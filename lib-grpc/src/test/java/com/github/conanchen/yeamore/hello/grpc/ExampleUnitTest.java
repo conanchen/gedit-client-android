@@ -1,4 +1,4 @@
-package com.github.conanchen.yeamore.hello.grpc;
+package com.github.conanchen.gedit.hello.grpc;
 
 import org.junit.Test;
 

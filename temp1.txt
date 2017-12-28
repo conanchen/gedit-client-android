@@ -117,8 +117,8 @@ debugAndroidTestCompileClasspath - Resolved configuration for compilation for va
 |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.0
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    \--- io.grpc:grpc-services:1.8.0
 |    |         +--- io.grpc:grpc-protobuf:1.8.0
 |    |         |    +--- io.grpc:grpc-core:1.8.0
@@ -234,8 +234,8 @@ debugAndroidTestRuntimeClasspath - Resolved configuration for runtime for varian
 |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.0
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    +--- io.grpc:grpc-services:1.8.0
 |    |    |    +--- io.grpc:grpc-protobuf:1.8.0
 |    |    |    |    +--- io.grpc:grpc-core:1.8.0
@@ -453,8 +453,8 @@ No dependencies
 debugCompileClasspath - Resolved configuration for compilation for variant: debug
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    \--- io.grpc:grpc-services:1.8.0
 |    |         +--- io.grpc:grpc-protobuf:1.8.0
 |    |         |    +--- io.grpc:grpc-core:1.8.0
@@ -565,8 +565,8 @@ No dependencies
 debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    +--- io.grpc:grpc-services:1.8.0
 |    |    |    +--- io.grpc:grpc-protobuf:1.8.0
 |    |    |    |    +--- io.grpc:grpc-core:1.8.0
@@ -737,8 +737,8 @@ No dependencies
 debugUnitTestCompileClasspath - Resolved configuration for compilation for variant: debugUnitTest
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    \--- io.grpc:grpc-services:1.8.0
 |    |         +--- io.grpc:grpc-protobuf:1.8.0
 |    |         |    +--- io.grpc:grpc-core:1.8.0
@@ -839,8 +839,8 @@ debugUnitTestCompileClasspath - Resolved configuration for compilation for varia
 debugUnitTestRuntimeClasspath - Resolved configuration for runtime for variant: debugUnitTest
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    +--- io.grpc:grpc-services:1.8.0
 |    |    |    +--- io.grpc:grpc-protobuf:1.8.0
 |    |    |    |    +--- io.grpc:grpc-core:1.8.0
@@ -1089,8 +1089,8 @@ No dependencies
 releaseCompileClasspath - Resolved configuration for compilation for variant: release
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    \--- io.grpc:grpc-services:1.8.0
 |    |         +--- io.grpc:grpc-protobuf:1.8.0
 |    |         |    +--- io.grpc:grpc-core:1.8.0
@@ -1201,8 +1201,8 @@ No dependencies
 releaseRuntimeClasspath - Resolved configuration for runtime for variant: release
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    +--- io.grpc:grpc-services:1.8.0
 |    |    |    +--- io.grpc:grpc-protobuf:1.8.0
 |    |    |    |    +--- io.grpc:grpc-core:1.8.0
@@ -1373,8 +1373,8 @@ No dependencies
 releaseUnitTestCompileClasspath - Resolved configuration for compilation for variant: releaseUnitTest
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    \--- io.grpc:grpc-services:1.8.0
 |    |         +--- io.grpc:grpc-protobuf:1.8.0
 |    |         |    +--- io.grpc:grpc-core:1.8.0
@@ -1475,8 +1475,8 @@ releaseUnitTestCompileClasspath - Resolved configuration for compilation for var
 releaseUnitTestRuntimeClasspath - Resolved configuration for runtime for variant: releaseUnitTest
 +--- project :lib-repository
 |    +--- project :lib-grpc
-|    |    +--- com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT
-|    |    |    \--- com.github.conanchen.yeamore-api:constants:master-SNAPSHOT
+|    |    +--- com.github.conanchen.gedit-api:grpc-javalite:master-SNAPSHOT
+|    |    |    \--- com.github.conanchen.gedit-api:constants:master-SNAPSHOT
 |    |    +--- io.grpc:grpc-services:1.8.0
 |    |    |    +--- io.grpc:grpc-protobuf:1.8.0
 |    |    |    |    +--- io.grpc:grpc-core:1.8.0

@@ -48,7 +48,7 @@ android {
 
 
 dependencies {
-    api("com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT") {
+    api("com.github.conanchen.gedit-api-grpc:grpc-javalite:master-SNAPSHOT") {
         exclude group: 'io.grpc', module: 'grpc-stub'
         exclude group: 'io.grpc', module: 'grpc-protobuf-lite'
     }

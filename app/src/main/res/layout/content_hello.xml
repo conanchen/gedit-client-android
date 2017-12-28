@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.github.conanchen.yeamore.hello.HelloActivity"
+    tools:context="com.github.conanchen.gedit.hello.HelloActivity"
     tools:showIn="@layout/activity_hello">
 
     <android.support.v7.widget.AppCompatEditText

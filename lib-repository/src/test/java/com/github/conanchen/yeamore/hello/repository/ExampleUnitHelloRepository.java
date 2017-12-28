@@ -1,4 +1,4 @@
-package com.github.conanchen.yeamore.hello.repository;
+package com.github.conanchen.gedit.hello.repository;
 
 import org.junit.Test;
 
