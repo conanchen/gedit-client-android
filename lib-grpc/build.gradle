@@ -1,0 +1,81 @@
+apply plugin: 'com.android.library'
+
+android {
+    lintOptions {
+        abortOnError false
+    }
+
+    compileSdkVersion 26
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            buildConfigField 'String', 'ENVIRONMENT', '"PRODUCTION"'
+            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.1.102"'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT', '8980'
+        }
+
+        debug {
+            signingConfig signingConfigs.debug
+            buildConfigField 'String', 'AMAPKEY', '"4d83adc4a7dea5315096f8629a8c9a02"'
+            buildConfigField 'String', 'ENVIRONMENT', '"DEBUG"'
+//            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.1.102"' //本机公司
+//            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.0.103"' //本机家里
+            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.0.114"' //本机公司
+//            buildConfigField 'String', 'GRPC_SERVER_HOST', '"172.18.31.159"'  //PC公司
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT', '8980'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+
+dependencies {
+    api("com.github.conanchen.yeamore-api:grpc-javalite:master-SNAPSHOT") {
+        exclude group: 'io.grpc', module: 'grpc-stub'
+        exclude group: 'io.grpc', module: 'grpc-protobuf-lite'
+    }
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    //grpc
+    implementation "com.google.auth:google-auth-library-oauth2-http:0.8.0"
+
+    implementation "io.grpc:grpc-auth:$GRPC_VERSION"
+    implementation "io.grpc:grpc-okhttp:$GRPC_VERSION"
+    api("io.grpc:grpc-services:$GRPC_VERSION"){
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+
+    implementation "com.google.code.gson:gson:$GSON_VERSION"
+    implementation "com.google.guava:guava:$GOOGLE_GUAVA_VERSION";
+
+
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+
+}

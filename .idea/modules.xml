@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-grpc/lib-grpc.iml" filepath="$PROJECT_DIR$/lib-grpc/lib-grpc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-repository/lib-repository.iml" filepath="$PROJECT_DIR$/lib-repository/lib-repository.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-room/lib-room.iml" filepath="$PROJECT_DIR$/lib-room/lib-room.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-repository/repository.iml" filepath="$PROJECT_DIR$/lib-repository/repository.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yeamore-hello-client-android.iml" filepath="$PROJECT_DIR$/yeamore-hello-client-android.iml" />
+    </modules>
+  </component>
+</project>

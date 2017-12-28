@@ -1,0 +1,71 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments = [moduleName: project.getName(),"room.schemaLocation": "$projectDir/schemas".toString()]
+//            }
+//        }
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            buildConfigField 'String', 'ENVIRONMENT', '"PRODUCTION"'
+        }
+
+        debug {
+            signingConfig signingConfigs.debug
+            buildConfigField 'String', 'ENVIRONMENT', '"DEBUG"'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    //room database
+    annotationProcessor "android.arch.persistence.room:compiler:$arch_room_version"
+    implementation "android.arch.persistence.room:runtime:$arch_room_version"
+    implementation "android.arch.persistence.room:rxjava2:$arch_room_version"
+    implementation "android.arch.paging:runtime:$arch_paging_version"
+    testImplementation "android.arch.persistence.room:testing:$arch_room_version"
+
+    implementation "com.google.code.gson:gson:$GSON_VERSION"
+    implementation "com.google.guava:guava:$GOOGLE_GUAVA_VERSION";
+
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+
+
+}
