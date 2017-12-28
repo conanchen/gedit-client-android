@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">gedit-hello-client-android</string>
+    <string name="app_name">gedit-client-android</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
