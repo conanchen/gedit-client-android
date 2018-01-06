@@ -40,7 +40,7 @@ public class HelloRepository {
             public void onHelloReply(HelloReply helloReply) {
                 Log.i(TAG, String.format("HelloReply: %s", helloReply.getMessage()));
                 Hello hello = Hello.builder()
-                        .setId(helloReply.getId())
+                        .setId(helloReply.getUuid())
                         .setMessage(helloReply.getMessage())
                         .setCreated(helloReply.getCreated())
                         .setLastUpdated(helloReply.getLastUpdated())

@@ -61,7 +61,7 @@ public class HelloService {
                     @Override
                     public void onNext(HelloReply helloReply) {
 
-                        System.out.println(String.format("sayHello got helloReply %d:%s gson=[%s]", helloReply.getId(), helloReply.getMessage(), gson.toJson(helloReply)));
+                        System.out.println(String.format("sayHello got helloReply %d:%s gson=[%s]", helloReply.getUuid(), helloReply.getMessage(), gson.toJson(helloReply)));
                         callback.onHelloReply(helloReply);
                     }
 
