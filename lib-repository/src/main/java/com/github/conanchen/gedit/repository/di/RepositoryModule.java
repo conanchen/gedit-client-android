@@ -3,8 +3,9 @@ package com.github.conanchen.gedit.repository.di;
 
 import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
 import com.github.conanchen.gedit.hello.grpc.di.GrpcModule;
-import com.github.conanchen.gedit.repository.hello.HelloRepository;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
+import com.github.conanchen.gedit.repository.hello.HelloRepository;
+import com.github.conanchen.gedit.repository.hello.StoreRepository;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.di.RoomModule;
 
@@ -19,17 +20,18 @@ import dagger.Provides;
 @Singleton
 @Module(includes = {
         GrpcModule.class,
-        RoomModule.class
+        RoomModule.class,
 })
 public class RepositoryModule {
 
     @Singleton
     @Provides
     public RepositoryFascade provideRepositoryFascade(
-            HelloRepository helloRepository
+            HelloRepository helloRepository,
+            StoreRepository storeRepository
     ) {
         return new RepositoryFascade(
-                helloRepository);
+                helloRepository,storeRepository);
     }
 
 
@@ -37,6 +39,8 @@ public class RepositoryModule {
     @Provides
     public HelloRepository provideHelloRepository(
             RoomFascade roomFascade, GrpcFascade grpcFascade) {
-        return new HelloRepository(roomFascade,grpcFascade);
+        return new HelloRepository(roomFascade, grpcFascade);
     }
+
+
 }

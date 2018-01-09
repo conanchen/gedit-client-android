@@ -2,6 +2,7 @@ package com.github.conanchen.gedit.ui.hello;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,13 +12,15 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.hello.Hello;
-import com.github.conanchen.gedit.di.BaseActivity;
+import com.github.conanchen.gedit.ui.store.CreateStoreActivity;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -128,6 +131,8 @@ public class HelloActivity extends BaseActivity {
     @OnClick(R.id.addbutton)
     public void onAddButtonClicked(View view) {
         String helloTxt = edithello.getText().toString();
+//        Log.i("-=-=-=", "点击了按钮");
+//        startActivity(new Intent(HelloActivity.this, CreateStoreActivity.class));
         helloViewModel.setHelloName(helloTxt);
     }
 }

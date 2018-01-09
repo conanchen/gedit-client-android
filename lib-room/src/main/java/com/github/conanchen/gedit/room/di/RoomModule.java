@@ -3,10 +3,10 @@ package com.github.conanchen.gedit.room.di;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
-
-import com.github.conanchen.gedit.room.hello.DaoHello;
 import com.github.conanchen.gedit.room.MyRoomDatabase;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.gedit.room.hello.DaoHello;
+import com.github.conanchen.gedit.room.hello.DaoStore;
 
 import javax.inject.Singleton;
 
@@ -29,7 +29,7 @@ public class RoomModule {
     @Singleton
     @Provides
     MyRoomDatabase provideRoomDatabase(Context context) {
-        return Room.databaseBuilder(context, MyRoomDatabase.class, "gedithello.db").build();
+        return Room.databaseBuilder(context, MyRoomDatabase.class, "gedit.db").build();
     }
 
     @Singleton
@@ -41,7 +41,13 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    public RoomFascade provideRoomFascade(DaoHello daoHello) {
-        return new RoomFascade(daoHello);
+    DaoStore provideDaoStore(MyRoomDatabase db) {
+        return db.daoStore();
+    }
+
+    @Singleton
+    @Provides
+    public RoomFascade provideRoomFascade(DaoHello daoHello, DaoStore daoStore) {
+        return new RoomFascade(daoHello, daoStore);
     }
 }

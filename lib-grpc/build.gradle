@@ -23,7 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
             buildConfigField 'String', 'ENVIRONMENT', '"PRODUCTION"'
-            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.1.102"'
+            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.1.5"'
             buildConfigField 'Integer', 'GRPC_SERVER_PORT', '8980'
         }
 
@@ -33,7 +33,7 @@ android {
             buildConfigField 'String', 'ENVIRONMENT', '"DEBUG"'
 //            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.1.102"' //本机公司
 //            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.0.103"' //本机家里
-            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.0.114"' //本机公司
+            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.1.5"' //本机公司
 //            buildConfigField 'String', 'GRPC_SERVER_HOST', '"172.18.31.159"'  //PC公司
             buildConfigField 'Integer', 'GRPC_SERVER_PORT', '8980'
         }
@@ -78,4 +78,5 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
 
+    compile project(path: ':lib-room')
 }

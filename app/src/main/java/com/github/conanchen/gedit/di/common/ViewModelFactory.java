@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.conanchen.gedit.di;
+package com.github.conanchen.gedit.di.common;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
@@ -26,11 +26,11 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 @Singleton
-public class HelloViewModelFactory implements ViewModelProvider.Factory {
+public class ViewModelFactory implements ViewModelProvider.Factory {
     private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 
     @Inject
-    public HelloViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
+    public ViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
         this.creators = creators;
     }
 

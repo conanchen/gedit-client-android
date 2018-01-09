@@ -2,8 +2,8 @@ package com.github.conanchen.gedit.di;
 
 import android.app.Application;
 
-
 import com.github.conanchen.gedit.HelloApplication;
+import com.github.conanchen.gedit.di.common.AppModule;
 import com.github.conanchen.gedit.repository.di.RepositoryModule;
 
 import javax.inject.Singleton;
@@ -19,7 +19,7 @@ import dagger.android.AndroidInjectionModule;
         AndroidInjectionModule.class,
 
         MainActivityModule.class,
-        RepositoryModule.class,
+        RepositoryModule.class
 })
 public interface AppComponent {
     @Component.Builder

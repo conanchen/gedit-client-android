@@ -3,11 +3,12 @@ package com.github.conanchen.gedit.repository.hello;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
-import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
 import com.github.conanchen.gedit.hello.grpc.HelloReply;
 import com.github.conanchen.gedit.hello.grpc.HelloService;
-import com.github.conanchen.gedit.room.hello.Hello;
+import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.gedit.room.hello.Hello;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -40,12 +41,13 @@ public class HelloRepository {
             public void onHelloReply(HelloReply helloReply) {
                 Log.i(TAG, String.format("HelloReply: %s", helloReply.getMessage()));
                 Hello hello = Hello.builder()
-                        .setId(helloReply.getUuid())
-                        .setMessage(helloReply.getMessage())
+                        .setId(helloReply.getUuid()==0?System.currentTimeMillis():helloReply.getUuid())
+                        .setMessage(Strings.isNullOrEmpty(helloReply.getMessage())?String.format("%s","hello is null"):helloReply.getMessage())
                         .setCreated(helloReply.getCreated())
                         .setLastUpdated(helloReply.getLastUpdated())
                         .build();
                 roomFascade.daoHello.save(hello);
+
             }
         });
     }

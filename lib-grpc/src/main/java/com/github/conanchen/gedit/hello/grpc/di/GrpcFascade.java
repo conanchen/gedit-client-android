@@ -1,6 +1,7 @@
 package com.github.conanchen.gedit.hello.grpc.di;
 
 import com.github.conanchen.gedit.hello.grpc.HelloService;
+import com.github.conanchen.gedit.hello.grpc.StoreService;
 
 import javax.inject.Inject;
 
@@ -14,11 +15,13 @@ public class GrpcFascade {
     String strAmir;
 
     public HelloService helloService;
+    public StoreService storeService;
 
 
     @Inject
-    public GrpcFascade(HelloService helloService) {
+    public GrpcFascade(HelloService helloService,StoreService storeService) {
         this.helloService = helloService;
+        this.storeService = storeService;
         System.out.println(strAmir);
     }
 

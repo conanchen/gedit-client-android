@@ -6,7 +6,7 @@ import android.os.StrictMode;
 import android.support.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
-import com.github.conanchen.gedit.di.AppInjector;
+import com.github.conanchen.gedit.di.common.AppInjector;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
 
 import javax.inject.Inject;

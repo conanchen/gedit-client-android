@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.di;
+package com.github.conanchen.gedit.di.common;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.support.v7.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.di;
+package com.github.conanchen.gedit.di.common;
 
 
 import android.app.Activity;
@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 
 
 import com.github.conanchen.gedit.HelloApplication;
+import com.github.conanchen.gedit.di.DaggerAppComponent;
 
 import dagger.android.AndroidInjection;
 import dagger.android.support.AndroidSupportInjection;

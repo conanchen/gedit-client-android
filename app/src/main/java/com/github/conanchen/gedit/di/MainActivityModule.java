@@ -3,6 +3,7 @@ package com.github.conanchen.gedit.di;
 
 
 import com.github.conanchen.gedit.ui.hello.HelloActivity;
+import com.github.conanchen.gedit.ui.store.CreateStoreActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -18,6 +19,9 @@ public abstract class MainActivityModule {
 
     @ContributesAndroidInjector
     abstract HelloActivity contributeHelloActivity();
+//
+    @ContributesAndroidInjector
+    abstract CreateStoreActivity contributeCreateStoreActivity();
 //
 //    @ContributesAndroidInjector
 //    abstract WordExamActivity contributeWordExamActivity();

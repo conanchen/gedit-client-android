@@ -2,7 +2,7 @@ package com.github.conanchen.gedit.hello.grpc.di;
 
 
 import com.github.conanchen.gedit.hello.grpc.HelloService;
-
+import com.github.conanchen.gedit.hello.grpc.StoreService;
 
 import javax.inject.Singleton;
 
@@ -19,10 +19,12 @@ public class GrpcModule {
     @Singleton
     @Provides
     public GrpcFascade provideGrpcFascade(
-            HelloService helloService
+            HelloService helloService,
+            StoreService storeService
+
     ) {
         return new GrpcFascade(
-                helloService);
+                helloService,storeService);
     }
 
 
@@ -30,5 +32,12 @@ public class GrpcModule {
     @Provides
     public HelloService provideHelloService() {
         return new HelloService();
+    }
+
+
+    @Singleton
+    @Provides
+    public StoreService provideStoreService() {
+        return new StoreService();
     }
 }
