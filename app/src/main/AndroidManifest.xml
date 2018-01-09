@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".ui.store.CreateStoreActivity">
         </activity>
+        <activity android:name=".ui.MainActivity">
+        </activity>
     </application>
 
 </manifest>

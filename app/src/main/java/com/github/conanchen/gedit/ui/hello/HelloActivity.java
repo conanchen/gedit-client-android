@@ -12,7 +12,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,7 @@ import android.view.View;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.hello.Hello;
-import com.github.conanchen.gedit.ui.store.CreateStoreActivity;
+import com.github.conanchen.gedit.ui.MainActivity;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -132,7 +131,7 @@ public class HelloActivity extends BaseActivity {
     public void onAddButtonClicked(View view) {
         String helloTxt = edithello.getText().toString();
 //        Log.i("-=-=-=", "点击了按钮");
-//        startActivity(new Intent(HelloActivity.this, CreateStoreActivity.class));
-        helloViewModel.setHelloName(helloTxt);
+        startActivity(new Intent(HelloActivity.this, MainActivity.class));
+//        helloViewModel.setHelloName(helloTxt);
     }
 }
