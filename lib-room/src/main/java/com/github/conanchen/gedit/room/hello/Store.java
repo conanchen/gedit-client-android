@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import com.google.common.base.Strings;
 
 /**
- * Created by Administrator on 2018/1/8.
+ * Created by Conan Chen on 2018/1/8.
  */
 @Entity(indices = {
         @Index(value = {"uuid", "address"}),

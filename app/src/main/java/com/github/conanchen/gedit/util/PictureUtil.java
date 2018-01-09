@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/4/5.
+ * Created by Conan Chen on 2017/4/5.
  */
 public class PictureUtil {
 

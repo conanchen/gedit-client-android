@@ -5,9 +5,11 @@ import android.util.Log;
 
 import com.github.conanchen.gedit.hello.grpc.StoreService;
 import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
+import com.github.conanchen.gedit.vo.Location;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
+import com.github.conanchen.gedit.vo.StoreCreateInfo;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by Administrator on 2018/1/8.
+ * Created by Conan Chen on 2018/1/8.
  */
 
 public class StoreRepository {
@@ -51,5 +53,15 @@ public class StoreRepository {
     }
 
 
+    public LiveData<List<Store>> loadStoresNearAt(Location location) {
+        return null;
+    }
 
+    public   LiveData<Store> findStore(String uuid) {
+        return null;
+    }
+
+    public LiveData<Store> createStore(StoreCreateInfo storeCreateInfo) {
+        return null;
+    }
 }

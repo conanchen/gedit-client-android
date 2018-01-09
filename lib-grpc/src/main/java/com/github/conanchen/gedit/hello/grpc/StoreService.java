@@ -14,7 +14,7 @@ import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 /**
- * Created by Administrator on 2018/1/8.
+ * Created by Conan Chen on 2018/1/8.
  */
 
 public class StoreService {

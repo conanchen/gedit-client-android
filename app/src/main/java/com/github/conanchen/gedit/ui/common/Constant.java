@@ -4,7 +4,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 
 /**
- * Created by Administrator on 2018/1/8.
+ * Created by Conan Chen on 2018/1/8.
  */
 
 public class Constant {

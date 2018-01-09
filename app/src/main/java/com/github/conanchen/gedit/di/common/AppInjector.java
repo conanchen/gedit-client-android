@@ -9,8 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 
-import com.github.conanchen.gedit.HelloApplication;
-import com.github.conanchen.gedit.di.DaggerAppComponent;
+import com.github.conanchen.gedit.GeditApplication;
 
 import dagger.android.AndroidInjection;
 import dagger.android.support.AndroidSupportInjection;
@@ -23,10 +22,10 @@ public class AppInjector {
     private AppInjector() {
     }
 
-    public static void init(HelloApplication helloApplication) {
-        DaggerAppComponent.builder().application(helloApplication)
-                .build().inject(helloApplication);
-        helloApplication
+    public static void init(GeditApplication geditApplication) {
+        DaggerAppComponent.builder().application(geditApplication)
+                .build().inject(geditApplication);
+        geditApplication
                 .registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
                     @Override
                     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

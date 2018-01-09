@@ -9,6 +9,9 @@ import android.support.annotation.VisibleForTesting;
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
 import com.github.conanchen.gedit.room.hello.Store;
 import com.github.conanchen.gedit.util.AbsentLiveData;
+import com.github.conanchen.gedit.vo.Location;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -16,33 +19,33 @@ import javax.inject.Inject;
  * Created by Conan Chen on 2018/1/8.
  */
 
-public class StoreViewModel extends ViewModel {
+public class StoreListViewModel extends ViewModel {
     @VisibleForTesting
-    final MutableLiveData<String> uuidMutableLiveData = new MutableLiveData<>();
-    private final LiveData<Store> store;
+    final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
+    private final LiveData<List<Store>> liveStores;
 
     @SuppressWarnings("unchecked")
     @Inject
-    public StoreViewModel(StoreRepository storeRepository) {
-        store = Transformations.switchMap(uuidMutableLiveData, uuid -> {
-            if (uuid == null) {
+    public StoreListViewModel(StoreRepository storeRepository) {
+        liveStores = Transformations.switchMap(locationMutableLiveData, location -> {
+            if (location == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeRepository.findStore(uuid);
+                return storeRepository.loadStoresNearAt(location);
             }
         });
 
     }
 
-
     @VisibleForTesting
-    public void setUuid(String uuid) {
-        uuidMutableLiveData.setValue(uuid);
+    public void updateLocation(Location location) {
+        locationMutableLiveData.setValue(location);
     }
 
     @VisibleForTesting
-    public LiveData<Store> getStore() {
-        return store;
+    public LiveData<List<Store>> getLiveStores() {
+        return liveStores;
     }
+
 
 }

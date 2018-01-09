@@ -15,7 +15,7 @@ import io.reactivex.Maybe;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 /**
- * Created by Administrator on 2018/1/8.
+ * Created by Conan Chen on 2018/1/8.
  */
 @Dao
 public interface DaoStore {

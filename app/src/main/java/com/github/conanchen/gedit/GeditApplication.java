@@ -15,8 +15,8 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import dagger.android.HasServiceInjector;
 
-public class HelloApplication extends MultiDexApplication implements HasActivityInjector, HasServiceInjector {
-    public static final String TAG = HelloApplication.class.getSimpleName();
+public class GeditApplication extends MultiDexApplication implements HasActivityInjector, HasServiceInjector {
+    public static final String TAG = GeditApplication.class.getSimpleName();
 
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingActivityInjector;

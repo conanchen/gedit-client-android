@@ -20,6 +20,7 @@ import com.github.conanchen.gedit.ui.common.Constant;
 import com.github.conanchen.gedit.ui.common.FullyGridLayoutManager;
 import com.github.conanchen.gedit.util.ChoosePictureOrVideo;
 import com.github.conanchen.gedit.util.PictureUtil;
+import com.github.conanchen.gedit.vo.StoreCreateInfo;
 import com.google.common.base.Strings;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -35,11 +36,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CreateStoreActivity extends BaseActivity {
-    public static String TAG = CreateStoreActivity.class.getSimpleName();
+public class StoreCreateActivity extends BaseActivity {
+    public static String TAG = StoreCreateActivity.class.getSimpleName();
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    private StoreViewModel viewModel;
+    private StoreCreateViewModel storeCreateViewModel;
 
     @BindView(R.id.save)
     TextView save;
@@ -65,14 +66,12 @@ public class CreateStoreActivity extends BaseActivity {
         setContentView(R.layout.activity_add_merchant);
         ButterKnife.bind(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreViewModel.class);
-        Log.i(TAG, "viewModel:" + viewModel + ",viewModelFactory:" + viewModelFactory);
-        viewModel.getStore().observe(this, stores -> {
-            if (stores != null) {
+        storeCreateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreCreateViewModel.class);
+        Log.i(TAG, "storeCreateViewModel:" + storeCreateViewModel + ",viewModelFactory:" + viewModelFactory);
+        storeCreateViewModel.getStore().observe(this, store -> {
+            if (store != null) {
                 StringBuilder stringBuilder = new StringBuilder();
-                for (Store store : stores) {
-                    stringBuilder.append(String.format("%d:%s@%d\n", store.uuid, store.storeName, store.address));
-                }
+                stringBuilder.append(String.format("%d:%s@%d\n", store.uuid, store.storeName, store.address));
                 show.setText(stringBuilder.toString());
             }
         });
@@ -84,16 +83,13 @@ public class CreateStoreActivity extends BaseActivity {
                 String one = one1.getText().toString().trim();
                 String two = two1.getText().toString().trim();
                 if (TextUtils.isEmpty(one) || TextUtils.isEmpty(two)) {
-                    Toast.makeText(CreateStoreActivity.this, "输入文字", Toast.LENGTH_LONG).show();
+                    Toast.makeText(StoreCreateActivity.this, "输入文字", Toast.LENGTH_LONG).show();
                     return;
                 }
-                Store store = Store.builder()
-                        .setUuid("no-used")
-                        .setStoreName(Strings.isNullOrEmpty(one) ? "no one" : one)
-                        .setAddress(Strings.isNullOrEmpty(two) ? "no two" : two)
+                StoreCreateInfo store = StoreCreateInfo.builder()
+                        .setName(Strings.isNullOrEmpty(one) ? "no one" : one)
                         .build();
-
-                viewModel.setStoreInfo(store);
+                storeCreateViewModel.createStoreWith(store);
             }
         });
 
@@ -113,7 +109,7 @@ public class CreateStoreActivity extends BaseActivity {
         adapter = new GridImageAdapter(this, new GridImageAdapter.onAddPicClickListener() {
             @Override
             public void onAddPicClick() {
-                ChoosePictureOrVideo.getInstance().ChoosePictureOrVideo(CreateStoreActivity.this, PictureMimeType.ofImage(), false, selectMedia);
+                ChoosePictureOrVideo.getInstance().ChoosePictureOrVideo(StoreCreateActivity.this, PictureMimeType.ofImage(), false, selectMedia);
             }
         });
 
@@ -154,15 +150,15 @@ public class CreateStoreActivity extends BaseActivity {
                         case 1:
                             // 预览图片 可自定长按保存路径
                             //PictureSelector.create(MainActivity.this).externalPicturePreview(position, "/custom_file", selectList);
-                            PictureSelector.create(CreateStoreActivity.this).externalPicturePreview(position, selectMedia);
+                            PictureSelector.create(StoreCreateActivity.this).externalPicturePreview(position, selectMedia);
                             break;
                         case 2:
                             // 预览视频
-                            PictureSelector.create(CreateStoreActivity.this).externalPictureVideo(media.getPath());
+                            PictureSelector.create(StoreCreateActivity.this).externalPictureVideo(media.getPath());
                             break;
                         case 3:
                             // 预览音频
-                            PictureSelector.create(CreateStoreActivity.this).externalPictureAudio(media.getPath());
+                            PictureSelector.create(StoreCreateActivity.this).externalPictureAudio(media.getPath());
                             break;
                     }
                 }

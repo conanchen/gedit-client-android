@@ -1,27 +1,33 @@
 package com.github.conanchen.gedit.di;
 
 
-
+import com.github.conanchen.gedit.ui.MainActivity;
 import com.github.conanchen.gedit.ui.hello.HelloActivity;
-import com.github.conanchen.gedit.ui.store.CreateStoreActivity;
+import com.github.conanchen.gedit.ui.my.MyFragment;
+import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module()
-public abstract class MainActivityModule {
+public abstract class ViewModule {
+    @ContributesAndroidInjector
+    abstract MyFragment contributeMyFragment();
 
-//    @ContributesAndroidInjector(modules = {
+
+    @ContributesAndroidInjector(modules = {
 //            FragmentLoginBuildersModule.class,
 //            FragmentWordsBuildersModule.class,
 //            FragmentMyBuildersModule.class
-//    })
+    })
+    abstract MainActivity contributeMainActivity();
 
     @ContributesAndroidInjector
     abstract HelloActivity contributeHelloActivity();
-//
+
+    //
     @ContributesAndroidInjector
-    abstract CreateStoreActivity contributeCreateStoreActivity();
+    abstract StoreCreateActivity contributeCreateStoreActivity();
 //
 //    @ContributesAndroidInjector
 //    abstract WordExamActivity contributeWordExamActivity();

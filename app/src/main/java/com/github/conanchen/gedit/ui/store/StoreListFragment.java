@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.github.conanchen.gedit.R;
 
 /**
- * Created by Administrator on 2018/1/9.
+ * Created by Conan Chen on 2018/1/9.
  */
 
 public class StoreListFragment extends Fragment {
