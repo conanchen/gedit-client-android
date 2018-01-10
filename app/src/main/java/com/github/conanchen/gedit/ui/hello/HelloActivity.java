@@ -2,13 +2,13 @@ package com.github.conanchen.gedit.ui.hello;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,8 +19,6 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.room.hello.Hello;
-import com.github.conanchen.gedit.ui.MainActivity;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,6 +34,7 @@ public class HelloActivity extends BaseActivity {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private HelloViewModel helloViewModel;
+    private final HelloAdapter helloAdapter = new HelloAdapter();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -49,8 +48,9 @@ public class HelloActivity extends BaseActivity {
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    @BindView(R.id.listitems)
-    AppCompatTextView hellosText;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     @BindView(R.id.edithello)
     AppCompatEditText edithello;
 
@@ -61,17 +61,21 @@ public class HelloActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setupViewModel();
+        setupRecyclerView();
+    }
+
+    private void setupRecyclerView() {
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(helloAdapter);
     }
 
     private void setupViewModel() {
         helloViewModel = ViewModelProviders.of(this, viewModelFactory).get(HelloViewModel.class);
-        helloViewModel.getHellos().observe(this, hellos -> {
+        helloViewModel.getHelloPagedListLiveData().observe(this, hellos -> {
             if (hellos != null) {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (Hello h : hellos) {
-                    stringBuilder.append(String.format("%d:%s@%d\n", h.id, h.message, h.lastUpdated));
-                }
-                hellosText.setText(stringBuilder.toString());
+                helloAdapter.setList(hellos);
             }
         });
 
@@ -132,8 +136,7 @@ public class HelloActivity extends BaseActivity {
     @OnClick(R.id.addbutton)
     public void onAddButtonClicked(View view) {
         String helloTxt = edithello.getText().toString();
-//        Log.i("-=-=-=", "点击了按钮");
-        startActivity(new Intent(HelloActivity.this, MainActivity.class));
-//        helloViewModel.setHelloName(helloTxt);
+        helloViewModel.setHelloName(helloTxt);
     }
+
 }

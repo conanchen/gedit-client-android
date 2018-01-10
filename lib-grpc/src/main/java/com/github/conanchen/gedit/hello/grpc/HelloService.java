@@ -2,6 +2,7 @@ package com.github.conanchen.gedit.hello.grpc;
 
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.google.gson.Gson;
 
@@ -61,13 +62,17 @@ public class HelloService {
                     @Override
                     public void onNext(HelloReply helloReply) {
 
-                        System.out.println(String.format("sayHello got helloReply %d:%s gson=[%s]", helloReply.getUuid(), helloReply.getMessage(), gson.toJson(helloReply)));
+                        System.out.println(String.format("sayHello got helloReply %s:%s gson=[%s]", helloReply.getUuid(), helloReply.getMessage(), gson.toJson(helloReply)));
                         callback.onHelloReply(helloReply);
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         Log.i(TAG, String.format("helloStub.sayHello() onError %s", t.getMessage()));
+                        callback.onHelloReply(HelloReply.newBuilder().setStatus(Status.newBuilder()
+                                .setCode(io.grpc.Status.Code.UNAVAILABLE.name())
+                                .setDetails("Hello API 错误：可能网络不通或服务器错误")
+                                .build()).build());
                     }
 
                     @Override
