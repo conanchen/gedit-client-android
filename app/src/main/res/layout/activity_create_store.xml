@@ -15,7 +15,6 @@
             android:id="@+id/savebutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
             android:padding="10dp"
             android:text="创建店铺"
             android:textColor="@color/text_color"/>
@@ -24,7 +23,6 @@
             android:id="@+id/show"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
             android:padding="10dp"
             android:text="显示"
             android:textColor="@color/text_color"/>

@@ -21,6 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -58,10 +59,10 @@ public class StoreRepository {
     public LiveData<StoreCreateResponse> createStore(StoreCreateInfo storeCreateInfo) {
         return new LiveData<StoreCreateResponse>() {
             @Override
-            public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<StoreCreateResponse> observer) {
+            protected void onActive() {
                 grpcFascade.storeService.storeCreate(storeCreateInfo, new StoreService.StoreCallback() {
                     @Override
-                    public void onStoreReply(CreateResponse createResponse) {
+                    public void onStoreCreateResponse(CreateResponse createResponse) {
                         Observable.fromCallable(() -> {
                             Log.i(TAG, String.format("CreateResponse: %s", createResponse.getStatus()));
                             if ("OK".compareToIgnoreCase(createResponse.getStatus().getCode()) == 0) {
@@ -76,21 +77,21 @@ public class StoreRepository {
                                 return new Long(-1);
                             }
                         }).subscribeOn(Schedulers.io())
-                                .observeOn(Schedulers.computation())
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Consumer<Long>() {
                                     @Override
                                     public void accept(@NonNull Long rowId) throws Exception {
                                         // the id of the upserted record.
                                         if (rowId > 0) {
-                                            postValue(StoreCreateResponse.builder()
+                                            setValue(StoreCreateResponse.builder()
                                                     .setStausCode("OK")
                                                     .setStatusDetail("Create Store successfully")
                                                     .setStoreUuid(createResponse.getUuid())
                                                     .build());
                                         } else {
-                                            postValue(StoreCreateResponse.builder()
-                                                    .setStausCode("FAILED")
-                                                    .setStatusDetail("Create/Save Store falied")
+                                            setValue(StoreCreateResponse.builder()
+                                                    .setStausCode(createResponse.getStatus().getCode())
+                                                    .setStatusDetail(createResponse.getStatus().getDetails())
                                                     .setStoreUuid(createResponse.getUuid())
                                                     .build());
                                         }

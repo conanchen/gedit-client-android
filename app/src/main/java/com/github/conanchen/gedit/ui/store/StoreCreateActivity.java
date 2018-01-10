@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,6 +65,10 @@ public class StoreCreateActivity extends BaseActivity {
     private List<String> shareCompressList = new ArrayList<>();//分享图片经过压缩的的路径
     private GridImageAdapter adapter;
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +76,25 @@ public class StoreCreateActivity extends BaseActivity {
         setContentView(R.layout.activity_create_store);
         ButterKnife.bind(this);
 
-        setupViewModel();
 
 
         //设置门店展示
         setExhibition();
 
+        setupViewModel();
     }
 
     private void setupViewModel() {
         storeCreateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreCreateViewModel.class);
         Log.i(TAG, "storeCreateViewModel:" + storeCreateViewModel + ",viewModelFactory:" + viewModelFactory);
-        storeCreateViewModel.getStoreCreateResponseLiveData().observe(this, storeCreateResponse -> {
-            if (storeCreateResponse != null) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse)));
-                show.setText(stringBuilder.toString());
-            }
-        });
+        storeCreateViewModel.getStoreCreateResponseLiveData()
+                .observe(this, storeCreateResponse -> {
+                    String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
+                    Log.i(TAG,message);
+                    if (storeCreateResponse != null) {
+                        show.setText(message);
+                    }
+                });
     }
 
     @OnClick(R.id.savebutton)
