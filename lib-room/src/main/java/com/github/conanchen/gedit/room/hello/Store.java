@@ -20,6 +20,8 @@ public class Store {
     @NonNull
     public String uuid;
     public String name;
+    public Double lat;
+    public Double lon;
     public String districtUuid;
     public String address;
     public long created;
@@ -28,9 +30,11 @@ public class Store {
     public Store() {
     }
 
-    private Store(@NonNull String uuid, String name, String districtUuid, String address, long created, long lastUpdated) {
+    private Store(@NonNull String uuid, String name, Double lat, Double lon, String districtUuid, String address, long created, long lastUpdated) {
         this.uuid = uuid;
         this.name = name;
+        this.lat = lat;
+        this.lon = lon;
         this.districtUuid = districtUuid;
         this.address = address;
         this.created = created;
@@ -44,6 +48,8 @@ public class Store {
     public static final class Builder {
         private String uuid;
         private String name;
+        public Double lat;
+        public Double lon;
         private String districtUuid;
         private String address;
         private long created;
@@ -64,7 +70,7 @@ public class Store {
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new Store(uuid, name, districtUuid,address, created, lastUpdated);
+            return new Store(uuid, name, lat,lon,districtUuid,address, created, lastUpdated);
         }
 
         public Builder setUuid(String uuid) {
@@ -74,6 +80,16 @@ public class Store {
 
         public Builder setName(String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder setLat(Double lat) {
+            this.lat = lat;
+            return this;
+        }
+
+        public Builder setLon(Double lon) {
+            this.lon = lon;
             return this;
         }
 

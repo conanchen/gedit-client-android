@@ -3,9 +3,9 @@ package com.github.conanchen.gedit.hello.grpc;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
-import com.github.conanchen.gedit.room.hello.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
+import com.google.common.base.Strings;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +21,7 @@ public class StoreService {
     private final static String TAG = StoreService.class.getSimpleName();
 
     public interface StoreCallback {
-        void onStoreReply(CreateResponse response);
-
+        void onStoreCreateResponse(CreateResponse response);
     }
 
     private ManagedChannel getManagedChannel() {
@@ -43,12 +42,12 @@ public class StoreService {
                 .create(com.github.conanchen.gedit.store.profile.grpc.CreateRequest
                                 .newBuilder()
                                 .setName(storeCreateInfo.name)
-                                .setDetailAddress(storeCreateInfo.address)
+                                .setDetailAddress(Strings.isNullOrEmpty(storeCreateInfo.address)?"no-detail-address":storeCreateInfo.address)
                                 .build(),
                         new StreamObserver<CreateResponse>() {
                             @Override
                             public void onNext(CreateResponse value) {
-                                callback.onStoreReply(value);
+                                callback.onStoreCreateResponse(value);
                                 Status status = value.getStatus();
                                 String code = status.getCode();
                                 Log.i(TAG, "staus:" + status + ",code:" + code);
@@ -57,6 +56,12 @@ public class StoreService {
                             @Override
                             public void onError(Throwable t) {
                                 Log.e(TAG, t.getMessage());
+                                callback.onStoreCreateResponse(
+                                        CreateResponse.newBuilder()
+                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                        .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
+                                                        .build())
+                                                .build());
                             }
 
                             @Override
