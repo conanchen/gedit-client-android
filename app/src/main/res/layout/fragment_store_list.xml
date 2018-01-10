@@ -13,13 +13,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/addbutton"
-        android:layout_width="match_parent"
+        android:id="@+id/hellobutton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
-        android:text="打开HelloActiviy看看👀"
+        android:text="打开Hello World看看👀"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" 
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/createbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:text="打开Create Store看看👀"
+        app:layout_constraintLeft_toRightOf="@+id/hellobutton"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <android.support.v7.widget.RecyclerView
@@ -30,5 +42,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addbutton" />
+        app:layout_constraintTop_toBottomOf="@+id/createbutton" />
 </android.support.constraint.ConstraintLayout>

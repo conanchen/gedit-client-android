@@ -5,6 +5,7 @@ import android.app.Service;
 import android.os.StrictMode;
 import android.support.multidex.MultiDexApplication;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.facebook.stetho.Stetho;
 import com.github.conanchen.gedit.di.common.AppInjector;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
@@ -44,8 +45,11 @@ public class GeditApplication extends MultiDexApplication implements HasActivity
         AppInjector.init(this);
 
         repositoryFascade.helloRepository.sayHello("Conan Chen");
-//        ARouter.init(this);
-//
+        if (BuildConfig.DEBUG) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
+            ARouter.openLog();     // 打印日志
+            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+        }
+        ARouter.init(this); // 尽可能早，推荐在Application中初始化//
 //
 //        DaemonEnv.initialize(this, AppServiceKeepliveTraceImpl.class, DaemonEnv.DEFAULT_WAKE_UP_INTERVAL);
 //        try {
@@ -64,7 +68,7 @@ public class GeditApplication extends MultiDexApplication implements HasActivity
 //        }
     }
 
-//    private ProviderInstaller.ProviderInstallListener providerInstallListener =
+    //    private ProviderInstaller.ProviderInstallListener providerInstallListener =
 //            new ProviderInstaller.ProviderInstallListener() {
 //                @Override
 //                public void onProviderInstalled() {

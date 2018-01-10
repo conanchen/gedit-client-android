@@ -12,6 +12,12 @@ android {
         // Enable MultiDexing:  https://developer.android.com/tools/building/multidex.html
         multiDexEnabled true
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [ moduleName : project.getName() ]
+            }
+        }
+
     }
     buildTypes {
         release {
@@ -93,6 +99,9 @@ dependencies {
 
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
+
+    compile "com.alibaba:arouter-api:$AROUTER_API_LIBS_VERSION"
+    annotationProcessor "com.alibaba:arouter-compiler:$AROUTER_COMPILER_LIBS_VERSION"
 
 
     implementation 'com.facebook.stetho:stetho:1.5.0'
