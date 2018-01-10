@@ -55,7 +55,8 @@ public class MainActivity extends BaseFragmentActivity {
 
         manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.container, storeListFragment)
+        transaction
+                .add(R.id.container, storeListFragment)
                 .add(R.id.container, myFragment)
                 .hide(myFragment)
                 .show(storeListFragment)
@@ -97,7 +98,8 @@ public class MainActivity extends BaseFragmentActivity {
                 mePic.setImageResource(R.mipmap.add);
 
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.hide(storeListFragment)
+                transaction
+                        .hide(storeListFragment)
                         .show(myFragment)
                         .commit();
 

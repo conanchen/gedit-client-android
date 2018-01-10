@@ -5,14 +5,20 @@ import com.github.conanchen.gedit.ui.MainActivity;
 import com.github.conanchen.gedit.ui.hello.HelloActivity;
 import com.github.conanchen.gedit.ui.my.MyFragment;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
+import com.github.conanchen.gedit.ui.store.StoreListFragment;
+import com.github.conanchen.gedit.ui.store.StoreListViewModel;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module()
 public abstract class ViewModule {
+
     @ContributesAndroidInjector
     abstract MyFragment contributeMyFragment();
+
+    @ContributesAndroidInjector
+    abstract StoreListFragment contributeStoreListFragment();
 
 
     @ContributesAndroidInjector(modules = {

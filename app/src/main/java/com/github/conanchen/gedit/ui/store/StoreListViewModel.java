@@ -6,6 +6,7 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
+import com.github.conanchen.gedit.repository.hello.HelloRepository;
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
 import com.github.conanchen.gedit.room.hello.Store;
 import com.github.conanchen.gedit.util.AbsentLiveData;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
  */
 
 public class StoreListViewModel extends ViewModel {
+
     @VisibleForTesting
     final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
     private final LiveData<List<Store>> liveStores;

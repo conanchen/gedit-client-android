@@ -43,7 +43,7 @@ public class StoreService {
                 .create(com.github.conanchen.gedit.store.profile.grpc.CreateRequest
                                 .newBuilder()
                                 .setName(storeCreateInfo.name)
-                                .setDetailAddress(storeCreateInfo.address)
+//                                .setDetailAddress(storeCreateInfo.address)
                                 .build(),
                         new StreamObserver<CreateResponse>() {
                             @Override
