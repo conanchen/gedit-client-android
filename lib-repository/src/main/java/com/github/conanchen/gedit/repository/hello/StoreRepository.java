@@ -81,7 +81,7 @@ public class StoreRepository {
                                 .subscribe(new Consumer<Long>() {
                                     @Override
                                     public void accept(@NonNull Long rowId) throws Exception {
-                                        // the id of the upserted record.
+                                        // the uuid of the upserted record.
                                         if (rowId > 0) {
                                             setValue(StoreCreateResponse.builder()
                                                     .setStausCode("OK")

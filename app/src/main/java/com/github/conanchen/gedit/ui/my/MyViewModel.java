@@ -20,6 +20,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.repository.hello.HelloRepository;
@@ -34,17 +35,18 @@ public class MyViewModel extends ViewModel {
 
     @VisibleForTesting
     final MutableLiveData<Long> helloTime = new MutableLiveData<>();
-    private final LiveData<List<Hello>> hellos;
+    private final LiveData<PagedList<Hello>> helloPagedListLiveData;
     private HelloRepository helloRepository;
 
     @SuppressWarnings("unchecked")
     @Inject
     public MyViewModel(HelloRepository helloRepository) {
         this.helloRepository = helloRepository;
-        hellos = Transformations.switchMap(helloTime, time -> {
+        helloPagedListLiveData = Transformations.switchMap(helloTime, time -> {
             if (time == null) {
                 return AbsentLiveData.create();
             } else {
+
                 return helloRepository.loadHellos(time);
             }
         });
@@ -57,8 +59,8 @@ public class MyViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public LiveData<List<Hello>> getHellos() {
-        return hellos;
+    public LiveData<PagedList<Hello>> getHelloPagedListLiveData() {
+        return helloPagedListLiveData;
     }
 
     @VisibleForTesting

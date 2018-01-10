@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+import android.support.v7.recyclerview.extensions.DiffCallback;
 
 import com.google.common.base.Strings;
 
@@ -12,12 +13,13 @@ import com.google.common.base.Strings;
  */
 
 @Entity(indices = {
-        @Index(value = {"id", "created"})
+        @Index(value = {"created"}),
+        @Index(value = {"uuid", "created"})
 })
 public class Hello {
     @PrimaryKey
     @NonNull
-    public long id;
+    public String uuid;
     public String message;
     public long created;
     public long lastUpdated;
@@ -25,19 +27,41 @@ public class Hello {
     public Hello() {
     }
 
-    private Hello(@NonNull long id, String message, long created, long lastUpdated) {
-        this.id = id;
+    private Hello(@NonNull String uuid, String message, long created, long lastUpdated) {
+        this.uuid = uuid;
         this.message = message;
         this.created = created;
         this.lastUpdated = lastUpdated;
     }
 
+    public static DiffCallback<Hello> DIFF_CALLBACK = new DiffCallback<Hello>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Hello oldItem, @NonNull Hello newItem) {
+            return oldItem.uuid == newItem.uuid;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Hello oldItem, @NonNull Hello newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+
+        Hello user = (Hello) obj;
+
+        return user.uuid == this.uuid;
+    }
     public static Builder builder() {
         return new Builder();
     }
 
     public static final class Builder {
-        private long id;
+        private String uuid;
         private String message;
         private long created;
         private long lastUpdated;
@@ -47,8 +71,8 @@ public class Hello {
 
         public Hello build() {
             String missing = "";
-            if (id <= 0) {
-                missing += " id must be > 0 ";
+            if (Strings.isNullOrEmpty(uuid)) {
+                missing += " uuid ";
             }
             if (Strings.isNullOrEmpty(message)) {
                 missing += " message";
@@ -57,11 +81,11 @@ public class Hello {
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new Hello(id, message, created, lastUpdated);
+            return new Hello(uuid, message, created, lastUpdated);
         }
 
-        public Builder setId(long id) {
-            this.id = id;
+        public Builder setUuid(String uuid) {
+            this.uuid = uuid;
             return this;
         }
 

@@ -26,13 +26,13 @@ public interface DaoHello {
     @Delete
     void delete(Hello hello);
 
-    @Query("SELECT * FROM Hello WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM Hello WHERE uuid = :id LIMIT 1")
     LiveData<Hello> findLive(int id);
 
-    @Query("SELECT * FROM Hello WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM Hello WHERE uuid = :id LIMIT 1")
     Maybe<Hello> findMaybe(int id);
 
-    @Query("SELECT * FROM Hello WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM Hello WHERE uuid = :id LIMIT 1")
     Hello findOne(int id);
 
     @Query("SELECT * FROM Hello ORDER by lastUpdated DESC ")

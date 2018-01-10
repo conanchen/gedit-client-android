@@ -1,6 +1,8 @@
 package com.github.conanchen.gedit.repository.hello;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.util.Log;
 
 import com.github.conanchen.gedit.hello.grpc.HelloReply;
@@ -12,9 +14,14 @@ import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by conanchen on 2017/12/20.
@@ -39,20 +46,46 @@ public class HelloRepository {
         grpcFascade.helloService.sayHello(s, new HelloService.HelloCallback() {
             @Override
             public void onHelloReply(HelloReply helloReply) {
-                Log.i(TAG, String.format("HelloReply: %s", helloReply.getMessage()));
-                Hello hello = Hello.builder()
-                        .setId(helloReply.getUuid()==0?System.currentTimeMillis():helloReply.getUuid())
-                        .setMessage(Strings.isNullOrEmpty(helloReply.getMessage())?String.format("%s","hello is null"):helloReply.getMessage())
-                        .setCreated(helloReply.getCreated())
-                        .setLastUpdated(helloReply.getLastUpdated())
-                        .build();
-                roomFascade.daoHello.save(hello);
+                Observable.fromCallable(() -> {
+                    Log.i(TAG, String.format("HelloReply: %s", helloReply.getMessage()));
+                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(helloReply.getStatus().getCode()) == 0) {
+                        Hello hello = Hello.builder()
+                                .setUuid(helloReply.getUuid())
+                                .setMessage(Strings.isNullOrEmpty(helloReply.getMessage()) ? String.format("%s", "hello is null") : helloReply.getMessage())
+                                .setCreated(helloReply.getCreated())
+                                .setLastUpdated(helloReply.getLastUpdated())
+                                .build();
+                        return roomFascade.daoHello.save(hello);
+                    } else {
+                        Hello hello = Hello.builder()
+                                .setUuid(UUID.randomUUID().toString())
+                                .setMessage(String.format("Hello 有错：%s:%s", helloReply.getStatus().getCode(), helloReply.getStatus().getDetails()))
+                                .setCreated(System.currentTimeMillis())
+                                .setLastUpdated(System.currentTimeMillis())
+                                .build();
+                        return roomFascade.daoHello.save(hello);
+                    }
 
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.computation())
+                        .subscribe(new Consumer<Long>() {
+                            @Override
+                            public void accept(Long aLong) throws Exception {
+                                Log.i(TAG, String.format("save rowId=%d", aLong));
+                            }
+                        });
             }
         });
     }
 
-    public LiveData<List<Hello>> loadHellos(Long time) {
-        return roomFascade.daoHello.getLiveHellos(100);
+    private static final PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
+            .setEnablePlaceholders(true)
+            .setPrefetchDistance(10)
+            .setPageSize(20).build();
+
+
+    public LiveData<PagedList<Hello>> loadHellos(Long time) {
+        return (new LivePagedListBuilder(roomFascade.daoHello.listLivePagedHellos(), pagedListConfig))
+                .build();
     }
 }

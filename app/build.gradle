@@ -96,6 +96,7 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:$arch_version"
     annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+    implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
 
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"

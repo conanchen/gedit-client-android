@@ -69,7 +69,7 @@ public class GridImageAdapter extends
             super(view);
             mImg = (ImageView) view.findViewById(R.id.fiv);
             ll_del = (LinearLayout) view.findViewById(R.id.ll_del);
-//            tv_duration = (TextView) view.findViewById(R.id.tv_duration);
+//            tv_duration = (TextView) view.findViewById(R.uuid.tv_duration);
         }
 
     }
