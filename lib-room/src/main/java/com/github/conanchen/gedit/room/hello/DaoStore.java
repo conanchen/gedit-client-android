@@ -20,7 +20,7 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface DaoStore {
     @Insert(onConflict = REPLACE)
-    long save(Store store);
+    Long save(Store store);
 
     @Insert(onConflict = REPLACE)
     Long[] saveAll(Store... stores);

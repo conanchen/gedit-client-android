@@ -53,4 +53,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$arch_version"
     annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
 
+    compile "io.reactivex.rxjava2:rxandroid:$RXANDROID_VERSION"
+
 }

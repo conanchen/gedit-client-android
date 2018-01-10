@@ -33,7 +33,7 @@ public class StoreService {
                 .build();
     }
 
-    public void storeCreate(Store store, StoreService.StoreCallback callback) {
+    public void storeCreate(StoreCreateInfo storeCreateInfo, StoreService.StoreCallback callback) {
         ManagedChannel channel = getManagedChannel();
 
 
@@ -42,8 +42,8 @@ public class StoreService {
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .create(com.github.conanchen.gedit.store.profile.grpc.CreateRequest
                                 .newBuilder()
-                                .setName(store.storeName)
-                                .setOwnerId(store.address)
+                                .setName(storeCreateInfo.name)
+                                .setDetailAddress(storeCreateInfo.address)
                                 .build(),
                         new StreamObserver<CreateResponse>() {
                             @Override

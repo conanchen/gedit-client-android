@@ -19,7 +19,8 @@ public class Store {
     @PrimaryKey
     @NonNull
     public String uuid;
-    public String storeName;
+    public String name;
+    public String districtUuid;
     public String address;
     public long created;
     public long lastUpdated;
@@ -27,9 +28,10 @@ public class Store {
     public Store() {
     }
 
-    private Store(@NonNull String uuid, String storeName, String address, long created, long lastUpdated) {
+    private Store(@NonNull String uuid, String name, String districtUuid, String address, long created, long lastUpdated) {
         this.uuid = uuid;
-        this.storeName = storeName;
+        this.name = name;
+        this.districtUuid = districtUuid;
         this.address = address;
         this.created = created;
         this.lastUpdated = lastUpdated;
@@ -41,7 +43,8 @@ public class Store {
 
     public static final class Builder {
         private String uuid;
-        private String storeName;
+        private String name;
+        private String districtUuid;
         private String address;
         private long created;
         private long lastUpdated;
@@ -54,14 +57,14 @@ public class Store {
             if (Strings.isNullOrEmpty(uuid)) {
                 missing += " uuid ";
             }
-            if (Strings.isNullOrEmpty(storeName)) {
-                missing += " storeName";
+            if (Strings.isNullOrEmpty(name)) {
+                missing += " name";
             }
 
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new Store(uuid, storeName, address, created, lastUpdated);
+            return new Store(uuid, name, districtUuid,address, created, lastUpdated);
         }
 
         public Builder setUuid(String uuid) {
@@ -69,8 +72,13 @@ public class Store {
             return this;
         }
 
-        public Builder setStoreName(String storeName) {
-            this.storeName = storeName;
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setDistrictUuid(String districtUuid) {
+            this.districtUuid = districtUuid;
             return this;
         }
 

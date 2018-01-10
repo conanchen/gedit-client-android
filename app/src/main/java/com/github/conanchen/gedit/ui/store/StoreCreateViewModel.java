@@ -7,9 +7,9 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
-import com.github.conanchen.gedit.room.hello.Store;
-import com.github.conanchen.gedit.vo.StoreCreateInfo;
+import com.github.conanchen.gedit.hello.grpc.StoreCreateInfo;
 import com.github.conanchen.gedit.util.AbsentLiveData;
+import com.github.conanchen.gedit.vo.StoreCreateResponse;
 
 import javax.inject.Inject;
 
@@ -20,12 +20,12 @@ import javax.inject.Inject;
 public class StoreCreateViewModel extends ViewModel {
     @VisibleForTesting
     final MutableLiveData<StoreCreateInfo> storeCreateInfoMutableLiveData = new MutableLiveData<>();
-    private final LiveData<Store> store;
+    private final LiveData<StoreCreateResponse> storeCreateResponseLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
     public StoreCreateViewModel(StoreRepository storeRepository) {
-        store = Transformations.switchMap(storeCreateInfoMutableLiveData, storeCreateInfo -> {
+        storeCreateResponseLiveData = Transformations.switchMap(storeCreateInfoMutableLiveData, storeCreateInfo -> {
             if (storeCreateInfo == null) {
                 return AbsentLiveData.create();
             } else {
@@ -37,8 +37,8 @@ public class StoreCreateViewModel extends ViewModel {
 
 
     @VisibleForTesting
-    public LiveData<Store> getStore() {
-        return store;
+    public LiveData<StoreCreateResponse> getStoreCreateResponseLiveData() {
+        return storeCreateResponseLiveData;
     }
 
     public void createStoreWith(StoreCreateInfo storeCreateInfo) {

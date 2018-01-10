@@ -1,6 +1,9 @@
 package com.github.conanchen.gedit.repository.hello;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.conanchen.gedit.hello.grpc.StoreService;
@@ -9,12 +12,17 @@ import com.github.conanchen.gedit.vo.Location;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
-import com.github.conanchen.gedit.vo.StoreCreateInfo;
+import com.github.conanchen.gedit.hello.grpc.StoreCreateInfo;
+import com.github.conanchen.gedit.vo.StoreCreateResponse;
 import com.google.gson.Gson;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Conan Chen on 2018/1/8.
@@ -33,20 +41,6 @@ public class StoreRepository {
         this.grpcFascade = grpcFascade;
     }
 
-    public void storeCreate(Store store) {
-        grpcFascade.storeService.storeCreate(store, new StoreService.StoreCallback() {
-            @Override
-            public void onStoreReply(CreateResponse createResponse) {
-                Log.i(TAG, String.format("CreateResponse: %s", createResponse.getStatus()));
-                Store s = Store.builder()
-                        .setUuid(createResponse.getUuid())
-                        .setStoreName(store.storeName)
-                        .setAddress(store.address)
-                        .build();
-                roomFascade.daoStore.save(s);
-            }
-        });
-    }
 
     public LiveData<List<Store>> createTime(Long time) {
         return roomFascade.daoStore.getLiveStores(100);
@@ -57,11 +51,55 @@ public class StoreRepository {
         return null;
     }
 
-    public   LiveData<Store> findStore(String uuid) {
+    public LiveData<Store> findStore(String uuid) {
         return null;
     }
 
-    public LiveData<Store> createStore(StoreCreateInfo storeCreateInfo) {
-        return null;
+    public LiveData<StoreCreateResponse> createStore(StoreCreateInfo storeCreateInfo) {
+        return new LiveData<StoreCreateResponse>() {
+            @Override
+            public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<StoreCreateResponse> observer) {
+                grpcFascade.storeService.storeCreate(storeCreateInfo, new StoreService.StoreCallback() {
+                    @Override
+                    public void onStoreReply(CreateResponse createResponse) {
+                        Observable.fromCallable(() -> {
+                            Log.i(TAG, String.format("CreateResponse: %s", createResponse.getStatus()));
+                            if ("OK".compareToIgnoreCase(createResponse.getStatus().getCode()) == 0) {
+                                Store s = Store.builder()
+                                        .setUuid(createResponse.getUuid())
+                                        .setName(storeCreateInfo.name)
+                                        .setDistrictUuid(storeCreateInfo.districtUuid)
+                                        .setAddress(storeCreateInfo.address)
+                                        .build();
+                                return roomFascade.daoStore.save(s);
+                            } else {
+                                return new Long(-1);
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(Schedulers.computation())
+                                .subscribe(new Consumer<Long>() {
+                                    @Override
+                                    public void accept(@NonNull Long rowId) throws Exception {
+                                        // the id of the upserted record.
+                                        if (rowId > 0) {
+                                            postValue(StoreCreateResponse.builder()
+                                                    .setStausCode("OK")
+                                                    .setStatusDetail("Create Store successfully")
+                                                    .setStoreUuid(createResponse.getUuid())
+                                                    .build());
+                                        } else {
+                                            postValue(StoreCreateResponse.builder()
+                                                    .setStausCode("FAILED")
+                                                    .setStatusDetail("Create/Save Store falied")
+                                                    .setStoreUuid(createResponse.getUuid())
+                                                    .build());
+                                        }
+                                    }
+                                });
+                        ;
+                    }
+                });
+            }
+        };
     }
 }

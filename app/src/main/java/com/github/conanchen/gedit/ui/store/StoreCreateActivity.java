@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,13 +16,13 @@ import android.widget.Toast;
 
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.room.hello.Store;
 import com.github.conanchen.gedit.ui.common.Constant;
 import com.github.conanchen.gedit.ui.common.FullyGridLayoutManager;
 import com.github.conanchen.gedit.util.ChoosePictureOrVideo;
 import com.github.conanchen.gedit.util.PictureUtil;
-import com.github.conanchen.gedit.vo.StoreCreateInfo;
+import com.github.conanchen.gedit.hello.grpc.StoreCreateInfo;
 import com.google.common.base.Strings;
+import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -35,15 +36,17 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class StoreCreateActivity extends BaseActivity {
     public static String TAG = StoreCreateActivity.class.getSimpleName();
+    private static final Gson gson = new Gson();
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private StoreCreateViewModel storeCreateViewModel;
 
-    @BindView(R.id.save)
-    TextView save;
+    @BindView(R.id.savebutton)
+    AppCompatButton savebutton;
     @BindView(R.id.show)
     TextView show;
     @BindView(R.id.one)
@@ -63,43 +66,43 @@ public class StoreCreateActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_merchant);
+        setContentView(R.layout.activity_create_store);
         ButterKnife.bind(this);
 
-        storeCreateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreCreateViewModel.class);
-        Log.i(TAG, "storeCreateViewModel:" + storeCreateViewModel + ",viewModelFactory:" + viewModelFactory);
-        storeCreateViewModel.getStore().observe(this, store -> {
-            if (store != null) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(String.format("%d:%s@%d\n", store.uuid, store.storeName, store.address));
-                show.setText(stringBuilder.toString());
-            }
-        });
+        setupViewModel();
 
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String one = one1.getText().toString().trim();
-                String two = two1.getText().toString().trim();
-                if (TextUtils.isEmpty(one) || TextUtils.isEmpty(two)) {
-                    Toast.makeText(StoreCreateActivity.this, "输入文字", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                StoreCreateInfo store = StoreCreateInfo.builder()
-                        .setName(Strings.isNullOrEmpty(one) ? "no one" : one)
-                        .build();
-                storeCreateViewModel.createStoreWith(store);
-            }
-        });
-
-//        StoreViewModel
 
         //设置门店展示
         setExhibition();
 
     }
 
+    private void setupViewModel() {
+        storeCreateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreCreateViewModel.class);
+        Log.i(TAG, "storeCreateViewModel:" + storeCreateViewModel + ",viewModelFactory:" + viewModelFactory);
+        storeCreateViewModel.getStoreCreateResponseLiveData().observe(this, storeCreateResponse -> {
+            if (storeCreateResponse != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse)));
+                show.setText(stringBuilder.toString());
+            }
+        });
+    }
+
+    @OnClick(R.id.savebutton)
+    public void onSaveButtonClicked() {
+        String one = one1.getText().toString().trim();
+        String two = two1.getText().toString().trim();
+        if (TextUtils.isEmpty(one) || TextUtils.isEmpty(two)) {
+            Toast.makeText(StoreCreateActivity.this, "输入文字", Toast.LENGTH_LONG).show();
+            return;
+        }
+        StoreCreateInfo store = StoreCreateInfo.builder()
+                .setName(Strings.isNullOrEmpty(one) ? "no one" : one)
+                .build();
+        storeCreateViewModel.createStoreWith(store);
+
+    }
 
     //设置门店展示
     private void setExhibition() {
