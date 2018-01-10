@@ -27,6 +27,12 @@ public class StoreListFragment extends Fragment {
         return view;
     }
 
+    @OnClick(R.id.hellobutton)
+    public void openHelloButtonClicked() {
+        // 1. 应用内简单的跳转(通过URL跳转在'进阶用法'中)
+        ARouter.getInstance().build("/app/HelloActivity").navigation();
+//        startActivity(new Intent(this.getContext(), StoreCreateActivity.class));
+    }
     @OnClick(R.id.createbutton)
     public void openCreateStoreButtonClicked() {
         // 1. 应用内简单的跳转(通过URL跳转在'进阶用法'中)

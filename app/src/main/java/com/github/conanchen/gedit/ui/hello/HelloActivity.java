@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.hello.Hello;
@@ -29,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+@Route(path = "/app/HelloActivity")
 public class HelloActivity extends BaseActivity {
 
     @Inject
