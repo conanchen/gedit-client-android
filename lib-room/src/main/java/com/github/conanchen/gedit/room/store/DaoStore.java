@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.room.hello;
+package com.github.conanchen.gedit.room.store;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.DataSource;

@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.room.hello;
+package com.github.conanchen.gedit.room.store;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;

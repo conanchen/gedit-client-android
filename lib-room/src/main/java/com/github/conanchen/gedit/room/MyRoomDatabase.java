@@ -4,9 +4,9 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.TypeConverters;
 
 import com.github.conanchen.gedit.room.hello.DaoHello;
-import com.github.conanchen.gedit.room.hello.DaoStore;
+import com.github.conanchen.gedit.room.store.DaoStore;
 import com.github.conanchen.gedit.room.hello.Hello;
-import com.github.conanchen.gedit.room.hello.Store;
+import com.github.conanchen.gedit.room.store.Store;
 
 
 @Database(entities = {

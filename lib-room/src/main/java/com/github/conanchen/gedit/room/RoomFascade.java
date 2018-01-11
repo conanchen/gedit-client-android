@@ -2,7 +2,7 @@ package com.github.conanchen.gedit.room;
 
 
 import com.github.conanchen.gedit.room.hello.DaoHello;
-import com.github.conanchen.gedit.room.hello.DaoStore;
+import com.github.conanchen.gedit.room.store.DaoStore;
 
 import javax.inject.Inject;
 

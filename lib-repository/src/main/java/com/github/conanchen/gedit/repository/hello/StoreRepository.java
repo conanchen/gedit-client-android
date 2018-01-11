@@ -9,7 +9,7 @@ import com.github.conanchen.gedit.hello.grpc.StoreService;
 import com.github.conanchen.gedit.hello.grpc.StoreUpdateInfo;
 import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
-import com.github.conanchen.gedit.room.hello.Store;
+import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateResponse;
 import com.github.conanchen.gedit.vo.Location;
