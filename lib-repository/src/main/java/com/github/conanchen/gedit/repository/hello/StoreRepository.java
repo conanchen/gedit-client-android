@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -29,7 +30,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Conan Chen on 2018/1/8.
  */
-
+@Singleton
 public class StoreRepository {
     private final static String TAG = StoreRepository.class.getSimpleName();
 

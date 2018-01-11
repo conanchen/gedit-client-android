@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.github.conanchen.gedit.GeditApplication;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
@@ -25,6 +26,8 @@ import butterknife.OnClick;
  */
 @Route(path = "/app/LoginActivity")
 public class LoginActivity extends BaseActivity {
+    public static final String TAG = LoginActivity.class.getSimpleName();
+
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     SigninViewModel loginViewModel;

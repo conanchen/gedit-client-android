@@ -6,6 +6,7 @@ import android.content.Context;
 import com.github.conanchen.gedit.room.MyRoomDatabase;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.DaoHello;
+import com.github.conanchen.gedit.room.kv.DaoKeyValue;
 import com.github.conanchen.gedit.room.store.DaoStore;
 
 import javax.inject.Singleton;
@@ -47,7 +48,15 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    public RoomFascade provideRoomFascade(DaoHello daoHello, DaoStore daoStore) {
-        return new RoomFascade(daoHello, daoStore);
+    DaoKeyValue provideKeyValueDao(MyRoomDatabase db) {
+        return db.daoKeyValue();
+    }
+
+
+
+    @Singleton
+    @Provides
+    public RoomFascade provideRoomFascade(DaoHello daoHello, DaoStore daoStore,DaoKeyValue daoKeyValue) {
+        return new RoomFascade(daoHello, daoStore,daoKeyValue);
     }
 }
