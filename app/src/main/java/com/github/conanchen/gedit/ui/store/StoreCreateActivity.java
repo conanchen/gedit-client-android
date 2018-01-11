@@ -16,13 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
+import com.github.conanchen.gedit.hello.grpc.StoreCreateInfo;
 import com.github.conanchen.gedit.ui.common.Constant;
 import com.github.conanchen.gedit.ui.common.FullyGridLayoutManager;
 import com.github.conanchen.gedit.util.ChoosePictureOrVideo;
 import com.github.conanchen.gedit.util.PictureUtil;
-import com.github.conanchen.gedit.hello.grpc.StoreCreateInfo;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
@@ -77,7 +78,6 @@ public class StoreCreateActivity extends BaseActivity {
         ButterKnife.bind(this);
 
 
-
         //设置门店展示
         setExhibition();
 
@@ -90,7 +90,7 @@ public class StoreCreateActivity extends BaseActivity {
         storeCreateViewModel.getStoreCreateResponseLiveData()
                 .observe(this, storeCreateResponse -> {
                     String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
-                    Log.i(TAG,message);
+                    Log.i(TAG, message);
                     if (storeCreateResponse != null) {
                         show.setText(message);
                     }
@@ -111,6 +111,12 @@ public class StoreCreateActivity extends BaseActivity {
         storeCreateViewModel.createStoreWith(store);
 
     }
+
+    @OnClick(R.id.updatebutton)
+    public void OnUpdateButtonClicked() {
+        ARouter.getInstance().build("/app/StoreUpdateActivity").navigation();
+    }
+
 
     //设置门店展示
     private void setExhibition() {

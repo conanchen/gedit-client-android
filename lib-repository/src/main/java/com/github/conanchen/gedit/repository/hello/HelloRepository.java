@@ -13,7 +13,6 @@ import com.github.conanchen.gedit.room.hello.Hello;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;

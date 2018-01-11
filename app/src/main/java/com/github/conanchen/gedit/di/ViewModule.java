@@ -6,7 +6,8 @@ import com.github.conanchen.gedit.ui.hello.HelloActivity;
 import com.github.conanchen.gedit.ui.my.MyFragment;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
-import com.github.conanchen.gedit.ui.store.StoreListViewModel;
+import com.github.conanchen.gedit.ui.store.StoreUpdateActivity;
+import com.github.conanchen.gedit.ui.store.StoreUpdateHeadPortraitActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -34,6 +35,13 @@ public abstract class ViewModule {
     //
     @ContributesAndroidInjector
     abstract StoreCreateActivity contributeCreateStoreActivity();
+
+    @ContributesAndroidInjector
+    abstract StoreUpdateActivity contributeStoreUpdateActivity();
+
+    @ContributesAndroidInjector
+    abstract StoreUpdateHeadPortraitActivity contributeStoreUpdateHeadPortraitActivity();
+
 //
 //    @ContributesAndroidInjector
 //    abstract WordExamActivity contributeWordExamActivity();

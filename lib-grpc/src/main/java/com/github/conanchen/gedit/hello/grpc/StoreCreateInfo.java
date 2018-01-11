@@ -37,7 +37,7 @@ public class StoreCreateInfo {
 
         public StoreCreateInfo build() {
             String missing = "";
-            if (Strings.isNullOrEmpty(name) ) {
+            if (Strings.isNullOrEmpty(name)) {
                 missing += " name ";
             }
 

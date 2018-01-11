@@ -27,6 +27,14 @@
             android:text="显示"
             android:textColor="@color/text_color"/>
 
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/updatebutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="修改店铺"
+            android:textColor="@color/text_color"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

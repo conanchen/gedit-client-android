@@ -5,6 +5,7 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
+import com.github.conanchen.gedit.store.profile.grpc.UpdateResponse;
 import com.google.common.base.Strings;
 
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,11 @@ public class StoreService {
 
     public interface StoreCallback {
         void onStoreCreateResponse(CreateResponse response);
+
+    }
+
+    public interface UpdateCallback {
+        void onUpdateResponse(UpdateResponse response);
     }
 
     private ManagedChannel getManagedChannel() {
@@ -34,8 +40,7 @@ public class StoreService {
 
     public void storeCreate(StoreCreateInfo storeCreateInfo, StoreService.StoreCallback callback) {
         ManagedChannel channel = getManagedChannel();
-
-
+        Log.i(TAG, "enter service -- storeCreate");
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
@@ -67,6 +72,46 @@ public class StoreService {
                             @Override
                             public void onCompleted() {
                                 Log.i(TAG, "storeProfileApiStub.create onCompleted()");
+                            }
+                        });
+
+    }
+
+
+    public void updateStore(StoreUpdateInfo storeUpdateInfo, StoreService.UpdateCallback callback) {
+        ManagedChannel channel = getManagedChannel();
+
+        StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
+        storeProfileApiStub
+                .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateRequest.newBuilder()
+                                .setUuid(storeUpdateInfo.uuid)
+                                .build(),
+                        new StreamObserver<UpdateResponse>() {
+                            @Override
+                            public void onNext(UpdateResponse value) {
+                                Log.i(TAG, "enter onNext()");
+                                callback.onUpdateResponse(value);
+                                Status status = value.getStatus();
+                                String code = status.getCode();
+                                Log.i(TAG, "staus:" + status + ",code:" + code);
+                            }
+
+                            @Override
+                            public void onError(Throwable t) {
+                                Log.i(TAG, "enter onError()");
+                                Log.e(TAG, t.getMessage());
+                                callback.onUpdateResponse(
+                                        UpdateResponse.newBuilder()
+                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                        .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
+                                                        .build())
+                                                .build());
+                            }
+
+                            @Override
+                            public void onCompleted() {
+
                             }
                         });
 
