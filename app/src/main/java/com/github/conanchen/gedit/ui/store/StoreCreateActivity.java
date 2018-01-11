@@ -19,7 +19,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.hello.grpc.StoreCreateInfo;
+import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
 import com.github.conanchen.gedit.ui.common.Constant;
 import com.github.conanchen.gedit.ui.common.FullyGridLayoutManager;
 import com.github.conanchen.gedit.util.ChoosePictureOrVideo;

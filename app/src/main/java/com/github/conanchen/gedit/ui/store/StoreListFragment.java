@@ -2,7 +2,6 @@ package com.github.conanchen.gedit.ui.store;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
@@ -16,7 +15,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
-import com.github.conanchen.gedit.ui.hello.HelloActivity;
 
 import javax.inject.Inject;
 
@@ -40,6 +38,10 @@ public class StoreListFragment extends BaseFragment implements Injectable {
     AppCompatButton createbutton;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.login)
+    AppCompatButton login;
+    @BindView(R.id.registe)
+    AppCompatButton registe;
 
     private StoreListViewModel storeListViewModel;
 
@@ -63,6 +65,7 @@ public class StoreListFragment extends BaseFragment implements Injectable {
         ARouter.getInstance().build("/app/HelloActivity").navigation();
 //        startActivity(new Intent(this.getContext(), StoreCreateActivity.class));
     }
+
     @OnClick(R.id.createbutton)
     public void openCreateStoreButtonClicked() {
         // 1. 应用内简单的跳转(通过URL跳转在'进阶用法'中)
@@ -70,4 +73,18 @@ public class StoreListFragment extends BaseFragment implements Injectable {
 //        startActivity(new Intent(this.getContext(), StoreCreateActivity.class));
     }
 
+
+    @OnClick({R.id.login, R.id.registe})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.login:
+                //登录界面
+                ARouter.getInstance().build("/app/LoginActivity").navigation();
+                break;
+            case R.id.registe:
+                //注册界面
+                ARouter.getInstance().build("/app/RegisterActivity").navigation();
+                break;
+        }
+    }
 }

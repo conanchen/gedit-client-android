@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.hello.grpc;
+package com.github.conanchen.gedit.hello.grpc.store;
 
 import android.location.Location;
 

@@ -10,7 +10,7 @@ import android.util.Log;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.hello.grpc.StoreUpdateInfo;
+import com.github.conanchen.gedit.hello.grpc.store.StoreUpdateInfo;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;

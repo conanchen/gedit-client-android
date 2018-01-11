@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.hello.grpc.StoreUpdateInfo;
+import com.github.conanchen.gedit.hello.grpc.store.StoreUpdateInfo;
 
 import javax.inject.Inject;
 

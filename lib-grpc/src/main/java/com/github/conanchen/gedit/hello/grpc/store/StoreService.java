@@ -1,8 +1,9 @@
-package com.github.conanchen.gedit.hello.grpc;
+package com.github.conanchen.gedit.hello.grpc.store;
 
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
+import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateResponse;
