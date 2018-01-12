@@ -92,12 +92,13 @@ public class MyFragment extends BaseFragment implements Injectable {
                 break;
             case R.id.my_store:
                 //我的店铺
-                ARouter.getInstance().build("/app/MyStoreActivity").navigation();
+                ARouter.getInstance().build("/app/ExtensionStoreDetailsActivity").navigation();
                 break;
             case R.id.my_fans:
                 //我的粉丝
                 break;
             case R.id.my_integral:
+                ARouter.getInstance().build("/app/IntegralActivity").navigation();
                 //积分
                 break;
             case R.id.my_extension_store:

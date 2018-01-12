@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.github.conanchen.gedit.ui.store.ExchangeIntegralActivity">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/left_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="积分兑现"
+        app:layout_constraintLeft_toRightOf="@id/left_back"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/integral_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="积分："
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/edit_text_money"
+        app:layout_constraintTop_toBottomOf="@+id/left_back"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edit_text_money"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/integral_desc"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_back"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/max_exchange_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="本次最多可兑换500积分"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/exchange_all"
+        app:layout_constraintTop_toBottomOf="@+id/integral_desc"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/exchange_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="全部提现"
+        app:layout_constraintLeft_toRightOf="@+id/max_exchange_message"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/integral_desc"/>
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/ali_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/max_exchange_message"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/ali"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="支付宝"
+        app:layout_constraintLeft_toRightOf="@+id/ali_icon"
+        app:layout_constraintRight_toLeftOf="@+id/ali_cb"
+        app:layout_constraintTop_toBottomOf="@+id/max_exchange_message"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/ali_cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toRightOf="@+id/ali"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/max_exchange_message"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/wei_xin_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ali_icon"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/wei_xin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="微信"
+        app:layout_constraintLeft_toRightOf="@+id/ali_icon"
+        app:layout_constraintRight_toLeftOf="@+id/ali_cb"
+        app:layout_constraintTop_toBottomOf="@+id/ali_icon"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/wei_xin_icon_cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toRightOf="@+id/ali"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ali_icon"/>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:text="确认"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wei_xin_icon"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:text="duihuanguize"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submit"/>
+</android.support.constraint.ConstraintLayout>

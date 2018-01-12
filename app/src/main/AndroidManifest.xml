@@ -41,11 +41,17 @@
         </activity>
         <activity android:name=".ui.auth.RegisterActivity">
         </activity>
-        <activity android:name=".ui.store.SotreUpdateAddressActivity">
+        <activity android:name=".ui.store.StoreUpdateAddressActivity">
         </activity>
         <activity android:name=".ui.store.MyStoreActivity">
         </activity>
         <activity android:name=".ui.store.MyStoreDetailsActivity">
+        </activity>
+        <activity android:name=".ui.store.ExtensionStoreDetailsActivity">
+        </activity>
+        <activity android:name=".ui.my.IntegralActivity">
+        </activity>
+        <activity android:name=".ui.store.ExchangeIntegralActivity">
         </activity>
     </application>
 

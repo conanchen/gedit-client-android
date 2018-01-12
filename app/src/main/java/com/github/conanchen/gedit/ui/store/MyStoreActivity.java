@@ -8,12 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 我的店铺
+ */
 @Route(path = "/app/MyStoreActivity")
 public class MyStoreActivity extends AppCompatActivity {
 
@@ -44,6 +48,7 @@ public class MyStoreActivity extends AppCompatActivity {
                 break;
             case R.id.add:
                 //添加店铺
+                ARouter.getInstance().build("/app/StoreCreateActivity").navigation();
                 break;
         }
     }

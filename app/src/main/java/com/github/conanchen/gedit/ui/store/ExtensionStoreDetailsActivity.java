@@ -16,10 +16,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 我的店铺详情
+ * 推广的店铺详情
  */
-@Route(path = "/app/MyStoreDetailsActivity")
-public class MyStoreDetailsActivity extends AppCompatActivity {
+@Route(path = "/app/ExtensionStoreDetailsActivity")
+public class ExtensionStoreDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.left_back)
     AppCompatImageView leftBack;
@@ -29,18 +29,10 @@ public class MyStoreDetailsActivity extends AppCompatActivity {
     ViewPager viewPager;
     @BindView(R.id.banner)
     RelativeLayout banner;
-    @BindView(R.id.total_money)
-    AppCompatTextView totalMoney;
-    @BindView(R.id.today_money)
-    AppCompatTextView todayMoney;
     @BindView(R.id.total_integral)
     AppCompatTextView totalIntegral;
     @BindView(R.id.today_integral)
     AppCompatTextView todayIntegral;
-    @BindView(R.id.my_employees)
-    AppCompatTextView myEmployees;
-    @BindView(R.id.code)
-    AppCompatTextView code;
     @BindView(R.id.address)
     AppCompatTextView address;
     @BindView(R.id.phone)
@@ -59,7 +51,7 @@ public class MyStoreDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_store_details);
+        setContentView(R.layout.activity_extension_store);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
     }
