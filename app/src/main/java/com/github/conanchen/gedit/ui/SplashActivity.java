@@ -28,9 +28,9 @@ public class SplashActivity extends BaseActivity {
         loginViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
             if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
                 // Start home activity
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            } else {
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            } else {
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
             }
             // close splash activity
             SplashActivity.this.finish();

@@ -31,6 +31,10 @@ public class StoreService {
         void onUpdateResponse(UpdateResponse response);
     }
 
+    public interface UpdateHeadPortraitCallback {
+        void onUpdateHeadPortraitResponse(UpdateResponse response);
+    }
+
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
                 .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT)
@@ -48,7 +52,7 @@ public class StoreService {
                 .create(com.github.conanchen.gedit.store.profile.grpc.CreateRequest
                                 .newBuilder()
                                 .setName(storeCreateInfo.name)
-                                .setDetailAddress(Strings.isNullOrEmpty(storeCreateInfo.address)?"no-detail-address":storeCreateInfo.address)
+                                .setDetailAddress(Strings.isNullOrEmpty(storeCreateInfo.address) ? "no-detail-address" : storeCreateInfo.address)
                                 .build(),
                         new StreamObserver<CreateResponse>() {
                             @Override
@@ -117,4 +121,98 @@ public class StoreService {
                         });
 
     }
+
+
+    /**
+     * 修改头像
+     *
+     * @param storeUpdateInfo 修改内容封装的对象
+     * @param callback
+     */
+    public void updateHeadPortrait(StoreUpdateInfo storeUpdateInfo, StoreService.UpdateHeadPortraitCallback callback) {
+        ManagedChannel channel = getManagedChannel();
+
+        StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
+        storeProfileApiStub
+                .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateRequest.newBuilder()
+                                .setUuid(storeUpdateInfo.uuid)
+                                .build(),
+                        new StreamObserver<UpdateResponse>() {
+                            @Override
+                            public void onNext(UpdateResponse value) {
+                                Log.i(TAG, "enter onNext()");
+                                callback.onUpdateHeadPortraitResponse(value);
+                                Status status = value.getStatus();
+                                String code = status.getCode();
+                                Log.i(TAG, "staus:" + status + ",code:" + code);
+                            }
+
+                            @Override
+                            public void onError(Throwable t) {
+                                Log.i(TAG, "enter onError()");
+                                Log.e(TAG, t.getMessage());
+                                callback.onUpdateHeadPortraitResponse(
+                                        UpdateResponse.newBuilder()
+                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                        .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
+                                                        .build())
+                                                .build());
+                            }
+
+                            @Override
+                            public void onCompleted() {
+
+                            }
+                        });
+
+    }
+
+
+    /**
+     * 修改地区
+     *
+     * @param storeUpdateInfo
+     * @param callback
+     */
+    public void updateAddress(StoreUpdateInfo storeUpdateInfo, StoreService.UpdateHeadPortraitCallback callback) {
+        ManagedChannel channel = getManagedChannel();
+
+        StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
+        storeProfileApiStub
+                .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateRequest.newBuilder()
+                                .setUuid(storeUpdateInfo.uuid)
+                                .build(),
+                        new StreamObserver<UpdateResponse>() {
+                            @Override
+                            public void onNext(UpdateResponse value) {
+                                Log.i(TAG, "enter onNext()");
+                                callback.onUpdateHeadPortraitResponse(value);
+                                Status status = value.getStatus();
+                                String code = status.getCode();
+                                Log.i(TAG, "staus:" + status + ",code:" + code);
+                            }
+
+                            @Override
+                            public void onError(Throwable t) {
+                                Log.i(TAG, "enter onError()");
+                                Log.e(TAG, t.getMessage());
+                                callback.onUpdateHeadPortraitResponse(
+                                        UpdateResponse.newBuilder()
+                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                        .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
+                                                        .build())
+                                                .build());
+                            }
+
+                            @Override
+                            public void onCompleted() {
+
+                            }
+                        });
+
+    }
+
+
 }

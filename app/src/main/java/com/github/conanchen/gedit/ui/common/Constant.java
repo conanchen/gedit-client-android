@@ -10,8 +10,8 @@ import com.luck.picture.lib.config.PictureMimeType;
 public class Constant {
 
     public static int selectMode = PictureConfig.MULTIPLE;//单选 or 多选
-    public static int MAX_SELECT_NUM = 9;// 图片最大可选数量
-    public static int maxSelectNumLicence = 1;// 图片最大可选数量
+    public static int MAX_SELECT_NUM_NINE = 9;// 图片最大可选数量
+    public static int MAX_SELECT_NUM_ONE = 1;// 图片最大可选数量
     public static int selectType = PictureMimeType.ofImage();//图片or视频
 
     public static int selectModeVideo = PictureConfig.SINGLE;//单选 or 多选

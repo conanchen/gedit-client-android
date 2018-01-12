@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.github.conanchen.gedit.ui.store.StoreUpdateHeadPortraitActivity">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="result"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/updatebutton"
@@ -12,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:padding="10dp"
-        android:text="按钮"/>
+        android:text="按钮"
+        app:layout_constraintTop_toBottomOf="@id/show"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -145,6 +145,7 @@ public class StoreCreateActivity extends BaseActivity {
                 if (!shareCompressList.isEmpty()) {
                     shareCompressList.remove(position);
                 }
+
                 if (!sharePathList.isEmpty()) {
                     sharePathList.remove(position);
                 }
@@ -152,7 +153,7 @@ public class StoreCreateActivity extends BaseActivity {
         });
 
         adapter.setList(selectMedia);
-        adapter.setSelectMax(Constant.MAX_SELECT_NUM);//设置最多显示的张数
+        adapter.setSelectMax(Constant.MAX_SELECT_NUM_NINE);//设置最多显示的张数
         recyclerView.setAdapter(adapter);
 
         //点击图片预览图片
@@ -199,7 +200,7 @@ public class StoreCreateActivity extends BaseActivity {
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                     if (PictureMimeType.ofImage() == Constant.selectType) {
                         //选择图片成功回调
-                        adapter.setSelectMax(Constant.MAX_SELECT_NUM);
+                        adapter.setSelectMax(Constant.MAX_SELECT_NUM_NINE);
                         adapter.notifyDataSetChanged();
 
                         //清除之前的数据

@@ -83,7 +83,7 @@ public class StoreListFragment extends BaseFragment implements Injectable {
                 break;
             case R.id.registe:
                 //注册界面
-                ARouter.getInstance().build("/app/RegisterActivity").navigation();
+                ARouter.getInstance().build("/app/StoreUpdateHeadPortraitActivity").navigation();
                 break;
         }
     }
