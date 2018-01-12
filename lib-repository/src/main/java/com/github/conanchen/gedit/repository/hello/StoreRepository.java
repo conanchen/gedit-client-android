@@ -62,6 +62,7 @@ public class StoreRepository {
         return new LiveData<StoreCreateResponse>() {
             @Override
             protected void onActive() {
+
                 grpcFascade.storeService.storeCreate(storeCreateInfo, new StoreService.StoreCallback() {
                     @Override
                     public void onStoreCreateResponse(CreateResponse createResponse) {
@@ -102,6 +103,7 @@ public class StoreRepository {
                         ;
                     }
                 });
+
             }
         };
     }
@@ -118,6 +120,7 @@ public class StoreRepository {
                             Log.i(TAG, String.format("UpdateResponse: %s", response.getStatus()));
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
+                                s.lastUpdated = response.getLastUpdated();
 //                                s.address = storeUpdateInfo.detailAddress;
                                 return roomFascade.daoStore.save(s);
                             } else {
@@ -168,7 +171,12 @@ public class StoreRepository {
                             Log.i(TAG, String.format("UpdateResponse: %s", response.getStatus()));
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
-                                s.address = storeUpdateInfo.logo;
+                                if(StoreUpdateInfo.Field.DETAIL_ADDRESS.equals(storeUpdateInfo.name)) {
+                                    s.address = (String) storeUpdateInfo.value;
+                                }else{
+                                    //TODO ....
+                                }
+                                s.lastUpdated = response.getLastUpdated();
                                 return roomFascade.daoStore.save(s);
                             } else {
                                 return new Long(-1);
@@ -217,7 +225,7 @@ public class StoreRepository {
                             Log.i(TAG, String.format("UpdateResponse: %s", response.getStatus()));
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
-                                s.address = storeUpdateInfo.logo;
+                                s.address = (String)storeUpdateInfo.value;
                                 return roomFascade.daoStore.save(s);
                             } else {
                                 return new Long(-1);
