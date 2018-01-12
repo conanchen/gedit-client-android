@@ -16,15 +16,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#1000"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="我的"/>
-
         <LinearLayout
+            android:id="@+id/mine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -63,6 +56,7 @@
         android:paddingTop="5dp">
 
         <LinearLayout
+            android:id="@+id/my_invest"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -82,6 +76,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/my_store"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -101,6 +96,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/my_fans"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -131,6 +127,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/my_integral"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -160,6 +157,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/my_extension_store"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -189,6 +187,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/customer_service"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -218,6 +217,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/setting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -241,22 +241,4 @@
             android:background="#1000"/>
     </LinearLayout>
 
-    <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="10dp"/>
-
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-    </android.support.v7.widget.LinearLayoutCompat>
 </LinearLayout>

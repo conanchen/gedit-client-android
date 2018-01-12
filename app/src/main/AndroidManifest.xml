@@ -43,6 +43,10 @@
         </activity>
         <activity android:name=".ui.store.SotreUpdateAddressActivity">
         </activity>
+        <activity android:name=".ui.store.MyStoreActivity">
+        </activity>
+        <activity android:name=".ui.store.MyStoreDetailsActivity">
+        </activity>
     </application>
 
 </manifest>

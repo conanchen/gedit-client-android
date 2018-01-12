@@ -9,7 +9,9 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
@@ -29,6 +31,22 @@ public class MyFragment extends BaseFragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @BindView(R.id.mine)
+    LinearLayout mine;
+    @BindView(R.id.my_invest)
+    LinearLayout myInvest;
+    @BindView(R.id.my_store)
+    LinearLayout myStore;
+    @BindView(R.id.my_fans)
+    LinearLayout myFans;
+    @BindView(R.id.my_integral)
+    LinearLayout myIntegral;
+    @BindView(R.id.my_extension_store)
+    LinearLayout myExtensionStore;
+    @BindView(R.id.customer_service)
+    LinearLayout customerService;
+    @BindView(R.id.setting)
+    LinearLayout setting;
 
     private MyViewModel viewModel;
 
@@ -60,5 +78,37 @@ public class MyFragment extends BaseFragment implements Injectable {
     @OnClick(R.id.myviewmodeltext)
     public void onViewClicked() {
         startActivity(new Intent(getContext(), StoreCreateActivity.class));
+    }
+
+    @OnClick({R.id.mine, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_integral, R.id.my_extension_store, R.id.customer_service, R.id.setting})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.mine:
+                //点击了小花花
+
+                break;
+            case R.id.my_invest:
+                //投资
+                break;
+            case R.id.my_store:
+                //我的店铺
+                ARouter.getInstance().build("/app/MyStoreActivity").navigation();
+                break;
+            case R.id.my_fans:
+                //我的粉丝
+                break;
+            case R.id.my_integral:
+                //积分
+                break;
+            case R.id.my_extension_store:
+                //我推广的店铺
+                break;
+            case R.id.customer_service:
+                //客服
+                break;
+            case R.id.setting:
+                //设置
+                break;
+        }
     }
 }
