@@ -100,7 +100,7 @@ public class MyFragment extends BaseFragment implements Injectable {
                 break;
             case R.id.my_integral:
                 //积分
-                ARouter.getInstance().build("/app/IntegralActivity").navigation();
+                ARouter.getInstance().build("/app/PointsActivity").navigation();
                 break;
             case R.id.my_extension_store:
                 //我推广的店铺

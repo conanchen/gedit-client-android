@@ -14,8 +14,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-@Route(path = "/app/IntegralActivity")
-public class IntegralActivity extends AppCompatActivity {
+@Route(path = "/app/PointsActivity")
+public class PointsActivity extends AppCompatActivity {
 
     @BindView(R.id.left_back)
     AppCompatImageView leftBack;
@@ -39,7 +39,7 @@ public class IntegralActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_integral);
+        setContentView(R.layout.activity_points);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
 

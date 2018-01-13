@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.conanchen.gedit.ui.my.IntegralActivity">
+    tools:context="com.github.conanchen.gedit.ui.my.PointsActivity">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/left_back"

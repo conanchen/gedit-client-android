@@ -1,1 +1,5 @@
 /build
+/app/build
+/lib-grpc/build
+/lib-repository/build
+/lib-room/build

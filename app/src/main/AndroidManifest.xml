@@ -49,7 +49,7 @@
         </activity>
         <activity android:name=".ui.store.ExtensionStoreDetailsActivity">
         </activity>
-        <activity android:name=".ui.my.IntegralActivity">
+        <activity android:name=".ui.my.PointsActivity">
         </activity>
         <activity android:name=".ui.store.ExchangeIntegralActivity">
         </activity>
