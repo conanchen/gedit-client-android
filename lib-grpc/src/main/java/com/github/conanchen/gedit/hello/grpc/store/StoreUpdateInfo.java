@@ -1,16 +1,14 @@
 package com.github.conanchen.gedit.hello.grpc.store;
 
-import android.location.Location;
-
+import com.github.conanchen.gedit.room.kv.VoAccessToken;
 import com.google.common.base.Strings;
 
-import java.util.List;
-
 /**
- * Created by Administrator on 2018/1/10.
+ * Created by Conan Chen on 2018/1/10.
  */
 
 public class StoreUpdateInfo {
+    public VoAccessToken voAccessToken;
     public String uuid;
     //单项修改
     public Field name;
@@ -31,7 +29,8 @@ public class StoreUpdateInfo {
 //    public List<String> images;
 
 
-    private StoreUpdateInfo(String uuid, Field name, Object value) {
+    private StoreUpdateInfo(VoAccessToken voAccessToken, String uuid, Field name, Object value) {
+        this.voAccessToken = voAccessToken;
         this.uuid = uuid;
         this.name = name;
         this.value = value;
@@ -43,6 +42,7 @@ public class StoreUpdateInfo {
 
 
     public static final class Builder {
+        private VoAccessToken voAccessToken;
         private String uuid;
         //单项修改
         private Field name;
@@ -53,6 +53,9 @@ public class StoreUpdateInfo {
 
         public StoreUpdateInfo build() {
             String missing = "";
+            if (voAccessToken ==null) {
+                missing += " voAccessToken ";
+            }
             if (Strings.isNullOrEmpty(uuid)) {
                 missing += " uuid ";
             }
@@ -67,7 +70,12 @@ public class StoreUpdateInfo {
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new StoreUpdateInfo(uuid, name, value);
+            return new StoreUpdateInfo(voAccessToken,uuid, name, value);
+        }
+
+        public Builder setVoAccessToken(VoAccessToken voAccessToken) {
+            this.voAccessToken = voAccessToken;
+            return this;
         }
 
         public Builder setUuid(String uuid) {

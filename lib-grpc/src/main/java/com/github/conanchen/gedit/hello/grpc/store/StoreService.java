@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
+import com.github.conanchen.gedit.hello.grpc.utils.JcaUtils;
 import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateResponse;
@@ -11,6 +12,7 @@ import com.google.common.base.Strings;
 
 import java.util.concurrent.TimeUnit;
 
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -84,11 +86,16 @@ public class StoreService {
 
 
     public void updateStore(StoreUpdateInfo storeUpdateInfo, StoreService.UpdateCallback callback) {
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(storeUpdateInfo.voAccessToken.accessToken,
+                        Long.valueOf(storeUpdateInfo.voAccessToken.expiresIn));
+
         ManagedChannel channel = getManagedChannel();
 
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .withCallCredentials(callCredentials)
                 .update(com.github.conanchen.gedit.store.profile.grpc.UpdateRequest.newBuilder()
                                 .setUuid(storeUpdateInfo.uuid)
                                 .build(),
