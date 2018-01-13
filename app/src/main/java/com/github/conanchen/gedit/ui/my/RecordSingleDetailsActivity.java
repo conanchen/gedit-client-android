@@ -34,16 +34,10 @@ public class RecordSingleDetailsActivity extends AppCompatActivity {
     AppCompatEditText businessNeedPay;
     @BindView(R.id.use_explain)
     AppCompatTextView useExplain;
-    @BindView(R.id.wallet_desc)
-    AppCompatTextView walletDesc;
     @BindView(R.id.wallet_cb)
     AppCompatCheckBox walletCb;
-    @BindView(R.id.ali_desc)
-    AppCompatTextView aliDesc;
     @BindView(R.id.ali_cb)
     AppCompatCheckBox aliCb;
-    @BindView(R.id.wei_xin_desc)
-    AppCompatTextView weiXinDesc;
     @BindView(R.id.wei_xin_cb)
     AppCompatCheckBox weiXinCb;
     @BindView(R.id.submit)
@@ -55,24 +49,25 @@ public class RecordSingleDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_record_single_details);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        title.setText("录单详情");
 
     }
 
-    @OnClick({R.id.left_back, R.id.wallet_desc, R.id.wallet_cb, R.id.ali_desc, R.id.ali_cb, R.id.wei_xin_desc, R.id.wei_xin_cb, R.id.submit})
+    @OnClick({R.id.left_back, R.id.wallet, R.id.wallet_cb, R.id.ali, R.id.ali_cb, R.id.wei_xin, R.id.wei_xin_cb, R.id.submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_back:
                 finish();
                 break;
-            case R.id.wallet_desc:
+            case R.id.wallet:
                 break;
             case R.id.wallet_cb:
                 break;
-            case R.id.ali_desc:
+            case R.id.ali:
                 break;
             case R.id.ali_cb:
                 break;
-            case R.id.wei_xin_desc:
+            case R.id.wei_xin:
                 break;
             case R.id.wei_xin_cb:
                 break;

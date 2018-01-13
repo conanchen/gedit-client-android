@@ -74,7 +74,8 @@ public class StoreListFragment extends BaseFragment implements Injectable {
     }
 
 
-    @OnClick({R.id.login, R.id.registe})
+    @OnClick({R.id.login, R.id.registe, R.id.my_store_details, R.id.my_extension_store_details, R.id.others_store_details,
+            R.id.record_single_list, R.id.record_single_details})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.login:
@@ -83,7 +84,27 @@ public class StoreListFragment extends BaseFragment implements Injectable {
                 break;
             case R.id.registe:
                 //注册界面
-                ARouter.getInstance().build("/app/StoreUpdateHeadPortraitActivity").navigation();
+                ARouter.getInstance().build("/app/RegisterActivity").navigation();
+                break;
+            case R.id.my_store_details:
+                //我的店铺详情
+                ARouter.getInstance().build("/app/MyStoreDetailsActivity").navigation();
+                break;
+            case R.id.my_extension_store_details:
+                //代理的店铺详情
+                ARouter.getInstance().build("/app/ExtensionStoreDetailsActivity").navigation();
+                break;
+            case R.id.others_store_details:
+                //其他店铺详情
+                ARouter.getInstance().build("/app/BusinessDetailsActivity").navigation();
+                break;
+            case R.id.record_single_list:
+                //录单列表
+                ARouter.getInstance().build("/app/RecordSingleListActivity").navigation();
+                break;
+            case R.id.record_single_details:
+                //录单列表
+                ARouter.getInstance().build("/app/RecordSingleDetailsActivity").navigation();
                 break;
         }
     }

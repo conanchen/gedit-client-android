@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.github.conanchen.gedit.ui.my.SettingActivity">
+
+    <include layout="@layout/layout_action_bar"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/left_back">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/update_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/update_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="手动更新"
+            app:layout_constraintLeft_toRightOf="@+id/update_icon"
+            app:layout_constraintRight_toLeftOf="@+id/update_icon_to_right"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/update_icon_to_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toRightOf="@+id/update_desc"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#3000"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/update_icon"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/other"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/update">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/other_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/other_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="XXXXXX"
+            app:layout_constraintLeft_toRightOf="@+id/other_icon"
+            app:layout_constraintRight_toLeftOf="@+id/other_desc_to_right"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/other_desc_to_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toRightOf="@+id/other_desc"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#3000"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/other_icon"/>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

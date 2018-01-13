@@ -7,35 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.github.conanchen.gedit.ui.my.PointsActivity">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/left_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@mipmap/add"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="10dp"
-        android:text="integral"
-        app:layout_constraintLeft_toRightOf="@id/left_back"
-        app:layout_constraintRight_toLeftOf="@id/buy"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/buy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="buy"
-        app:layout_constraintLeft_toRightOf="@id/title"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <include layout="@layout/layout_action_bar"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/today_add_integral_desc"
@@ -99,122 +71,129 @@
         app:layout_constraintTop_toBottomOf="@+id/can_exchange_integral_desc"/>
 
     <View
-        android:id="@+id/view1"
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:background="#3000"
         app:layout_constraintTop_toBottomOf="@+id/can_consumption_integral"/>
 
-
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/to_integral_exchange_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@mipmap/add"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view1"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/to_integral_exchange_desc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="积分兑现"
-        app:layout_constraintLeft_toRightOf="@+id/to_integral_exchange_icon"
-        app:layout_constraintRight_toLeftOf="@+id/to_integral_exchange_icon_to_right"
-        app:layout_constraintTop_toBottomOf="@+id/view1"/>
-
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/to_integral_exchange_icon_to_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@mipmap/add"
-        app:layout_constraintLeft_toRightOf="@id/to_integral_exchange_desc"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view1"/>
-
-
-    <View
-        android:id="@+id/view2"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/exchange_points"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#3000"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/to_integral_exchange_icon"/>
-
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/can_consumption_integral_info_icon"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@mipmap/add"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2"/>
+        app:layout_constraintTop_toBottomOf="@+id/view">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/can_consumption_integral_info_desc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="可消费积分"
-        app:layout_constraintLeft_toRightOf="@+id/can_consumption_integral_info_icon"
-        app:layout_constraintRight_toLeftOf="@+id/can_consumption_integral_info_desc_to_right"
-        app:layout_constraintTop_toBottomOf="@+id/view2"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/to_integral_exchange_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toLeftOf="parent"/>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/can_consumption_integral_info_desc_to_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@mipmap/add"
-        app:layout_constraintLeft_toRightOf="@+id/can_consumption_integral_info_desc"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/to_integral_exchange_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="积分兑现"
+            app:layout_constraintLeft_toRightOf="@+id/to_integral_exchange_icon"
+            app:layout_constraintRight_toLeftOf="@+id/to_integral_exchange_icon_to_right"/>
 
-    <View
-        android:id="@+id/view3"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/to_integral_exchange_icon_to_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toRightOf="@id/to_integral_exchange_desc"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#3000"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/to_integral_exchange_icon"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/can_consumption_points"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#3000"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/can_consumption_integral_info_icon"/>
-
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/can_exchange_integral_info_icon"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@mipmap/add"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"/>
+        app:layout_constraintTop_toBottomOf="@+id/exchange_points">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/can_exchange_integral_info_desc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="可兑换积分明细"
-        app:layout_constraintLeft_toRightOf="@+id/can_exchange_integral_info_icon"
-        app:layout_constraintRight_toLeftOf="@+id/can_exchange_integral_info_desc_to_right"
-        app:layout_constraintTop_toBottomOf="@+id/view3"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/can_consumption_integral_info_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toLeftOf="parent"/>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/can_exchange_integral_info_desc_to_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@mipmap/add"
-        app:layout_constraintLeft_toRightOf="@+id/can_exchange_integral_info_desc"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/can_consumption_integral_info_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="可消费积分"
+            app:layout_constraintLeft_toRightOf="@+id/can_consumption_integral_info_icon"
+            app:layout_constraintRight_toLeftOf="@+id/can_consumption_integral_info_desc_to_right"/>
 
-    <View
-        android:id="@+id/view4"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/can_consumption_integral_info_desc_to_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toRightOf="@+id/can_consumption_integral_info_desc"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#3000"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/can_consumption_integral_info_icon"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/can_exchange_record"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#3000"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/can_exchange_integral_info_icon"/>
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/can_consumption_points">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/can_exchange_integral_info_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/can_exchange_integral_info_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="可兑换积分明细"
+            app:layout_constraintLeft_toRightOf="@+id/can_exchange_integral_info_icon"
+            app:layout_constraintRight_toLeftOf="@+id/can_exchange_integral_info_desc_to_right"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/can_exchange_integral_info_desc_to_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/add"
+            app:layout_constraintLeft_toRightOf="@+id/can_exchange_integral_info_desc"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#3000"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/can_exchange_integral_info_icon"/>
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

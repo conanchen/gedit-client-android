@@ -1,6 +1,7 @@
 package com.github.conanchen.gedit.ui.my;
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
@@ -17,24 +18,25 @@ import butterknife.OnClick;
 @Route(path = "/app/PointsActivity")
 public class PointsActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
+
     @BindView(R.id.title)
     AppCompatTextView title;
-    @BindView(R.id.buy)
-    AppCompatTextView buy;
+    @BindView(R.id.left_back)
+    AppCompatImageView leftBack;
+    @BindView(R.id.right_text)
+    AppCompatTextView rightText;
     @BindView(R.id.today_add_integral)
     AppCompatTextView todayAddIntegral;
     @BindView(R.id.can_consumption_integral)
     AppCompatTextView canConsumptionIntegral;
     @BindView(R.id.can_exchange_integral)
     AppCompatTextView canExchangeIntegral;
-    @BindView(R.id.to_integral_exchange_desc)
-    AppCompatTextView toIntegralExchangeDesc;
-    @BindView(R.id.can_consumption_integral_info_desc)
-    AppCompatTextView canConsumptionIntegralInfoDesc;
-    @BindView(R.id.can_exchange_integral_info_desc)
-    AppCompatTextView canExchangeIntegralInfoDesc;
+    @BindView(R.id.exchange_points)
+    ConstraintLayout exchangePoints;
+    @BindView(R.id.can_consumption_points)
+    ConstraintLayout canConsumptionPoints;
+    @BindView(R.id.can_exchange_record)
+    ConstraintLayout canExchangeRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,30 +44,35 @@ public class PointsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_points);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        title.setText("积分");
+        rightText.setVisibility(View.VISIBLE);
+        rightText.setText("购买");
+
 
     }
 
-    @OnClick({R.id.left_back, R.id.buy, R.id.to_integral_exchange_desc, R.id.can_consumption_integral_info_desc, R.id.can_exchange_integral_info_desc})
+    @OnClick({R.id.left_back, R.id.right_text, R.id.exchange_points, R.id.can_consumption_points, R.id.can_exchange_record})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_back:
                 finish();
                 break;
-            case R.id.buy:
-                //去购买积分
+            case R.id.right_text:
+                //购买
                 break;
-            case R.id.to_integral_exchange_desc:
+            case R.id.exchange_points:
                 //跳转到积分兑换界面
-                ARouter.getInstance().build("/app/ExchangeIntegralActivity").navigation();
+                ARouter.getInstance().build("/app/ExchangePointsActivity").navigation();
                 break;
-            case R.id.can_consumption_integral_info_desc:
+            case R.id.can_consumption_points:
                 //可消费积分明细
-                ARouter.getInstance().build("/app/ConsumptionIntegralDetailsActivity").navigation();
+                ARouter.getInstance().build("/app/ConsumptionPointsDetailsActivity").navigation();
                 break;
-            case R.id.can_exchange_integral_info_desc:
+            case R.id.can_exchange_record:
                 //可兑换积分明细
-                ARouter.getInstance().build("/app/ExchangeIntegralDetailsActivity").navigation();
+                ARouter.getInstance().build("/app/ExchangePointsDetailsActivity").navigation();
                 break;
         }
     }
+
 }

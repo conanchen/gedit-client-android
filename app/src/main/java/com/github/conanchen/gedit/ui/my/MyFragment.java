@@ -108,9 +108,11 @@ public class MyFragment extends BaseFragment implements Injectable {
                 break;
             case R.id.customer_service:
                 //客服
+                ARouter.getInstance().build("/app/CustomerServiceActivity").navigation();
                 break;
             case R.id.setting:
                 //设置
+                ARouter.getInstance().build("/app/SettingActivity").navigation();
                 break;
         }
     }

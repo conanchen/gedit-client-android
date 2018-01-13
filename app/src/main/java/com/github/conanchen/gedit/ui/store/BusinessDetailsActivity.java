@@ -54,6 +54,7 @@ public class BusinessDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_store_details);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        title.setText("王小姐的店");
     }
 
     @OnClick({R.id.left_back})

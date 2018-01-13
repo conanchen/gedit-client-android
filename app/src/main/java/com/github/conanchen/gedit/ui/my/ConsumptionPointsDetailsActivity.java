@@ -15,10 +15,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 录单列表界面
+ * 可消费积分明细
  */
-@Route(path = "/app/RecordSingleListActivity")
-public class RecordSingleListActivity extends AppCompatActivity {
+@Route(path = "/app/ConsumptionPointsDetailsActivity")
+public class ConsumptionPointsDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.left_back)
     AppCompatImageView leftBack;
@@ -30,13 +30,12 @@ public class RecordSingleListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_single);
+        setContentView(R.layout.activity_consumption_points_details);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
-        title.setText("录单");
     }
 
-    @OnClick({R.id.left_back, R.id.title})
+    @OnClick({R.id.left_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_back:

@@ -17,8 +17,8 @@ import butterknife.OnClick;
 /**
  * 可兑换积分明细
  */
-@Route(path = "/app/ExchangeIntegralDetailsActivity")
-public class ExchangeIntegralDetailsActivity extends AppCompatActivity {
+@Route(path = "/app/ExchangePointsDetailsActivity")
+public class ExchangePointsDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.left_back)
     AppCompatImageView leftBack;
@@ -30,7 +30,7 @@ public class ExchangeIntegralDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exchange_integral_details);
+        setContentView(R.layout.activity_exchange_points_details);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
     }

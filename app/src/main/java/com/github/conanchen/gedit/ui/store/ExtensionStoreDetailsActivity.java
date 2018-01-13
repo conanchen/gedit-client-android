@@ -43,10 +43,6 @@ public class ExtensionStoreDetailsActivity extends AppCompatActivity {
     AppCompatTextView prompt;
     @BindView(R.id.store_introduce)
     AppCompatTextView storeIntroduce;
-    @BindView(R.id.delete)
-    AppCompatTextView delete;
-    @BindView(R.id.modify)
-    AppCompatTextView modify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -51,13 +51,13 @@
         </activity>
         <activity android:name=".ui.my.PointsActivity">
         </activity>
-        <activity android:name=".ui.store.ExchangeIntegralActivity">
+        <activity android:name=".ui.store.ExchangePointsActivity">
         </activity>
         <activity android:name=".ui.store.MyExtensionStoreActivity">
         </activity>
-        <activity android:name=".ui.my.ConsumptionIntegralDetailsActivity">
+        <activity android:name=".ui.my.ConsumptionPointsDetailsActivity">
         </activity>
-        <activity android:name=".ui.my.ExchangeIntegralDetailsActivity">
+        <activity android:name=".ui.my.ExchangePointsDetailsActivity">
         </activity>
         <activity android:name=".ui.store.BusinessDetailsActivity">
         </activity>
@@ -68,6 +68,10 @@
         <activity android:name=".ui.my.RecordSingleListActivity">
         </activity>
         <activity android:name=".ui.my.RecordSingleDetailsActivity">
+        </activity>
+        <activity android:name=".ui.my.CustomerServiceActivity">
+        </activity>
+        <activity android:name=".ui.my.SettingActivity">
         </activity>
     </application>
 

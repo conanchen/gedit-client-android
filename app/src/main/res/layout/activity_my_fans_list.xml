@@ -7,25 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.github.conanchen.gedit.ui.my.MyFansListActivity">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/left_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@mipmap/add"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="10dp"
-        android:text="我的粉丝"
-        app:layout_constraintLeft_toRightOf="@id/left_back"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <include layout="@layout/layout_action_bar"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

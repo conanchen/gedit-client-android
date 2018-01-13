@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.conanchen.gedit.ui.my.RecordSingleListActivity">
+    tools:context="com.github.conanchen.gedit.ui.my.ExchangePointsDetailsActivity">
 
     <include layout="@layout/layout_action_bar"/>
 
@@ -17,4 +17,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/left_back"/>
+
 </android.support.constraint.ConstraintLayout>

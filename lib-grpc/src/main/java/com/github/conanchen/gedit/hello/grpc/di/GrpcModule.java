@@ -2,6 +2,7 @@ package com.github.conanchen.gedit.hello.grpc.di;
 
 
 import com.github.conanchen.gedit.hello.grpc.HelloService;
+import com.github.conanchen.gedit.hello.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.hello.grpc.auth.SigninService;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 
@@ -22,11 +23,15 @@ public class GrpcModule {
     public GrpcFascade provideGrpcFascade(
             HelloService helloService,
             StoreService storeService,
-            SigninService signinService
+            SigninService signinService,
+            RegisterService registerService
 
     ) {
         return new GrpcFascade(
-                helloService, storeService, signinService);
+                helloService,
+                storeService,
+                signinService,
+                registerService);
     }
 
     @Singleton
@@ -46,5 +51,11 @@ public class GrpcModule {
     @Provides
     public SigninService provideSigninService() {
         return new SigninService();
+    }
+
+    @Singleton
+    @Provides
+    public RegisterService provideRegisterService() {
+        return new RegisterService();
     }
 }

@@ -4,6 +4,7 @@ package com.github.conanchen.gedit.di;
 import com.github.conanchen.gedit.ui.MainActivity;
 import com.github.conanchen.gedit.ui.SplashActivity;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
+import com.github.conanchen.gedit.ui.auth.RegisterActivity;
 import com.github.conanchen.gedit.ui.hello.HelloActivity;
 import com.github.conanchen.gedit.ui.my.MyFragment;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
@@ -49,6 +50,9 @@ public abstract class ViewModule {
 
     @ContributesAndroidInjector
     abstract SplashActivity contributeSplashActivity();
+
+    @ContributesAndroidInjector
+    abstract RegisterActivity contributeRegisterActivity();
 
 
     //

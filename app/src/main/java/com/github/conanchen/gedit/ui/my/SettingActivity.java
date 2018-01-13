@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -15,24 +14,22 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 可消费积分明细
+ * 设置界面
  */
-@Route(path = "/app/ConsumptionIntegralDetailsActivity")
-public class ConsumptionIntegralDetailsActivity extends AppCompatActivity {
+@Route(path = "/app/SettingActivity")
+public class SettingActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
     @BindView(R.id.title)
     AppCompatTextView title;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_consumption_integral_details);
+        setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        title.setText("设置");
     }
 
     @OnClick({R.id.left_back})
