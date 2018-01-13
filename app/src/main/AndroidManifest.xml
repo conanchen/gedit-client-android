@@ -53,6 +53,22 @@
         </activity>
         <activity android:name=".ui.store.ExchangeIntegralActivity">
         </activity>
+        <activity android:name=".ui.store.MyExtensionStoreActivity">
+        </activity>
+        <activity android:name=".ui.my.ConsumptionIntegralDetailsActivity">
+        </activity>
+        <activity android:name=".ui.my.ExchangeIntegralDetailsActivity">
+        </activity>
+        <activity android:name=".ui.store.BusinessDetailsActivity">
+        </activity>
+        <activity android:name=".ui.my.MyFansListActivity">
+        </activity>
+        <activity android:name=".ui.store.PaymentActivity">
+        </activity>
+        <activity android:name=".ui.my.RecordSingleListActivity">
+        </activity>
+        <activity android:name=".ui.my.RecordSingleDetailsActivity">
+        </activity>
     </application>
 
 </manifest>

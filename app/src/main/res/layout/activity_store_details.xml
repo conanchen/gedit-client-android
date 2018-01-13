@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.conanchen.gedit.ui.store.ExtensionStoreDetailsActivity">
+    tools:context="com.github.conanchen.gedit.ui.store.BusinessDetailsActivity">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/left_back"
@@ -18,15 +18,14 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:padding="10dp"
-        android:text="王小姐的茶"
-        app:layout_constraintLeft_toLeftOf="@id/left_back"
+        android:text="王小姐的店"
+        app:layout_constraintLeft_toRightOf="@id/left_back"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-
     <RelativeLayout
         android:id="@+id/banner"
         android:layout_width="match_parent"
@@ -40,64 +39,6 @@
             android:layout_height="match_parent"/>
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/total_integral"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="5dp"
-        android:text="1500"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/view1"
-        app:layout_constraintTop_toBottomOf="@+id/banner"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/total_integral_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="total_integral_desc"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/view1"
-        app:layout_constraintTop_toBottomOf="@id/total_integral"/>
-
-    <View
-        android:id="@+id/view1"
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:background="#000"
-        android:visibility="gone"
-        app:layout_constraintLeft_toRightOf="@+id/total_integral"
-        app:layout_constraintRight_toLeftOf="@+id/today_integral"
-        app:layout_constraintTop_toBottomOf="@id/banner"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/today_integral"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="1500"
-        app:layout_constraintLeft_toRightOf="@id/view1"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/banner"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/today_integral_desc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="今日总积分"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@+id/view1"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/today_integral"/>
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#3000"
-        app:layout_constraintTop_toBottomOf="@id/total_integral_desc"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/address_icon"
@@ -106,7 +47,7 @@
         android:layout_marginTop="10dp"
         android:src="@mipmap/add"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view2"/>
+        app:layout_constraintTop_toBottomOf="@id/banner"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/address"
@@ -116,7 +57,7 @@
         android:layout_marginTop="10dp"
         android:text="成都市武侯区玉林路120号"
         app:layout_constraintLeft_toRightOf="@+id/address_icon"
-        app:layout_constraintTop_toBottomOf="@+id/view2"/>
+        app:layout_constraintTop_toBottomOf="@+id/banner"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/phone_icon"
@@ -184,5 +125,4 @@
         android:text="店铺介绍：XXXXXXXXXXXXXXX"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prompt_icon"/>
-
 </android.support.constraint.ConstraintLayout>

@@ -59,8 +59,12 @@ public class IntegralActivity extends AppCompatActivity {
                 ARouter.getInstance().build("/app/ExchangeIntegralActivity").navigation();
                 break;
             case R.id.can_consumption_integral_info_desc:
+                //可消费积分明细
+                ARouter.getInstance().build("/app/ConsumptionIntegralDetailsActivity").navigation();
                 break;
             case R.id.can_exchange_integral_info_desc:
+                //可兑换积分明细
+                ARouter.getInstance().build("/app/ExchangeIntegralDetailsActivity").navigation();
                 break;
         }
     }

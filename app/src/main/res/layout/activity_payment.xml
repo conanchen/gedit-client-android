@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.github.conanchen.gedit.ui.store.PaymentActivity">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/left_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="付款"
+        app:layout_constraintLeft_toRightOf="@id/left_back"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/store_name_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="商铺名称："
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/store_name"
+        app:layout_constraintTop_toBottomOf="@+id/left_back"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/store_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="miss"
+        app:layout_constraintLeft_toRightOf="@+id/store_name_desc"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_back"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/need_pay_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="应付金额："
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/need_pay"
+        app:layout_constraintTop_toBottomOf="@+id/store_name"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/need_pay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/need_pay_desc"
+        app:layout_constraintRight_toRightOf="@+id/unit"
+        app:layout_constraintTop_toBottomOf="@+id/store_name"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="元"
+        app:layout_constraintLeft_toRightOf="@+id/need_pay"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/store_name"/>
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/use_integral_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="可用500积分抵扣5元"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/use"
+        app:layout_constraintTop_toBottomOf="@+id/need_pay_desc"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/use"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toRightOf="@+id/use_integral_desc"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/need_pay_desc"/>
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/no_use_integral_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="不适用积分可获得300积分"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/no_use"
+        app:layout_constraintTop_toBottomOf="@+id/use_integral_desc"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/no_use"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toRightOf="@+id/no_use_integral_desc"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/use_integral_desc"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/money_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:text="￥"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/money"
+        app:layout_constraintTop_toBottomOf="@+id/no_use_integral_desc"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:text="95"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toRightOf="@+id/money_unit"
+        app:layout_constraintRight_toLeftOf="@+id/used_integral"
+        app:layout_constraintTop_toBottomOf="@+id/no_use_integral_desc"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/used_integral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:text="95"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toRightOf="@+id/money"
+        app:layout_constraintTop_toBottomOf="@+id/no_use_integral_desc"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:text="确认付款"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/money"/>
+
+
+</android.support.constraint.ConstraintLayout>
