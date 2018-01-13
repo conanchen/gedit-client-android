@@ -56,10 +56,11 @@ public class StoreUpdateActivity extends BaseActivity {
     @OnClick(R.id.updatebutton)
     public void setUpdatebuttonClick() {
         String name = nameEdit.getText().toString().trim();
-        //获取uuid   传入数据库查询
+        //获取uuid   传入数据库查询 ?? 为什么要到数据库查询，
         String uuid = "1";
         StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
-                .setName(name)
+                .setName(StoreUpdateInfo.Field.NAME)
+                .setValue(name)
                 .setUuid(uuid)
                 .build();
         storeUpdateViewModel.updateStoreWith(storeUpdateInfo);

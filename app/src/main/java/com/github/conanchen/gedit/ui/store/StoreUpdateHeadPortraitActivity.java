@@ -92,9 +92,9 @@ public class StoreUpdateHeadPortraitActivity extends BaseActivity {
                     }
                 }
                 StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
-                        .setName("1221")
+                        .setName(StoreUpdateInfo.Field.LOGO)
                         .setUuid("111")
-                        .setLogo("http://baidu.com")
+                        .setValue("http://baidu.com")
                         .build();
 //                storeUpdateHeadPortraitViewModel.updateHeadPortrait(storeUpdateInfo);
                 break;
@@ -226,9 +226,9 @@ public class StoreUpdateHeadPortraitActivity extends BaseActivity {
                                 }
                             }
                             StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
-                                    .setName("1221")
+                                    .setName(StoreUpdateInfo.Field.LOGO)
                                     .setUuid("111")
-                                    .setLogo(selectMedia.get(0).getPath())
+                                    .setValue(selectMedia.get(0).getPath())
                                     .build();
                             storeUpdateHeadPortraitViewModel.updateHeadPortrait(storeUpdateInfo);
                         }

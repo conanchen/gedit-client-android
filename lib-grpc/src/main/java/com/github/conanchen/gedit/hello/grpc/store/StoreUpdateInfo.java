@@ -15,8 +15,9 @@ public class StoreUpdateInfo {
     //单项修改
     public Field name;
     public Object value;
-  public  enum Field{
-        NAME,LOGO,TYPE,DESC,DISTRICT_UUID,DETAIL_ADDRESS,LOCATION,POINTS_RATE,IMAGES
+
+    public enum Field {
+        NAME, LOGO, TYPE, DESC, DISTRICT_UUID, DETAIL_ADDRESS, LOCATION, POINTS_RATE, IMAGES
     }
 //
 //    public String name;
@@ -55,10 +56,10 @@ public class StoreUpdateInfo {
             if (Strings.isNullOrEmpty(uuid)) {
                 missing += " uuid ";
             }
-            if(name == null){
+            if (name == null) {
                 missing += " uuid ";
             }
-            if(value == null){
+            if (value == null) {
                 missing += " value ";
             }
 
@@ -66,7 +67,7 @@ public class StoreUpdateInfo {
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new StoreUpdateInfo(uuid, name,value);
+            return new StoreUpdateInfo(uuid, name, value);
         }
 
         public Builder setUuid(String uuid) {

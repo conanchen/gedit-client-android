@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.github.conanchen.gedit.di.common.BaseActivity;
+import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
-import com.github.conanchen.gedit.ui.auth.SigninViewModel;
 
 import javax.inject.Inject;
 
@@ -15,7 +15,7 @@ public class SplashActivity extends BaseActivity {
     public static final String TAG = SplashActivity.class.getSimpleName();
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    SigninViewModel loginViewModel;
+    CurrentSigninViewModel currentSigninViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +24,13 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void setupViewModel() {
-        loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(SigninViewModel.class);
-        loginViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
             if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
                 // Start home activity
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-            } else {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            } else {
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             }
             // close splash activity
             SplashActivity.this.finish();
