@@ -30,6 +30,8 @@ public class StoreListFragment extends BaseFragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    private StoreListViewModel storeListViewModel;
+
     @BindView(R.id.title)
     AppCompatTextView title;
     @BindView(R.id.hellobutton)
@@ -43,7 +45,6 @@ public class StoreListFragment extends BaseFragment implements Injectable {
     @BindView(R.id.registe)
     AppCompatButton registe;
 
-    private StoreListViewModel storeListViewModel;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
