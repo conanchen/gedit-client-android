@@ -1,5 +1,8 @@
 package com.github.conanchen.gedit.ui;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,14 +14,22 @@ import android.widget.TextView;
 
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
+import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
+import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.my.MyFragment;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseFragmentActivity {
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+    CurrentSigninViewModel currentSigninViewModel;
+
 
     @BindView(R.id.container)
     FrameLayout container;
@@ -45,8 +56,14 @@ public class MainActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        setupViewModel();
         initView();
     }
+
+    private void setupViewModel() {
+        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+    }
+
 
     private void initView() {
 
@@ -92,16 +109,22 @@ public class MainActivity extends BaseFragmentActivity {
                 break;
             case R.id.me_frame_layout:
                 //点击了我的
-                mainText.setTextColor(getResources().getColor(R.color.text_color));
-                meText.setTextColor(getResources().getColor(R.color.blue));
-                mainPic.setImageResource(R.mipmap.add);
-                mePic.setImageResource(R.mipmap.add);
+                currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                        mainText.setTextColor(getResources().getColor(R.color.text_color));
+                        meText.setTextColor(getResources().getColor(R.color.blue));
+                        mainPic.setImageResource(R.mipmap.add);
+                        mePic.setImageResource(R.mipmap.add);
 
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction
-                        .hide(storeListFragment)
-                        .show(myFragment)
-                        .commit();
+                        FragmentTransaction transaction = manager.beginTransaction();
+                        transaction
+                                .hide(storeListFragment)
+                                .show(myFragment)
+                                .commit();
+                    } else {
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+                });
 
                 break;
         }
