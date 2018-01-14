@@ -54,6 +54,6 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
     implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
 
-    compile "io.reactivex.rxjava2:rxandroid:$RXANDROID_VERSION"
+    implementation "io.reactivex.rxjava2:rxandroid:$RXANDROID_VERSION"
 
 }

@@ -5,9 +5,11 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.hello.grpc.utils.JcaUtils;
-import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
+import com.github.conanchen.gedit.store.profile.grpc.CreateStoreRequest;
+import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
-import com.github.conanchen.gedit.store.profile.grpc.UpdateResponse;
+import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
+import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.google.common.base.Strings;
 
 import java.util.concurrent.TimeUnit;
@@ -25,16 +27,16 @@ public class StoreService {
     private final static String TAG = StoreService.class.getSimpleName();
 
     public interface StoreCallback {
-        void onStoreCreateResponse(CreateResponse response);
+        void onStoreCreateResponse(CreateStoreResponse response);
 
     }
 
     public interface UpdateCallback {
-        void onUpdateResponse(UpdateResponse response);
+        void onUpdateStoreResponse(UpdateStoreResponse response);
     }
 
     public interface UpdateHeadPortraitCallback {
-        void onUpdateHeadPortraitResponse(UpdateResponse response);
+        void onUpdateHeadPortraitResponse(UpdateStoreResponse response);
     }
 
     private ManagedChannel getManagedChannel() {
@@ -51,14 +53,14 @@ public class StoreService {
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .create(com.github.conanchen.gedit.store.profile.grpc.CreateRequest
+                .create(com.github.conanchen.gedit.store.profile.grpc.CreateStoreRequest
                                 .newBuilder()
                                 .setName(storeCreateInfo.name)
                                 .setDetailAddress(Strings.isNullOrEmpty(storeCreateInfo.address) ? "no-detail-address" : storeCreateInfo.address)
                                 .build(),
-                        new StreamObserver<CreateResponse>() {
+                        new StreamObserver<CreateStoreResponse>() {
                             @Override
-                            public void onNext(CreateResponse value) {
+                            public void onNext(CreateStoreResponse value) {
                                 callback.onStoreCreateResponse(value);
                                 Status status = value.getStatus();
                                 String code = status.getCode();
@@ -69,7 +71,7 @@ public class StoreService {
                             public void onError(Throwable t) {
                                 Log.e(TAG, t.getMessage());
                                 callback.onStoreCreateResponse(
-                                        CreateResponse.newBuilder()
+                                        CreateStoreResponse.newBuilder()
                                                 .setStatus(Status.newBuilder().setCode("FAILED")
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())
@@ -96,14 +98,14 @@ public class StoreService {
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .withCallCredentials(callCredentials)
-                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateRequest.newBuilder()
+                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest.newBuilder()
                                 .setUuid(storeUpdateInfo.uuid)
                                 .build(),
-                        new StreamObserver<UpdateResponse>() {
+                        new StreamObserver<UpdateStoreResponse>() {
                             @Override
-                            public void onNext(UpdateResponse value) {
+                            public void onNext(UpdateStoreResponse value) {
                                 Log.i(TAG, "enter onNext()");
-                                callback.onUpdateResponse(value);
+                                callback.onUpdateStoreResponse(value);
                                 Status status = value.getStatus();
                                 String code = status.getCode();
                                 Log.i(TAG, "staus:" + status + ",code:" + code);
@@ -113,8 +115,8 @@ public class StoreService {
                             public void onError(Throwable t) {
                                 Log.i(TAG, "enter onError()");
                                 Log.e(TAG, t.getMessage());
-                                callback.onUpdateResponse(
-                                        UpdateResponse.newBuilder()
+                                callback.onUpdateStoreResponse(
+                                        UpdateStoreResponse.newBuilder()
                                                 .setStatus(Status.newBuilder().setCode("FAILED")
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())
@@ -142,12 +144,12 @@ public class StoreService {
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateRequest.newBuilder()
+                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest.newBuilder()
                                 .setUuid(storeUpdateInfo.uuid)
                                 .build(),
-                        new StreamObserver<UpdateResponse>() {
+                        new StreamObserver<UpdateStoreResponse>() {
                             @Override
-                            public void onNext(UpdateResponse value) {
+                            public void onNext(UpdateStoreResponse value) {
                                 Log.i(TAG, "enter onNext()");
                                 callback.onUpdateHeadPortraitResponse(value);
                                 Status status = value.getStatus();
@@ -160,7 +162,7 @@ public class StoreService {
                                 Log.i(TAG, "enter onError()");
                                 Log.e(TAG, t.getMessage());
                                 callback.onUpdateHeadPortraitResponse(
-                                        UpdateResponse.newBuilder()
+                                        UpdateStoreResponse.newBuilder()
                                                 .setStatus(Status.newBuilder().setCode("FAILED")
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())
@@ -188,12 +190,12 @@ public class StoreService {
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateRequest.newBuilder()
+                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest.newBuilder()
                                 .setUuid(storeUpdateInfo.uuid)
                                 .build(),
-                        new StreamObserver<UpdateResponse>() {
+                        new StreamObserver<UpdateStoreResponse>() {
                             @Override
-                            public void onNext(UpdateResponse value) {
+                            public void onNext(UpdateStoreResponse value) {
                                 Log.i(TAG, "enter onNext()");
                                 callback.onUpdateHeadPortraitResponse(value);
                                 Status status = value.getStatus();
@@ -206,7 +208,7 @@ public class StoreService {
                                 Log.i(TAG, "enter onError()");
                                 Log.e(TAG, t.getMessage());
                                 callback.onUpdateHeadPortraitResponse(
-                                        UpdateResponse.newBuilder()
+                                        UpdateStoreResponse.newBuilder()
                                                 .setStatus(Status.newBuilder().setCode("FAILED")
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())

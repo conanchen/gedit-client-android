@@ -5,6 +5,7 @@ import android.util.Log;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
+import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionRequest;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionResponse;
 import com.github.conanchen.gedit.user.auth.grpc.UserAuthApiGrpc;
 import com.google.protobuf.Empty;
@@ -42,7 +43,7 @@ public class RegisterService {
         UserAuthApiGrpc.UserAuthApiStub userAuthApiBlockingStub = UserAuthApiGrpc.newStub(channel);
         userAuthApiBlockingStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .registerSmsStep1Question(Empty.newBuilder()
+                .registerSmsStep1Question(SmsStep1QuestionRequest.newBuilder()
                                 .build(),
                         new StreamObserver<SmsStep1QuestionResponse>() {
                             @Override

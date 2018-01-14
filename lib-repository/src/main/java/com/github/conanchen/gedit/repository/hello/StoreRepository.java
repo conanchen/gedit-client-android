@@ -10,8 +10,8 @@ import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 import com.github.conanchen.gedit.hello.grpc.store.StoreUpdateInfo;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.gedit.store.profile.grpc.CreateResponse;
-import com.github.conanchen.gedit.store.profile.grpc.UpdateResponse;
+import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
+import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.vo.Location;
 import com.github.conanchen.gedit.vo.StoreCreateResponse;
 import com.github.conanchen.gedit.vo.StoreUpdateResponse;
@@ -65,9 +65,9 @@ public class StoreRepository {
 
                 grpcFascade.storeService.storeCreate(storeCreateInfo, new StoreService.StoreCallback() {
                     @Override
-                    public void onStoreCreateResponse(CreateResponse createResponse) {
+                    public void onStoreCreateResponse(CreateStoreResponse createResponse) {
                         Observable.fromCallable(() -> {
-                            Log.i(TAG, String.format("CreateResponse: %s", createResponse.getStatus()));
+                            Log.i(TAG, String.format("CreateStoreResponse: %s", createResponse.getStatus()));
                             if ("OK".compareToIgnoreCase(createResponse.getStatus().getCode()) == 0) {
                                 Store s = Store.builder()
                                         .setUuid(createResponse.getUuid())
@@ -115,9 +115,9 @@ public class StoreRepository {
             protected void onActive() {
                 grpcFascade.storeService.updateStore(storeUpdateInfo, new StoreService.UpdateCallback() {
                     @Override
-                    public void onUpdateResponse(UpdateResponse response) {
+                    public void onUpdateStoreResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {
-                            Log.i(TAG, String.format("UpdateResponse: %s", response.getStatus()));
+                            Log.i(TAG, String.format("UpdateStoreResponse: %s", response.getStatus()));
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
                                 s.lastUpdated = response.getLastUpdated();
@@ -166,9 +166,9 @@ public class StoreRepository {
             protected void onActive() {
                 grpcFascade.storeService.updateHeadPortrait(storeUpdateInfo, new StoreService.UpdateHeadPortraitCallback() {
                     @Override
-                    public void onUpdateHeadPortraitResponse(UpdateResponse response) {
+                    public void onUpdateHeadPortraitResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {
-                            Log.i(TAG, String.format("UpdateResponse: %s", response.getStatus()));
+                            Log.i(TAG, String.format("UpdateStoreResponse: %s", response.getStatus()));
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
                                 if(StoreUpdateInfo.Field.DETAIL_ADDRESS.equals(storeUpdateInfo.name)) {
@@ -220,9 +220,9 @@ public class StoreRepository {
             protected void onActive() {
                 grpcFascade.storeService.updateAddress(storeUpdateInfo, new StoreService.UpdateHeadPortraitCallback() {
                     @Override
-                    public void onUpdateHeadPortraitResponse(UpdateResponse response) {
+                    public void onUpdateHeadPortraitResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {
-                            Log.i(TAG, String.format("UpdateResponse: %s", response.getStatus()));
+                            Log.i(TAG, String.format("UpdateStoreResponse: %s", response.getStatus()));
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
                                 s.address = (String)storeUpdateInfo.value;
