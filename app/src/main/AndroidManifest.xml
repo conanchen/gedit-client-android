@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.github.conanchen.gedit">
+    package="com.github.conanchen.gedit">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- android:theme="@style/AppTheme.NoActionBar" -->
     <application
@@ -17,62 +17,41 @@
             android:name=".ui.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.hello.HelloActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".ui.store.StoreCreateActivity">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.store.StoreCreateActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.MainActivity"
-            android:launchMode="singleTask">
-        </activity>
-        <activity android:name=".ui.store.StoreUpdateActivity">
-        </activity>
-        <activity android:name=".ui.store.StoreUpdateHeadPortraitActivity">
-        </activity>
-        <activity android:name=".ui.auth.LoginActivity">
-        </activity>
-        <activity android:name=".ui.auth.RegisterActivity">
-        </activity>
-        <activity android:name=".ui.store.StoreUpdateAddressActivity">
-        </activity>
-        <activity android:name=".ui.store.MyStoreActivity">
-        </activity>
-        <activity android:name=".ui.store.MyStoreDetailsActivity">
-        </activity>
-        <activity android:name=".ui.store.ExtensionStoreDetailsActivity">
-        </activity>
-        <activity android:name=".ui.my.PointsActivity">
-        </activity>
-        <activity android:name=".ui.store.ExchangePointsActivity">
-        </activity>
-        <activity android:name=".ui.store.MyExtensionStoreActivity">
-        </activity>
-        <activity android:name=".ui.my.ConsumptionPointsDetailsActivity">
-        </activity>
-        <activity android:name=".ui.my.ExchangePointsDetailsActivity">
-        </activity>
-        <activity android:name=".ui.store.BusinessDetailsActivity">
-        </activity>
-        <activity android:name=".ui.my.MyFansListActivity">
-        </activity>
-        <activity android:name=".ui.store.PaymentActivity">
-        </activity>
-        <activity android:name=".ui.my.RecordSingleListActivity">
-        </activity>
-        <activity android:name=".ui.my.RecordSingleDetailsActivity">
-        </activity>
-        <activity android:name=".ui.my.CustomerServiceActivity">
-        </activity>
-        <activity android:name=".ui.my.SettingActivity">
-        </activity>
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".ui.store.StoreUpdateActivity"></activity>
+        <activity android:name=".ui.store.StoreUpdateHeadPortraitActivity"></activity>
+        <activity android:name=".ui.auth.LoginActivity"></activity>
+        <activity android:name=".ui.auth.RegisterActivity"></activity>
+        <activity android:name=".ui.store.StoreUpdateAddressActivity"></activity>
+        <activity android:name=".ui.store.MyStoreActivity"></activity>
+        <activity android:name=".ui.store.MyStoreDetailsActivity"></activity>
+        <activity android:name=".ui.store.ExtensionStoreDetailsActivity"></activity>
+        <activity android:name=".ui.my.PointsActivity"></activity>
+        <activity android:name=".ui.store.ExchangePointsActivity"></activity>
+        <activity android:name=".ui.store.MyExtensionStoreActivity"></activity>
+        <activity android:name=".ui.my.ConsumptionPointsDetailsActivity"></activity>
+        <activity android:name=".ui.my.ExchangePointsDetailsActivity"></activity>
+        <activity android:name=".ui.store.BusinessDetailsActivity"></activity>
+        <activity android:name=".ui.my.MyFansListActivity"></activity>
+        <activity android:name=".ui.store.PaymentActivity"></activity>
+        <activity android:name=".ui.my.RecordSingleListActivity"></activity>
+        <activity android:name=".ui.my.RecordSingleDetailsActivity"></activity>
+        <activity android:name=".ui.my.CustomerServiceActivity"></activity>
+        <activity android:name=".ui.my.SettingActivity"></activity>
     </application>
 
 </manifest>

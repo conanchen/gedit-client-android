@@ -7,26 +7,32 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
+import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
 import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
 import com.github.conanchen.gedit.room.kv.VoAccessToken;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 @Route(path = "/app/StoreCreateActivity")
 public class StoreCreateActivity extends BaseActivity {
@@ -36,18 +42,15 @@ public class StoreCreateActivity extends BaseActivity {
     private StoreCreateViewModel storeCreateViewModel;
     private CurrentSigninViewModel currentSigninViewModel;
 
-    @BindView(R.id.title)
-    AppCompatTextView title;
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
+
     @BindView(R.id.create)
-    AppCompatButton create;
+    AppCompatButton mCreateButton;
+
     @BindView(R.id.name)
-    AppCompatEditText name;
-    @BindView(R.id.tel)
-    AppCompatEditText tel;
-    @BindView(R.id.address)
-    AppCompatEditText address;
+    AppCompatEditText mNameEditText;
+
+    @BindView(R.id.introducerPhone)
+    AppCompatEditText introducerPhone;
 
 
     public static String TAG = StoreCreateActivity.class.getSimpleName();
@@ -64,17 +67,53 @@ public class StoreCreateActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_store);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
-        title.setText("创建商铺");
 
         setupViewModel();
-        setupEditText();
+        setupInputChecker();
     }
 
-    private void setupEditText() {
 
+    private void setupInputChecker() {
+        Observable<CharSequence> observableName = RxTextView.textChanges(mNameEditText);
+        Observable<CharSequence> observableAddress = RxTextView.textChanges(mNameEditText);
+
+        Observable.combineLatest(observableName, observableAddress,
+                (name, address) -> isNameValid(name.toString()) && isAddressValid(address.toString()))
+                .subscribe(aBoolean -> RxView.enabled(mCreateButton).accept(aBoolean));
+
+        RxView.clicks(mCreateButton)
+                .throttleFirst(3, TimeUnit.SECONDS) //防止3秒内连续点击,或者只使用doOnNext部分
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(o -> {
+                    Toast.makeText(StoreCreateActivity.this, "创建中....", Toast.LENGTH_SHORT).show();
+                    currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+                        if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                            //创建商铺
+                            String storeName = mNameEditText.getText().toString().trim();
+                            String storeTel = introducerPhone.getText().toString().trim();
+
+                            StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
+                                    .setName(storeName)
+                                    .setMobile(storeTel)
+                                    .setVoAccessToken(VoAccessToken.builder().setAccessToken(signinResponse.getAccessToken()).setExpiresIn(signinResponse.getExpiresIn()).build())
+                                    .build();
+                            storeCreateViewModel.createStoreWith(storeCreateInfo);
+                        } else {
+                            startActivity(new Intent(StoreCreateActivity.this, LoginActivity.class));
+                        }
+                    });
+                });
 
     }
+
+    private boolean isNameValid(String name) {
+        return !Strings.isNullOrEmpty(name);
+    }
+
+    private boolean isAddressValid(String password) {
+        return password.length() >= 6;
+    }
+
 
     private void setupViewModel() {
         storeCreateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreCreateViewModel.class);
@@ -89,37 +128,8 @@ public class StoreCreateActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.left_back, R.id.create})
+    @OnClick({R.id.back})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.left_back:
-                finish();
-                break;
-            case R.id.create:
-
-                currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
-                        //创建商铺
-                        String storeName = name.getText().toString().trim();
-                        String storeTel = tel.getText().toString().trim();
-                        String storeAddress = address.getText().toString().trim();
-                        if (Strings.isNullOrEmpty(storeName) || Strings.isNullOrEmpty(storeTel) || Strings.isNullOrEmpty(storeAddress)) {
-                            return;
-                        }
-
-                        StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
-                                .setAddress(storeAddress)
-                                .setName(storeName)
-                                .setMobile(storeTel)
-                                .setVoAccessToken(VoAccessToken.builder().setAccessToken(signinResponse.getAccessToken()).setExpiresIn(signinResponse.getExpiresIn()).build())
-                                .build();
-                        storeCreateViewModel.createStoreWith(storeCreateInfo);
-                    } else {
-                        startActivity(new Intent(StoreCreateActivity.this, LoginActivity.class));
-                    }
-                });
-
-                break;
-        }
+        finish();
     }
 }

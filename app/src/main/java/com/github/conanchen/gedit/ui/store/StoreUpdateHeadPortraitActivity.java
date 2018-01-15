@@ -150,7 +150,7 @@ public class StoreUpdateHeadPortraitActivity extends BaseActivity {
                     switch (mediaType) {
                         case 1:
                             // 预览图片 可自定长按保存路径
-                            //PictureSelector.create(MainActivity.this).externalPicturePreview(position, "/custom_file", selectList);
+                            //PictureSelector.mCreateButton(MainActivity.this).externalPicturePreview(position, "/custom_file", selectList);
                             PictureSelector.create(StoreUpdateHeadPortraitActivity.this).externalPicturePreview(position, selectMedia);
                             break;
                         case 2:
