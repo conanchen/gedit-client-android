@@ -5,23 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/layout_action_bar"/>
-
-    <!--<android.support.v7.widget.AppCompatTextView-->
-    <!--android:id="@+id/title"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="这里是店铺列表附近的这里是店铺列表附近的这里是店铺列表附近的这里是店铺列表附近的这里是店铺列表附近的"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"/>-->
-
-    <!--<GridLayout-->
-    <!--android:id="@+id/justfortestlayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:columnCount="3"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/title"-->
-    <!--app:layout_constraintBottom_toTopOf="@+id/recyclerView">-->
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/hellobutton"
@@ -30,7 +13,8 @@
         android:layout_alignParentRight="true"
         android:layout_column="0"
         android:layout_margin="10dp"
-        android:text="Hello World"/>
+        android:text="Hello World"
+        app:layout_constraintTop_toBottomOf="@+id/left_back"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/createbutton"
@@ -40,78 +24,17 @@
         android:layout_column="1"
         android:layout_margin="10dp"
         android:text="Create Store"
-        app:layout_constraintLeft_toRightOf="@id/hellobutton"/>
-
-    <!--<android.support.v7.widget.AppCompatButton-->
-    <!--android:id="@+id/login"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_column="2"-->
-    <!--android:layout_margin="10dp"-->
-    <!--android:text="登录" />-->
-
-    <!--<android.support.v7.widget.AppCompatButton-->
-    <!--android:id="@+id/registe"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_column="0"-->
-    <!--android:layout_margin="10dp"-->
-    <!--android:text="注册" />-->
-
-    <!--<android.support.v7.widget.AppCompatButton-->
-    <!--android:id="@+id/my_store_details"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_column="1"-->
-    <!--android:layout_margin="10dp"-->
-    <!--android:text="我的商铺详情" />-->
-
-    <!--<android.support.v7.widget.AppCompatButton-->
-    <!--android:id="@+id/my_extension_store_details"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_margin="10dp"-->
-    <!--android:layout_column="2"-->
-    <!--android:text="我推广的商铺详情" />-->
-
-    <!--<android.support.v7.widget.AppCompatButton-->
-    <!--android:id="@+id/others_store_details"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_column="0"-->
-    <!--android:layout_margin="10dp"-->
-    <!--android:text="商铺详情" />-->
-
-    <!--<android.support.v7.widget.AppCompatButton-->
-    <!--android:id="@+id/record_single_list"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_column="1"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_margin="10dp"-->
-    <!--android:text="录单列表界面" />-->
-
-    <!--<android.support.v7.widget.AppCompatButton-->
-    <!--android:id="@+id/record_single_details"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_column="2"-->
-    <!--android:layout_margin="10dp"-->
-    <!--android:text="录单详情界面" />-->
-    <!--</GridLayout>-->
+        app:layout_constraintLeft_toRightOf="@id/hellobutton"
+        app:layout_constraintTop_toBottomOf="@+id/left_back"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/hellobutton"/>
+
+    <include layout="@layout/layout_action_bar"/>
 </android.support.constraint.ConstraintLayout>

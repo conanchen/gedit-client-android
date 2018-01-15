@@ -6,14 +6,12 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
+import android.util.Log;
 
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
-import com.github.conanchen.gedit.room.hello.Hello;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.gedit.vo.Location;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,6 +29,7 @@ public class StoreListViewModel extends ViewModel {
     @Inject
     public StoreListViewModel(StoreRepository storeRepository) {
         liveStores = Transformations.switchMap(locationMutableLiveData, location -> {
+            Log.i("-=-=-=", "location:" + location);
             if (location == null) {
                 return AbsentLiveData.create();
             } else {

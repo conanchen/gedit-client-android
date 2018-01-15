@@ -1,6 +1,7 @@
 package com.github.conanchen.gedit.ui.store;
 
 import android.arch.paging.PagedListAdapter;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +38,7 @@ public class StoreListAdapter extends PagedListAdapter<Store, StoreListAdapter.V
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        ConstraintLayout layout;
         AppCompatImageView image;
         AppCompatTextView name;
         AppCompatTextView points;
@@ -51,11 +53,28 @@ public class StoreListAdapter extends PagedListAdapter<Store, StoreListAdapter.V
             points = itemView.findViewById(R.id.points);
             distance = itemView.findViewById(R.id.store_distance);
             address = itemView.findViewById(R.id.address_info);
+            layout = itemView.findViewById(R.id.layout);
         }
 
         public void bindTo(Store store) {
             name.setText(store.address);
             distance.setText(store.uuid);
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.OnItemClick(store);
+                }
+            });
         }
+    }
+
+    private OnItemClickListener listener;
+
+    interface OnItemClickListener {
+        void OnItemClick(Store store);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

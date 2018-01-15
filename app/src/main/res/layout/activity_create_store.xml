@@ -1,201 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:scrollbars="none">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/layout_action_bar"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:hint="store name:"
+        android:padding="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_back"/>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/savebutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="创建店铺"
-            android:textColor="@color/text_color"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/tel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="store_tel:"
+        android:inputType="number"
+        android:maxLength="11"
+        android:padding="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name"/>
 
-        <TextView
-            android:id="@+id/show"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="显示"
-            android:textColor="@color/text_color"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="store_address:"
+        android:padding="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tel"/>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/updatebutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="修改店铺"
-            android:textColor="@color/text_color"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/create"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="创建店铺"
+        android:textColor="@color/text_color"
+        app:layout_constraintTop_toBottomOf="@+id/address"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_bg_black_stroke_corners"
-            android:orientation="horizontal">
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="显示"
+        android:textColor="@color/text_color"
+        app:layout_constraintTop_toBottomOf="@id/create"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="店铺名称:"
-                android:textColor="@color/text_color"/>
 
-            <EditText
-                android:id="@+id/one"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:padding="2dp"
-                android:singleLine="true"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_bg_black_stroke_corners"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="店铺地址:"
-                android:textColor="@color/text_color"/>
-
-            <EditText
-                android:id="@+id/two"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@null"
-                android:padding="2dp"
-                android:singleLine="true"
-                android:textSize="14sp"/>
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_bg_black_stroke_corners"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="手机号:"
-                android:textColor="@color/text_color"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:inputType="number"
-                android:maxLength="11"
-                android:padding="2dp"
-                android:singleLine="true"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_bg_black_stroke_corners"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="折扣:"
-                android:textColor="@color/text_color"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:padding="2dp"
-                android:singleLine="true"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_bg_black_stroke_corners"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="营业时间:"
-                android:textColor="@color/text_color"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:padding="2dp"
-                android:singleLine="true"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_bg_black_stroke_corners"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="店铺照片(最多9张):"
-                android:textColor="@color/text_color"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+</android.support.constraint.ConstraintLayout>

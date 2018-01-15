@@ -2,22 +2,30 @@ package com.github.conanchen.gedit.ui.store;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
+import com.github.conanchen.gedit.room.store.Store;
+import com.github.conanchen.gedit.util.CustomPopWindow;
 import com.github.conanchen.gedit.vo.Location;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,7 +37,7 @@ import butterknife.OnClick;
  * Created by Conan Chen on 2018/1/9.
  */
 
-public class StoreListFragment extends BaseFragment implements Injectable {
+public class StoreListFragment extends BaseFragment implements Injectable, StoreListAdapter.OnItemClickListener, CustomPopWindow.OnItemClickListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -41,8 +49,15 @@ public class StoreListFragment extends BaseFragment implements Injectable {
     AppCompatImageView leftBack;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.right_image)
+    AppCompatImageView rightImage;
+    @BindView(R.id.hellobutton)
+    AppCompatButton hellobutton;
+    @BindView(R.id.createbutton)
+    AppCompatButton createbutton;
 
     private StoreListAdapter mAdapter;
+    private CustomPopWindow popWindow;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -56,82 +71,90 @@ public class StoreListFragment extends BaseFragment implements Injectable {
         ButterKnife.bind(this, view);
 
         title.setText("首页");
-        setupRecyclerView();
+        rightImage.setVisibility(View.VISIBLE);
+        rightImage.setImageDrawable(getResources().getDrawable(R.mipmap.add));
+        leftBack.setVisibility(View.GONE);
+        title.setVisibility(View.GONE);
 
+        setupPop();
+        setupRecyclerView();
         setupViewModel();
         return view;
+    }
+
+    /**
+     * 设置右上角弹框的内容
+     */
+    private void setupPop() {
+        //设置右上角弹框内容
+        List<String> menu = new ArrayList<>();
+        menu.add("扫一扫");
+        menu.add("收款");
+        menu.add("录单");
+        popWindow = new CustomPopWindow(getActivity(), menu);
     }
 
     private void setupViewModel() {
         storeListViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreListViewModel.class);
         storeListViewModel.getLiveStores().observe(this, stores -> {
-            Log.i("getLiveStores().observe", "stores是不是为空" + stores);
             if (stores != null) {
                 mAdapter.setList(stores);
             }
         });
         storeListViewModel.updateLocation(Location.builder().setLat(1).setLon(2).build());
-
     }
-
 
     /**
      * 设置recyclerView
      */
     private void setupRecyclerView() {
         mAdapter = new StoreListAdapter();
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 2);
+        recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(mAdapter);
 
+        mAdapter.setOnItemClickListener(this);
     }
-
 
     @OnClick(R.id.hellobutton)
     public void openHelloButtonClicked() {
-        // 1. 应用内简单的跳转(通过URL跳转在'进阶用法'中)
         ARouter.getInstance().build("/app/HelloActivity").navigation();
-        //        startActivity(new Intent(this.getContext(), StoreCreateActivity.class));
     }
 
     @OnClick(R.id.createbutton)
     public void openCreateStoreButtonClicked() {
-        // 1. 应用内简单的跳转(通过URL跳转在'进阶用法'中)
         ARouter.getInstance().build("/app/StoreCreateActivity").navigation();
     }
-    /*@OnClick({R.id.login, R.id.registe, R.id.my_store_details, R.id.my_extension_store_details, R.id.others_store_details,
-            R.id.record_single_list, R.id.record_single_details})
+
+    /**
+     * 列表条目的点击事件
+     *
+     * @param store
+     */
+    @Override
+    public void OnItemClick(Store store) {
+        startActivity(new Intent(getContext(), BusinessDetailsActivity.class));
+    }
+
+    /**
+     * 点击事件
+     *
+     * @param view
+     */
+    @OnClick({R.id.right_image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.login:
-                //登录界面
-                ARouter.getInstance().build("/app/LoginActivity").navigation();
-                break;
-            case R.id.registe:
-                //注册界面
-                ARouter.getInstance().build("/app/RegisterActivity").navigation();
-                break;
-            case R.id.my_store_details:
-                //我的店铺详情
-                ARouter.getInstance().build("/app/MyStoreDetailsActivity").navigation();
-                break;
-            case R.id.my_extension_store_details:
-                //代理的店铺详情
-                ARouter.getInstance().build("/app/ExtensionStoreDetailsActivity").navigation();
-                break;
-            case R.id.others_store_details:
-                //其他店铺详情
-                ARouter.getInstance().build("/app/BusinessDetailsActivity").navigation();
-                break;
-            case R.id.record_single_list:
-                //录单列表
-                ARouter.getInstance().build("/app/RecordSingleListActivity").navigation();
-                break;
-            case R.id.record_single_details:
-                //录单列表
-                ARouter.getInstance().build("/app/RecordSingleDetailsActivity").navigation();
+            case R.id.right_image:
+                //右上角的弹框
+                popWindow.showLocation(R.id.right_image);
+                popWindow.setOnItemClickListener(this);
                 break;
         }
-    }*/
+    }
+
+
+    @Override
+    public void onClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
 }
