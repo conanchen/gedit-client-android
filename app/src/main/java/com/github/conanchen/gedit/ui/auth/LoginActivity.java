@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -99,5 +100,11 @@ public class LoginActivity extends BaseActivity {
                 .observe(this, signinResponse -> {
                     mResultTextView.setText("登陆结果：" + signinResponse.accessToken + "===" + signinResponse.expiresIn);
                 });
+    }
+
+
+    @OnClick({R.id.back})
+    public void onViewClicked(View view) {
+        finish();
     }
 }

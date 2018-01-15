@@ -109,22 +109,16 @@ public class MainActivity extends BaseFragmentActivity {
                 break;
             case R.id.me_frame_layout:
                 //点击了我的
-                currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
-                        mainText.setTextColor(getResources().getColor(R.color.text_color));
-                        meText.setTextColor(getResources().getColor(R.color.blue));
-                        mainPic.setImageResource(R.mipmap.add);
-                        mePic.setImageResource(R.mipmap.add);
+                mainText.setTextColor(getResources().getColor(R.color.text_color));
+                meText.setTextColor(getResources().getColor(R.color.blue));
+                mainPic.setImageResource(R.mipmap.add);
+                mePic.setImageResource(R.mipmap.add);
 
-                        FragmentTransaction transaction = manager.beginTransaction();
-                        transaction
-                                .hide(storeListFragment)
-                                .show(myFragment)
-                                .commit();
-                    } else {
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    }
-                });
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction
+                        .hide(storeListFragment)
+                        .show(myFragment)
+                        .commit();
 
                 break;
         }
