@@ -17,6 +17,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
+import com.github.conanchen.gedit.vo.Location;
 
 import javax.inject.Inject;
 
@@ -32,25 +33,20 @@ public class StoreListFragment extends BaseFragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    private StoreListViewModel storeListViewModel;
+
     @BindView(R.id.title)
     AppCompatTextView title;
     @BindView(R.id.left_back)
     AppCompatImageView leftBack;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    private StoreListViewModel storeListViewModel;
+
     private StoreListAdapter mAdapter;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        storeListViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreListViewModel.class);
-        storeListViewModel.getLiveStores().observe(this, stores -> {
-            Log.i("getLiveStores().observe", "stores是不是为空" + stores);
-            if (stores != null) {
-                mAdapter.setList(stores);
-            }
-        });
     }
 
     @Nullable
@@ -62,7 +58,20 @@ public class StoreListFragment extends BaseFragment implements Injectable {
         title.setText("首页");
         setupRecyclerView();
 
+        setupViewModel();
         return view;
+    }
+
+    private void setupViewModel() {
+        storeListViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreListViewModel.class);
+        storeListViewModel.getLiveStores().observe(this, stores -> {
+            Log.i("getLiveStores().observe", "stores是不是为空" + stores);
+            if (stores != null) {
+                mAdapter.setList(stores);
+            }
+        });
+        storeListViewModel.updateLocation(Location.builder().setLat(1).setLon(2).build());
+
     }
 
 
@@ -80,11 +89,11 @@ public class StoreListFragment extends BaseFragment implements Injectable {
 
 
     @OnClick(R.id.hellobutton)
-        public void openHelloButtonClicked() {
-            // 1. 应用内简单的跳转(通过URL跳转在'进阶用法'中)
-            ARouter.getInstance().build("/app/HelloActivity").navigation();
-    //        startActivity(new Intent(this.getContext(), StoreCreateActivity.class));
-        }
+    public void openHelloButtonClicked() {
+        // 1. 应用内简单的跳转(通过URL跳转在'进阶用法'中)
+        ARouter.getInstance().build("/app/HelloActivity").navigation();
+        //        startActivity(new Intent(this.getContext(), StoreCreateActivity.class));
+    }
 
     @OnClick(R.id.createbutton)
     public void openCreateStoreButtonClicked() {

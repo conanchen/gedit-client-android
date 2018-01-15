@@ -58,6 +58,8 @@ public class StoreRepository {
 
     public LiveData<PagedList<Store>> loadStoresNearAt(Location location) {
         Log.i("caxun", "caxunshuju");
+        //TODO call grpc api to refresh near stores
+
         return (new LivePagedListBuilder(roomFascade.daoStore.listLivePagedStore(), pagedListConfig))
                 .build();
     }
