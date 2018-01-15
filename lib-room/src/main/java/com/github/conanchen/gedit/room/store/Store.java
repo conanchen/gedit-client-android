@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+import android.support.v7.recyclerview.extensions.DiffCallback;
 
 import com.google.common.base.Strings;
 
@@ -13,6 +14,7 @@ import com.google.common.base.Strings;
 @Entity(indices = {
         @Index(value = {"uuid", "address"}),
         @Index(value = {"address"}),
+        @Index(value = {"lastUpdated"}),
         @Index(value = {"uuid"})
 })
 public class Store {
@@ -40,6 +42,29 @@ public class Store {
         this.created = created;
         this.lastUpdated = lastUpdated;
     }
+
+    public static DiffCallback<Store> DIFF_CALLBACK = new DiffCallback<Store>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Store oldItem, @NonNull Store newItem) {
+            return oldItem.uuid == newItem.uuid;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Store oldItem, @NonNull Store newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+
+        Store user = (Store) obj;
+
+        return user.uuid == this.uuid;
+    }
+
 
     public static Store.Builder builder() {
         return new Store.Builder();

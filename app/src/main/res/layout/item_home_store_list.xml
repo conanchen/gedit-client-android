@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shadow_background">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/store_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="wang xiao jie de store"
+        app:layout_constraintTop_toBottomOf="@+id/image"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5% points"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/store_distance"
+        app:layout_constraintTop_toBottomOf="@+id/store_name"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/store_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5% points"
+        app:layout_constraintLeft_toRightOf="@+id/points"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/store_name"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/address_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/points"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/address_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:src="@mipmap/add"
+        android:text="cheng dou shi wu hou qu yu lin"
+        app:layout_constraintLeft_toRightOf="@+id/address_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/points"/>
+</android.support.constraint.ConstraintLayout>

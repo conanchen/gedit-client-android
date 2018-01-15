@@ -33,6 +33,7 @@ public class ConsumptionPointsDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_consumption_points_details);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        title.setText("积分明细");
     }
 
     @OnClick({R.id.left_back})

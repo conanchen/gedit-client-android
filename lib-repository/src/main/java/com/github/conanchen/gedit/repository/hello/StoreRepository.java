@@ -1,6 +1,8 @@
 package com.github.conanchen.gedit.repository.hello;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -49,9 +51,15 @@ public class StoreRepository {
         return roomFascade.daoStore.getLiveStores(100);
     }
 
+    private static final PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
+            .setEnablePlaceholders(true)
+            .setPrefetchDistance(10)
+            .setPageSize(20).build();
 
-    public LiveData<List<Store>> loadStoresNearAt(Location location) {
-        return null;
+    public LiveData<PagedList<Store>> loadStoresNearAt(Location location) {
+        Log.i("caxun", "caxunshuju");
+        return (new LivePagedListBuilder(roomFascade.daoStore.listLivePagedStore(), pagedListConfig))
+                .build();
     }
 
     public LiveData<Store> findStore(String uuid) {
@@ -77,7 +85,15 @@ public class StoreRepository {
                                         .build();
                                 return roomFascade.daoStore.save(s);
                             } else {
-                                return new Long(-1);
+                                Store s = Store.builder()
+                                        .setUuid("uuid" + System.currentTimeMillis())
+                                        .setName("name" + System.currentTimeMillis())
+                                        .setDistrictUuid("districtUuid" + System.currentTimeMillis())
+                                        .setAddress("address" + System.currentTimeMillis())
+                                        .build();
+                                Log.i(TAG, "添加假数据");
+                                return roomFascade.daoStore.save(s);
+//                                return new Long(-1);
                             }
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -89,7 +105,7 @@ public class StoreRepository {
                                             setValue(StoreCreateResponse.builder()
                                                     .setStausCode("OK")
                                                     .setStatusDetail("Create Store successfully")
-                                                    .setStoreUuid(createResponse.getUuid())
+                                                    .setStoreUuid("set jia shu ju uuid")
                                                     .build());
                                         } else {
                                             setValue(StoreCreateResponse.builder()
@@ -171,9 +187,9 @@ public class StoreRepository {
                             Log.i(TAG, String.format("UpdateStoreResponse: %s", response.getStatus()));
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
-                                if(StoreUpdateInfo.Field.DETAIL_ADDRESS.equals(storeUpdateInfo.name)) {
+                                if (StoreUpdateInfo.Field.DETAIL_ADDRESS.equals(storeUpdateInfo.name)) {
                                     s.address = (String) storeUpdateInfo.value;
-                                }else{
+                                } else {
                                     //TODO ....
                                 }
                                 s.lastUpdated = response.getLastUpdated();
@@ -208,6 +224,7 @@ public class StoreRepository {
             }
         };
     }
+
     /**
      * 修改头像的方法
      *
@@ -225,7 +242,7 @@ public class StoreRepository {
                             Log.i(TAG, String.format("UpdateStoreResponse: %s", response.getStatus()));
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
-                                s.address = (String)storeUpdateInfo.value;
+                                s.address = (String) storeUpdateInfo.value;
                                 return roomFascade.daoStore.save(s);
                             } else {
                                 return new Long(-1);

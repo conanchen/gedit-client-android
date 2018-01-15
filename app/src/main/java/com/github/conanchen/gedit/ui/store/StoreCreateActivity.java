@@ -20,6 +20,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
+import com.github.conanchen.gedit.room.kv.VoAccessToken;
 import com.github.conanchen.gedit.ui.common.Constant;
 import com.github.conanchen.gedit.ui.common.FullyGridLayoutManager;
 import com.github.conanchen.gedit.util.ChoosePictureOrVideo;
@@ -105,8 +106,14 @@ public class StoreCreateActivity extends BaseActivity {
             Toast.makeText(StoreCreateActivity.this, "输入文字", Toast.LENGTH_LONG).show();
             return;
         }
+
+        VoAccessToken voAccessToken = VoAccessToken.builder()
+                .setExpiresIn("ExpiresIn")
+                .setAccessToken("AccessToken")
+                .build();
         StoreCreateInfo store = StoreCreateInfo.builder()
                 .setName(Strings.isNullOrEmpty(one) ? "no one" : one)
+                .setVoAccessToken(voAccessToken)
                 .build();
         storeCreateViewModel.createStoreWith(store);
 

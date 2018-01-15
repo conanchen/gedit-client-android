@@ -7,6 +7,8 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
+import com.github.conanchen.gedit.room.hello.Hello;
+
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -48,4 +50,7 @@ public interface DaoStore {
 
     @Query("SELECT * FROM Store ORDER by address DESC LIMIT :size")
     LiveData<List<Store>> getLiveStores(Integer size);
+
+    @Query("SELECT * FROM Store ORDER by lastUpdated DESC ")
+    public abstract DataSource.Factory<Integer, Store> listLivePagedStore();
 }

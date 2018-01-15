@@ -48,8 +48,9 @@ public class HelloRepository {
                 Observable.fromCallable(() -> {
                     Log.i(TAG, String.format("HelloReply: %s", helloReply.getMessage()));
                     if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(helloReply.getStatus().getCode()) == 0) {
+                        Log.i(TAG, String.format("HelloReply: %s", gson.toJson(helloReply)));
                         Hello hello = Hello.builder()
-                                .setUuid(helloReply.getUuid())
+                                .setUuid(Strings.isNullOrEmpty(helloReply.getUuid()) ? "1" : helloReply.getUuid())
                                 .setMessage(Strings.isNullOrEmpty(helloReply.getMessage()) ? String.format("%s", "hello is null") : helloReply.getMessage())
                                 .setCreated(helloReply.getCreated())
                                 .setLastUpdated(helloReply.getLastUpdated())
@@ -84,6 +85,7 @@ public class HelloRepository {
 
 
     public LiveData<PagedList<Hello>> loadHellos(Long time) {
+        Log.i("-=-=-=-", "hello 查询");
         return (new LivePagedListBuilder(roomFascade.daoHello.listLivePagedHellos(), pagedListConfig))
                 .build();
     }

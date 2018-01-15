@@ -4,9 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
+import com.github.conanchen.gedit.room.hello.Hello;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.gedit.vo.Location;
@@ -23,7 +25,7 @@ public class StoreListViewModel extends ViewModel {
 
     @VisibleForTesting
     final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
-    private final LiveData<List<Store>> liveStores;
+    private final LiveData<PagedList<Store>> liveStores;
 
     @SuppressWarnings("unchecked")
     @Inject
@@ -44,7 +46,7 @@ public class StoreListViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public LiveData<List<Store>> getLiveStores() {
+    public LiveData<PagedList<Store>> getLiveStores() {
         return liveStores;
     }
 
