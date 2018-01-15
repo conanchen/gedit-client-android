@@ -105,7 +105,7 @@ public class MyFragment extends BaseFragment implements Injectable {
                         break;
                     case R.id.my_fans:
                         //我的粉丝
-                        ARouter.getInstance().build("/app/MyFansListActivity").navigation();
+                        ARouter.getInstance().build("/app/MyFansActivity").navigation();
                         break;
                     case R.id.my_integral:
                         //积分

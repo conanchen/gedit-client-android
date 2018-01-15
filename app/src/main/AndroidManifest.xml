@@ -46,13 +46,13 @@
             android:name=".ui.store.StoreUpdateAddressActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.store.MyStoreListActivity"
+            android:name=".ui.my.MyStoreListActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.store.MyStoreDetailsActivity"
+            android:name=".ui.my.MyStoreDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.store.ExtensionStoreDetailsActivity"
+            android:name=".ui.my.MyExtensionStoreDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.my.PointsActivity"
@@ -61,7 +61,7 @@
             android:name=".ui.store.ExchangePointsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.store.MyExtensionStoreActivity"
+            android:name=".ui.my.MyExtensionStoreActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.my.ConsumptionPointsDetailsActivity"
@@ -73,10 +73,10 @@
             android:name=".ui.store.StoreDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.my.MyFansListActivity"
+            android:name=".ui.my.MyFansActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.store.PaymentActivity"
+            android:name=".ui.payment.PaymentActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.my.RecordSingleListActivity"
@@ -91,13 +91,13 @@
             android:name=".ui.my.SettingActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.my.MyStorePointsRecordActivity"
+            android:name=".ui.my.MyStorePointsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.my.MyEmployeesActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.my.MyStorePayeeRecordActivity"
+            android:name=".ui.my.MyStorePaymentsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

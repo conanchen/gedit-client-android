@@ -20,6 +20,7 @@ import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.ui.my.RecordSingleListActivity;
+import com.github.conanchen.gedit.ui.payment.PaymentActivity;
 import com.github.conanchen.gedit.util.CustomPopWindow;
 import com.github.conanchen.gedit.vo.Location;
 

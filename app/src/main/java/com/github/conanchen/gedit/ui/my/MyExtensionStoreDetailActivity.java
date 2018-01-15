@@ -1,11 +1,12 @@
-package com.github.conanchen.gedit.ui.store;
+package com.github.conanchen.gedit.ui.my;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
@@ -15,22 +16,38 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 我推广的界面
+ * 推广的店铺详情
  */
-@Route(path = "/app/MyExtensionStoreActivity")
-public class MyExtensionStoreActivity extends AppCompatActivity {
+@Route(path = "/app/MyExtensionStoreDetailActivity")
+public class MyExtensionStoreDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.left_back)
     AppCompatImageView leftBack;
     @BindView(R.id.title)
     AppCompatTextView title;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    @BindView(R.id.banner)
+    RelativeLayout banner;
+    @BindView(R.id.total_integral)
+    AppCompatTextView totalIntegral;
+    @BindView(R.id.today_integral)
+    AppCompatTextView todayIntegral;
+    @BindView(R.id.address)
+    AppCompatTextView address;
+    @BindView(R.id.phone)
+    AppCompatTextView phone;
+    @BindView(R.id.time)
+    AppCompatTextView time;
+    @BindView(R.id.prompt)
+    AppCompatTextView prompt;
+    @BindView(R.id.store_introduce)
+    AppCompatTextView storeIntroduce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_extension_store);
+        setContentView(R.layout.activity_extension_store);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
     }

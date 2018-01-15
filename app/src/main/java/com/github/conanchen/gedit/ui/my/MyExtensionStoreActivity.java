@@ -2,42 +2,43 @@ package com.github.conanchen.gedit.ui.my;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MyStorePayeeRecordActivity extends AppCompatActivity {
+/**
+ * 我推广的界面
+ */
+@Route(path = "/app/MyExtensionStoreActivity")
+public class MyExtensionStoreActivity extends AppCompatActivity {
 
-    @BindView(R.id.back)
-    AppCompatImageButton back;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    @BindView(R.id.left_back)
+    AppCompatImageView leftBack;
     @BindView(R.id.title)
     AppCompatTextView title;
-    @BindView(R.id.right)
-    AppCompatImageButton right;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_store_payee_record);
+        setContentView(R.layout.activity_my_extension_store);
         ButterKnife.bind(this);
+        getSupportActionBar().hide();
     }
 
-    @OnClick(R.id.back)
+    @OnClick({R.id.left_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.back:
+            case R.id.left_back:
                 finish();
                 break;
         }

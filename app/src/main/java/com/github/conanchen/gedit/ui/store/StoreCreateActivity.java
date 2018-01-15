@@ -18,6 +18,7 @@ import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
 import com.github.conanchen.gedit.room.kv.VoAccessToken;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
+import com.github.conanchen.gedit.ui.my.MyStoreDetailsActivity;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;

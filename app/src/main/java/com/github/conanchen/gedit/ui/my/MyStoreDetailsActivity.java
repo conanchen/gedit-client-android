@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.ui.store;
+package com.github.conanchen.gedit.ui.my;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
-import com.github.conanchen.gedit.ui.my.MyEmployeesActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
