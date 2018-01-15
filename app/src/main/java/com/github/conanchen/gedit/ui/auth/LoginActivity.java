@@ -9,17 +9,24 @@ import android.support.v7.widget.AppCompatTextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.github.conanchen.gedit.GeditApplication;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
 import com.google.common.base.Strings;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
+
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * 登录界面
@@ -31,14 +38,18 @@ public class LoginActivity extends BaseActivity {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     SigninViewModel loginViewModel;
+
     @BindView(R.id.name)
-    AppCompatEditText name;
+    AppCompatEditText mPhoneEditText;
+
     @BindView(R.id.pass)
-    AppCompatEditText pass;
+    AppCompatEditText mPasswordEditText;
+
     @BindView(R.id.login)
-    AppCompatButton login;
+    AppCompatButton mLoginButton;
+
     @BindView(R.id.show)
-    AppCompatTextView show;
+    AppCompatTextView mResultTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,29 +57,47 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         setupViewModel();
+        setupInputChecker();
+    }
+
+    private void setupInputChecker() {
+        Observable<CharSequence> observablePhone = RxTextView.textChanges(mPhoneEditText);
+        Observable<CharSequence> observablePassword = RxTextView.textChanges(mPasswordEditText);
+
+        Observable.combineLatest(observablePhone, observablePassword,
+                (phone, password) -> isPhoneValid(phone.toString()) && isPasswordValid(password.toString()))
+                .subscribe(aBoolean -> RxView.enabled(mLoginButton).accept(aBoolean));
+
+        RxView.clicks(mLoginButton)
+                .throttleFirst(3, TimeUnit.SECONDS) //防止3秒内连续点击,或者只使用doOnNext部分
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(o -> {
+                    Toast.makeText(LoginActivity.this, "登录中....", Toast.LENGTH_SHORT).show();
+                    String userName = mPhoneEditText.getText().toString().trim();
+                    String password = mPasswordEditText.getText().toString().trim();
+                    SigninInfo loginInfo = SigninInfo.builder()
+                            .setMobile(userName)
+                            .setPassword(password)
+                            .build();
+
+                    loginViewModel.login(loginInfo);
+                });
+
+    }
+
+    private boolean isPhoneValid(String phone) {
+        return phone.length() == 11;
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password.length() >= 6;
     }
 
     private void setupViewModel() {
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(SigninViewModel.class);
         loginViewModel.getSigninResponseLiveData()
                 .observe(this, signinResponse -> {
-                    show.setText("登陆结果：" + signinResponse.accessToken + "===" + signinResponse.expiresIn);
+                    mResultTextView.setText("登陆结果：" + signinResponse.accessToken + "===" + signinResponse.expiresIn);
                 });
-    }
-
-    @OnClick(R.id.login)
-    public void onViewClicked() {
-        String userName = name.getText().toString().trim();
-        String password = pass.getText().toString().trim();
-        if (Strings.isNullOrEmpty(userName) || Strings.isNullOrEmpty(password)) {
-            Toast.makeText(this, "输入账号密码", Toast.LENGTH_LONG).show();
-            return;
-        }
-        SigninInfo loginInfo = SigninInfo.builder()
-                .setMobile(userName)
-                .setPassword(password)
-                .build();
-
-        loginViewModel.login(loginInfo);
     }
 }
