@@ -5,7 +5,9 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shadow_background">
+    android:layout_margin="10dp"
+    android:background="@drawable/shadow_background"
+    android:padding="10dp">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image"

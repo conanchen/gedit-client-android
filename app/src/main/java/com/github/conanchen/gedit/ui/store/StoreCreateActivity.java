@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
 import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
 import com.github.conanchen.gedit.room.kv.VoAccessToken;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
@@ -72,11 +71,9 @@ public class StoreCreateActivity extends BaseActivity {
         setupInputChecker();
     }
 
-
     private void setupInputChecker() {
         Observable<CharSequence> observableName = RxTextView.textChanges(mNameEditText);
         Observable<CharSequence> observableAddress = RxTextView.textChanges(mNameEditText);
-
         Observable.combineLatest(observableName, observableAddress,
                 (name, address) -> isNameValid(name.toString()) && isAddressValid(address.toString()))
                 .subscribe(aBoolean -> RxView.enabled(mCreateButton).accept(aBoolean));

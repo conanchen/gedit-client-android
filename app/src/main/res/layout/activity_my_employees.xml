@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.conanchen.gedit.ui.my.ConsumptionPointsDetailsActivity">
+    tools:context="com.github.conanchen.gedit.ui.my.MyEmployeesActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -31,7 +31,7 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="可消费积分明细"
+                android:text="我的员工"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/back"
                 app:layout_constraintLeft_toRightOf="@+id/back"
@@ -58,4 +58,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+
 </android.support.constraint.ConstraintLayout>

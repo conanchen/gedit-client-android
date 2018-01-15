@@ -43,21 +43,16 @@ public class PointsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_points);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
-        title.setText("积分");
-        rightText.setVisibility(View.VISIBLE);
-        rightText.setText("购买");
-
 
     }
 
-    @OnClick({R.id.left_back, R.id.right_text, R.id.exchange_points, R.id.can_consumption_points, R.id.can_exchange_record})
+    @OnClick({R.id.back, R.id.right, R.id.exchange_points, R.id.can_consumption_points, R.id.can_exchange_record})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.left_back:
+            case R.id.back:
                 finish();
                 break;
-            case R.id.right_text:
+            case R.id.right:
                 //购买
                 break;
             case R.id.exchange_points:

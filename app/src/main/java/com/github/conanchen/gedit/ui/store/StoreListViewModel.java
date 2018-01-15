@@ -29,14 +29,12 @@ public class StoreListViewModel extends ViewModel {
     @Inject
     public StoreListViewModel(StoreRepository storeRepository) {
         liveStores = Transformations.switchMap(locationMutableLiveData, location -> {
-            Log.i("-=-=-=", "location:" + location);
             if (location == null) {
                 return AbsentLiveData.create();
             } else {
                 return storeRepository.loadStoresNearAt(location);
             }
         });
-
     }
 
     @VisibleForTesting

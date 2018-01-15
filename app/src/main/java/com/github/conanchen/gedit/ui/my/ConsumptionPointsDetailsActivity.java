@@ -20,10 +20,6 @@ import butterknife.OnClick;
 @Route(path = "/app/ConsumptionPointsDetailsActivity")
 public class ConsumptionPointsDetailsActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
-    @BindView(R.id.title)
-    AppCompatTextView title;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -32,14 +28,12 @@ public class ConsumptionPointsDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consumption_points_details);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
-        title.setText("积分明细");
     }
 
-    @OnClick({R.id.left_back})
+    @OnClick({R.id.back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.left_back:
+            case R.id.back:
                 finish();
                 break;
         }

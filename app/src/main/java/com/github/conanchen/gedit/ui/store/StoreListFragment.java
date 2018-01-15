@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +19,7 @@ import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.room.store.Store;
+import com.github.conanchen.gedit.ui.my.RecordSingleListActivity;
 import com.github.conanchen.gedit.util.CustomPopWindow;
 import com.github.conanchen.gedit.vo.Location;
 
@@ -43,18 +42,14 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
     ViewModelProvider.Factory viewModelFactory;
     private StoreListViewModel storeListViewModel;
 
-    @BindView(R.id.title)
-    AppCompatTextView title;
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.right_image)
-    AppCompatImageView rightImage;
     @BindView(R.id.hellobutton)
     AppCompatButton hellobutton;
     @BindView(R.id.createbutton)
     AppCompatButton createbutton;
+    @BindView(R.id.right)
+    AppCompatImageButton right;
 
     private StoreListAdapter mAdapter;
     private CustomPopWindow popWindow;
@@ -70,17 +65,13 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
         View view = inflater.inflate(R.layout.fragment_store_list, null);
         ButterKnife.bind(this, view);
 
-        title.setText("首页");
-        rightImage.setVisibility(View.VISIBLE);
-        rightImage.setImageDrawable(getResources().getDrawable(R.mipmap.add));
-        leftBack.setVisibility(View.GONE);
-        title.setVisibility(View.GONE);
 
         setupPop();
         setupRecyclerView();
         setupViewModel();
         return view;
     }
+
 
     /**
      * 设置右上角弹框的内容
@@ -103,6 +94,7 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
         });
         storeListViewModel.updateLocation(Location.builder().setLat(1).setLon(2).build());
     }
+
 
     /**
      * 设置recyclerView
@@ -133,7 +125,7 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
      */
     @Override
     public void OnItemClick(Store store) {
-        startActivity(new Intent(getContext(), BusinessDetailsActivity.class));
+        startActivity(new Intent(getContext(), StoreDetailsActivity.class));
     }
 
     /**
@@ -141,12 +133,12 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
      *
      * @param view
      */
-    @OnClick({R.id.right_image})
+    @OnClick({R.id.right})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.right_image:
+            case R.id.right:
                 //右上角的弹框
-                popWindow.showLocation(R.id.right_image);
+                popWindow.showLocation(R.id.right);
                 popWindow.setOnItemClickListener(this);
                 break;
         }
@@ -155,6 +147,15 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
 
     @Override
     public void onClick(AdapterView<?> parent, View view, int position, long id) {
-
+        if (position == 0) {
+            //扫一扫
+//            startActivity(new Intent(getActivity(), ));
+        } else if (position == 1) {
+            //收款
+            startActivity(new Intent(getActivity(), PaymentActivity.class));
+        } else {
+            //录单
+            startActivity(new Intent(getActivity(), RecordSingleListActivity.class));
+        }
     }
 }

@@ -19,7 +19,7 @@ import butterknife.OnClick;
  * 商家详情
  */
 @Route(path = "/app/BusinessDetailsActivity")
-public class BusinessDetailsActivity extends AppCompatActivity {
+public class StoreDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.left_back)
     AppCompatImageView leftBack;

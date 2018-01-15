@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.github.conanchen.gedit.GeditApplication;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
@@ -19,6 +20,8 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -42,13 +45,10 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.name)
     AppCompatEditText mPhoneEditText;
-
     @BindView(R.id.pass)
     AppCompatEditText mPasswordEditText;
-
     @BindView(R.id.login)
     AppCompatButton mLoginButton;
-
     @BindView(R.id.show)
     AppCompatTextView mResultTextView;
 

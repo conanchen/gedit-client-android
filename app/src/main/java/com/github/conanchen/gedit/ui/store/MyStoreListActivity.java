@@ -19,14 +19,8 @@ import butterknife.OnClick;
  * 我的店铺
  */
 @Route(path = "/app/MyStoreActivity")
-public class MyStoreActivity extends AppCompatActivity {
+public class MyStoreListActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
-    @BindView(R.id.title)
-    AppCompatTextView title;
-    @BindView(R.id.add)
-    AppCompatTextView add;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -36,14 +30,13 @@ public class MyStoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_store);
         getSupportActionBar().hide();
         ButterKnife.bind(this);
-        title.setText("我的店铺");
 
     }
 
-    @OnClick({R.id.left_back, R.id.add})
+    @OnClick({R.id.back, R.id.add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.left_back:
+            case R.id.back:
                 finish();
                 break;
             case R.id.add:

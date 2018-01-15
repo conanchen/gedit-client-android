@@ -20,10 +20,6 @@ import butterknife.OnClick;
 @Route(path = "/app/RecordSingleListActivity")
 public class RecordSingleListActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
-    @BindView(R.id.title)
-    AppCompatTextView title;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -32,14 +28,12 @@ public class RecordSingleListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_single);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
-        title.setText("录单");
     }
 
-    @OnClick({R.id.left_back, R.id.title})
+    @OnClick({R.id.back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.left_back:
+            case R.id.back:
                 finish();
                 break;
         }
