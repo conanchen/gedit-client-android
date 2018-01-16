@@ -15,9 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * 录单详情界面
- */
+
 @Route(path = "/app/MyInvestPaymentActivity")
 public class MyInvestPaymentActivity extends AppCompatActivity {
 

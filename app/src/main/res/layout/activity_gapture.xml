@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              android:id="@+id/activity_second"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
-
 
     <FrameLayout
         android:id="@+id/fl_my_container"
@@ -11,21 +11,73 @@
         android:layout_height="match_parent"
         android:visibility="visible"/>
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2000">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp">
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/title"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="二维码收款"
+                android:textAlignment="center"
+                android:textColor="#FFF"
+                app:layout_constraintBottom_toBottomOf="@+id/back"
+                app:layout_constraintLeft_toRightOf="@+id/back"
+                app:layout_constraintRight_toLeftOf="@id/right"
+                app:layout_constraintTop_toTopOf="@+id/back"/>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/add"
+                android:visibility="invisible"
+                app:layout_constraintLeft_toRightOf="@+id/title"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:orientation="horizontal"
+        android:layout_gravity="bottom|center_vertical"
         android:paddingBottom="15dp"
         android:paddingTop="15dp">
 
         <LinearLayout
             android:id="@+id/linear1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center_horizontal"
+                android:padding="20dp"
+                android:text="将二维码放入框内即可自动扫描"
+                android:textColor="#FFF"
+                android:visibility="visible"/>
 
             <ImageView
                 android:layout_width="wrap_content"

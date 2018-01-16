@@ -79,6 +79,7 @@ public class MyStoreActivity extends AppCompatActivity {
                 break;
             case R.id.code:
                 //二维码
+                startActivity(new Intent(MyStoreActivity.this, MyStoreCodeActivity.class));
                 break;
             case R.id.address:
                 //地址

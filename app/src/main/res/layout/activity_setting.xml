@@ -31,7 +31,7 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="积分记录"
+                android:text="设置"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/back"
                 app:layout_constraintLeft_toRightOf="@+id/back"

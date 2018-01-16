@@ -16,9 +16,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 推广的店铺详情
+ * 我工作的店铺详情
  */
-@Route(path = "/app/MyIntroducedStoreActivity")
+@Route(path = "/app/MyWorkStoreActivity")
 public class MyWorkStoreActivity extends AppCompatActivity {
 
     @BindView(R.id.view_pager)

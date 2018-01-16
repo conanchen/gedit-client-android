@@ -95,7 +95,7 @@
         android:drawableLeft="@mipmap/add"
         android:drawablePadding="20dp"
         android:padding="10dp"
-        android:text="积分"
+        android:text="我的积分"
         app:layout_constraintTop_toBottomOf="@id/view"/>
 
     <View
@@ -120,6 +120,23 @@
         android:background="#000"
         app:layout_constraintTop_toBottomOf="@id/my_extension_stores"/>
 
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/my_works_stores"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="我工作的店铺"
+        app:layout_constraintTop_toBottomOf="@id/my_extension_stores"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/my_works_stores"/>
+
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/customer_service"
         android:layout_width="match_parent"
@@ -128,7 +145,7 @@
         android:drawablePadding="20dp"
         android:padding="10dp"
         android:text="客服"
-        app:layout_constraintTop_toBottomOf="@id/my_extension_stores"/>
+        app:layout_constraintTop_toBottomOf="@id/my_works_stores"/>
 
     <View
         android:layout_width="match_parent"

@@ -6,13 +6,11 @@ import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatImageButton;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
@@ -20,21 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.my.myinvestpayment.MyInvestPaymentsActivity;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
+import com.github.conanchen.gedit.ui.payment.PayeeActivity;
 import com.github.conanchen.gedit.ui.payment.PointsPayActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
 import com.github.conanchen.gedit.util.CustomPopWindow;
-import com.uuzuche.lib_zxing.activity.CodeUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
@@ -43,6 +36,10 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -87,6 +84,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         setupViewModel();
         setupPop();
         initView();
@@ -184,7 +182,9 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                             .withListener(new PermissionListener() {
                                 @Override
                                 public void onPermissionGranted(PermissionGrantedResponse response) {
-                                    ARouter.getInstance().build("/app/GaptureActivity").navigation();
+//                                    ARouter.getInstance().build("/app/GaptureActivity").navigation();
+                                    Intent intent = new Intent(MainActivity.this, GaptureActivity.class);
+                                    startActivityForResult(intent, REQUEST_CODE);
                                 }
 
                                 @Override
@@ -207,11 +207,10 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                             .check();
                 }
             }).start();
-//            Intent intent = new Intent(this, GaptureActivity.class);
-//            startActivityForResult(intent, REQUEST_CODE);
         } else if (position == 1) {
-            //收款
-            startActivity(new Intent(this, PointsPayActivity.class));
+            //收款界面
+//            startActivity(new Intent(this, PointsPayActivity.class));
+            startActivity(new Intent(this, PayeeActivity.class));
         } else {
             //录单
             startActivity(new Intent(this, MyInvestPaymentsActivity.class));
@@ -239,7 +238,9 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "我要去积分抵扣付款", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(this, PointsPayActivity.class));
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }

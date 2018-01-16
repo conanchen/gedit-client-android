@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 付款界面
+ * 积分付款界面
  */
 @Route(path = "/app/PointsPayActivity")
 public class PointsPayActivity extends AppCompatActivity {

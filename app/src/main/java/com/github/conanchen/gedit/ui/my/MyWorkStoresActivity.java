@@ -2,8 +2,6 @@ package com.github.conanchen.gedit.ui.my;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -15,9 +13,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 我推广的店铺界面
+ * 我工作的店铺列表
  */
-@Route(path = "/app/MyIntroducedStoresActivity")
+@Route(path = "/app/MyWorkStoresActivity")
 public class MyWorkStoresActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerView)
@@ -30,11 +28,14 @@ public class MyWorkStoresActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.back})
+    @OnClick({R.id.back, R.id.right})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
+                break;
+            case R.id.right:
+                //增加
                 break;
         }
     }

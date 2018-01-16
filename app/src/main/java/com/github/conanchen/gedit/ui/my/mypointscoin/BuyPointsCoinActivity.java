@@ -15,9 +15,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * 录单详情界面
- */
 @Route(path = "/app/BuyPointsCoinActivity")
 public class BuyPointsCoinActivity extends AppCompatActivity {
 

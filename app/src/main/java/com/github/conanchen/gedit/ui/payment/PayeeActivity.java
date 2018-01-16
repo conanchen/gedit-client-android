@@ -1,27 +1,25 @@
-package com.github.conanchen.gedit.ui.my.mypointscoin;
+package com.github.conanchen.gedit.ui.payment;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-@Route(path = "/app/MyPointsCoinActivity")
-public class MyPointsCoinActivity extends AppCompatActivity {
+public class PayeeActivity extends AppCompatActivity {
 
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    @BindView(R.id.code)
+    AppCompatImageView code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_single);
+        setContentView(R.layout.activity_payee);
         ButterKnife.bind(this);
     }
 
