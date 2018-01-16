@@ -20,10 +20,6 @@ import butterknife.OnClick;
 @Route(path = "/app/MyIntroducedStoresActivity")
 public class MyIntroducedStoresActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
-    @BindView(R.id.title)
-    AppCompatTextView title;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -34,10 +30,10 @@ public class MyIntroducedStoresActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.left_back})
+    @OnClick({R.id.back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.left_back:
+            case R.id.back:
                 finish();
                 break;
         }

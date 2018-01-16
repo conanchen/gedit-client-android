@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,236 +10,146 @@
         android:id="@+id/myviewmodeltext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MyViewModel is injected ? "/>
+        android:text="MyViewModel is injected ? "
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="#3000">
 
-        <LinearLayout
-            android:id="@+id/mine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="#1000"
-            android:orientation="horizontal"
-            android:paddingBottom="20dp"
-            android:paddingTop="10dp">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:src="@mipmap/add"
+            app:layout_constraintBottom_toBottomOf="@id/name"
+            app:layout_constraintTop_toTopOf="@id/name"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_launcher"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="10dp"
+            android:drawableRight="@mipmap/add"
+            android:gravity="center_vertical"
+            android:text="小花花"
+            app:layout_constraintLeft_toRightOf="@id/image"
+            app:layout_constraintRight_toRightOf="parent"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="小花花"/>
+    </android.support.constraint.ConstraintLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="20dp"
-                android:src="@mipmap/delete_pic"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/my_invest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/add"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="投资"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/my_store"
+        app:layout_constraintTop_toBottomOf="@id/me"/>
 
-        </LinearLayout>
-    </LinearLayout>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/my_store"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/add"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="我的店铺"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/my_invest"
+        app:layout_constraintRight_toLeftOf="@id/my_fans"
+        app:layout_constraintTop_toBottomOf="@id/me"/>
 
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/my_fans"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/add"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="我的粉丝"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/my_store"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/me"/>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="#3000"
+        app:layout_constraintTop_toBottomOf="@id/my_fans"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/my_points"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="5dp">
-
-        <LinearLayout
-            android:id="@+id/my_invest"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="投资"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/my_store"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="我的店铺"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/my_fans"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="我的粉丝"/>
-        </LinearLayout>
-    </LinearLayout>
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="积分"
+        app:layout_constraintTop_toBottomOf="@id/view"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="#1000"/>
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/my_points"/>
 
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/my_extension_stores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="我推广的店铺"
+        app:layout_constraintTop_toBottomOf="@id/my_points"/>
 
-        <LinearLayout
-            android:id="@+id/my_integral"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="10dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/my_extension_stores"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="积分"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#1000"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/customer_service"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="客服"
+        app:layout_constraintTop_toBottomOf="@id/my_extension_stores"/>
 
-        <LinearLayout
-            android:id="@+id/my_extension_store"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="10dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/customer_service"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我推广的店铺"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#1000"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="设置"
+        app:layout_constraintTop_toBottomOf="@id/customer_service"/>
 
-        <LinearLayout
-            android:id="@+id/customer_service"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="客服"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#1000"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/setting"/>
 
-        <LinearLayout
-            android:id="@+id/setting"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="设置"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#1000"/>
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

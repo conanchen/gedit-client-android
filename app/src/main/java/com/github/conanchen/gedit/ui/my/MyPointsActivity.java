@@ -1,15 +1,16 @@
 package com.github.conanchen.gedit.ui.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.ui.store.ExchangePointsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,13 +19,6 @@ import butterknife.OnClick;
 @Route(path = "/app/MyPointsActivity")
 public class MyPointsActivity extends AppCompatActivity {
 
-
-    @BindView(R.id.title)
-    AppCompatTextView title;
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
-    @BindView(R.id.right_text)
-    AppCompatTextView rightText;
     @BindView(R.id.today_add_integral)
     AppCompatTextView todayAddIntegral;
     @BindView(R.id.can_consumption_integral)
@@ -53,7 +47,8 @@ public class MyPointsActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.right:
-                //购买
+                //兑换
+                startActivity(new Intent(MyPointsActivity.this, ExchangePointsActivity.class));
                 break;
             case R.id.exchange_points:
                 //跳转到积分兑换界面

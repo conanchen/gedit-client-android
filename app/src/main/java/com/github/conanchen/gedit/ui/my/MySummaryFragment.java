@@ -5,18 +5,18 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
-import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 
 import javax.inject.Inject;
@@ -33,26 +33,14 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @BindView(R.id.image)
+    AppCompatImageView image;
+    @BindView(R.id.name)
+    AppCompatTextView name;
+    @BindView(R.id.me)
+    ConstraintLayout me;
     private MySummaryViewModel mySummaryViewModel;
     CurrentSigninViewModel currentSigninViewModel;
-
-
-    @BindView(R.id.mine)
-    LinearLayout mine;
-    @BindView(R.id.my_invest)
-    LinearLayout myInvest;
-    @BindView(R.id.my_store)
-    LinearLayout myStore;
-    @BindView(R.id.my_fans)
-    LinearLayout myFans;
-    @BindView(R.id.my_integral)
-    LinearLayout myIntegral;
-    @BindView(R.id.my_extension_store)
-    LinearLayout myExtensionStore;
-    @BindView(R.id.customer_service)
-    LinearLayout customerService;
-    @BindView(R.id.setting)
-    LinearLayout setting;
 
 
     @BindView(R.id.myviewmodeltext)
@@ -86,47 +74,48 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
         startActivity(new Intent(getContext(), StoreCreateActivity.class));
     }
 
-    @OnClick({R.id.mine, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_integral, R.id.my_extension_store, R.id.customer_service, R.id.setting})
+
+    @OnClick({R.id.me, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_points, R.id.my_extension_stores, R.id.customer_service, R.id.setting})
     public void onViewClicked(View view) {
-        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
-                switch (view.getId()) {
-                    case R.id.mine:
-                        //点击了小花花
-
-                        break;
-                    case R.id.my_invest:
-                        //投资
-                        break;
-                    case R.id.my_store:
-                        //我的店铺
-                        ARouter.getInstance().build("/app/MyStoreActivity").navigation();
-                        break;
-                    case R.id.my_fans:
-                        //我的粉丝
-                        ARouter.getInstance().build("/app/MyFansActivity").navigation();
-                        break;
-                    case R.id.my_integral:
-                        //积分
-                        ARouter.getInstance().build("/app/MyPointsActivity").navigation();
-                        break;
-                    case R.id.my_extension_store:
-                        //我推广的店铺
-                        ARouter.getInstance().build("/app/MyIntroducedStoresActivity").navigation();
-                        break;
-                    case R.id.customer_service:
-                        //客服
-                        ARouter.getInstance().build("/app/CustomerServiceActivity").navigation();
-                        break;
-                    case R.id.setting:
-                        //设置
-                        ARouter.getInstance().build("/app/SettingActivity").navigation();
-                        break;
-                }
-            } else {
-                startActivity(new Intent(this.getActivity(), LoginActivity.class));
-            }
-        });
-
+//        currentSigninViewModel.getCurrentSigninResponse().observe(this,signinResponse -> {
+//                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+//
+//                    }else{
+//                       startActivity(new Intent(this.getActivity(), LoginActivity.class));
+//                    }
+//        });
+        switch (view.getId()) {
+            case R.id.me:
+                //点击了小花花
+                break;
+            case R.id.my_invest:
+                //投资
+                break;
+            case R.id.my_store:
+                //我的店铺
+                ARouter.getInstance().build("/app/MyStoresActivity").navigation();
+                break;
+            case R.id.my_fans:
+                //我的粉丝
+                ARouter.getInstance().build("/app/MyFansActivity").navigation();
+                break;
+            case R.id.my_points:
+                //积分
+                ARouter.getInstance().build("/app/MyPointsActivity").navigation();
+                break;
+            case R.id.my_extension_stores:
+                //我推广的店铺
+                ARouter.getInstance().build("/app/MyIntroducedStoresActivity").navigation();
+                break;
+            case R.id.customer_service:
+                //客服
+                ARouter.getInstance().build("/app/CustomerServiceActivity").navigation();
+                break;
+            case R.id.setting:
+                //设置
+                ARouter.getInstance().build("/app/SettingActivity").navigation();
+                break;
+        }
     }
+
 }

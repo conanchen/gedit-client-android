@@ -45,7 +45,7 @@
                 android:layout_height="0dp"
                 android:gravity="center_vertical"
                 android:src="@mipmap/add"
-                android:text="duihuan"
+                android:text="兑换"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/title"
