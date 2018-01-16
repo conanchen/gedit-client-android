@@ -18,7 +18,7 @@ import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
 import com.github.conanchen.gedit.room.kv.VoAccessToken;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
-import com.github.conanchen.gedit.ui.my.MyStoreDetailsActivity;
+import com.github.conanchen.gedit.ui.my.mystore.MyStoreActivity;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -121,7 +121,7 @@ public class StoreCreateActivity extends BaseActivity {
                     String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
                     Log.i(TAG, message);
                     if (storeCreateResponse != null) {
-                        startActivity(new Intent(StoreCreateActivity.this, MyStoreDetailsActivity.class));
+                        startActivity(new Intent(StoreCreateActivity.this, MyStoreActivity.class));
                     }
                 });
     }

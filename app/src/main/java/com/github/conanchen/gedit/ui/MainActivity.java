@@ -2,11 +2,9 @@ package com.github.conanchen.gedit.ui;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -15,8 +13,7 @@ import android.widget.TextView;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
-import com.github.conanchen.gedit.ui.auth.LoginActivity;
-import com.github.conanchen.gedit.ui.my.MyFragment;
+import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
 
 import javax.inject.Inject;
@@ -48,7 +45,7 @@ public class MainActivity extends BaseFragmentActivity {
 
     private FragmentManager manager;
     private StoreListFragment storeListFragment;
-    private MyFragment myFragment;
+    private MySummaryFragment mySummaryFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +65,14 @@ public class MainActivity extends BaseFragmentActivity {
     private void initView() {
 
         storeListFragment = new StoreListFragment();
-        myFragment = new MyFragment();
+        mySummaryFragment = new MySummaryFragment();
 
         manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction
                 .add(R.id.container, storeListFragment)
-                .add(R.id.container, myFragment)
-                .hide(myFragment)
+                .add(R.id.container, mySummaryFragment)
+                .hide(mySummaryFragment)
                 .show(storeListFragment)
                 .commit();
 
@@ -86,7 +83,7 @@ public class MainActivity extends BaseFragmentActivity {
         mePic.setImageResource(R.mipmap.add);
 
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        fragmentTransaction.hide(myFragment)
+        fragmentTransaction.hide(mySummaryFragment)
                 .show(storeListFragment)
                 .commit();
     }
@@ -102,7 +99,7 @@ public class MainActivity extends BaseFragmentActivity {
                 mePic.setImageResource(R.mipmap.add);
 
                 FragmentTransaction fragmentTransaction = manager.beginTransaction();
-                fragmentTransaction.hide(myFragment)
+                fragmentTransaction.hide(mySummaryFragment)
                         .show(storeListFragment)
                         .commit();
 
@@ -117,7 +114,7 @@ public class MainActivity extends BaseFragmentActivity {
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction
                         .hide(storeListFragment)
-                        .show(myFragment)
+                        .show(mySummaryFragment)
                         .commit();
 
                 break;

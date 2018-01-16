@@ -15,7 +15,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
-import com.github.conanchen.gedit.ui.MainActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
@@ -30,11 +29,11 @@ import butterknife.OnClick;
  * Created by Conan Chen on 2018/1/9.
  */
 
-public class MyFragment extends BaseFragment implements Injectable {
+public class MySummaryFragment extends BaseFragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    private MyViewModel myViewModel;
+    private MySummaryViewModel mySummaryViewModel;
     CurrentSigninViewModel currentSigninViewModel;
 
 
@@ -66,10 +65,10 @@ public class MyFragment extends BaseFragment implements Injectable {
     }
 
     private void setupViewModel() {
-        myViewModel = ViewModelProviders.of(this, viewModelFactory).get(MyViewModel.class);
+        mySummaryViewModel = ViewModelProviders.of(this, viewModelFactory).get(MySummaryViewModel.class);
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
-        myviewmodeltext.setText(String.format("MyViewModel is injected ? myViewModel=%s", myViewModel));
-        myViewModel.setHelloName("set name");
+        myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
+        mySummaryViewModel.setHelloName("set name");
     }
 
     @Nullable
@@ -109,11 +108,11 @@ public class MyFragment extends BaseFragment implements Injectable {
                         break;
                     case R.id.my_integral:
                         //积分
-                        ARouter.getInstance().build("/app/PointsActivity").navigation();
+                        ARouter.getInstance().build("/app/MyPointsActivity").navigation();
                         break;
                     case R.id.my_extension_store:
                         //我推广的店铺
-                        ARouter.getInstance().build("/app/MyExtensionStoreActivity").navigation();
+                        ARouter.getInstance().build("/app/MyIntroducedStoresActivity").navigation();
                         break;
                     case R.id.customer_service:
                         //客服

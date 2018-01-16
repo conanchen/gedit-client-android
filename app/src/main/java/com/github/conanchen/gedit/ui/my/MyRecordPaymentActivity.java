@@ -19,8 +19,8 @@ import butterknife.OnClick;
 /**
  * 录单详情界面
  */
-@Route(path = "/app/RecordSingleDetailsActivity")
-public class RecordSingleDetailsActivity extends AppCompatActivity {
+@Route(path = "/app/MyRecordPaymentActivity")
+public class MyRecordPaymentActivity extends AppCompatActivity {
 
     @BindView(R.id.consumption_money)
     AppCompatEditText consumptionMoney;

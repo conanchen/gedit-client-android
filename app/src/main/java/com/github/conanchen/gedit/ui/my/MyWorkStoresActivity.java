@@ -15,25 +15,30 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 录单列表界面
+ * 我推广的店铺界面
  */
-@Route(path = "/app/RecordSingleListActivity")
-public class RecordSingleListActivity extends AppCompatActivity {
+@Route(path = "/app/MyIntroducedStoresActivity")
+public class MyWorkStoresActivity extends AppCompatActivity {
 
+    @BindView(R.id.left_back)
+    AppCompatImageView leftBack;
+    @BindView(R.id.title)
+    AppCompatTextView title;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_single);
+        setContentView(R.layout.activity_my_extension_store);
         ButterKnife.bind(this);
+        getSupportActionBar().hide();
     }
 
-    @OnClick({R.id.back})
+    @OnClick({R.id.left_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.back:
+            case R.id.left_back:
                 finish();
                 break;
         }

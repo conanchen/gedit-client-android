@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.ui.my;
+package com.github.conanchen.gedit.ui.my.mystore;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +19,7 @@ import butterknife.OnClick;
  * 我的店铺
  */
 @Route(path = "/app/MyStoreActivity")
-public class MyStoreListActivity extends AppCompatActivity {
+public class MyStoresActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;

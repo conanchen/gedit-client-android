@@ -1,0 +1,63 @@
+package com.github.conanchen.gedit.ui.my;
+
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
+import android.view.View;
+import android.widget.RelativeLayout;
+
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.github.conanchen.gedit.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * 推广的店铺详情
+ */
+@Route(path = "/app/MyIntroducedStoreActivity")
+public class MyIntroducedStoreActivity extends AppCompatActivity {
+
+    @BindView(R.id.left_back)
+    AppCompatImageView leftBack;
+    @BindView(R.id.title)
+    AppCompatTextView title;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    @BindView(R.id.banner)
+    RelativeLayout banner;
+    @BindView(R.id.total_integral)
+    AppCompatTextView totalIntegral;
+    @BindView(R.id.today_integral)
+    AppCompatTextView todayIntegral;
+    @BindView(R.id.address)
+    AppCompatTextView address;
+    @BindView(R.id.phone)
+    AppCompatTextView phone;
+    @BindView(R.id.time)
+    AppCompatTextView time;
+    @BindView(R.id.prompt)
+    AppCompatTextView prompt;
+    @BindView(R.id.store_introduce)
+    AppCompatTextView storeIntroduce;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_extension_store);
+        ButterKnife.bind(this);
+        getSupportActionBar().hide();
+    }
+
+    @OnClick({R.id.left_back})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.left_back:
+                finish();
+                break;
+        }
+    }
+}

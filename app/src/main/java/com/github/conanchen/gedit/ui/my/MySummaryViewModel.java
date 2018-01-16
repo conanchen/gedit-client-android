@@ -31,7 +31,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MyViewModel extends ViewModel {
+public class MySummaryViewModel extends ViewModel {
 
     @VisibleForTesting
     final MutableLiveData<Long> helloTime = new MutableLiveData<>();
@@ -40,7 +40,7 @@ public class MyViewModel extends ViewModel {
 
     @SuppressWarnings("unchecked")
     @Inject
-    public MyViewModel(HelloRepository helloRepository) {
+    public MySummaryViewModel(HelloRepository helloRepository) {
         this.helloRepository = helloRepository;
         helloPagedListLiveData = Transformations.switchMap(helloTime, time -> {
             if (time == null) {

@@ -15,8 +15,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-@Route(path = "/app/PointsActivity")
-public class PointsActivity extends AppCompatActivity {
+@Route(path = "/app/MyPointsActivity")
+public class MyPointsActivity extends AppCompatActivity {
 
 
     @BindView(R.id.title)

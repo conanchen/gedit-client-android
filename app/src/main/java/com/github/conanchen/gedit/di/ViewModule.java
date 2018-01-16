@@ -6,7 +6,7 @@ import com.github.conanchen.gedit.ui.SplashActivity;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.auth.RegisterActivity;
 import com.github.conanchen.gedit.ui.hello.HelloActivity;
-import com.github.conanchen.gedit.ui.my.MyFragment;
+import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
 import com.github.conanchen.gedit.ui.store.StoreUpdateActivity;
@@ -19,7 +19,7 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class ViewModule {
 
     @ContributesAndroidInjector
-    abstract MyFragment contributeMyFragment();
+    abstract MySummaryFragment contributeMyFragment();
 
     @ContributesAndroidInjector
     abstract StoreListFragment contributeStoreListFragment();

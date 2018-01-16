@@ -15,7 +15,7 @@ import butterknife.OnClick;
 /**
  * 我的员工界面
  */
-public class MyEmployeesActivity extends AppCompatActivity {
+public class MyStoreEmployeesActivity extends AppCompatActivity {
 
     @BindView(R.id.back)
     AppCompatImageButton back;

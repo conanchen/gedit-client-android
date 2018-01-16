@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.ui.my;
+package com.github.conanchen.gedit.ui.my.mystore;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.ui.my.MyStoreEmployeesActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,8 +20,8 @@ import butterknife.OnClick;
 /**
  * 我的店铺详情
  */
-@Route(path = "/app/MyStoreDetailsActivity")
-public class MyStoreDetailsActivity extends AppCompatActivity {
+@Route(path = "/app/MyStoreActivity")
+public class MyStoreActivity extends AppCompatActivity {
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -75,7 +76,7 @@ public class MyStoreDetailsActivity extends AppCompatActivity {
                 break;
             case R.id.my_employees:
                 //我的员工
-                startActivity(new Intent(MyStoreDetailsActivity.this, MyEmployeesActivity.class));
+                startActivity(new Intent(MyStoreActivity.this, MyStoreEmployeesActivity.class));
                 break;
             case R.id.code:
                 //二维码
