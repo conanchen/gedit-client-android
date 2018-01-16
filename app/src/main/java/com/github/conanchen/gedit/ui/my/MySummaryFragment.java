@@ -17,6 +17,7 @@ import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
+import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 
 import javax.inject.Inject;
@@ -37,7 +38,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
     AppCompatImageView image;
     @BindView(R.id.name)
     AppCompatTextView name;
-    @BindView(R.id.me)
+    @BindView(R.id.me_login)
     ConstraintLayout me;
     private MySummaryViewModel mySummaryViewModel;
     CurrentSigninViewModel currentSigninViewModel;
@@ -57,6 +58,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
         myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
         mySummaryViewModel.setHelloName("set name");
+
     }
 
     @Nullable
@@ -75,7 +77,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
     }
 
 
-    @OnClick({R.id.me, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_points, R.id.my_extension_stores, R.id.customer_service, R.id.setting})
+    @OnClick({R.id.me_login, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_points, R.id.my_extension_stores, R.id.customer_service, R.id.setting})
     public void onViewClicked(View view) {
 //        currentSigninViewModel.getCurrentSigninResponse().observe(this,signinResponse -> {
 //                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
@@ -85,7 +87,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
 //                    }
 //        });
         switch (view.getId()) {
-            case R.id.me:
+            case R.id.me_login:
                 //点击了小花花
                 break;
             case R.id.my_invest:
