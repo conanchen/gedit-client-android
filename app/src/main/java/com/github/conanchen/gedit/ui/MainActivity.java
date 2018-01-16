@@ -34,6 +34,7 @@ import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
@@ -49,7 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseFragmentActivity {
+public class MainActivity extends BaseFragmentActivity implements CustomPopWindow.OnItemClickListener {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     CurrentSigninViewModel currentSigninViewModel;
@@ -155,39 +156,6 @@ public class MainActivity extends BaseFragmentActivity {
                         .hide(storeListFragment)
                         .show(mySummaryFragment)
                         .commit();
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Dexter.withActivity(MainActivity.this)
-                                .withPermission(Manifest.permission.CAMERA)
-                                .withListener(new PermissionListener() {
-                                    @Override
-                                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                                        ARouter.getInstance().build("/app/GaptureActivity").navigation();
-                                    }
-
-                                    @Override
-                                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                                        Toast.makeText(MainActivity.this,"我们需要摄像头访问权限来启动扫码功能，can not open GaptureActivity ",Toast.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                                        MainActivity.this.showPermissionRationale(token);
-                                    }
-                                })
-                                .withErrorListener(new PermissionRequestErrorListener() {
-                                    @Override
-                                    public void onError(DexterError error) {
-
-                                    }
-                                })
-                                .onSameThread()
-                                .check();
-                    }
-                }).start();
-
                 break;
         }
     }
@@ -208,8 +176,39 @@ public class MainActivity extends BaseFragmentActivity {
     public void onClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
             //扫一扫
-            Intent intent = new Intent(this, GaptureActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Dexter.withActivity(MainActivity.this)
+                            .withPermission(Manifest.permission.CAMERA)
+                            .withListener(new PermissionListener() {
+                                @Override
+                                public void onPermissionGranted(PermissionGrantedResponse response) {
+                                    ARouter.getInstance().build("/app/GaptureActivity").navigation();
+                                }
+
+                                @Override
+                                public void onPermissionDenied(PermissionDeniedResponse response) {
+                                    Toast.makeText(MainActivity.this, "我们需要摄像头访问权限来启动扫码功能，can not open GaptureActivity ", Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                                    MainActivity.this.showPermissionRationale(token);
+                                }
+                            })
+                            .withErrorListener(new PermissionRequestErrorListener() {
+                                @Override
+                                public void onError(DexterError error) {
+
+                                }
+                            })
+                            .onSameThread()
+                            .check();
+                }
+            }).start();
+//            Intent intent = new Intent(this, GaptureActivity.class);
+//            startActivityForResult(intent, REQUEST_CODE);
         } else if (position == 1) {
             //收款
             startActivity(new Intent(this, PointsPayActivity.class));
@@ -276,4 +275,6 @@ public class MainActivity extends BaseFragmentActivity {
                 })
                 .show();
     }
+
+
 }
