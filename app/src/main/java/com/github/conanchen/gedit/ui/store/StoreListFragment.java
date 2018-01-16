@@ -20,7 +20,7 @@ import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.ui.my.myinvestpayment.MyInvestPaymentsActivity;
-import com.github.conanchen.gedit.ui.payment.PaymentActivity;
+import com.github.conanchen.gedit.ui.payment.PointsPayActivity;
 import com.github.conanchen.gedit.util.CustomPopWindow;
 import com.github.conanchen.gedit.vo.Location;
 
@@ -153,7 +153,7 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
 //            startActivity(new Intent(getActivity(), ));
         } else if (position == 1) {
             //收款
-            startActivity(new Intent(getActivity(), PaymentActivity.class));
+            startActivity(new Intent(getActivity(), PointsPayActivity.class));
         } else {
             //录单
             startActivity(new Intent(getActivity(), MyInvestPaymentsActivity.class));

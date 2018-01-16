@@ -8,4 +8,7 @@
     <color name="gray">#3000</color>
     <color name="text_color">#202122</color>
     <color name="color_f6">#f6f6f6</color>
+
+
+    <color name="scan_corner_color">#0effc2</color>
 </resources>

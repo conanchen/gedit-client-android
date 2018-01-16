@@ -19,8 +19,8 @@ import butterknife.OnClick;
 /**
  * 付款界面
  */
-@Route(path = "/app/PaymentActivity")
-public class PaymentActivity extends AppCompatActivity {
+@Route(path = "/app/PointsPayActivity")
+public class PointsPayActivity extends AppCompatActivity {
 
 
     @BindView(R.id.store_name)
