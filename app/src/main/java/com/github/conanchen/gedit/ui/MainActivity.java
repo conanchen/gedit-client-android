@@ -2,19 +2,31 @@ package com.github.conanchen.gedit.ui;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
+import com.github.conanchen.gedit.ui.my.myinvestpayment.MyInvestPaymentsActivity;
+import com.github.conanchen.gedit.ui.payment.GaptureActivity;
+import com.github.conanchen.gedit.ui.payment.PointsPayActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
+import com.github.conanchen.gedit.util.CustomPopWindow;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseFragmentActivity {
+public class MainActivity extends BaseFragmentActivity implements CustomPopWindow.OnItemClickListener {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     CurrentSigninViewModel currentSigninViewModel;
@@ -47,13 +59,20 @@ public class MainActivity extends BaseFragmentActivity {
     private StoreListFragment storeListFragment;
     private MySummaryFragment mySummaryFragment;
 
+    private CustomPopWindow popWindow;
+
+    /**
+     * 扫描跳转Activity RequestCode
+     */
+    public static final int REQUEST_CODE = 111;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
         setupViewModel();
+        setupPop();
         initView();
     }
 
@@ -88,9 +107,14 @@ public class MainActivity extends BaseFragmentActivity {
                 .commit();
     }
 
-    @OnClick({R.id.main_frame_layout, R.id.me_frame_layout})
+    @OnClick({R.id.right, R.id.main_frame_layout, R.id.me_frame_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.right:
+                //右上角的弹框
+                popWindow.showLocation(R.id.right);
+                popWindow.setOnItemClickListener(this);
+                break;
             case R.id.main_frame_layout:
                 //点击了主页
                 mainText.setTextColor(getResources().getColor(R.color.blue));
@@ -119,5 +143,62 @@ public class MainActivity extends BaseFragmentActivity {
 
                 break;
         }
+    }
+
+    /**
+     * 设置右上角弹框的内容
+     */
+    private void setupPop() {
+        //设置右上角弹框内容
+        List<String> menu = new ArrayList<>();
+        menu.add("扫一扫");
+        menu.add("收款");
+        menu.add("录单");
+        popWindow = new CustomPopWindow(this, menu);
+    }
+
+    @Override
+    public void onClick(AdapterView<?> parent, View view, int position, long id) {
+        if (position == 0) {
+            //扫一扫
+            Intent intent = new Intent(this, GaptureActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        } else if (position == 1) {
+            //收款
+            startActivity(new Intent(this, PointsPayActivity.class));
+        } else {
+            //录单
+            startActivity(new Intent(this, MyInvestPaymentsActivity.class));
+        }
+    }
+
+    /**
+     * 回调
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /**
+         * 处理二维码扫描结果
+         */
+        if (requestCode == REQUEST_CODE) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+
     }
 }

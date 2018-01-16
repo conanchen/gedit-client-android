@@ -12,20 +12,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.gedit.ui.my.myinvestpayment.MyInvestPaymentsActivity;
-import com.github.conanchen.gedit.ui.payment.PointsPayActivity;
-import com.github.conanchen.gedit.util.CustomPopWindow;
 import com.github.conanchen.gedit.vo.Location;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -37,7 +30,7 @@ import butterknife.OnClick;
  * Created by Conan Chen on 2018/1/9.
  */
 
-public class StoreListFragment extends BaseFragment implements Injectable, StoreListAdapter.OnItemClickListener, CustomPopWindow.OnItemClickListener {
+public class StoreListFragment extends BaseFragment implements Injectable, StoreListAdapter.OnItemClickListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -49,11 +42,9 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
     AppCompatButton hellobutton;
     @BindView(R.id.createbutton)
     AppCompatButton createbutton;
-    @BindView(R.id.right)
-    AppCompatImageButton right;
 
     private StoreListAdapter mAdapter;
-    private CustomPopWindow popWindow;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -66,25 +57,11 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
         View view = inflater.inflate(R.layout.fragment_store_list, null);
         ButterKnife.bind(this, view);
 
-
-        setupPop();
         setupRecyclerView();
         setupViewModel();
         return view;
     }
 
-
-    /**
-     * 设置右上角弹框的内容
-     */
-    private void setupPop() {
-        //设置右上角弹框内容
-        List<String> menu = new ArrayList<>();
-        menu.add("扫一扫");
-        menu.add("收款");
-        menu.add("录单");
-        popWindow = new CustomPopWindow(getActivity(), menu);
-    }
 
     private void setupViewModel() {
         storeListViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreListViewModel.class);
@@ -129,34 +106,4 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
         startActivity(new Intent(getContext(), StoreDetailsActivity.class));
     }
 
-    /**
-     * 点击事件
-     *
-     * @param view
-     */
-    @OnClick({R.id.right})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.right:
-                //右上角的弹框
-                popWindow.showLocation(R.id.right);
-                popWindow.setOnItemClickListener(this);
-                break;
-        }
-    }
-
-
-    @Override
-    public void onClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 0) {
-            //扫一扫
-//            startActivity(new Intent(getActivity(), ));
-        } else if (position == 1) {
-            //收款
-            startActivity(new Intent(getActivity(), PointsPayActivity.class));
-        } else {
-            //录单
-            startActivity(new Intent(getActivity(), MyInvestPaymentsActivity.class));
-        }
-    }
 }

@@ -2,17 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.github.conanchen.gedit">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- android:theme="@style/AppTheme.NoActionBar" -->
     <application
@@ -26,6 +26,11 @@
         <activity
             android:name=".ui.SplashActivity"
             android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.hello.HelloActivity"
@@ -36,7 +41,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.MainActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.store.StoreUpdateActivity"/>
         <activity
             android:name=".ui.store.StoreUpdateHeadPortraitActivity"
@@ -77,11 +83,6 @@
         <activity
             android:name=".ui.payment.GaptureActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.payment.PointsPayActivity"
