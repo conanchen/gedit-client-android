@@ -1,9 +1,7 @@
-package com.github.conanchen.gedit.ui.my;
+package com.github.conanchen.gedit.ui.my.mypointscoin;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -17,8 +15,8 @@ import butterknife.OnClick;
 /**
  * 录单列表界面
  */
-@Route(path = "/app/MyRecordPaymentsActivity")
-public class MyRecordPaymentsActivity extends AppCompatActivity {
+@Route(path = "/app/MyPointsCoinActivity")
+public class MyPointsCoinActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;

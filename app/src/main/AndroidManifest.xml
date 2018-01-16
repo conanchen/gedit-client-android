@@ -73,10 +73,10 @@
             android:name=".ui.payment.PaymentActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.my.MyRecordPaymentsActivity"
+            android:name=".ui.my.myinvestpayment.MyInvestPaymentsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.my.MyRecordPaymentActivity"
+            android:name=".ui.my.myinvestpayment.MyInvestPaymentActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.my.CustomerServiceActivity"

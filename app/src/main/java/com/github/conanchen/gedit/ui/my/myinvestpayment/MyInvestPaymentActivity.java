@@ -1,11 +1,10 @@
-package com.github.conanchen.gedit.ui.my;
+package com.github.conanchen.gedit.ui.my.myinvestpayment;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
@@ -19,8 +18,8 @@ import butterknife.OnClick;
 /**
  * 录单详情界面
  */
-@Route(path = "/app/MyRecordPaymentActivity")
-public class MyRecordPaymentActivity extends AppCompatActivity {
+@Route(path = "/app/MyInvestPaymentActivity")
+public class MyInvestPaymentActivity extends AppCompatActivity {
 
     @BindView(R.id.consumption_money)
     AppCompatEditText consumptionMoney;
