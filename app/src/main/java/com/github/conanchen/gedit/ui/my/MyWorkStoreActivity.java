@@ -21,10 +21,6 @@ import butterknife.OnClick;
 @Route(path = "/app/MyIntroducedStoreActivity")
 public class MyWorkStoreActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
-    @BindView(R.id.title)
-    AppCompatTextView title;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     @BindView(R.id.banner)
@@ -49,13 +45,12 @@ public class MyWorkStoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extension_store);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
     }
 
-    @OnClick({R.id.left_back})
+    @OnClick({R.id.back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.left_back:
+            case R.id.back:
                 finish();
                 break;
         }

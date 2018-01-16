@@ -63,7 +63,6 @@ public class MyStoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_store_details);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
 
     }
 
