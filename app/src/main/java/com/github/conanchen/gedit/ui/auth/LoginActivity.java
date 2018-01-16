@@ -2,6 +2,7 @@ package com.github.conanchen.gedit.ui.auth;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -10,16 +11,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.github.conanchen.gedit.GeditApplication;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
-import com.google.common.base.Strings;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +26,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 
 /**
  * 登录界面
@@ -103,8 +98,20 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.back})
+    @OnClick({R.id.back, R.id.register, R.id.forget})
     public void onViewClicked(View view) {
-        finish();
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.register:
+                //快速注册
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                break;
+            case R.id.forget:
+                //忘记密码
+                startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
+                break;
+        }
     }
 }

@@ -22,10 +22,7 @@ import butterknife.OnClick;
 @Route(path = "/app/PaymentActivity")
 public class PaymentActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
-    @BindView(R.id.title)
-    AppCompatTextView title;
+
     @BindView(R.id.store_name)
     AppCompatTextView storeName;
     @BindView(R.id.need_pay)
@@ -50,13 +47,12 @@ public class PaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
     }
 
-    @OnClick({R.id.left_back, R.id.submit})
+    @OnClick({R.id.back, R.id.submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.left_back:
+            case R.id.back:
                 finish();
                 break;
             case R.id.submit:

@@ -93,6 +93,9 @@
         <activity
             android:name=".ui.my.MyStorePaymentsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.auth.ForgetPasswordActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
