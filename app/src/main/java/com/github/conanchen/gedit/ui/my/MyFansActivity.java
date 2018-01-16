@@ -32,7 +32,6 @@ public class MyFansActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_fans_list);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
     }
 
     @OnClick({R.id.left_back})

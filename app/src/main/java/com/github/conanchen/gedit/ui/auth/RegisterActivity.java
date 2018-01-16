@@ -56,7 +56,6 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
         setupViewModel();
         setupRecyclerView();
         RegisterInfo registerInfo = RegisterInfo.builder().build();
@@ -112,9 +111,12 @@ public class RegisterActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.register})
+    @OnClick({R.id.back, R.id.register})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
             case R.id.register:
                 break;
         }

@@ -116,7 +116,7 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
 
     @OnClick(R.id.createbutton)
     public void openCreateStoreButtonClicked() {
-        ARouter.getInstance().build("/app/StoreCreateActivity").navigation();
+        ARouter.getInstance().build("/app/RegisterActivity").navigation();
     }
 
     /**

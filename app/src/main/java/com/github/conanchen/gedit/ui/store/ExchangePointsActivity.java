@@ -23,10 +23,6 @@ import butterknife.OnClick;
 @Route(path = "/app/ExchangePointsActivity")
 public class ExchangePointsActivity extends AppCompatActivity {
 
-    @BindView(R.id.left_back)
-    AppCompatImageView leftBack;
-    @BindView(R.id.title)
-    AppCompatTextView title;
     @BindView(R.id.edit_text_money)
     AppCompatEditText editTextMoney;
     @BindView(R.id.max_exchange_message)
@@ -49,13 +45,12 @@ public class ExchangePointsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange_points);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
     }
 
-    @OnClick({R.id.left_back, R.id.exchange_all, R.id.ali_cb, R.id.ali, R.id.wei_xin_cb, R.id.wei_xin, R.id.submit})
+    @OnClick({R.id.back, R.id.exchange_all, R.id.ali_cb, R.id.ali, R.id.wei_xin_cb, R.id.wei_xin, R.id.submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.left_back:
+            case R.id.back:
                 finish();
                 break;
             case R.id.exchange_all:
