@@ -58,12 +58,25 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
 
     private void setupViewModel() {
         mySummaryViewModel = ViewModelProviders.of(this, viewModelFactory).get(MySummaryViewModel.class);
-        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
-        myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
-        mySummaryViewModel.setHelloName("set name");
+        mySummaryViewModel.getHelloPagedListLiveData().observe(this,hellos -> {
 
-        //判断用户是否登录
-        isLogined();
+        });
+
+        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+            if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                isLogin = true;
+                //如果登录就显示名字  没有显示登录或注册
+                name.setText("小花花");
+                myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
+                mySummaryViewModel.setHelloName("set login name");
+            } else {
+                isLogin = false;
+                name.setText("登录/注册");
+                myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
+                mySummaryViewModel.setHelloName("set notlogin name");
+            }
+        });
     }
 
     @Nullable
@@ -130,19 +143,4 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
 //        }
     }
 
-    /**
-     * 判断用户是否登录
-     */
-    public void isLogined() {
-        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
-                isLogin = true;
-                //如果登录就显示名字  没有显示登录或注册
-                name.setText("小花花");
-            } else {
-                isLogin = false;
-                name.setText("登录/注册");
-            }
-        });
-    }
 }
