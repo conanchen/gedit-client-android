@@ -55,6 +55,8 @@ public class StoreCreateActivity extends BaseActivity {
 
     public static String TAG = StoreCreateActivity.class.getSimpleName();
     private static final Gson gson = new Gson();
+    private String accessToken;
+    private String expiresIn;
 
 
     @Override
@@ -84,22 +86,21 @@ public class StoreCreateActivity extends BaseActivity {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                     Toast.makeText(StoreCreateActivity.this, "创建中....", Toast.LENGTH_SHORT).show();
-                    currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-                        if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
-                            //创建商铺
-                            String storeName = mNameEditText.getText().toString().trim();
-                            String storeTel = introducerPhone.getText().toString().trim();
+//                    if (isLogin) {
+                        //创建商铺
+                        String storeName = mNameEditText.getText().toString().trim();
+                        String storeTel = introducerPhone.getText().toString().trim();
 
-                            StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
-                                    .setName(storeName)
-                                    .setMobile(storeTel)
-                                    .setVoAccessToken(VoAccessToken.builder().setAccessToken(signinResponse.getAccessToken()).setExpiresIn(signinResponse.getExpiresIn()).build())
-                                    .build();
-                            storeCreateViewModel.createStoreWith(storeCreateInfo);
-                        } else {
-                            startActivity(new Intent(StoreCreateActivity.this, LoginActivity.class));
-                        }
-                    });
+                        StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
+                                .setName(storeName)
+                                .setMobile(storeTel)
+                                .setVoAccessToken(VoAccessToken.builder().setAccessToken("accToken").setExpiresIn("ExpiresIn").build())
+                                .build();
+                        storeCreateViewModel.createStoreWith(storeCreateInfo);
+//                    } else {
+//                        startActivity(new Intent(StoreCreateActivity.this, LoginActivity.class));
+//                    }
+
                 });
 
     }
@@ -112,18 +113,30 @@ public class StoreCreateActivity extends BaseActivity {
         return password.length() >= 6;
     }
 
+    boolean isLogin = false;
 
     private void setupViewModel() {
         storeCreateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreCreateViewModel.class);
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
-        storeCreateViewModel.getStoreCreateResponseLiveData()
-                .observe(this, storeCreateResponse -> {
+        storeCreateViewModel.getStoreCreateResponseLiveData().observe(this, storeCreateResponse -> {
                     String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
                     Log.i(TAG, message);
                     if (storeCreateResponse != null) {
                         startActivity(new Intent(StoreCreateActivity.this, MyStoreActivity.class));
                     }
                 });
+
+
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+            if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                isLogin = true;
+                accessToken = signinResponse.getAccessToken();
+                expiresIn = signinResponse.getExpiresIn();
+            } else {
+                isLogin = false;
+            }
+        });
+
     }
 
     @OnClick({R.id.back})
