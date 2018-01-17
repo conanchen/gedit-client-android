@@ -1,6 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    signingConfigs {
+        key {
+            keyAlias 'qzd'
+            keyPassword 'jifenpz'
+            storeFile file('key.jks')
+            storePassword 'jifenpz'
+        }
+    }
+
+
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.jifenpz.gedit"

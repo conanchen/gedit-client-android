@@ -1,14 +1,21 @@
 package com.github.conanchen.gedit.ui.my.mystore;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.di.common.BaseActivity;
+import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
+import com.github.conanchen.gedit.vo.Location;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,11 +25,15 @@ import butterknife.OnClick;
  * 我的店铺
  */
 @Route(path = "/app/MyStoresActivity")
-public class MyStoresActivity extends AppCompatActivity {
+public class MyStoresActivity extends BaseActivity {
 
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+    MyStoresViewModel myStoresViewModel;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    private MyStoresAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +41,32 @@ public class MyStoresActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_store);
         ButterKnife.bind(this);
 
+        setupRecyclerView();
+        setupViewModel();
+
+    }
+
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new MyStoresAdapter();
+        recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new MyStoresAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(Store store) {
+                startActivity(new Intent(MyStoresActivity.this,MyStoreActivity.class));
+            }
+        });
+    }
+
+    private void setupViewModel() {
+        myStoresViewModel = ViewModelProviders.of(this, viewModelFactory).get(MyStoresViewModel.class);
+        myStoresViewModel.getLiveStores().observe(this, stores -> {
+            if (stores != null) {
+                mAdapter.setList(stores);
+            }
+        });
+        myStoresViewModel.updateLocation(Location.builder().setLat(1).setLon(2).build());
     }
 
     @OnClick({R.id.back, R.id.right})

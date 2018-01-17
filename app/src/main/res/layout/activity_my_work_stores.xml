@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.conanchen.gedit.ui.my.MyStoreEmployeesActivity">
+    tools:context="com.github.conanchen.gedit.ui.my.MyWorkStoresActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -31,18 +31,19 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="我的员工"
+                android:text="我工作过的店铺"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/back"
                 app:layout_constraintLeft_toRightOf="@+id/back"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/back"/>
 
-            <android.support.v7.widget.AppCompatImageButton
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/right"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="增加"
                 android:visibility="invisible"
                 app:layout_constraintLeft_toRightOf="@+id/title"
                 app:layout_constraintRight_toRightOf="parent"
@@ -59,5 +60,4 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"/>
-
 </android.support.constraint.ConstraintLayout>

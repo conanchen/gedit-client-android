@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@color/white">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/add"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:singleLine="true"
+        android:text="wang xiao jie"
+        app:layout_constraintBottom_toTopOf="@id/money"
+        app:layout_constraintLeft_toRightOf="@id/image"
+        app:layout_constraintRight_toLeftOf="@id/distance"
+        app:layout_constraintTop_toTopOf="@id/image"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="working"
+        app:layout_constraintBottom_toBottomOf="@id/image"
+        app:layout_constraintLeft_toLeftOf="@id/name"
+        app:layout_constraintRight_toLeftOf="@id/icon"
+        app:layout_constraintTop_toBottomOf="@id/name"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#3000"
+        app:layout_constraintTop_toBottomOf="@id/image"/>
+</android.support.constraint.ConstraintLayout>

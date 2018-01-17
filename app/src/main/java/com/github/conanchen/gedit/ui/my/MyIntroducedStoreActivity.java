@@ -43,7 +43,7 @@ public class MyIntroducedStoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_extension_store);
+        setContentView(R.layout.activity_my_introduce_store);
         ButterKnife.bind(this);
     }
 
