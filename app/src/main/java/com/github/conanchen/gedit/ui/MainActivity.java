@@ -46,6 +46,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends BaseFragmentActivity implements CustomPopWindow.OnItemClickListener {
     @Inject
@@ -174,39 +176,36 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
     public void onClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
             //扫一扫
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Dexter.withActivity(MainActivity.this)
-                            .withPermission(Manifest.permission.CAMERA)
-                            .withListener(new PermissionListener() {
-                                @Override
-                                public void onPermissionGranted(PermissionGrantedResponse response) {
+            Observable.just(true).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+                Dexter.withActivity(MainActivity.this)
+                        .withPermission(Manifest.permission.CAMERA)
+                        .withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse response) {
 //                                    ARouter.getInstance().build("/app/GaptureActivity").navigation();
-                                    Intent intent = new Intent(MainActivity.this, GaptureActivity.class);
-                                    startActivityForResult(intent, REQUEST_CODE);
-                                }
+                                Intent intent = new Intent(MainActivity.this, GaptureActivity.class);
+                                startActivityForResult(intent, REQUEST_CODE);
+                            }
 
-                                @Override
-                                public void onPermissionDenied(PermissionDeniedResponse response) {
-                                    Toast.makeText(MainActivity.this, "我们需要摄像头访问权限来启动扫码功能，can not open GaptureActivity ", Toast.LENGTH_LONG).show();
-                                }
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse response) {
+                                Toast.makeText(MainActivity.this, "我们需要摄像头访问权限来启动扫码功能，can not open GaptureActivity ", Toast.LENGTH_LONG).show();
+                            }
 
-                                @Override
-                                public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                                    MainActivity.this.showPermissionRationale(token);
-                                }
-                            })
-                            .withErrorListener(new PermissionRequestErrorListener() {
-                                @Override
-                                public void onError(DexterError error) {
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                                MainActivity.this.showPermissionRationale(token);
+                            }
+                        })
+                        .withErrorListener(new PermissionRequestErrorListener() {
+                            @Override
+                            public void onError(DexterError error) {
 
-                                }
-                            })
-                            .onSameThread()
-                            .check();
-                }
-            }).start();
+                            }
+                        })
+                        .onSameThread()
+                        .check();
+            });
         } else if (position == 1) {
             //收款界面
 //            startActivity(new Intent(this, PointsPayActivity.class));
