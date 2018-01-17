@@ -7,6 +7,7 @@ import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.auth.RegisterActivity;
 import com.github.conanchen.gedit.ui.hello.HelloActivity;
 import com.github.conanchen.gedit.ui.my.MyIntroducedStoresActivity;
+import com.github.conanchen.gedit.ui.my.MyStoreEmployeesActivity;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.my.MyWorkStoresActivity;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoresActivity;
@@ -69,6 +70,9 @@ public abstract class ViewModule {
 
     @ContributesAndroidInjector
     abstract MyIntroducedStoresActivity contributeMyIntroducedStoresActivity();
+
+    @ContributesAndroidInjector
+    abstract MyStoreEmployeesActivity contributeMyStoreEmployeesActivity();
 
 
     //
