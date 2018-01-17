@@ -43,7 +43,7 @@ public class MyWorkStoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_extension_store);
+        setContentView(R.layout.activity_my_word_store);
         ButterKnife.bind(this);
     }
 
