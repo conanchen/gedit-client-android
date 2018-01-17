@@ -14,6 +14,7 @@ import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
+import com.github.conanchen.gedit.store.search.grpc.SearchRequest;
 import com.github.conanchen.gedit.vo.Location;
 import com.github.conanchen.gedit.vo.StoreCreateResponse;
 import com.github.conanchen.gedit.vo.StoreUpdateResponse;
@@ -57,8 +58,21 @@ public class StoreRepository {
             .setPageSize(20).build();
 
     public LiveData<PagedList<Store>> loadStoresNearAt(Location location) {
-        //TODO call grpc api to refresh near stores
 
+        //  call grpc api to refresh near stores
+        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+            grpcFascade.storeService.searchStoresNearAt(
+                    SearchRequest.newBuilder().setLat(location.lat).setLon(location.lon).build(),
+                    response -> {
+                        //TODO 填写完整信息
+                        Store s = Store.builder()
+                                .setUuid(response.getUuid())
+                                .setName(response.getName())
+                                .setAddress(response.getDesc())
+                                .build();
+                        roomFascade.daoStore.save(s);
+                    });
+        });
         return (new LivePagedListBuilder(roomFascade.daoStore.listLivePagedStore(), pagedListConfig))
                 .build();
     }

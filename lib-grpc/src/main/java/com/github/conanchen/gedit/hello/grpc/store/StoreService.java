@@ -10,8 +10,12 @@ import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
+import com.github.conanchen.gedit.store.search.grpc.SearchRequest;
+import com.github.conanchen.gedit.store.search.grpc.SearchResponse;
+import com.github.conanchen.gedit.store.search.grpc.StoreSearchApiGrpc;
 import com.google.common.base.Strings;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import io.grpc.CallCredentials;
@@ -25,6 +29,12 @@ import io.grpc.stub.StreamObserver;
 
 public class StoreService {
     private final static String TAG = StoreService.class.getSimpleName();
+
+
+    public interface StoreSearchCallback {
+        void onStoreSearchResponse(SearchResponse response);
+
+    }
 
     public interface StoreCallback {
         void onStoreCreateResponse(CreateStoreResponse response);
@@ -45,6 +55,33 @@ public class StoreService {
                 .usePlaintext(true)
                 //                .keepAliveTime(60, TimeUnit.SECONDS)
                 .build();
+    }
+
+    public void searchStoresNearAt(SearchRequest searchRequest, StoreSearchCallback callback) {
+        ManagedChannel channel = getManagedChannel();
+        StoreSearchApiGrpc.StoreSearchApiStub storeSearchApiStub = StoreSearchApiGrpc.newStub(channel);
+        storeSearchApiStub
+                .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .search(searchRequest, new StreamObserver<SearchResponse>() {
+                    @Override
+                    public void onNext(SearchResponse value) {
+                        callback.onStoreSearchResponse(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        callback.onStoreSearchResponse(SearchResponse.newBuilder().setUuid(UUID.randomUUID().toString())
+                                .setName(String.format("StoreName%d", System.currentTimeMillis()))
+                                .setDesc(String.format("StoreDesc%d", System.currentTimeMillis()))
+                                .build());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        Log.i(TAG, "storeSearchApiStub.search onCompleted()");
+
+                    }
+                });
     }
 
     public void storeCreate(StoreCreateInfo storeCreateInfo, StoreService.StoreCallback callback) {
