@@ -6,7 +6,6 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
-import android.util.Log;
 
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
 import com.github.conanchen.gedit.room.store.Store;
@@ -23,12 +22,12 @@ public class StoreListViewModel extends ViewModel {
 
     @VisibleForTesting
     final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
-    private final LiveData<PagedList<Store>> liveStores;
+    private final LiveData<PagedList<Store>> storePagedListLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
     public StoreListViewModel(StoreRepository storeRepository) {
-        liveStores = Transformations.switchMap(locationMutableLiveData, location -> {
+        storePagedListLiveData = Transformations.switchMap(locationMutableLiveData, location -> {
             if (location == null) {
                 return AbsentLiveData.create();
             } else {
@@ -43,8 +42,8 @@ public class StoreListViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public LiveData<PagedList<Store>> getLiveStores() {
-        return liveStores;
+    public LiveData<PagedList<Store>> getStorePagedListLiveData() {
+        return storePagedListLiveData;
     }
 
 
