@@ -8,7 +8,9 @@ import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
+import com.github.conanchen.gedit.room.store.MyStores;
 import com.github.conanchen.gedit.room.store.Store;
+import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.gedit.vo.Location;
 
@@ -21,28 +23,28 @@ import javax.inject.Inject;
 public class MyStoresViewModel extends ViewModel {
 
     @VisibleForTesting
-    final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
-    private final LiveData<PagedList<Store>> liveStores;
+    final MutableLiveData<Long> locationMutableLiveData = new MutableLiveData<>();
+    private final LiveData<PagedList<MyStores>> liveStores;
 
     @SuppressWarnings("unchecked")
     @Inject
     public MyStoresViewModel(StoreRepository storeRepository) {
-        liveStores = Transformations.switchMap(locationMutableLiveData, location -> {
-            if (location == null) {
+        liveStores = Transformations.switchMap(locationMutableLiveData, times -> {
+            if (times == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeRepository.loadStoresNearAt(location);
+                return storeRepository.loadMyStores(times);
             }
         });
     }
 
     @VisibleForTesting
-    public void updateLocation(Location location) {
-        locationMutableLiveData.setValue(location);
+    public void loadMyStores(Long times) {
+        locationMutableLiveData.setValue(times);
     }
 
     @VisibleForTesting
-    public LiveData<PagedList<Store>> getLiveStores() {
+    public LiveData<PagedList<MyStores>> getLiveStores() {
         return liveStores;
     }
 }

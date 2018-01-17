@@ -10,16 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.room.store.MyStores;
 import com.github.conanchen.gedit.room.store.Store;
 
 /**
  * Created by Administrator on 2018/1/17.
  */
 
-public class MyStoresAdapter extends PagedListAdapter<Store, MyStoresAdapter.ViewHolder> {
+public class MyStoresAdapter extends PagedListAdapter<MyStores, MyStoresAdapter.ViewHolder> {
 
     protected MyStoresAdapter() {
-        super(Store.DIFF_CALLBACK);
+        super(MyStores.DIFF_CALLBACK);
     }
 
     @Override
@@ -31,7 +32,7 @@ public class MyStoresAdapter extends PagedListAdapter<Store, MyStoresAdapter.Vie
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Store store = getItem(position);
+        MyStores store = getItem(position);
         if (store != null) {
             holder.bindTo(store);
         }
@@ -54,13 +55,13 @@ public class MyStoresAdapter extends PagedListAdapter<Store, MyStoresAdapter.Vie
             layout = itemView.findViewById(R.id.layout);
         }
 
-        public void bindTo(Store store) {
-            name.setText(store.address);
-            distance.setText(store.uuid);
+        public void bindTo(MyStores myStores) {
+            name.setText(myStores.storeUuid);
+            distance.setText(myStores.storeName);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.OnItemClick(store);
+                    listener.OnItemClick(myStores);
                 }
             });
         }
@@ -69,7 +70,7 @@ public class MyStoresAdapter extends PagedListAdapter<Store, MyStoresAdapter.Vie
     private OnItemClickListener listener;
 
     interface OnItemClickListener {
-        void OnItemClick(Store store);
+        void OnItemClick(MyStores store);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

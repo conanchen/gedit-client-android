@@ -5,10 +5,11 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.hello.grpc.utils.JcaUtils;
-import com.github.conanchen.gedit.store.profile.grpc.CreateStoreRequest;
+import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
+import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
+import com.github.conanchen.gedit.store.owner.grpc.StoreOwnerApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
-import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchRequest;
 import com.github.conanchen.gedit.store.search.grpc.SearchResponse;
@@ -33,6 +34,11 @@ public class StoreService {
 
     public interface StoreSearchCallback {
         void onStoreSearchResponse(SearchResponse response);
+
+    }
+
+    public interface LoadMyStoresCallBack {
+        void onLoadMyStores(OwnershipResponse response);
 
     }
 
@@ -258,6 +264,40 @@ public class StoreService {
                             }
                         });
 
+    }
+
+
+    public void loadMyStores(StoreService.LoadMyStoresCallBack callBack) {
+        ManagedChannel channel = getManagedChannel();
+        StoreOwnerApiGrpc.StoreOwnerApiStub storeOwnerApiStub = StoreOwnerApiGrpc.newStub(channel);
+        Log.i("-=-=-", "进来了没");
+        storeOwnerApiStub.listMyStore(ListMyStoreRequest.newBuilder().build(), new StreamObserver<OwnershipResponse>() {
+            @Override
+            public void onNext(OwnershipResponse value) {
+                Log.i("-=-=-", "onNext");
+                callBack.onLoadMyStores(value);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.i("-=-=-", "onError");
+                callBack.onLoadMyStores(OwnershipResponse.newBuilder()
+                        .setStatus(Status.newBuilder().setCode("FAILED")
+                                .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
+                                .build())
+                        .build());
+            }
+
+            @Override
+            public void onCompleted() {
+                Log.i("-=-=-", "onCompleted");
+                callBack.onLoadMyStores(OwnershipResponse.newBuilder()
+                        .setStatus(Status.newBuilder().setCode("onCompleted()")
+                                .setDetails(String.format("onCompleted（）"))
+                                .build())
+                        .build());
+            }
+        });
     }
 
 
