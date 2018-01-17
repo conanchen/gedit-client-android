@@ -24,7 +24,7 @@ import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.my.myinvestpayment.MyInvestPaymentsActivity;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
-import com.github.conanchen.gedit.ui.payment.PayeeActivity;
+import com.github.conanchen.gedit.ui.payment.PayeeQRCodeActivity;
 import com.github.conanchen.gedit.ui.payment.PointsPayActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
 import com.github.conanchen.gedit.util.CustomPopWindow;
@@ -210,7 +210,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
         } else if (position == 1) {
             //收款界面
 //            startActivity(new Intent(this, PointsPayActivity.class));
-            startActivity(new Intent(this, PayeeActivity.class));
+            startActivity(new Intent(this, PayeeQRCodeActivity.class));
         } else {
             //录单
             startActivity(new Intent(this, MyInvestPaymentsActivity.class));

@@ -11,7 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PayeeActivity extends AppCompatActivity {
+public class PayeeQRCodeActivity extends AppCompatActivity {
 
     @BindView(R.id.code)
     AppCompatImageView code;

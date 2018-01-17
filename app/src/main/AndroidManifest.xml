@@ -118,7 +118,7 @@
             android:name=".ui.my.MyWorkStoreActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.payment.PayeeActivity"
+            android:name=".ui.payment.PayeeQRCodeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.my.MyInvestOrAgentActivity"
