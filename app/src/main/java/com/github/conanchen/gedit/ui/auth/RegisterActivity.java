@@ -195,7 +195,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.back, R.id.get_sms_code, R.id.register})
+    @OnClick({R.id.back, R.id.get_sms_code, R.id.refresh})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -210,8 +210,8 @@ public class RegisterActivity extends BaseActivity {
                         .build();
                 registerViewModel.getSms(registerInfo);
                 break;
-            case R.id.register:
-
+            case R.id.refresh:
+                registerViewModel.getVerify(RegisterInfo.builder().build());
                 break;
         }
     }
