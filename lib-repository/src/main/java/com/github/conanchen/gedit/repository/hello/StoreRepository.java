@@ -11,7 +11,7 @@ import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 import com.github.conanchen.gedit.hello.grpc.store.StoreUpdateInfo;
 import com.github.conanchen.gedit.room.RoomFascade;
-import com.github.conanchen.gedit.room.store.MyStores;
+import com.github.conanchen.gedit.room.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
@@ -289,53 +289,5 @@ public class StoreRepository {
                 });
             }
         };
-    }
-
-
-    public LiveData<PagedList<MyStores>> loadMyStores(Long times) {
-        grpcFascade.storeService.loadMyStores(new StoreService.LoadMyStoresCallBack() {
-            @Override
-            public void onLoadMyStores(OwnershipResponse response) {
-                Log.i("-=-=-", String.format("loadMyStores: %s", response.getStatus()));
-                Observable.fromCallable(() -> {
-                    if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
-                        MyStores myStores = MyStores.builder()
-                                .setStoreUuid(response.getOwnership().getStoreUuid())
-                                .setLat(response.getOwnership().getLocation().getLat())
-                                .setLon(response.getOwnership().getLocation().getLon())
-                                .setStoreLogo(response.getOwnership().getStoreLogo())
-                                .setStoreName(response.getOwnership().getStoreName())
-                                .build();
-                        return roomFascade.daoMyStores.save(myStores);
-                    } else {
-                        MyStores myStores = MyStores.builder()
-                                .setStoreUuid("storeUuid" + System.currentTimeMillis())
-                                .setLat(111.0)
-                                .setLon(222.0)
-                                .setStoreName("shibai")
-                                .setStoreLogo("wwwwwwwww")
-                                .build();
-                        return roomFascade.daoMyStores.save(myStores);
-                    }
-                }).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(@NonNull Long rowId) throws Exception {
-                                // the uuid of the upserted record.
-                                if (rowId > 0) {
-                                    return;
-                                } else {
-                                    return;
-                                }
-                            }
-                        });
-                ;
-            }
-        });
-
-        Log.i("-=-=-", "伙计走到这一步，但是没数据");
-        return (new LivePagedListBuilder(roomFascade.daoMyStores.listLivePagedMyStore(), pagedListConfig))
-                .build();
     }
 }

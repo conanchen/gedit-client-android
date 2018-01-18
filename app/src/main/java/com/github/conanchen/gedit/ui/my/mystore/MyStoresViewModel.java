@@ -7,12 +7,9 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.repository.hello.StoreRepository;
-import com.github.conanchen.gedit.room.store.MyStores;
-import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
+import com.github.conanchen.gedit.repository.hello.MyStoreRepository;
+import com.github.conanchen.gedit.room.store.MyStore;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-import com.github.conanchen.gedit.vo.Location;
 
 import javax.inject.Inject;
 
@@ -23,28 +20,28 @@ import javax.inject.Inject;
 public class MyStoresViewModel extends ViewModel {
 
     @VisibleForTesting
-    final MutableLiveData<Long> locationMutableLiveData = new MutableLiveData<>();
-    private final LiveData<PagedList<MyStores>> liveStores;
+    final MutableLiveData<Long> lastUpdatedMutableLiveData = new MutableLiveData<>();
+    private final LiveData<PagedList<MyStore>> myStorePagedListLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
-    public MyStoresViewModel(StoreRepository storeRepository) {
-        liveStores = Transformations.switchMap(locationMutableLiveData, times -> {
+    public MyStoresViewModel(MyStoreRepository myStoreRepository) {
+        myStorePagedListLiveData = Transformations.switchMap(lastUpdatedMutableLiveData, times -> {
             if (times == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeRepository.loadMyStores(times);
+                return myStoreRepository.loadMyStores(times);
             }
         });
     }
 
     @VisibleForTesting
     public void loadMyStores(Long times) {
-        locationMutableLiveData.setValue(times);
+        lastUpdatedMutableLiveData.setValue(times);
     }
 
     @VisibleForTesting
-    public LiveData<PagedList<MyStores>> getLiveStores() {
-        return liveStores;
+    public LiveData<PagedList<MyStore>> getMyStorePagedListLiveData() {
+        return myStorePagedListLiveData;
     }
 }

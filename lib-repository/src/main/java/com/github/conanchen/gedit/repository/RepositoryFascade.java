@@ -1,6 +1,7 @@
 package com.github.conanchen.gedit.repository;
 
 import com.github.conanchen.gedit.repository.hello.HelloRepository;
+import com.github.conanchen.gedit.repository.hello.MyStoreRepository;
 import com.github.conanchen.gedit.repository.hello.RegisterRepository;
 import com.github.conanchen.gedit.repository.hello.SigninRepository;
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
@@ -18,6 +19,7 @@ public class RepositoryFascade {
 
     public HelloRepository helloRepository;
     public StoreRepository storeRepository;
+    public MyStoreRepository myStoreRepository;
     public KeyValueRepository keyValueRepository;
     public SigninRepository signinRepository;
     public RegisterRepository registerRepository;
@@ -25,11 +27,13 @@ public class RepositoryFascade {
     @Inject
     public RepositoryFascade(HelloRepository helloRepository,
                              StoreRepository storeRepository,
+                             MyStoreRepository myStoreRepository,
                              SigninRepository signinRepository,
                              KeyValueRepository keyValueRepository,
                              RegisterRepository registerRepository) {
         this.helloRepository = helloRepository;
         this.storeRepository = storeRepository;
+        this.myStoreRepository = myStoreRepository;
         this.signinRepository = signinRepository;
         this.keyValueRepository = keyValueRepository;
         this.registerRepository = registerRepository;

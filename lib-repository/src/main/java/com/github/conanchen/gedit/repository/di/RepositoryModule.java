@@ -5,6 +5,7 @@ import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
 import com.github.conanchen.gedit.hello.grpc.di.GrpcModule;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
 import com.github.conanchen.gedit.repository.hello.HelloRepository;
+import com.github.conanchen.gedit.repository.hello.MyStoreRepository;
 import com.github.conanchen.gedit.repository.hello.RegisterRepository;
 import com.github.conanchen.gedit.repository.hello.SigninRepository;
 import com.github.conanchen.gedit.repository.hello.StoreRepository;
@@ -32,6 +33,7 @@ public class RepositoryModule {
     public RepositoryFascade provideRepositoryFascade(
             HelloRepository helloRepository,
             StoreRepository storeRepository,
+            MyStoreRepository myStoreRepository,
             SigninRepository signinRepository,
             KeyValueRepository keyValueRepository,
             RegisterRepository registerRepository
@@ -39,6 +41,7 @@ public class RepositoryModule {
         return new RepositoryFascade(
                 helloRepository,
                 storeRepository,
+                myStoreRepository,
                 signinRepository,
                 keyValueRepository,
                 registerRepository);

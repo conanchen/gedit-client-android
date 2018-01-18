@@ -7,7 +7,7 @@ import com.github.conanchen.gedit.room.MyRoomDatabase;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.DaoHello;
 import com.github.conanchen.gedit.room.kv.DaoKeyValue;
-import com.github.conanchen.gedit.room.store.DaoMyStores;
+import com.github.conanchen.gedit.room.store.DaoMyStore;
 import com.github.conanchen.gedit.room.store.DaoStore;
 
 import javax.inject.Singleton;
@@ -55,7 +55,7 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    DaoMyStores provideDaoMyStores(MyRoomDatabase db) {
+    DaoMyStore provideDaoMyStores(MyRoomDatabase db) {
         return db.daoMyStores();
     }
 
@@ -63,7 +63,7 @@ public class RoomModule {
     @Singleton
     @Provides
     public RoomFascade provideRoomFascade(DaoHello daoHello, DaoStore daoStore, DaoKeyValue daoKeyValue,
-                                          DaoMyStores daoMyStores) {
-        return new RoomFascade(daoHello, daoStore, daoKeyValue, daoMyStores);
+                                          DaoMyStore daoMyStore) {
+        return new RoomFascade(daoHello, daoStore, daoKeyValue, daoMyStore);
     }
 }

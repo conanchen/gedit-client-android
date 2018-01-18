@@ -3,7 +3,6 @@ package com.github.conanchen.gedit.room.store;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.recyclerview.extensions.DiffCallback;
 
@@ -16,7 +15,7 @@ import com.google.common.base.Strings;
         @Index(value = {"storeUuid"}),
         @Index(value = {"lastUpdated"})
 })
-public class MyStores {
+public class MyStore {
     @PrimaryKey
     @NonNull
     public String storeUuid;
@@ -28,7 +27,7 @@ public class MyStores {
     public long lastUpdated;
 
 
-    public MyStores(@NonNull String storeUuid, String storeName, String storeLogo, Double lat, Double lon, long created, long lastUpdated) {
+    public MyStore(@NonNull String storeUuid, String storeName, String storeLogo, Double lat, Double lon, long created, long lastUpdated) {
         this.storeUuid = storeUuid;
         this.storeName = storeName;
         this.storeLogo = storeLogo;
@@ -38,14 +37,14 @@ public class MyStores {
         this.lastUpdated = lastUpdated;
     }
 
-    public static DiffCallback<MyStores> DIFF_CALLBACK = new DiffCallback<MyStores>() {
+    public static DiffCallback<MyStore> DIFF_CALLBACK = new DiffCallback<MyStore>() {
         @Override
-        public boolean areItemsTheSame(@NonNull MyStores oldItem, @NonNull MyStores newItem) {
+        public boolean areItemsTheSame(@NonNull MyStore oldItem, @NonNull MyStore newItem) {
             return oldItem.storeUuid == newItem.storeUuid;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull MyStores oldItem, @NonNull MyStores newItem) {
+        public boolean areContentsTheSame(@NonNull MyStore oldItem, @NonNull MyStore newItem) {
             return oldItem.equals(newItem);
         }
     };
@@ -55,13 +54,13 @@ public class MyStores {
         if (obj == this)
             return true;
 
-        MyStores myStores = (MyStores) obj;
+        MyStore myStore = (MyStore) obj;
 
-        return myStores.storeUuid == this.storeUuid;
+        return myStore.storeUuid == this.storeUuid;
     }
 
-    public static MyStores.Builder builder() {
-        return new MyStores.Builder();
+    public static MyStore.Builder builder() {
+        return new MyStore.Builder();
     }
 
     public static final class Builder {
@@ -76,7 +75,7 @@ public class MyStores {
         public Builder() {
         }
 
-        public MyStores build() {
+        public MyStore build() {
             String missing = "";
             if (Strings.isNullOrEmpty(storeUuid)) {
                 missing += " storeUuid ";
@@ -88,7 +87,7 @@ public class MyStores {
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new MyStores(storeUuid, storeName, storeLogo, lat, lon, created, lastUpdated);
+            return new MyStore(storeUuid, storeName, storeLogo, lat, lon, created, lastUpdated);
         }
 
         public Builder setStoreUuid(String storeUuid) {

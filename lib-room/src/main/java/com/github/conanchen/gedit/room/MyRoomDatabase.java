@@ -8,9 +8,9 @@ import com.github.conanchen.gedit.room.hello.Hello;
 import com.github.conanchen.gedit.room.kv.DaoKeyValue;
 import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.room.kv.ValueConverters;
-import com.github.conanchen.gedit.room.store.DaoMyStores;
+import com.github.conanchen.gedit.room.store.DaoMyStore;
 import com.github.conanchen.gedit.room.store.DaoStore;
-import com.github.conanchen.gedit.room.store.MyStores;
+import com.github.conanchen.gedit.room.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
 
 
@@ -19,7 +19,7 @@ import com.github.conanchen.gedit.room.store.Store;
                 Hello.class,
                 Store.class,
                 KeyValue.class,
-                MyStores.class
+                MyStore.class
         },
         version = 1,
         exportSchema = false)
@@ -31,6 +31,6 @@ public abstract class MyRoomDatabase extends android.arch.persistence.room.RoomD
 
     public abstract DaoKeyValue daoKeyValue();
 
-    public abstract DaoMyStores daoMyStores();
+    public abstract DaoMyStore daoMyStores();
 
 }

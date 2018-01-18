@@ -11,7 +11,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.room.store.MyStores;
+import com.github.conanchen.gedit.room.store.MyStore;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 
 import javax.inject.Inject;
@@ -52,7 +52,7 @@ public class MyStoresActivity extends BaseActivity {
 
         mAdapter.setOnItemClickListener(new MyStoresAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClick(MyStores myStores) {
+            public void OnItemClick(MyStore myStore) {
                 startActivity(new Intent(MyStoresActivity.this, MyStoreActivity.class));
             }
         });
@@ -60,7 +60,7 @@ public class MyStoresActivity extends BaseActivity {
 
     private void setupViewModel() {
         myStoresViewModel = ViewModelProviders.of(this, viewModelFactory).get(MyStoresViewModel.class);
-        myStoresViewModel.getLiveStores().observe(this, stores -> {
+        myStoresViewModel.getMyStorePagedListLiveData().observe(this, stores -> {
             if (stores != null) {
                 mAdapter.setList(stores);
             }
