@@ -15,14 +15,16 @@ public class RegisterInfo {
     public String questionUuid;
     public String questionTip;
     public List<Question> question;
+    public String password;
 
-    public RegisterInfo(String token, String mobile, String smscode, String questionUuid, String questionTip,List<Question> question) {
+    public RegisterInfo(String token, String mobile, String smscode, String questionUuid, String questionTip, List<Question> question, String password) {
         this.token = token;
         this.mobile = mobile;
         this.smscode = smscode;
         this.questionUuid = questionUuid;
         this.questionTip = questionTip;
         this.question = question;
+        this.password = password;
     }
 
     public static RegisterInfo.Builder builder() {
@@ -36,12 +38,13 @@ public class RegisterInfo {
         private String questionUuid;
         private String questionTip;
         private List<Question> question;
+        private String password;
 
         public Builder() {
         }
 
         public RegisterInfo build() {
-            return new RegisterInfo(token, mobile, smscode, questionUuid, questionTip, question);
+            return new RegisterInfo(token, mobile, smscode, questionUuid, questionTip, question, password);
         }
 
         public Builder setToken(String token) {
@@ -71,6 +74,11 @@ public class RegisterInfo {
 
         public Builder setQuestion(List<Question> question) {
             this.question = question;
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            this.password = password;
             return this;
         }
     }
