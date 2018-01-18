@@ -52,10 +52,7 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.hellobutton)
-    AppCompatButton hellobutton;
-    @BindView(R.id.createbutton)
-    AppCompatButton createbutton;
+
 
     private StoreListAdapter mAdapter;
 
@@ -136,15 +133,6 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
         mAdapter.setOnItemClickListener(this);
     }
 
-    @OnClick(R.id.hellobutton)
-    public void openHelloButtonClicked() {
-        ARouter.getInstance().build("/app/HelloActivity").navigation();
-    }
-
-    @OnClick(R.id.createbutton)
-    public void openCreateStoreButtonClicked() {
-        ARouter.getInstance().build("/app/RegisterActivity").navigation();
-    }
 
     /**
      * 列表条目的点击事件
