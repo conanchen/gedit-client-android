@@ -6,7 +6,7 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.repository.hello.StoreRepository;
+import com.github.conanchen.gedit.repository.StoreRepository;
 import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.gedit.vo.StoreCreateResponse;

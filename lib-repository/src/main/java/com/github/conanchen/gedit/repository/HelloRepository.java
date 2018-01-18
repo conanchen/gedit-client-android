@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.repository.hello;
+package com.github.conanchen.gedit.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;

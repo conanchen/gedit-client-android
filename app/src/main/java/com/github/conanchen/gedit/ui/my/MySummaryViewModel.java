@@ -23,11 +23,9 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.repository.hello.HelloRepository;
+import com.github.conanchen.gedit.repository.HelloRepository;
 import com.github.conanchen.gedit.room.hello.Hello;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-
-import java.util.List;
 
 import javax.inject.Inject;
 

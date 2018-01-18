@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.repository.hello;
+package com.github.conanchen.gedit.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;
@@ -11,9 +11,7 @@ import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 import com.github.conanchen.gedit.hello.grpc.store.StoreUpdateInfo;
 import com.github.conanchen.gedit.room.RoomFascade;
-import com.github.conanchen.gedit.room.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;

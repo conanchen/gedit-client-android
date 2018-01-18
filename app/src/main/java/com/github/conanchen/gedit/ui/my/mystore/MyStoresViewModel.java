@@ -7,7 +7,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.repository.hello.MyStoreRepository;
+import com.github.conanchen.gedit.repository.MyStoreRepository;
 import com.github.conanchen.gedit.room.store.MyStore;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 

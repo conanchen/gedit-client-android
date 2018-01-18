@@ -1,10 +1,5 @@
 package com.github.conanchen.gedit.repository;
 
-import com.github.conanchen.gedit.repository.hello.HelloRepository;
-import com.github.conanchen.gedit.repository.hello.MyStoreRepository;
-import com.github.conanchen.gedit.repository.hello.RegisterRepository;
-import com.github.conanchen.gedit.repository.hello.SigninRepository;
-import com.github.conanchen.gedit.repository.hello.StoreRepository;
 import com.github.conanchen.gedit.repository.kv.KeyValueRepository;
 
 import javax.inject.Inject;
