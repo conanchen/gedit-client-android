@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
+import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -46,6 +48,8 @@ public class LoginActivity extends BaseActivity {
     AppCompatButton mLoginButton;
     @BindView(R.id.show)
     AppCompatTextView mResultTextView;
+
+    private static final Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +97,7 @@ public class LoginActivity extends BaseActivity {
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(SigninViewModel.class);
         loginViewModel.getSigninResponseLiveData()
                 .observe(this, signinResponse -> {
+                    Log.i("-=-=-", gson.toJson(signinResponse));
                     mResultTextView.setText("登陆结果：" + signinResponse.accessToken + "===" + signinResponse.expiresIn);
                 });
     }
