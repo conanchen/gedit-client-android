@@ -6,6 +6,7 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
+import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionRequest;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionResponse;
@@ -39,7 +40,7 @@ public class RegisterService {
     }
 
     public interface RegisterCallback {
-        void onRegisterCallback(SigninResponse response);
+        void onRegisterCallback(RegisterResponse response);
     }
 
     private ManagedChannel getManagedChannel() {
@@ -134,19 +135,19 @@ public class RegisterService {
     public void getRegister(RegisterInfo registerInfo, RegisterService.RegisterCallback callback) {
         ManagedChannel channel = getManagedChannel();
         UserAuthApiGrpc.UserAuthApiStub userAuthApiStub = UserAuthApiGrpc.newStub(channel);
-        userAuthApiStub.registerSmsStep3Signin(SmsStep3RegisterRequest.newBuilder()
+        userAuthApiStub.registerSmsStep3Register(SmsStep3RegisterRequest.newBuilder()
                 .setMobile(registerInfo.mobile)
                 .setSmscode(registerInfo.smscode)
                 .setPassword(registerInfo.password)
-                .build(), new StreamObserver<SigninResponse>() {
+                .build(), new StreamObserver<RegisterResponse>() {
             @Override
-            public void onNext(SigninResponse value) {
+            public void onNext(RegisterResponse value) {
                 callback.onRegisterCallback(value);
             }
 
             @Override
             public void onError(Throwable t) {
-                callback.onRegisterCallback(SigninResponse.newBuilder()
+                callback.onRegisterCallback(RegisterResponse.newBuilder()
                         .setStatus(Status.newBuilder()
                                 .setCode("Fail")
                                 .setDetails("api没有调通" + t.getMessage()))
@@ -155,7 +156,7 @@ public class RegisterService {
 
             @Override
             public void onCompleted() {
-                callback.onRegisterCallback(SigninResponse.newBuilder()
+                callback.onRegisterCallback(RegisterResponse.newBuilder()
                         .setStatus(Status.newBuilder()
                                 .setCode("Fail")
                                 .setDetails("onCompleted"))

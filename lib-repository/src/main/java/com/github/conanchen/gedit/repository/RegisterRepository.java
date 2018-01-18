@@ -8,6 +8,7 @@ import com.github.conanchen.gedit.hello.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.hello.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
@@ -139,33 +140,33 @@ public class RegisterRepository {
      * @param registerInfo
      * @return
      */
-    public LiveData<SigninResponse> getRegister(RegisterInfo registerInfo) {
-        return new LiveData<SigninResponse>() {
+    public LiveData<RegisterResponse> getRegister(RegisterInfo registerInfo) {
+        return new LiveData<RegisterResponse>() {
             @Override
             protected void onActive() {
                 grpcFascade.registerService.getRegister(registerInfo, new RegisterService.RegisterCallback() {
                     @Override
-                    public void onRegisterCallback(SigninResponse response) {
+                    public void onRegisterCallback(RegisterResponse response) {
                         Observable.fromCallable(() -> {
                             // TODO: 2018/1/18  数据需要处理
-                            SigninResponse signinResponse = SigninResponse.newBuilder()
+                            RegisterResponse signinResponse = RegisterResponse.newBuilder()
                                     .setStatus(response.getStatus())
                                     .build();
                             return signinResponse;
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<SigninResponse>() {
+                                .subscribe(new Consumer<RegisterResponse>() {
                                     @Override
-                                    public void accept(@NonNull SigninResponse signinResponse) throws Exception {
+                                    public void accept(@NonNull RegisterResponse signinResponse) throws Exception {
                                         // the uuid of the upserted record.
                                         if (registerInfo != null) {
                                             Log.i(TAG, gson.toJson(registerInfo));
-                                            setValue(SigninResponse.newBuilder()
+                                            setValue(RegisterResponse.newBuilder()
                                                     .setStatus(response.getStatus())
                                                     .build());
 
                                         } else {
-                                            setValue(SigninResponse.newBuilder()
+                                            setValue(RegisterResponse.newBuilder()
                                                     .setStatus(response.getStatus())
                                                     .build());
                                         }

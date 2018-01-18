@@ -8,6 +8,7 @@ import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.hello.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
+import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep3RegisterRequest;
@@ -30,7 +31,7 @@ public class RegisterViewModel extends ViewModel {
 
     @VisibleForTesting
     final MutableLiveData<RegisterInfo> registerLiveData = new MutableLiveData<>();
-    private final LiveData<SigninResponse> register;
+    private final LiveData<RegisterResponse> register;
 
     @SuppressWarnings("unchecked")
     @Inject
@@ -88,7 +89,7 @@ public class RegisterViewModel extends ViewModel {
 
 
     @VisibleForTesting
-    public LiveData<SigninResponse> getRegisterLiveData() {
+    public LiveData<RegisterResponse> getRegisterLiveData() {
         return register;
     }
 

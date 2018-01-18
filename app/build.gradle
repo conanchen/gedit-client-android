@@ -106,6 +106,6 @@ dependencies {
     implementation 'com.karumi:dexter:4.2.0'
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
 
-    compile 'com.github.conanchen:AmapLiveLocation:1.0.3'
+    implementation 'com.github.conanchen:AmapLiveLocation:1.0.3'
 
 }
