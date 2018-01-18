@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">gedit-client-android</string>
+    <string name="app_name">积分铺子</string>
 
     <string name="action_settings">Settings</string>
     <string name="permission_granted_feedback">GRANTED</string>

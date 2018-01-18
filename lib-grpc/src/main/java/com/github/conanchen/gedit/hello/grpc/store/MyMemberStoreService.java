@@ -16,8 +16,8 @@ import io.grpc.stub.StreamObserver;
  * Created by Conan Chen on 2018/1/8.
  */
 
-public class MyStoreService {
-    private final static String TAG = MyStoreService.class.getSimpleName();
+public class MyMemberStoreService {
+    private final static String TAG = MyMemberStoreService.class.getSimpleName();
 
     public interface OwnershipCallBack {
         void onOwnershipResponse(OwnershipResponse response);
@@ -35,7 +35,7 @@ public class MyStoreService {
 
 
 
-    public void loadMyStores(ListMyStoreRequest request,OwnershipCallBack callBack) {
+    public void loadMyMemberStores(ListMyStoreRequest request,OwnershipCallBack callBack) {
         ManagedChannel channel = getManagedChannel();
         StoreOwnerApiGrpc.StoreOwnerApiStub storeOwnerApiStub = StoreOwnerApiGrpc.newStub(channel);
         Log.i("-=-=-", "进来了没");

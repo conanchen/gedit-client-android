@@ -1,6 +1,5 @@
-package com.github.conanchen.gedit.hello.grpc.store;
+package com.github.conanchen.utils.vo;
 
-import com.github.conanchen.gedit.room.kv.VoAccessToken;
 import com.google.common.base.Strings;
 
 /**

@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.room.kv;
+package com.github.conanchen.utils.vo;
 
 public class VoAccessToken {
     public String accessToken;

@@ -12,11 +12,12 @@ android {
     }
 
 
-    compileSdkVersion 26
+    compileSdkVersion rootProject.COMPILE_SDK_VERSION
+
     defaultConfig {
         applicationId "com.jifenpz.gedit"
-        minSdkVersion 19
-        targetSdkVersion 26
+        minSdkVersion rootProject.MIN_SDK_VERSION
+        targetSdkVersion rootProject.TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -54,33 +55,6 @@ android {
         enabled = false
     }
 
-    // workaround for "duplicate files during packaging of APK" issue:
-//    packagingOptions {
-//        exclude 'META-INF/ASL2.0'
-//        exclude 'META-INF/LICENSE'
-//        exclude 'META-INF/LICENSE.txt'
-//        exclude 'META-INF/license.txt'
-//        exclude 'META-INF/NOTICE'
-//        exclude 'META-INF/NOTICE.txt'
-//        exclude 'META-INF/notice.txt'
-//        exclude 'META-INF/DEPENDENCIES'
-//        exclude 'META-INF/services/javax.annotation.processing.Processor' // butterknife
-//        pickFirst 'google/protobuf/any.proto'
-//        pickFirst 'google/protobuf/field_mask.proto'
-//        pickFirst 'google/protobuf/plugin.proto'
-//        pickFirst 'google/protobuf/compiler/plugin.proto'
-//        pickFirst 'google/protobuf/api.proto'
-//        pickFirst 'google/protobuf/descriptor.proto'
-//        pickFirst 'google/protobuf/wrappers.proto'
-//        pickFirst 'google/protobuf/type.proto'
-//        pickFirst 'google/protobuf/struct.proto'
-//        pickFirst 'google/protobuf/timestamp.proto'
-//        pickFirst 'google/protobuf/source_context.proto'
-//        pickFirst 'google/protobuf/duration.proto'
-//        pickFirst 'google/protobuf/empty.proto'
-//    }
-
-
 }
 
 dependencies {
@@ -88,9 +62,9 @@ dependencies {
     implementation project(":lib-repository")
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
-    implementation "com.android.support.constraint:constraint-layout:1.0.2"
+    implementation "com.android.support:appcompat-v7:$ANDROID_SUPPORT_LIBS_VERSION"
+    implementation "com.android.support:design:$ANDROID_SUPPORT_LIBS_VERSION"
+    implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

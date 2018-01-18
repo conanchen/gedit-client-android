@@ -1,18 +1,12 @@
 package com.github.conanchen.gedit.ui.auth;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
-import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
-import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
-import com.github.conanchen.gedit.room.kv.VoAccessToken;
-import com.github.conanchen.gedit.util.AbsentLiveData;
-import com.github.conanchen.gedit.vo.SigninResponse;
+import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;

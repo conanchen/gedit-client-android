@@ -13,6 +13,8 @@ import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.StoreSearchApiGrpc;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
+import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.google.common.base.Strings;
 
 import java.util.UUID;

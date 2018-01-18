@@ -12,7 +12,7 @@ rootProject.ext.JAVA_TARGET_VERSION = JavaVersion.VERSION_1_7
 
 rootProject.ext.TARGET_SDK_VERSION = 26
 rootProject.ext.COMPILE_SDK_VERSION = 26
-rootProject.ext.MIN_SDK_VERSION = 21
+rootProject.ext.MIN_SDK_VERSION = 19
 
 rootProject.ext.ANDROID_BUILD_TOOLS_VERSION = "26.0.2"
 rootProject.ext.ANDROID_SUPPORT_LIBS_VERSION = "26.1.0"
@@ -63,3 +63,4 @@ rootProject.ext.html_textview_version = "3.5"
 rootProject.ext.tourguide_version = "1.0.17-SNAPSHOT@aar"
 rootProject.ext.commons_lang3_version = "3.7"
 rootProject.ext.jackson_version = "2.9.1"
+rootProject.ext.google_auth_version = "0.9.0"

@@ -7,14 +7,13 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
-import com.github.conanchen.gedit.hello.grpc.store.StoreCreateInfo;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
-import com.github.conanchen.gedit.hello.grpc.store.StoreUpdateInfo;
+import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
-import com.github.conanchen.gedit.store.profile.grpc.StoreProfileResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
 import com.github.conanchen.gedit.vo.Location;

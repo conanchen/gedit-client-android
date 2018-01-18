@@ -10,7 +10,7 @@ import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.room.kv.Value;
-import com.github.conanchen.gedit.room.kv.VoAccessToken;
+import com.github.conanchen.utils.vo.VoAccessToken;
 import com.github.conanchen.gedit.vo.SigninResponse;
 import com.google.gson.Gson;
 

@@ -1,5 +1,7 @@
 package com.github.conanchen.gedit.room.kv;
 
+import com.github.conanchen.utils.vo.VoAccessToken;
+
 /**
  * Created by admin on 2017/7/20.
  */

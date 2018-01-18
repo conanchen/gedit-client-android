@@ -4,7 +4,10 @@ package com.github.conanchen.gedit.hello.grpc.di;
 import com.github.conanchen.gedit.hello.grpc.HelloService;
 import com.github.conanchen.gedit.hello.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.hello.grpc.auth.SigninService;
+import com.github.conanchen.gedit.hello.grpc.store.MyIntroducedStoreService;
+import com.github.conanchen.gedit.hello.grpc.store.MyMemberStoreService;
 import com.github.conanchen.gedit.hello.grpc.store.MyStoreService;
+import com.github.conanchen.gedit.hello.grpc.store.MyWorkinStoreService;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 
 import javax.inject.Singleton;
@@ -25,6 +28,9 @@ public class GrpcModule {
             HelloService helloService,
             StoreService storeService,
             MyStoreService myStoreService,
+            MyWorkinStoreService myWorkinStoreService,
+            MyIntroducedStoreService myIntroducedStoreService,
+            MyMemberStoreService myMemberStoreService,
             SigninService signinService,
             RegisterService registerService
 
@@ -33,6 +39,9 @@ public class GrpcModule {
                 helloService,
                 storeService,
                 myStoreService,
+                myWorkinStoreService,
+                myIntroducedStoreService,
+                myMemberStoreService,
                 signinService,
                 registerService);
     }
@@ -54,6 +63,24 @@ public class GrpcModule {
     @Provides
     public MyStoreService provideMyStoreService() {
         return new MyStoreService();
+    }
+
+    @Singleton
+    @Provides
+    public MyIntroducedStoreService provideMyIntroducedStoreService() {
+        return new MyIntroducedStoreService();
+    }
+
+    @Singleton
+    @Provides
+    public MyWorkinStoreService provideMyWorkinStoreService() {
+        return new MyWorkinStoreService();
+    }
+
+    @Singleton
+    @Provides
+    public MyMemberStoreService provideMyMemberStoreService() {
+        return new MyMemberStoreService();
     }
 
     @Singleton

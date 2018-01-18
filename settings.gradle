@@ -1,1 +1,1 @@
-include ':app', ':lib-repository', ':lib-grpc', ':lib-room'
+include ':app', ':lib-repository', ':lib-grpc', ':lib-room', ':lib-utils'

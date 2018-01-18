@@ -5,11 +5,11 @@ android {
         abortOnError false
     }
 
-    compileSdkVersion 26
+    compileSdkVersion rootProject.COMPILE_SDK_VERSION
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 26
+        minSdkVersion rootProject.MIN_SDK_VERSION
+        targetSdkVersion rootProject.TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
 
@@ -48,19 +48,18 @@ android {
 
 
 dependencies {
+    api project(":lib-utils")
+
     api("com.github.conanchen.gedit-api-grpc:grpc-javalite:master-SNAPSHOT") {
         exclude group: 'io.grpc', module: 'grpc-stub'
         exclude group: 'io.grpc', module: 'grpc-protobuf-lite'
     }
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:26.1.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     //grpc
-    implementation "com.google.auth:google-auth-library-oauth2-http:0.8.0"
+    implementation "com.google.auth:google-auth-library-oauth2-http:$google_auth_version"
 
     implementation "io.grpc:grpc-auth:$GRPC_VERSION"
     implementation "io.grpc:grpc-okhttp:$GRPC_VERSION"
@@ -78,5 +77,4 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
 
-    compile project(path: ':lib-room')
 }
