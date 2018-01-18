@@ -49,7 +49,7 @@
         android:drawableTop="@mipmap/add"
         android:gravity="center_horizontal"
         android:padding="10dp"
-        android:text="投资"
+        android:text="我的积分"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/my_store"
@@ -95,7 +95,7 @@
         android:drawableLeft="@mipmap/add"
         android:drawablePadding="20dp"
         android:padding="10dp"
-        android:text="我的积分"
+        android:text="我的会员店铺"
         app:layout_constraintTop_toBottomOf="@id/view"/>
 
     <View
@@ -168,5 +168,37 @@
         android:layout_height="1dp"
         android:background="#000"
         app:layout_constraintTop_toBottomOf="@id/setting"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/qudaili"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="去代理"
+        app:layout_constraintTop_toBottomOf="@id/setting"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/qudaili"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/jifenbao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="积分宝"
+        app:layout_constraintTop_toBottomOf="@id/qudaili"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/jifenbao"/>
 
 </android.support.constraint.ConstraintLayout>
