@@ -8,7 +8,9 @@ import com.github.conanchen.gedit.hello.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.hello.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionResponse;
+import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -35,7 +37,12 @@ public class RegisterRepository {
         this.grpcFascade = grpcFascade;
     }
 
-
+    /**
+     * 获取注册时需要的图片验证
+     *
+     * @param registerInfo
+     * @return
+     */
     public LiveData<RegisterInfo> getVerify(RegisterInfo registerInfo) {
         return new LiveData<RegisterInfo>() {
             @Override
@@ -79,5 +86,97 @@ public class RegisterRepository {
         };
     }
 
+    /**
+     * 获取短信验证码
+     *
+     * @param registerInfo
+     * @return
+     */
+    public LiveData<SmsStep2AnswerResponse> getSms(RegisterInfo registerInfo) {
+        return new LiveData<SmsStep2AnswerResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.registerService.getMsm(registerInfo, new RegisterService.RegisterSmsCallback() {
+                    @Override
+                    public void onRegisterSmsCallback(SmsStep2AnswerResponse response) {
+                        Observable.fromCallable(() -> {
+                            // TODO: 2018/1/18  数据需要处理
+                            SmsStep2AnswerResponse smsStep2AnswerResponse = SmsStep2AnswerResponse.newBuilder()
+                                    .setStatus(response.getStatus())
+                                    .build();
+                            return smsStep2AnswerResponse;
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<SmsStep2AnswerResponse>() {
+                                    @Override
+                                    public void accept(@NonNull SmsStep2AnswerResponse smsStep2AnswerResponse) throws Exception {
+                                        // the uuid of the upserted record.
+                                        if (registerInfo != null) {
+                                            Log.i(TAG, gson.toJson(registerInfo));
+                                            setValue(SmsStep2AnswerResponse.newBuilder()
+                                                    .setStatus(response.getStatus())
+                                                    .build());
+
+                                        } else {
+                                            setValue(SmsStep2AnswerResponse.newBuilder()
+                                                    .setStatus(response.getStatus())
+                                                    .build());
+                                        }
+
+                                    }
+                                });
+                        ;
+                    }
+                });
+            }
+        };
+
+    }
+
+    /**
+     * 注册
+     *
+     * @param registerInfo
+     * @return
+     */
+    public LiveData<SigninResponse> getRegister(RegisterInfo registerInfo) {
+        return new LiveData<SigninResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.registerService.getRegister(registerInfo, new RegisterService.RegisterCallback() {
+                    @Override
+                    public void onRegisterCallback(SigninResponse response) {
+                        Observable.fromCallable(() -> {
+                            // TODO: 2018/1/18  数据需要处理
+                            SigninResponse signinResponse = SigninResponse.newBuilder()
+                                    .setStatus(response.getStatus())
+                                    .build();
+                            return signinResponse;
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<SigninResponse>() {
+                                    @Override
+                                    public void accept(@NonNull SigninResponse signinResponse) throws Exception {
+                                        // the uuid of the upserted record.
+                                        if (registerInfo != null) {
+                                            Log.i(TAG, gson.toJson(registerInfo));
+                                            setValue(SigninResponse.newBuilder()
+                                                    .setStatus(response.getStatus())
+                                                    .build());
+
+                                        } else {
+                                            setValue(SigninResponse.newBuilder()
+                                                    .setStatus(response.getStatus())
+                                                    .build());
+                                        }
+
+                                    }
+                                });
+                        ;
+                    }
+                });
+            }
+        };
+    }
 
 }

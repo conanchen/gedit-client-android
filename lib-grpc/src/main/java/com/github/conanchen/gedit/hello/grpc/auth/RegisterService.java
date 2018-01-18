@@ -2,13 +2,17 @@ package com.github.conanchen.gedit.hello.grpc.auth;
 
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
+import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionRequest;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionResponse;
+import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerRequest;
+import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
+import com.github.conanchen.gedit.user.auth.grpc.SmsStep3RegisterRequest;
 import com.github.conanchen.gedit.user.auth.grpc.UserAuthApiGrpc;
-import com.google.protobuf.Empty;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +31,15 @@ public class RegisterService {
     public interface RegisterVerifyCallback {
         void onRegisterVerifyResponse(SmsStep1QuestionResponse response);
 
+    }
+
+    public interface RegisterSmsCallback {
+        void onRegisterSmsCallback(SmsStep2AnswerResponse response);
+
+    }
+
+    public interface RegisterCallback {
+        void onRegisterCallback(SigninResponse response);
     }
 
     private ManagedChannel getManagedChannel() {
@@ -72,4 +85,83 @@ public class RegisterService {
                             }
                         });
     }
+
+    /**
+     * 获取短信验证码
+     *
+     * @param registerInfo
+     * @param callback
+     */
+    public void getMsm(RegisterInfo registerInfo, RegisterService.RegisterSmsCallback callback) {
+        ManagedChannel channel = getManagedChannel();
+        UserAuthApiGrpc.UserAuthApiStub userAuthApiStub = UserAuthApiGrpc.newStub(channel);
+        userAuthApiStub.registerSmsStep2Answer(SmsStep2AnswerRequest.newBuilder()
+                .setMobile(registerInfo.mobile)
+                .setToken(registerInfo.token)
+//                .setQuestionUuid(1, registerInfo.questionUuid)
+                .build(), new StreamObserver<SmsStep2AnswerResponse>() {
+            @Override
+            public void onNext(SmsStep2AnswerResponse value) {
+                callback.onRegisterSmsCallback(value);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                callback.onRegisterSmsCallback(SmsStep2AnswerResponse.newBuilder()
+                        .setStatus(Status.newBuilder()
+                                .setCode("Fail")
+                                .setDetails("api没有调通" + t.getMessage()))
+                        .build());
+            }
+
+            @Override
+            public void onCompleted() {
+                callback.onRegisterSmsCallback(SmsStep2AnswerResponse.newBuilder()
+                        .setStatus(Status.newBuilder()
+                                .setCode("Fail")
+                                .setDetails("onCompleted"))
+                        .build());
+            }
+        });
+    }
+
+    /**
+     * 注册
+     *
+     * @param registerInfo
+     * @param callback
+     */
+    public void getRegister(RegisterInfo registerInfo, RegisterService.RegisterCallback callback) {
+        ManagedChannel channel = getManagedChannel();
+        UserAuthApiGrpc.UserAuthApiStub userAuthApiStub = UserAuthApiGrpc.newStub(channel);
+        userAuthApiStub.registerSmsStep3Signin(SmsStep3RegisterRequest.newBuilder()
+                .setMobile(registerInfo.mobile)
+                .setSmscode(registerInfo.smscode)
+                .setPassword(registerInfo.password)
+                .build(), new StreamObserver<SigninResponse>() {
+            @Override
+            public void onNext(SigninResponse value) {
+                callback.onRegisterCallback(value);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                callback.onRegisterCallback(SigninResponse.newBuilder()
+                        .setStatus(Status.newBuilder()
+                                .setCode("Fail")
+                                .setDetails("api没有调通" + t.getMessage()))
+                        .build());
+            }
+
+            @Override
+            public void onCompleted() {
+                callback.onRegisterCallback(SigninResponse.newBuilder()
+                        .setStatus(Status.newBuilder()
+                                .setCode("Fail")
+                                .setDetails("onCompleted"))
+                        .build());
+            }
+        });
+    }
+
 }
