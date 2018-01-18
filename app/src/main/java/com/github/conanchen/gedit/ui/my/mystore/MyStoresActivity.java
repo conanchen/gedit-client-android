@@ -11,9 +11,8 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.room.store.Store;
+import com.github.conanchen.gedit.room.store.MyStores;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
-import com.github.conanchen.gedit.vo.Location;
 
 import javax.inject.Inject;
 
@@ -53,8 +52,8 @@ public class MyStoresActivity extends BaseActivity {
 
         mAdapter.setOnItemClickListener(new MyStoresAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClick(Store store) {
-                startActivity(new Intent(MyStoresActivity.this,MyStoreActivity.class));
+            public void OnItemClick(MyStores myStores) {
+                startActivity(new Intent(MyStoresActivity.this, MyStoreActivity.class));
             }
         });
     }
@@ -66,7 +65,7 @@ public class MyStoresActivity extends BaseActivity {
                 mAdapter.setList(stores);
             }
         });
-        myStoresViewModel.updateLocation(Location.builder().setLat(1).setLon(2).build());
+        myStoresViewModel.loadMyStores(System.currentTimeMillis());
     }
 
     @OnClick({R.id.back, R.id.right})

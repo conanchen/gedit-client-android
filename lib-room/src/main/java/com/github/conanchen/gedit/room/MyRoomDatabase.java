@@ -4,11 +4,13 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.TypeConverters;
 
 import com.github.conanchen.gedit.room.hello.DaoHello;
+import com.github.conanchen.gedit.room.hello.Hello;
 import com.github.conanchen.gedit.room.kv.DaoKeyValue;
 import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.room.kv.ValueConverters;
+import com.github.conanchen.gedit.room.store.DaoMyStores;
 import com.github.conanchen.gedit.room.store.DaoStore;
-import com.github.conanchen.gedit.room.hello.Hello;
+import com.github.conanchen.gedit.room.store.MyStores;
 import com.github.conanchen.gedit.room.store.Store;
 
 
@@ -16,7 +18,8 @@ import com.github.conanchen.gedit.room.store.Store;
         {
                 Hello.class,
                 Store.class,
-                KeyValue.class
+                KeyValue.class,
+                MyStores.class
         },
         version = 1,
         exportSchema = false)
@@ -27,5 +30,7 @@ public abstract class MyRoomDatabase extends android.arch.persistence.room.RoomD
     public abstract DaoStore daoStore();
 
     public abstract DaoKeyValue daoKeyValue();
+
+    public abstract DaoMyStores daoMyStores();
 
 }

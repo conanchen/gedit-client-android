@@ -7,6 +7,7 @@ import com.github.conanchen.gedit.room.MyRoomDatabase;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.DaoHello;
 import com.github.conanchen.gedit.room.kv.DaoKeyValue;
+import com.github.conanchen.gedit.room.store.DaoMyStores;
 import com.github.conanchen.gedit.room.store.DaoStore;
 
 import javax.inject.Singleton;
@@ -52,11 +53,17 @@ public class RoomModule {
         return db.daoKeyValue();
     }
 
+    @Singleton
+    @Provides
+    DaoMyStores provideDaoMyStores(MyRoomDatabase db) {
+        return db.daoMyStores();
+    }
 
 
     @Singleton
     @Provides
-    public RoomFascade provideRoomFascade(DaoHello daoHello, DaoStore daoStore,DaoKeyValue daoKeyValue) {
-        return new RoomFascade(daoHello, daoStore,daoKeyValue);
+    public RoomFascade provideRoomFascade(DaoHello daoHello, DaoStore daoStore, DaoKeyValue daoKeyValue,
+                                          DaoMyStores daoMyStores) {
+        return new RoomFascade(daoHello, daoStore, daoKeyValue, daoMyStores);
     }
 }
