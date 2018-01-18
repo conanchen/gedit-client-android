@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import com.github.conanchen.gedit.di.common.ViewModelFactory;
 import com.github.conanchen.gedit.di.common.ViewModelKey;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
-import com.github.conanchen.gedit.ui.auth.ForgetPasswordViewModel;
 import com.github.conanchen.gedit.ui.auth.RegisterViewModel;
 import com.github.conanchen.gedit.ui.auth.SigninViewModel;
 import com.github.conanchen.gedit.ui.hello.HelloViewModel;
@@ -103,12 +102,5 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MyStoreEmployeesViewModel.class)
     abstract ViewModel bindMyStoreEmployeesViewModel(MyStoreEmployeesViewModel myIntroducedStoresViewModel);
-
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(ForgetPasswordViewModel.class)
-    abstract ViewModel bindForgetPasswordViewModel(ForgetPasswordViewModel forgetPasswordViewModel);
-
 
 }

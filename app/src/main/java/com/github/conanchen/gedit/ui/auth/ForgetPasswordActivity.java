@@ -41,7 +41,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    ForgetPasswordViewModel forgetPasswordViewModel;
+    RegisterViewModel registerViewModel;
 
 
     @BindView(R.id.mobile)
@@ -100,7 +100,7 @@ public class ForgetPasswordActivity extends BaseActivity {
                             .setSmscode(verifyCode)
                             .setPassword(password)
                             .build();
-                    forgetPasswordViewModel.getSRegister(registerInfo);
+                    registerViewModel.getSRegister(registerInfo);
                 });
     }
 
@@ -118,9 +118,9 @@ public class ForgetPasswordActivity extends BaseActivity {
     }
 
     private void setupViewModel() {
-        forgetPasswordViewModel = ViewModelProviders.of(this, viewModelFactory).get(ForgetPasswordViewModel.class);
+        registerViewModel = ViewModelProviders.of(this, viewModelFactory).get(RegisterViewModel.class);
 
-        forgetPasswordViewModel.getRegisterResponseLiveData().observe(this, new Observer<RegisterInfo>() {
+        registerViewModel.getRegisterResponseLiveData().observe(this, new Observer<RegisterInfo>() {
             @Override
             public void onChanged(@Nullable RegisterInfo registerInfo) {
                 Log.i("-=-=-=", "获取验证的图片的观察者" + gson.toJson(registerInfo));
@@ -130,10 +130,10 @@ public class ForgetPasswordActivity extends BaseActivity {
 
             }
         });
-        forgetPasswordViewModel.getVerify(RegisterInfo.builder().build());
+        registerViewModel.getVerify(RegisterInfo.builder().build());
 
 
-        forgetPasswordViewModel.getRegisterSmsLiveData().observe(this, new Observer<SmsStep2AnswerResponse>() {
+        registerViewModel.getRegisterSmsLiveData().observe(this, new Observer<SmsStep2AnswerResponse>() {
             @Override
             public void onChanged(@Nullable SmsStep2AnswerResponse smsStep2AnswerResponse) {
                 Log.i("-=-=-=", "获取短信的观察者" + gson.toJson(smsStep2AnswerResponse));
@@ -142,7 +142,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         });
 
 
-        forgetPasswordViewModel.getRegisterLiveData().observe(this, new Observer<SigninResponse>() {
+        registerViewModel.getRegisterLiveData().observe(this, new Observer<SigninResponse>() {
             @Override
             public void onChanged(@Nullable SigninResponse signinResponse) {
                 // TODO: 2018/1/18 注册成功就就去登录
@@ -200,10 +200,10 @@ public class ForgetPasswordActivity extends BaseActivity {
                         .setToken("进入界面服务器返回")
                         .setQuestionUuid("问题的uuid")
                         .build();
-                forgetPasswordViewModel.getSms(registerInfo);
+                registerViewModel.getSms(registerInfo);
                 break;
             case R.id.refresh:
-                forgetPasswordViewModel.getVerify(RegisterInfo.builder().build());
+                registerViewModel.getVerify(RegisterInfo.builder().build());
                 break;
         }
     }
