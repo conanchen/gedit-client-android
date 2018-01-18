@@ -31,6 +31,6 @@ public abstract class MyRoomDatabase extends android.arch.persistence.room.RoomD
 
     public abstract DaoKeyValue daoKeyValue();
 
-    public abstract DaoMyStore daoMyStores();
+    public abstract DaoMyStore daoMyStore();
 
 }

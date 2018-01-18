@@ -3,6 +3,7 @@ package com.github.conanchen.gedit.hello.grpc.di;
 import com.github.conanchen.gedit.hello.grpc.HelloService;
 import com.github.conanchen.gedit.hello.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.hello.grpc.auth.SigninService;
+import com.github.conanchen.gedit.hello.grpc.store.MyStoreService;
 import com.github.conanchen.gedit.hello.grpc.store.StoreService;
 
 import javax.inject.Inject;
@@ -18,6 +19,7 @@ public class GrpcFascade {
 
     public HelloService helloService;
     public StoreService storeService;
+    public MyStoreService myStoreService;
     public SigninService signinService;
     public RegisterService registerService;
 
@@ -25,10 +27,12 @@ public class GrpcFascade {
     @Inject
     public GrpcFascade(HelloService helloService,
                        StoreService storeService,
+                       MyStoreService myStoreService,
                        SigninService signinService,
                        RegisterService registerService) {
         this.helloService = helloService;
         this.storeService = storeService;
+        this.myStoreService = myStoreService;
         this.signinService = signinService;
         this.registerService = registerService;
         System.out.println(strAmir);

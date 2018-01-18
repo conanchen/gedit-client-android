@@ -63,6 +63,15 @@ public class RepositoryModule {
     }
 
 
+
+    @Singleton
+    @Provides
+    public MyStoreRepository provideMyStoreRepository(
+            RoomFascade roomFascade, GrpcFascade grpcFascade) {
+        return new MyStoreRepository(roomFascade, grpcFascade);
+    }
+
+
     @Singleton
     @Provides
     public SigninRepository provideSigninRepository(

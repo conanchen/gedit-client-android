@@ -19,12 +19,12 @@ import javax.inject.Inject;
 public class StoreViewModel extends ViewModel {
     @VisibleForTesting
     final MutableLiveData<String> uuidMutableLiveData = new MutableLiveData<>();
-    private final LiveData<Store> store;
+    private final LiveData<Store> storeLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
     public StoreViewModel(StoreRepository storeRepository) {
-        store = Transformations.switchMap(uuidMutableLiveData, uuid -> {
+        storeLiveData = Transformations.switchMap(uuidMutableLiveData, uuid -> {
             if (uuid == null) {
                 return AbsentLiveData.create();
             } else {
@@ -41,8 +41,8 @@ public class StoreViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public LiveData<Store> getStore() {
-        return store;
+    public LiveData<Store> getStoreLiveData() {
+        return storeLiveData;
     }
 
 }
