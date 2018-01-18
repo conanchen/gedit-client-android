@@ -16,7 +16,7 @@ import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
-import com.github.conanchen.gedit.store.search.grpc.SearchRequest;
+import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
 import com.github.conanchen.gedit.vo.Location;
 import com.github.conanchen.gedit.vo.StoreCreateResponse;
 import com.github.conanchen.gedit.vo.StoreUpdateResponse;

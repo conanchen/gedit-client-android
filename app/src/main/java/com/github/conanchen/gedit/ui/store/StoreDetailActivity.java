@@ -5,10 +5,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 
 import butterknife.BindView;
@@ -18,8 +21,11 @@ import butterknife.OnClick;
 /**
  * 商家详情
  */
-@Route(path = "/app/BusinessDetailsActivity")
-public class StoreDetailsActivity extends AppCompatActivity {
+@Route(path = "/app/StoreDetailActivity")
+public class StoreDetailActivity extends AppCompatActivity {
+    private static String   TAG = StoreDetailActivity.class.getSimpleName();
+    @Autowired
+    public String uuid; //passed from ARouter
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -47,8 +53,14 @@ public class StoreDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store_details);
+        ARouter.getInstance().inject(this);
+
+        // ARouter会自动对字段进行赋值，无需主动获取
+        Log.d(TAG,String.format("ARouter got param uuid=%s",uuid));
+
+        setContentView(R.layout.activity_store_detail);
         ButterKnife.bind(this);
+
     }
 
     @OnClick({R.id.back})

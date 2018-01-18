@@ -11,8 +11,8 @@ import com.github.conanchen.gedit.store.owner.grpc.StoreOwnerApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
-import com.github.conanchen.gedit.store.search.grpc.SearchRequest;
-import com.github.conanchen.gedit.store.search.grpc.SearchResponse;
+import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
+import com.github.conanchen.gedit.store.search.grpc.SearchStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.StoreSearchApiGrpc;
 import com.google.common.base.Strings;
 
@@ -33,7 +33,7 @@ public class StoreService {
 
 
     public interface StoreSearchCallback {
-        void onStoreSearchResponse(SearchResponse response);
+        void onStoreSearchResponse(SearchStoreResponse response);
 
     }
 
@@ -63,20 +63,20 @@ public class StoreService {
                 .build();
     }
 
-    public void searchStoresNearAt(SearchRequest searchRequest, StoreSearchCallback callback) {
+    public void searchStoresNearAt(SearchStoreRequest searchRequest, StoreSearchCallback callback) {
         ManagedChannel channel = getManagedChannel();
         StoreSearchApiGrpc.StoreSearchApiStub storeSearchApiStub = StoreSearchApiGrpc.newStub(channel);
         storeSearchApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .search(searchRequest, new StreamObserver<SearchResponse>() {
+                .search(searchRequest, new StreamObserver<SearchStoreResponse>() {
                     @Override
-                    public void onNext(SearchResponse value) {
+                    public void onNext(SearchStoreResponse value) {
                         callback.onStoreSearchResponse(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        callback.onStoreSearchResponse(SearchResponse.newBuilder().setUuid(UUID.randomUUID().toString())
+                        callback.onStoreSearchResponse(SearchStoreResponse.newBuilder().setUuid(UUID.randomUUID().toString())
                                 .setName(String.format("StoreName%d", System.currentTimeMillis()))
                                 .setDesc(String.format("StoreDesc%d", System.currentTimeMillis()))
                                 .build());

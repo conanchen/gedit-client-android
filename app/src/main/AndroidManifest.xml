@@ -85,7 +85,7 @@
             android:name=".ui.my.MyIntroducedStoresActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.store.StoreDetailsActivity"
+            android:name=".ui.store.StoreDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.my.MyFansActivity"

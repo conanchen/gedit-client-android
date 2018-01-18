@@ -16,7 +16,7 @@ import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
-import com.github.conanchen.gedit.store.search.grpc.SearchRequest;
+import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
 import com.github.conanchen.gedit.vo.Location;
 import com.github.conanchen.gedit.vo.StoreCreateResponse;
 import com.github.conanchen.gedit.vo.StoreUpdateResponse;
@@ -64,7 +64,7 @@ public class StoreRepository {
         //  call grpc api to refresh near stores
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
             grpcFascade.storeService.searchStoresNearAt(
-                    SearchRequest.newBuilder().setLat(location.lat).setLon(location.lon).build(),
+                    SearchStoreRequest.newBuilder().setLat(location.lat).setLon(location.lon).build(),
                     response -> {
                         //TODO 填写完整信息
                         Store s = Store.builder()

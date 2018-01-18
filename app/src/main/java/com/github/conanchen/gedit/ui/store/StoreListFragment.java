@@ -1,15 +1,12 @@
 package com.github.conanchen.gedit.ui.store;
 
 import android.Manifest;
-import android.app.Activity;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.amap.api.location.AMapLocation;
 import com.github.conanchen.amap.livelocation.AmapLiveLocation;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragment;
@@ -38,7 +34,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Conan Chen on 2018/1/9.
@@ -141,7 +136,11 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
      */
     @Override
     public void OnItemClick(Store store) {
-        startActivity(new Intent(getContext(), StoreDetailsActivity.class));
+//        startActivity(new Intent(getContext(), StoreDetailActivity.class));
+        // 2. 跳转并携带参数
+        ARouter.getInstance().build("/app/StoreDetailActivity")
+                .withString("uuid", store.uuid)
+                .navigation();
     }
 
 }
