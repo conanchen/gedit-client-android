@@ -13,6 +13,8 @@ import com.github.conanchen.gedit.hello.grpc.store.StoreUpdateInfo;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
+import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
+import com.github.conanchen.gedit.store.profile.grpc.StoreProfileResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
 import com.github.conanchen.gedit.vo.Location;
@@ -78,14 +80,33 @@ public class StoreRepository {
     }
 
     public LiveData<Store> findStore(String uuid) {
-        return null;
+        grpcFascade.storeService.downloadStoreProfile(
+                GetStoreRequest.newBuilder().setUuid(uuid).setLastUpdated(-1).build(),
+                response -> {
+                    Observable
+                            .just(true)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.io())
+                            .subscribe(aBoolean -> {
+                                if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                                    Store s = Store.builder()
+                                            .setUuid(response.getStoreProfile().getUuid())
+                                            .setName(response.getStoreProfile().getName())
+                                            .setDistrictUuid(response.getStoreProfile().getDistrictUuid())
+                                            .setAddress(response.getStoreProfile().getDetailAddress())
+                                            .build();
+                                    roomFascade.daoStore.save(s);
+                                }
+                            });
+                });
+        return roomFascade.daoStore.findLive(uuid);
     }
 
     public LiveData<StoreCreateResponse> createStore(StoreCreateInfo storeCreateInfo) {
         return new LiveData<StoreCreateResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.storeService.storeCreate(storeCreateInfo, new StoreService.StoreCallback() {
+                grpcFascade.storeService.storeCreate(storeCreateInfo, new StoreService.StoreCreateCallback() {
                     @Override
                     public void onStoreCreateResponse(CreateStoreResponse createResponse) {
                         Observable.fromCallable(() -> {

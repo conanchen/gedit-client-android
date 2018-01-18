@@ -55,8 +55,8 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    DaoMyStore provideDaoMyStores(MyRoomDatabase db) {
-        return db.daoMyStores();
+    DaoMyStore provideDaoMyStore(MyRoomDatabase db) {
+        return db.daoMyStore();
     }
 
 

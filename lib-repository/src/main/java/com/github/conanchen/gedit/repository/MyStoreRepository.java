@@ -48,7 +48,7 @@ public class MyStoreRepository {
 
     public LiveData<PagedList<MyStore>> loadMyStores(Long times) {
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.storeService.loadMyStores(response -> {
+            grpcFascade.myStoreService.loadMyStores(response -> {
                 MyStore myStore = MyStore.builder()
                         .setStoreUuid(response.getOwnership().getStoreUuid())
                         .setLat(response.getOwnership().getLocation().getLat())
