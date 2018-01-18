@@ -18,6 +18,7 @@ import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.hello.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
+import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
 import com.google.common.base.Strings;
@@ -142,9 +143,9 @@ public class ForgetPasswordActivity extends BaseActivity {
         });
 
 
-        registerViewModel.getRegisterLiveData().observe(this, new Observer<SigninResponse>() {
+        registerViewModel.getRegisterLiveData().observe(this, new Observer<RegisterResponse>() {
             @Override
-            public void onChanged(@Nullable SigninResponse signinResponse) {
+            public void onChanged(@Nullable RegisterResponse signinResponse) {
                 // TODO: 2018/1/18 注册成功就就去登录
                 Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(signinResponse));
             }

@@ -14,6 +14,7 @@ import com.github.conanchen.gedit.ui.my.MyWorkStoresActivity;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoresActivity;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
+import com.github.conanchen.gedit.ui.store.StoreDetailActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
 import com.github.conanchen.gedit.ui.store.StoreUpdateActivity;
 import com.github.conanchen.gedit.ui.store.StoreUpdateHeadPortraitActivity;
@@ -29,6 +30,9 @@ public abstract class ViewModule {
 
     @ContributesAndroidInjector
     abstract StoreListFragment contributeStoreListFragment();
+
+    @ContributesAndroidInjector
+    abstract StoreDetailActivity contributeStoreDetailActivity();
 
 
     @ContributesAndroidInjector(modules = {
