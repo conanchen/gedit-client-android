@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
-import com.github.conanchen.gedit.ui.my.MyStoreEmployeesActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

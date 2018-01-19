@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.ui.my;
+package com.github.conanchen.gedit.ui.my.myworkinstore;
 
 import android.arch.paging.PagedListAdapter;
 import android.support.constraint.ConstraintLayout;

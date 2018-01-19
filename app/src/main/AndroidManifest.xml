@@ -109,22 +109,22 @@
             android:name=".ui.my.SettingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyStorePointsActivity"
+            android:name=".ui.my.mystore.MyStorePointsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyStoreEmployeesActivity"
+            android:name=".ui.my.mystore.MyStoreEmployeesActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyStorePaymentsActivity"
+            android:name=".ui.my.mystore.MyStorePaymentsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.auth.ForgetPasswordActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyWorkStoresActivity"
+            android:name=".ui.my.myworkinstore.MyWorkStoresActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyWorkStoreActivity"
+            android:name=".ui.my.myworkinstore.MyWorkStoreActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.payment.PayeeQRCodeActivity"

@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.ui.my;
+package com.github.conanchen.gedit.ui.my.myworkinstore;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
