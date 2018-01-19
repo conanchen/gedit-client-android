@@ -21,6 +21,7 @@ import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
+import com.github.conanchen.gedit.util.JudgeISMobileNo;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -69,7 +70,7 @@ public class RegisterActivity extends BaseActivity {
     private static final Gson gson = new Gson();
     private RegisterVerifyPicAdapter mAdapter;
     private List<Question> mData = new ArrayList<>();
-
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class RegisterActivity extends BaseActivity {
                             .build();
                     registerViewModel.getSRegister(registerInfo);
                 });
+
     }
 
     private boolean isTelValid(String tel) {
@@ -128,10 +130,14 @@ public class RegisterActivity extends BaseActivity {
     private void setupViewModel() {
         registerViewModel = ViewModelProviders.of(this, viewModelFactory).get(RegisterViewModel.class);
         registerViewModel.getRegisterResponseLiveData().observe(this, new Observer<RegisterInfo>() {
+
             @Override
             public void onChanged(@Nullable RegisterInfo registerInfo) {
-                Log.i("-=-=-=", "获取验证的图片的观察者" + gson.toJson(registerInfo));
+                Log.i("-=-=-=", "返回token,questionTip,Question" + gson.toJson(registerInfo));
                 mTvQuestionDesc.setText("registerInfo" + gson.toJson(registerInfo));
+                token = registerInfo.token;
+                String questionTip = registerInfo.questionTip;
+                List<Question> question = registerInfo.question;
                 //获取验证数据成功
                 showVerifyPicOrQuestion(registerInfo);
 
@@ -201,11 +207,37 @@ public class RegisterActivity extends BaseActivity {
             case R.id.back:
                 finish();
             case R.id.get_sms_code:
+
+                if (mAdapter.isSelected != null && (mAdapter.isSelected.size() > 0)) {
+                    int num = 0;
+                    for (int i = 0; i < mAdapter.isSelected.size(); i++) {
+                        if (mAdapter.isSelected.get(i)) {
+                            num = num + 1;
+                        }
+                    }
+                    //判断选中的个数是否大于0
+                    if (num <= 0) {
+                        Toast.makeText(RegisterActivity.this, "请选择需要验证的图片", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+
                 String tel = mEtMobile.getText().toString().trim();
+
+                if (Strings.isNullOrEmpty(tel)) {
+                    Toast.makeText(RegisterActivity.this, "请输入电话号码", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (!JudgeISMobileNo.isMobileNO(tel)) {
+                    Toast.makeText(RegisterActivity.this, "电话号码格式有误", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 //获取验证码
                 RegisterInfo registerInfo = RegisterInfo.builder()
                         .setMobile(tel)
-                        .setToken("进入界面服务器返回")
+                        .setToken(token)
                         .setQuestionUuid("问题的uuid")
                         .build();
                 registerViewModel.getSms(registerInfo);

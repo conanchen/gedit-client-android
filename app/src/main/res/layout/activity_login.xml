@@ -138,7 +138,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:inputType="numberPassword"
+            android:inputType="textPassword"
             android:padding="10dp"
             app:layout_constraintLeft_toRightOf="@id/pass_desc"
             app:layout_constraintRight_toLeftOf="@+id/pass_icon"
@@ -169,7 +169,7 @@
             android:layout_margin="10dp"
             android:padding="10dp"
             android:text="答案"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@+id/pass"/>
 
         <android.support.v7.widget.AppCompatButton

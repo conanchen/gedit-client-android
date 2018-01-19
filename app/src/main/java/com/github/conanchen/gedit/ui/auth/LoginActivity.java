@@ -99,6 +99,7 @@ public class LoginActivity extends BaseActivity {
                 .observe(this, signinResponse -> {
                     Log.i("-=-=-", gson.toJson(signinResponse));
                     mResultTextView.setText("登陆结果：" + signinResponse.accessToken + "===" + signinResponse.expiresIn);
+                    finish();
                 });
     }
 

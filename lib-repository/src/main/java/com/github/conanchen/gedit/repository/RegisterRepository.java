@@ -4,9 +4,10 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Status;
+import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.grpc.auth.RegisterService;
-import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionResponse;
@@ -100,9 +101,11 @@ public class RegisterRepository {
                     @Override
                     public void onRegisterSmsCallback(SmsStep2AnswerResponse response) {
                         Observable.fromCallable(() -> {
-                            // TODO: 2018/1/18  数据需要处理
                             SmsStep2AnswerResponse smsStep2AnswerResponse = SmsStep2AnswerResponse.newBuilder()
-                                    .setStatus(response.getStatus())
+                                    .setStatus(Status.newBuilder()
+                                            .setCode(response.getStatus().getCode())
+                                            .setDetails(response.getStatus().getDetails())
+                                            .build())
                                     .build();
                             return smsStep2AnswerResponse;
                         }).subscribeOn(Schedulers.io())

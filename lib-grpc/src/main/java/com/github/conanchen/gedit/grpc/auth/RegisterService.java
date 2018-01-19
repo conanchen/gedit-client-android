@@ -65,7 +65,7 @@ public class RegisterService {
                                 List<Question> questionList = value.getQuestionList();
                                 String token = value.getToken();
                                 String questionTip = value.getQuestionTip();
-                                Log.i(TAG, "token:" + token + "questionTip:" + questionTip);
+                                Log.i("-=-=-=-=", "token:" + token + "questionTip:" + questionTip);
                                 callback.onRegisterVerifyResponse(value);
                             }
 
