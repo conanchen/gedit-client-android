@@ -58,7 +58,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
 
     private void setupViewModel() {
         mySummaryViewModel = ViewModelProviders.of(this, viewModelFactory).get(MySummaryViewModel.class);
-        mySummaryViewModel.getHelloPagedListLiveData().observe(this,hellos -> {
+        mySummaryViewModel.getHelloPagedListLiveData().observe(this, hellos -> {
 
         });
 
@@ -93,7 +93,8 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
         startActivity(new Intent(getContext(), StoreCreateActivity.class));
     }
 
-    @OnClick({R.id.me_login, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_points, R.id.my_extension_stores, R.id.my_works_stores, R.id.customer_service, R.id.setting})
+    @OnClick({R.id.me_login, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_points, R.id.my_extension_stores,
+            R.id.my_works_stores, R.id.customer_service, R.id.setting, R.id.jifenbao})
     public void onViewClicked(View view) {
 //        if (isLogin) {
         switch (view.getId()) {
@@ -106,8 +107,8 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
                 }
                 break;
             case R.id.my_invest:
-                //投资和代理
-                startActivity(new Intent(getContext(), MyInvestOrAgentActivity.class));
+                //我的积分
+                ARouter.getInstance().build("/app/MyPointsActivity").navigation();
                 break;
             case R.id.my_store:
                 //我的店铺
@@ -136,6 +137,9 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
             case R.id.setting:
                 //设置
                 ARouter.getInstance().build("/app/SettingActivity").navigation();
+                break;
+            case R.id.jifenbao:
+                ARouter.getInstance().build("/app/MyInvestOrAgentActivity").navigation();
                 break;
         }
 //        } else {

@@ -9,13 +9,14 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.util.ListViewAdaptToScrollView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+@Route(path = "/app/MyInvestOrAgentActivity")
 public class MyInvestOrAgentActivity extends AppCompatActivity {
 
     @BindView(R.id.had_num)

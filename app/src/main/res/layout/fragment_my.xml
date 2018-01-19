@@ -96,6 +96,7 @@
         android:drawablePadding="20dp"
         android:padding="10dp"
         android:text="我的会员店铺"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/view"/>
 
     <View

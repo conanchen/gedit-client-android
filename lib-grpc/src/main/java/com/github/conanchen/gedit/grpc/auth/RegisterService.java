@@ -98,6 +98,7 @@ public class RegisterService {
         userAuthApiStub.registerSmsStep2Answer(SmsStep2AnswerRequest.newBuilder()
                 .setMobile(registerInfo.mobile)
                 .setToken(registerInfo.token)
+//                .addAllQuestionUuid()
 //                .setQuestionUuid(1, registerInfo.questionUuid)
                 .build(), new StreamObserver<SmsStep2AnswerResponse>() {
             @Override

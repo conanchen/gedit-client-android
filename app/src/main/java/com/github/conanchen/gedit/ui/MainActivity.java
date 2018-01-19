@@ -9,12 +9,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,8 +57,14 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
     CurrentSigninViewModel currentSigninViewModel;
 
 
-    @BindView(R.id.container)
-    FrameLayout container;
+    @BindView(R.id.viewPager)
+    ViewPager mViewPager;
+    @BindView(R.id.home)
+    RadioButton mRbHome;
+    @BindView(R.id.mine)
+    RadioButton mRbMine;
+    @BindView(R.id.rg)
+    RadioGroup rg;
     @BindView(R.id.main_pic)
     ImageView mainPic;
     @BindView(R.id.main_text)
@@ -70,9 +78,9 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
     @BindView(R.id.me_frame_layout)
     FrameLayout meFrameLayout;
 
-    private FragmentManager manager;
-    private StoreListFragment storeListFragment;
-    private MySummaryFragment mySummaryFragment;
+
+    private List<Fragment> viewPagerList = new ArrayList<>();//装viewPager中的Fragment
+    private MainViewPagerAdapter mainViewPagerAdapter; //ViewPager的适配器
 
     private CustomPopWindow popWindow;
 
@@ -80,6 +88,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
      * 扫描跳转Activity RequestCode
      */
     public static final int REQUEST_CODE = 111;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +98,8 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
         setupViewModel();
         setupPop();
-        initView();
+
+        initView();//初始化数据
     }
 
     private void setupViewModel() {
@@ -99,66 +109,64 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
     private void initView() {
 
-        storeListFragment = new StoreListFragment();
-        mySummaryFragment = new MySummaryFragment();
+        viewPagerList.add(new StoreListFragment());
+        viewPagerList.add(new MySummaryFragment());
 
-        manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction
-                .add(R.id.container, storeListFragment)
-                .add(R.id.container, mySummaryFragment)
-                .hide(mySummaryFragment)
-                .show(storeListFragment)
-                .commit();
+        mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), viewPagerList);
+        mViewPager.setAdapter(mainViewPagerAdapter);
 
-        //默认主页
-        mainText.setTextColor(getResources().getColor(R.color.blue));
-        meText.setTextColor(getResources().getColor(R.color.text_color));
-        mainPic.setImageResource(R.mipmap.add);
-        mePic.setImageResource(R.mipmap.add);
 
-        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        fragmentTransaction.hide(mySummaryFragment)
-                .show(storeListFragment)
-                .commit();
+        //默认选中首页
+        mRbHome.setTextColor(getResources().getColor(R.color.blue));
+        mRbMine.setTextColor(getResources().getColor(R.color.black));
+        mViewPager.setCurrentItem(0);
+
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        mRbHome.setTextColor(getResources().getColor(R.color.blue));
+                        mRbMine.setTextColor(getResources().getColor(R.color.black));
+                        break;
+                    case 1:
+                        mRbHome.setTextColor(getResources().getColor(R.color.black));
+                        mRbMine.setTextColor(getResources().getColor(R.color.blue));
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.home:
+                        mViewPager.setCurrentItem(0);
+                        mRbHome.setTextColor(getResources().getColor(R.color.blue));
+                        mRbMine.setTextColor(getResources().getColor(R.color.black));
+                        break;
+                    case R.id.mine:
+                        mViewPager.setCurrentItem(1);
+                        mRbHome.setTextColor(getResources().getColor(R.color.black));
+                        mRbMine.setTextColor(getResources().getColor(R.color.blue));
+                        break;
+                }
+            }
+        });
     }
 
-    @OnClick({R.id.right, R.id.main_frame_layout, R.id.me_frame_layout})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.right:
-                //右上角的弹框
-                popWindow.showLocation(R.id.right);
-                popWindow.setOnItemClickListener(this);
-                break;
-            case R.id.main_frame_layout:
-                //点击了主页
-                mainText.setTextColor(getResources().getColor(R.color.blue));
-                meText.setTextColor(getResources().getColor(R.color.text_color));
-                mainPic.setImageResource(R.mipmap.add);
-                mePic.setImageResource(R.mipmap.add);
-
-                FragmentTransaction fragmentTransaction = manager.beginTransaction();
-                fragmentTransaction.hide(mySummaryFragment)
-                        .show(storeListFragment)
-                        .commit();
-
-                break;
-            case R.id.me_frame_layout:
-                //点击了我的
-                mainText.setTextColor(getResources().getColor(R.color.text_color));
-                meText.setTextColor(getResources().getColor(R.color.blue));
-                mainPic.setImageResource(R.mipmap.add);
-                mePic.setImageResource(R.mipmap.add);
-
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction
-                        .hide(storeListFragment)
-                        .show(mySummaryFragment)
-                        .commit();
-                break;
-        }
-    }
 
     /**
      * 设置右上角弹框的内容
@@ -170,6 +178,13 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
         menu.add("收款");
         menu.add("录单");
         popWindow = new CustomPopWindow(this, menu);
+    }
+
+
+    @OnClick(R.id.right)
+    public void onViewClicked() {
+        popWindow.showLocation(R.id.right);
+        popWindow.setOnItemClickListener(this);
     }
 
     @Override
