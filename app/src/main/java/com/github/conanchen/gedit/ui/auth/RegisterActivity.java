@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
@@ -37,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
@@ -48,7 +51,6 @@ public class RegisterActivity extends BaseActivity {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     RegisterViewModel registerViewModel;
-
 
     @BindView(R.id.mobile)
     AppCompatEditText mEtMobile;
@@ -99,9 +101,9 @@ public class RegisterActivity extends BaseActivity {
                 .subscribe(o -> {
                     Toast.makeText(RegisterActivity.this, "注册中....", Toast.LENGTH_SHORT).show();
 
-                    String mobile = mEtMobile.toString().trim();
-                    String verifyCode = mEtVerifyCode.toString().trim();
-                    String password = mEtPass.toString().trim();
+                    String mobile = mEtMobile.getText().toString().trim();
+                    String verifyCode = mEtVerifyCode.getText().toString().trim();
+                    String password = mEtPass.getText().toString().trim();
 
                     RegisterInfo registerInfo = RegisterInfo.builder()
                             .setMobile(mobile)
@@ -133,11 +135,9 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onChanged(@Nullable RegisterInfo registerInfo) {
-                Log.i("-=-=-=", "返回token,questionTip,Question" + gson.toJson(registerInfo));
                 mTvQuestionDesc.setText("registerInfo" + gson.toJson(registerInfo));
                 token = registerInfo.token;
-                String questionTip = registerInfo.questionTip;
-                List<Question> question = registerInfo.question;
+                mTvQuestionDesc.setText(Strings.isNullOrEmpty(registerInfo.questionTip) ? "找图片" : registerInfo.questionTip);
                 //获取验证数据成功
                 showVerifyPicOrQuestion(registerInfo);
 
@@ -149,8 +149,8 @@ public class RegisterActivity extends BaseActivity {
         registerViewModel.getRegisterSmsLiveData().observe(this, new Observer<SmsStep2AnswerResponse>() {
             @Override
             public void onChanged(@Nullable SmsStep2AnswerResponse smsStep2AnswerResponse) {
-                Log.i("-=-=-=", "获取短信的观察者" + gson.toJson(smsStep2AnswerResponse));
-                mEtVerifyCode.setText(smsStep2AnswerResponse.getStatus().getCode() + "");
+                // TODO: 2018/1/19 接收到短信  填写短信验证码即可
+                mEtVerifyCode.setText(smsStep2AnswerResponse.getStatus().getDetails() + "");
             }
         });
 
@@ -158,11 +158,11 @@ public class RegisterActivity extends BaseActivity {
         registerViewModel.getRegisterLiveData().observe(this, new Observer<RegisterResponse>() {
             @Override
             public void onChanged(@Nullable RegisterResponse registerResponse) {
-                // TODO: 2018/1/18 注册成功就就去登录
                 Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(registerResponse));
+                registerViewModel.saveToken(registerResponse);
+                finish();
             }
         });
-
 
     }
 
@@ -172,7 +172,7 @@ public class RegisterActivity extends BaseActivity {
     private void setupRecyclerView() {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mAdapter = new RegisterVerifyPicAdapter(this, mData);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setNormal();
@@ -184,6 +184,7 @@ public class RegisterActivity extends BaseActivity {
      * @param registerInfo
      */
     private void showVerifyPicOrQuestion(RegisterInfo registerInfo) {
+        Log.i("-=-=-=", "返回token,questionTip,Question" + gson.toJson(registerInfo));
         List<Question> question = registerInfo.question;
         if (question != null && !question.isEmpty()) {
             mTvQuestionDesc.setVisibility(View.VISIBLE);
@@ -208,10 +209,13 @@ public class RegisterActivity extends BaseActivity {
                 finish();
             case R.id.get_sms_code:
 
+                List<Question> questions = new ArrayList<>();//装选中的图片对象
                 if (mAdapter.isSelected != null && (mAdapter.isSelected.size() > 0)) {
                     int num = 0;
                     for (int i = 0; i < mAdapter.isSelected.size(); i++) {
                         if (mAdapter.isSelected.get(i)) {
+                            Question question = mData.get(i);
+                            questions.add(question);
                             num = num + 1;
                         }
                     }
@@ -234,11 +238,12 @@ public class RegisterActivity extends BaseActivity {
                     return;
                 }
 
+
                 //获取验证码
                 RegisterInfo registerInfo = RegisterInfo.builder()
                         .setMobile(tel)
                         .setToken(token)
-                        .setQuestionUuid("问题的uuid")
+                        .setQuestion(questions)
                         .build();
                 registerViewModel.getSms(registerInfo);
                 break;

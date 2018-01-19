@@ -3,11 +3,12 @@ package com.github.conanchen.gedit.grpc.auth;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
-import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.grpc.store.StoreService;
+import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SigninWithPasswordRequest;
 import com.github.conanchen.gedit.user.auth.grpc.UserAuthApiGrpc;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +22,7 @@ import io.grpc.stub.StreamObserver;
 
 public class SigninService {
     private final static String TAG = StoreService.class.getSimpleName();
+    private Gson gson = new Gson();
 
     public interface SigninCallback {
         void onSigninResponse(SigninResponse response);
@@ -36,7 +38,6 @@ public class SigninService {
     }
 
     public void login(SigninInfo signinInfo, SigninService.SigninCallback callback) {
-        Log.i(TAG, signinInfo.mobile + "==SigninService==" + signinInfo.password);
         ManagedChannel channel = getManagedChannel();
 
         UserAuthApiGrpc.UserAuthApiStub userAuthApiBlockingStub = UserAuthApiGrpc.newStub(channel);
@@ -49,10 +50,8 @@ public class SigninService {
                         new StreamObserver<SigninResponse>() {
                             @Override
                             public void onNext(SigninResponse value) {
+                                Log.i("-=-=-=-", "value" + gson.toJson(value));
                                 callback.onSigninResponse(value);
-                                Status status = value.getStatus();
-                                String code = status.getCode();
-                                Log.i(TAG, "staus:" + status + ",code:" + code);
                             }
 
                             @Override

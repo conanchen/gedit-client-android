@@ -14,10 +14,9 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.utils.vo.StoreCreateInfo;
-import com.github.conanchen.utils.vo.VoAccessToken;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoreActivity;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -86,16 +85,24 @@ public class StoreCreateActivity extends BaseActivity {
                 .subscribe(o -> {
                     Toast.makeText(StoreCreateActivity.this, "创建中....", Toast.LENGTH_SHORT).show();
 //                    if (isLogin) {
-                        //创建商铺
-                        String storeName = mNameEditText.getText().toString().trim();
-                        String storeTel = introducerPhone.getText().toString().trim();
+                    //创建商铺
+                    String storeName = mNameEditText.getText().toString().trim();
+                    String storeTel = introducerPhone.getText().toString().trim();
+//创建店铺需提供名称、地理位置、行政区编号、详细地址，其他内容通过单项修改完善
+//        string name = 1; //unique
+//        Location location = 4;
+//        string districtUuid = 9;
+//        string detailAddress = 10;
+//        string introducerUuid = 12;
 
-                        StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
-                                .setName(storeName)
-                                .setMobile(storeTel)
-                                .setVoAccessToken(VoAccessToken.builder().setAccessToken("accToken").setExpiresIn("ExpiresIn").build())
-                                .build();
-                        storeCreateViewModel.createStoreWith(storeCreateInfo);
+                    StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
+                            .setName(storeName)
+                            .setLat(11.0)
+                            .setLon(22.0)
+                            .setDistrictUuid("441400")
+                            .setDetailAddress("si chun sheng ")
+                            .build();
+                    storeCreateViewModel.createStoreWith(storeCreateInfo);
 //                    } else {
 //                        startActivity(new Intent(StoreCreateActivity.this, LoginActivity.class));
 //                    }
@@ -118,12 +125,12 @@ public class StoreCreateActivity extends BaseActivity {
         storeCreateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreCreateViewModel.class);
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
         storeCreateViewModel.getStoreCreateResponseLiveData().observe(this, storeCreateResponse -> {
-                    String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
-                    Log.i(TAG, message);
-                    if (storeCreateResponse != null) {
-                        startActivity(new Intent(StoreCreateActivity.this, MyStoreActivity.class));
-                    }
-                });
+            String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
+            Log.i(TAG, message);
+            if (storeCreateResponse != null) {
+                startActivity(new Intent(StoreCreateActivity.this, MyStoreActivity.class));
+            }
+        });
 
 
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {

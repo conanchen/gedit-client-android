@@ -23,7 +23,7 @@ public class KeyValueRepository {
     private GrpcFascade grpcFascade;
 
     @Inject
-    public KeyValueRepository(RoomFascade roomFascade,GrpcFascade grpcFascade) {
+    public KeyValueRepository(RoomFascade roomFascade, GrpcFascade grpcFascade) {
         this.roomFascade = roomFascade;
         this.grpcFascade = grpcFascade;
     }

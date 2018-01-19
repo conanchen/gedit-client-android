@@ -57,9 +57,9 @@ public class RegisterVerifyPicAdapter extends RecyclerView.Adapter<RegisterVerif
             holder.background.setVisibility(View.GONE);
         }
 
-//        Glide.with(context)
-//                .load(question.getImage())
-//                .into(holder.imageView);
+        Glide.with(context)
+                .load(question.getImage())
+                .into(holder.imageView);
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override

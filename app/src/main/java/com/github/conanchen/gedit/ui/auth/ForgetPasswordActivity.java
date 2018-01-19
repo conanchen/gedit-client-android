@@ -8,18 +8,21 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
+import com.github.conanchen.gedit.util.JudgeISMobileNo;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -43,7 +46,6 @@ public class ForgetPasswordActivity extends BaseActivity {
     ViewModelProvider.Factory viewModelFactory;
     RegisterViewModel registerViewModel;
 
-
     @BindView(R.id.mobile)
     AppCompatEditText mEtMobile;
     @BindView(R.id.verify)
@@ -64,6 +66,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     private static final Gson gson = new Gson();
     private RegisterVerifyPicAdapter mAdapter;
     private List<Question> mData = new ArrayList<>();
+    private String token;//进入界面获取的token只是为了验证图片的时候在用
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +75,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         setupViewModel();
-
+        setupRecyclerView();
         setupInputChecker();
     }
 
@@ -89,11 +92,11 @@ public class ForgetPasswordActivity extends BaseActivity {
                 .throttleFirst(3, TimeUnit.SECONDS) //防止3秒内连续点击,或者只使用doOnNext部分
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
-                    Toast.makeText(ForgetPasswordActivity.this, "处理中....", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgetPasswordActivity.this, "注册中....", Toast.LENGTH_SHORT).show();
 
-                    String mobile = mEtMobile.toString().trim();
-                    String verifyCode = mEtVerifyCode.toString().trim();
-                    String password = mEtPass.toString().trim();
+                    String mobile = mEtMobile.getText().toString().trim();
+                    String verifyCode = mEtVerifyCode.getText().toString().trim();
+                    String password = mEtPass.getText().toString().trim();
 
                     RegisterInfo registerInfo = RegisterInfo.builder()
                             .setMobile(mobile)
@@ -119,12 +122,13 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     private void setupViewModel() {
         registerViewModel = ViewModelProviders.of(this, viewModelFactory).get(RegisterViewModel.class);
-
         registerViewModel.getRegisterResponseLiveData().observe(this, new Observer<RegisterInfo>() {
+
             @Override
             public void onChanged(@Nullable RegisterInfo registerInfo) {
-                Log.i("-=-=-=", "获取验证的图片的观察者" + gson.toJson(registerInfo));
                 mTvQuestionDesc.setText("registerInfo" + gson.toJson(registerInfo));
+                token = registerInfo.token;
+                mTvQuestionDesc.setText(Strings.isNullOrEmpty(registerInfo.questionTip) ? "找图片" : registerInfo.questionTip);
                 //获取验证数据成功
                 showVerifyPicOrQuestion(registerInfo);
 
@@ -132,21 +136,20 @@ public class ForgetPasswordActivity extends BaseActivity {
         });
         registerViewModel.getVerify(RegisterInfo.builder().build());
 
-
         registerViewModel.getRegisterSmsLiveData().observe(this, new Observer<SmsStep2AnswerResponse>() {
             @Override
             public void onChanged(@Nullable SmsStep2AnswerResponse smsStep2AnswerResponse) {
-                Log.i("-=-=-=", "获取短信的观察者" + gson.toJson(smsStep2AnswerResponse));
-                mEtVerifyCode.setText(smsStep2AnswerResponse.getStatus().getCode() + "");
+                // TODO: 2018/1/19 接收到短信  填写短信验证码即可
+                mEtVerifyCode.setText(smsStep2AnswerResponse.getStatus().getDetails() + "");
             }
         });
 
-
         registerViewModel.getRegisterLiveData().observe(this, new Observer<RegisterResponse>() {
             @Override
-            public void onChanged(@Nullable RegisterResponse signinResponse) {
-                // TODO: 2018/1/18 注册成功就就去登录
-                Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(signinResponse));
+            public void onChanged(@Nullable RegisterResponse registerResponse) {
+                Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(registerResponse));
+                registerViewModel.saveToken(registerResponse);
+                finish();
             }
         });
 
@@ -158,7 +161,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     private void setupRecyclerView() {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mAdapter = new RegisterVerifyPicAdapter(this, mData);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setNormal();
@@ -170,6 +173,7 @@ public class ForgetPasswordActivity extends BaseActivity {
      * @param registerInfo
      */
     private void showVerifyPicOrQuestion(RegisterInfo registerInfo) {
+        Log.i("-=-=-=", "返回token,questionTip,Question" + gson.toJson(registerInfo));
         List<Question> question = registerInfo.question;
         if (question != null && !question.isEmpty()) {
             mTvQuestionDesc.setVisibility(View.VISIBLE);
@@ -193,12 +197,42 @@ public class ForgetPasswordActivity extends BaseActivity {
             case R.id.back:
                 finish();
             case R.id.get_sms_code:
+
+                List<Question> questions = new ArrayList<>();//装选中的图片对象
+                if (mAdapter.isSelected != null && (mAdapter.isSelected.size() > 0)) {
+                    int num = 0;
+                    for (int i = 0; i < mAdapter.isSelected.size(); i++) {
+                        if (mAdapter.isSelected.get(i)) {
+                            Question question = mData.get(i);
+                            questions.add(question);
+                            num = num + 1;
+                        }
+                    }
+                    //判断选中的个数是否大于0
+                    if (num <= 0) {
+                        Toast.makeText(ForgetPasswordActivity.this, "请选择需要验证的图片", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+
                 String tel = mEtMobile.getText().toString().trim();
+
+                if (Strings.isNullOrEmpty(tel)) {
+                    Toast.makeText(ForgetPasswordActivity.this, "请输入电话号码", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (!JudgeISMobileNo.isMobileNO(tel)) {
+                    Toast.makeText(ForgetPasswordActivity.this, "电话号码格式有误", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
                 //获取验证码
                 RegisterInfo registerInfo = RegisterInfo.builder()
                         .setMobile(tel)
-                        .setToken("进入界面服务器返回")
-                        .setQuestionUuid("问题的uuid")
+                        .setToken(token)
+                        .setQuestion(questions)
                         .build();
                 registerViewModel.getSms(registerInfo);
                 break;

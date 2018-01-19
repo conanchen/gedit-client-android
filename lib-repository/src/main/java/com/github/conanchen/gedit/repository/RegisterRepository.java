@@ -31,6 +31,7 @@ public class RegisterRepository {
     private final static Gson gson = new Gson();
     private RoomFascade roomFascade;
     private GrpcFascade grpcFascade;
+    private RepositoryFascade repositoryFascade;
 
     @Inject
     public RegisterRepository(RoomFascade roomFascade, GrpcFascade grpcFascade) {
@@ -52,7 +53,6 @@ public class RegisterRepository {
                     @Override
                     public void onRegisterVerifyResponse(SmsStep1QuestionResponse response) {
                         Observable.fromCallable(() -> {
-                            Log.i(TAG, String.format("SmsStep1QuestionResponse: %s", response.getToken()));
                             RegisterInfo register = RegisterInfo.builder()
                                     .setToken(response.getToken())
                                     .setQuestionTip(response.getQuestionTip())
@@ -70,11 +70,13 @@ public class RegisterRepository {
                                             setValue(RegisterInfo.builder()
                                                     .setToken(response.getToken())
                                                     .setQuestionTip(response.getQuestionTip())
+                                                    .setQuestion(response.getQuestionList())
                                                     .build());
                                         } else {
                                             setValue(RegisterInfo.builder()
                                                     .setToken(response.getToken())
                                                     .setQuestionTip(response.getQuestionTip())
+                                                    .setQuestion(response.getQuestionList())
                                                     .build());
                                         }
 
@@ -150,9 +152,11 @@ public class RegisterRepository {
                     @Override
                     public void onRegisterCallback(RegisterResponse response) {
                         Observable.fromCallable(() -> {
-                            // TODO: 2018/1/18  数据需要处理
+
                             RegisterResponse signinResponse = RegisterResponse.newBuilder()
                                     .setStatus(response.getStatus())
+                                    .setAccessToken(response.getAccessToken())
+                                    .setExpiresIn(response.getExpiresIn())
                                     .build();
                             return signinResponse;
                         }).subscribeOn(Schedulers.io())
@@ -164,12 +168,16 @@ public class RegisterRepository {
                                         if (registerInfo != null) {
                                             Log.i(TAG, gson.toJson(registerInfo));
                                             setValue(RegisterResponse.newBuilder()
+                                                    .setAccessToken(response.getAccessToken())
+                                                    .setExpiresIn(response.getExpiresIn())
                                                     .setStatus(response.getStatus())
                                                     .build());
 
                                         } else {
                                             setValue(RegisterResponse.newBuilder()
                                                     .setStatus(response.getStatus())
+                                                    .setAccessToken("Fail")
+                                                    .setExpiresIn("bottom")
                                                     .build());
                                         }
 

@@ -3,9 +3,8 @@ package com.github.conanchen.gedit.grpc.auth;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
-import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.grpc.store.StoreService;
-import com.github.conanchen.gedit.user.auth.grpc.Question;
+import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionRequest;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionResponse;
@@ -13,7 +12,9 @@ import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerRequest;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep3RegisterRequest;
 import com.github.conanchen.gedit.user.auth.grpc.UserAuthApiGrpc;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,7 @@ import io.grpc.stub.StreamObserver;
 
 public class RegisterService {
     private final static String TAG = StoreService.class.getSimpleName();
+    private Gson gson = new Gson();
 
     public interface RegisterVerifyCallback {
         void onRegisterVerifyResponse(SmsStep1QuestionResponse response);
@@ -61,17 +63,11 @@ public class RegisterService {
                         new StreamObserver<SmsStep1QuestionResponse>() {
                             @Override
                             public void onNext(SmsStep1QuestionResponse value) {
-
-                                List<Question> questionList = value.getQuestionList();
-                                String token = value.getToken();
-                                String questionTip = value.getQuestionTip();
-                                Log.i("-=-=-=-=", "token:" + token + "questionTip:" + questionTip);
                                 callback.onRegisterVerifyResponse(value);
                             }
 
                             @Override
                             public void onError(Throwable t) {
-                                Log.e(TAG, t.getMessage());
                                 callback.onRegisterVerifyResponse(
                                         SmsStep1QuestionResponse.newBuilder()
                                                 .setToken("get token is fail")
@@ -95,11 +91,20 @@ public class RegisterService {
     public void getMsm(RegisterInfo registerInfo, RegisterService.RegisterSmsCallback callback) {
         ManagedChannel channel = getManagedChannel();
         UserAuthApiGrpc.UserAuthApiStub userAuthApiStub = UserAuthApiGrpc.newStub(channel);
+
+
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < registerInfo.question.size(); i++) {
+            String uuid = registerInfo.question.get(i).getUuid();
+            list.add(uuid);
+        }
+
+        Iterable<String> iterable = new ArrayList<String>(list);
+
         userAuthApiStub.registerSmsStep2Answer(SmsStep2AnswerRequest.newBuilder()
                 .setMobile(registerInfo.mobile)
                 .setToken(registerInfo.token)
-//                .addAllQuestionUuid()
-//                .setQuestionUuid(1, registerInfo.questionUuid)
+                .addAllQuestionUuid(iterable)
                 .build(), new StreamObserver<SmsStep2AnswerResponse>() {
             @Override
             public void onNext(SmsStep2AnswerResponse value) {
@@ -111,17 +116,13 @@ public class RegisterService {
                 callback.onRegisterSmsCallback(SmsStep2AnswerResponse.newBuilder()
                         .setStatus(Status.newBuilder()
                                 .setCode("Fail")
-                                .setDetails("api没有调通" + t.getMessage()))
+                                .setDetails("onError()  : " + t.getMessage()))
                         .build());
             }
 
             @Override
             public void onCompleted() {
-                callback.onRegisterSmsCallback(SmsStep2AnswerResponse.newBuilder()
-                        .setStatus(Status.newBuilder()
-                                .setCode("Fail")
-                                .setDetails("onCompleted"))
-                        .build());
+
             }
         });
     }
@@ -135,34 +136,32 @@ public class RegisterService {
     public void getRegister(RegisterInfo registerInfo, RegisterService.RegisterCallback callback) {
         ManagedChannel channel = getManagedChannel();
         UserAuthApiGrpc.UserAuthApiStub userAuthApiStub = UserAuthApiGrpc.newStub(channel);
-        userAuthApiStub.registerSmsStep3Register(SmsStep3RegisterRequest.newBuilder()
-                .setMobile(registerInfo.mobile)
-                .setSmscode(registerInfo.smscode)
-                .setPassword(registerInfo.password)
-                .build(), new StreamObserver<RegisterResponse>() {
-            @Override
-            public void onNext(RegisterResponse value) {
-                callback.onRegisterCallback(value);
-            }
+        userAuthApiStub.
+                registerSmsStep3Register(SmsStep3RegisterRequest.newBuilder()
+                        .setMobile(registerInfo.mobile)
+                        .setSmscode(registerInfo.smscode)
+                        .setPassword(registerInfo.password)
+                        .build(), new StreamObserver<RegisterResponse>() {
+                    @Override
+                    public void onNext(RegisterResponse value) {
+                        callback.onRegisterCallback(value);
+                    }
 
-            @Override
-            public void onError(Throwable t) {
-                callback.onRegisterCallback(RegisterResponse.newBuilder()
-                        .setStatus(Status.newBuilder()
-                                .setCode("Fail")
-                                .setDetails("api没有调通" + t.getMessage()))
-                        .build());
-            }
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.i("-=-=-=-", t.getMessage());
+                        callback.onRegisterCallback(RegisterResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode("Fail")
+                                        .setDetails("api没有调通" + t.getMessage()))
+                                .build());
+                    }
 
-            @Override
-            public void onCompleted() {
-                callback.onRegisterCallback(RegisterResponse.newBuilder()
-                        .setStatus(Status.newBuilder()
-                                .setCode("Fail")
-                                .setDetails("onCompleted"))
-                        .build());
-            }
-        });
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
     }
 
 }

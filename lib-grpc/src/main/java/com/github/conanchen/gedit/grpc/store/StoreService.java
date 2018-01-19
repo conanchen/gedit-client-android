@@ -2,9 +2,9 @@ package com.github.conanchen.gedit.grpc.store;
 
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
-import com.github.conanchen.gedit.utils.JcaUtils;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
@@ -13,9 +13,10 @@ import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.StoreSearchApiGrpc;
+import com.github.conanchen.gedit.utils.JcaUtils;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
-import com.google.common.base.Strings;
+import com.google.gson.Gson;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +35,7 @@ import io.grpc.stub.StreamObserver;
 @Singleton
 public class StoreService {
     private final static String TAG = StoreService.class.getSimpleName();
+    private Gson gson = new Gson();
 
     public interface StoreSearchCallback {
         void onStoreSearchResponse(SearchStoreResponse response);
@@ -121,26 +123,27 @@ public class StoreService {
     public void storeCreate(StoreCreateInfo storeCreateInfo, StoreCreateCallback callback) {
         ManagedChannel channel = getManagedChannel();
         Log.i(TAG, "enter service -- storeCreate");
+
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .create(com.github.conanchen.gedit.store.profile.grpc.CreateStoreRequest
                                 .newBuilder()
                                 .setName(storeCreateInfo.name)
-                                .setDetailAddress(Strings.isNullOrEmpty(storeCreateInfo.address) ? "no-detail-address" : storeCreateInfo.address)
+                                .setLocation(Location.newBuilder().setLon(storeCreateInfo.lon).setLat(storeCreateInfo.lat).build())
+                                .setDistrictUuid(storeCreateInfo.districtUuid)
+                                .setDetailAddress(storeCreateInfo.detailAddress)
                                 .build(),
                         new StreamObserver<CreateStoreResponse>() {
                             @Override
                             public void onNext(CreateStoreResponse value) {
+                                Log.i("-=-=-=---", "onNext  ====  value:" + gson.toJson(value));
                                 callback.onStoreCreateResponse(value);
-                                Status status = value.getStatus();
-                                String code = status.getCode();
-                                Log.i(TAG, "staus:" + status + ",code:" + code);
                             }
 
                             @Override
                             public void onError(Throwable t) {
-                                Log.e(TAG, t.getMessage());
+                                Log.i("-=-=-=---", "onError  ====  value:" + gson.toJson(t));
                                 callback.onStoreCreateResponse(
                                         CreateStoreResponse.newBuilder()
                                                 .setStatus(Status.newBuilder().setCode("FAILED")
@@ -151,7 +154,7 @@ public class StoreService {
 
                             @Override
                             public void onCompleted() {
-                                Log.i(TAG, "storeProfileApiStub.create onCompleted()");
+                                Log.i("-=-=-=---", "onCompleted" );
                             }
                         });
 

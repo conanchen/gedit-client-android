@@ -8,17 +8,23 @@ import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
+import com.github.conanchen.gedit.room.kv.KeyValue;
+import com.github.conanchen.gedit.room.kv.Value;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
 import com.github.conanchen.gedit.util.AbsentLiveData;
+import com.github.conanchen.utils.vo.VoAccessToken;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
 
 /**
  * Created by Administrator on 2018/1/13.
  */
 
 public class RegisterViewModel extends ViewModel {
+
     @VisibleForTesting
     final MutableLiveData<RegisterInfo> registerInfoMutableLiveData = new MutableLiveData<>();
     private final LiveData<RegisterInfo> registerResponseLiveData;
@@ -31,9 +37,13 @@ public class RegisterViewModel extends ViewModel {
     final MutableLiveData<RegisterInfo> registerLiveData = new MutableLiveData<>();
     private final LiveData<RegisterResponse> register;
 
+    private RepositoryFascade repositoryFascade;
+
     @SuppressWarnings("unchecked")
     @Inject
     public RegisterViewModel(RepositoryFascade repositoryFascade) {
+
+        this.repositoryFascade = repositoryFascade;
 
         registerResponseLiveData = Transformations.switchMap(registerInfoMutableLiveData, registerInfo -> {
             if (registerInfo == null) {
@@ -84,8 +94,6 @@ public class RegisterViewModel extends ViewModel {
     }
 
 
-
-
     @VisibleForTesting
     public LiveData<RegisterResponse> getRegisterLiveData() {
         return register;
@@ -97,7 +105,15 @@ public class RegisterViewModel extends ViewModel {
     }
 
 
-
-
-
+    public void saveToken(RegisterResponse registerResponse) {
+        repositoryFascade.keyValueRepository.save(KeyValue.builder()
+                .setKey(KeyValue.KEY.USER_CURRENT_ACCESSTOKEN)
+                .setValue(Value.builder()
+                        .setVoAccessToken(VoAccessToken.builder()
+                                .setAccessToken(registerResponse.getAccessToken())
+                                .setExpiresIn(registerResponse.getExpiresIn())
+                                .build())
+                        .build())
+                .build());
+    }
 }

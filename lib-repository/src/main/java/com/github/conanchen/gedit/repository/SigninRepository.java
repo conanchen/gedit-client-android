@@ -4,14 +4,14 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.auth.SigninInfo;
 import com.github.conanchen.gedit.grpc.auth.SigninService;
-import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.room.kv.Value;
-import com.github.conanchen.utils.vo.VoAccessToken;
 import com.github.conanchen.gedit.vo.SigninResponse;
+import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -42,7 +42,6 @@ public class SigninRepository {
 
 
     public LiveData<SigninResponse> login(SigninInfo signinInfo) {
-        Log.i(TAG, signinInfo.mobile + "==SigninRepository==" + signinInfo.password);
         return new LiveData<SigninResponse>() {
             @Override
             protected void onActive() {
@@ -50,8 +49,9 @@ public class SigninRepository {
                     @Override
                     public void onSigninResponse(com.github.conanchen.gedit.user.auth.grpc.SigninResponse response) {
                         Observable.fromCallable(() -> {
-                            Log.i(TAG, String.format("UpdateResponse: %s", response.getStatus()));
-                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                            Log.i("-=-=-", gson.toJson(response));
+
+                            if (response.getStatus().getCode().equals("0")) {
                                 //登录成功
                                 VoAccessToken voAccessToken = VoAccessToken.builder()
                                         .setAccessToken(response.getAccessToken())
@@ -63,7 +63,7 @@ public class SigninRepository {
                                         .build();
 
                                 KeyValue keyValue = KeyValue.builder()
-                                        .setKey(response.getAccessToken())
+                                        .setKey(KeyValue.KEY.USER_CURRENT_ACCESSTOKEN)
                                         .setValue(value)
                                         .build();
                                 return roomFascade.daoKeyValue.save(keyValue);
@@ -78,8 +78,8 @@ public class SigninRepository {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
                                             setValue(SigninResponse.builder()
-                                                    .setAccessToken("OK")
-                                                    .setExpiresIn("user login Successful")
+                                                    .setAccessToken(response.getAccessToken())
+                                                    .setExpiresIn(response.getExpiresIn())
                                                     .build());
                                         } else {
                                             setValue(SigninResponse.builder()
@@ -87,7 +87,6 @@ public class SigninRepository {
                                                     .setExpiresIn(response.getStatus().getDetails())
                                                     .build());
                                         }
-
                                     }
                                 });
                         ;

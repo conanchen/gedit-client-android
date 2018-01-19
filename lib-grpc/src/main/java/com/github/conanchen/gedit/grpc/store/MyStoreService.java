@@ -5,6 +5,7 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
+import com.github.conanchen.gedit.store.owner.grpc.Ownership;
 import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.gedit.store.owner.grpc.StoreOwnerApiGrpc;
 
@@ -34,11 +35,9 @@ public class MyStoreService {
     }
 
 
-
-    public void loadMyStores(ListMyStoreRequest request,OwnershipCallBack callBack) {
+    public void loadMyStores(ListMyStoreRequest request, OwnershipCallBack callBack) {
         ManagedChannel channel = getManagedChannel();
         StoreOwnerApiGrpc.StoreOwnerApiStub storeOwnerApiStub = StoreOwnerApiGrpc.newStub(channel);
-        Log.i("-=-=-", "进来了没");
         storeOwnerApiStub.listMyStore(request, new StreamObserver<OwnershipResponse>() {
             @Override
             public void onNext(OwnershipResponse value) {
@@ -50,8 +49,9 @@ public class MyStoreService {
             public void onError(Throwable t) {
                 Log.i("-=-=-", "onError");
                 callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
-                        .setStatus(Status.newBuilder().setCode("FAILED")
-                                .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
+                        .setOwnership(Ownership.newBuilder()
+                                .setStoreUuid("uuid" + System.currentTimeMillis())
+                                .setStoreName("name" + System.currentTimeMillis())
                                 .build())
                         .build());
             }
