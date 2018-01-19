@@ -4,12 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.github.conanchen.gedit.hello.grpc.auth.RegisterInfo;
-import com.github.conanchen.gedit.hello.grpc.auth.RegisterService;
-import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
+import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
+import com.github.conanchen.gedit.grpc.auth.RegisterService;
+import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
-import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep1QuestionResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
 import com.google.gson.Gson;

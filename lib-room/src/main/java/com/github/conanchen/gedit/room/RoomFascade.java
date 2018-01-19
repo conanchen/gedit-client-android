@@ -3,7 +3,7 @@ package com.github.conanchen.gedit.room;
 
 import com.github.conanchen.gedit.room.hello.DaoHello;
 import com.github.conanchen.gedit.room.kv.DaoKeyValue;
-import com.github.conanchen.gedit.room.store.DaoMyStore;
+import com.github.conanchen.gedit.room.my.store.DaoMyStore;
 import com.github.conanchen.gedit.room.store.DaoStore;
 
 import javax.inject.Inject;

@@ -4,9 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
-import com.github.conanchen.gedit.hello.grpc.auth.SigninService;
-import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
+import com.github.conanchen.gedit.grpc.auth.SigninInfo;
+import com.github.conanchen.gedit.grpc.auth.SigninService;
+import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.room.kv.Value;

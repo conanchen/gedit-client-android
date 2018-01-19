@@ -2,7 +2,7 @@ package com.github.conanchen.gedit.repository.kv;
 
 import android.arch.lifecycle.LiveData;
 
-import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
+import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
 

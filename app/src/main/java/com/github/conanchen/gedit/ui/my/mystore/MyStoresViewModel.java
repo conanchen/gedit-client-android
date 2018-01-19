@@ -8,7 +8,7 @@ import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.repository.MyStoreRepository;
-import com.github.conanchen.gedit.room.store.MyStore;
+import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 
 import javax.inject.Inject;

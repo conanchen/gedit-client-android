@@ -6,7 +6,7 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
+import com.github.conanchen.gedit.grpc.auth.SigninInfo;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.gedit.vo.SigninResponse;

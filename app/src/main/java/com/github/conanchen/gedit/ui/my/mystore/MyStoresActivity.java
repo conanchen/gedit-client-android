@@ -11,7 +11,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.room.store.MyStore;
+import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 
 import javax.inject.Inject;

@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.hello.grpc.auth.SigninInfo;
+import com.github.conanchen.gedit.grpc.auth.SigninInfo;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;

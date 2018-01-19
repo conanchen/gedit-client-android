@@ -6,8 +6,8 @@ import android.arch.paging.PagedList;
 import android.util.Log;
 
 import com.github.conanchen.gedit.hello.grpc.HelloReply;
-import com.github.conanchen.gedit.hello.grpc.HelloService;
-import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
+import com.github.conanchen.gedit.grpc.hello.HelloService;
+import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.Hello;
 import com.google.common.base.Strings;

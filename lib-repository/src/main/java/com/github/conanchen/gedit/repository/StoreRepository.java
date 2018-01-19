@@ -6,9 +6,9 @@ import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
+import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
-import com.github.conanchen.gedit.hello.grpc.store.StoreService;
+import com.github.conanchen.gedit.grpc.store.StoreService;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.Store;

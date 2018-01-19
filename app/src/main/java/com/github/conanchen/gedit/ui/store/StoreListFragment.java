@@ -3,7 +3,6 @@ package com.github.conanchen.gedit.ui.store;
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;

@@ -16,10 +16,9 @@ import android.widget.Toast;
 
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.hello.grpc.auth.RegisterInfo;
+import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
-import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;

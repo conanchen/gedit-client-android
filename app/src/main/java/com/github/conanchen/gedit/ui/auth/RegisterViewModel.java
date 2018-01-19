@@ -6,12 +6,10 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.hello.grpc.auth.RegisterInfo;
+import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
-import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
-import com.github.conanchen.gedit.user.auth.grpc.SmsStep3RegisterRequest;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 
 import javax.inject.Inject;

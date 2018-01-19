@@ -4,9 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 
-import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
+import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
-import com.github.conanchen.gedit.room.store.MyStore;
+import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
 import com.google.gson.Gson;

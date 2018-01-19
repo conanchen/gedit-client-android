@@ -7,10 +7,10 @@ import com.github.conanchen.gedit.room.MyRoomDatabase;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.DaoHello;
 import com.github.conanchen.gedit.room.kv.DaoKeyValue;
-import com.github.conanchen.gedit.room.store.DaoMyIntroducedStore;
-import com.github.conanchen.gedit.room.store.DaoMyMemberStore;
-import com.github.conanchen.gedit.room.store.DaoMyStore;
-import com.github.conanchen.gedit.room.store.DaoMyWorkinStore;
+import com.github.conanchen.gedit.room.my.store.DaoMyIntroducedStore;
+import com.github.conanchen.gedit.room.my.store.DaoMyMemberStore;
+import com.github.conanchen.gedit.room.my.store.DaoMyStore;
+import com.github.conanchen.gedit.room.my.store.DaoMyWorkinStore;
 import com.github.conanchen.gedit.room.store.DaoStore;
 
 import javax.inject.Singleton;

@@ -1,8 +1,8 @@
 package com.github.conanchen.gedit.repository.di;
 
 
-import com.github.conanchen.gedit.hello.grpc.di.GrpcFascade;
-import com.github.conanchen.gedit.hello.grpc.di.GrpcModule;
+import com.github.conanchen.gedit.di.GrpcFascade;
+import com.github.conanchen.gedit.di.GrpcModule;
 import com.github.conanchen.gedit.repository.MyIntroducedStoreRepository;
 import com.github.conanchen.gedit.repository.MyMemberStoreRepository;
 import com.github.conanchen.gedit.repository.MyWorkinStoreRepository;
