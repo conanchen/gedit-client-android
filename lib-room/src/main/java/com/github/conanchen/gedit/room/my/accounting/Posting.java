@@ -12,8 +12,8 @@ import com.google.common.base.Strings;
  * Created by Conan Chen on 2018/1/17.
  */
 @Entity(indices = {
-        @Index(value = {"accountUuid"}),
-        @Index(value = {"lastUpdated"})
+        @Index(value = {"uuid"}),
+        @Index(value = {"accountUuid","created"})
 })
 public class Posting {
 //### 账户流水Postings
@@ -36,7 +36,10 @@ public class Posting {
     public int amount; //posting amount
     public long created;
 
-    public Posting(@NonNull String uuid, String journalUuid, String accountUuid, String type, int amount, long created) {
+    public Posting() {
+    }
+
+    private Posting(@NonNull String uuid, String journalUuid, String accountUuid, String type, int amount, long created) {
         this.uuid = uuid;
         this.journalUuid = journalUuid;
         this.accountUuid = accountUuid;

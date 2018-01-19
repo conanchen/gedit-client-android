@@ -33,8 +33,10 @@ public class Journal {
     public Value value;
     public long created;
 
+    public Journal() {
+    }
 
-    public Journal(@NonNull String uuid, String accountUuid, String type, Value value, long created) {
+    private Journal(@NonNull String uuid, String accountUuid, String type, Value value, long created) {
         this.uuid = uuid;
         this.accountUuid = accountUuid;
         this.type = type;

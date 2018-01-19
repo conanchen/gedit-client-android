@@ -29,6 +29,9 @@ public class Balance {
     public int currentBalance;
     public long lastUpdated;
 
+    public Balance() {
+    }
+
     private Balance(@NonNull String accountUuid, String accountType, int previousBalance,
                     long previousDate, int currentChanges, long currentDate,
                     int currentBalance, long lastUpdated) {

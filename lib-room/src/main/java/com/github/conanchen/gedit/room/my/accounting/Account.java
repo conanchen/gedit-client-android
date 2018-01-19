@@ -32,6 +32,8 @@ public class Account {
     public String type;
     public long created;
 
+    public Account() {
+    }
 
     private Account(@NonNull String uuid, String type, long created) {
         this.uuid = uuid;

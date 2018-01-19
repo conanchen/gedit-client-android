@@ -7,6 +7,11 @@ import com.github.conanchen.gedit.room.MyRoomDatabase;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.DaoHello;
 import com.github.conanchen.gedit.room.kv.DaoKeyValue;
+import com.github.conanchen.gedit.room.my.accounting.DaoAccount;
+import com.github.conanchen.gedit.room.my.accounting.DaoBalance;
+import com.github.conanchen.gedit.room.my.accounting.DaoJournal;
+import com.github.conanchen.gedit.room.my.accounting.DaoPosting;
+import com.github.conanchen.gedit.room.my.payment.DaoPayment;
 import com.github.conanchen.gedit.room.my.store.DaoMyIntroducedStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyMemberStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyStore;
@@ -81,6 +86,39 @@ public class RoomModule {
     DaoMyMemberStore provideDaoMyMemberStore(MyRoomDatabase db) {
         return db.daoMyMemberStore();
     }
+
+
+    @Singleton
+    @Provides
+    DaoAccount provideDaoAccount(MyRoomDatabase db) {
+        return db.daoDaoAccount();
+    }
+
+    @Singleton
+    @Provides
+    DaoBalance provideDaoBalance(MyRoomDatabase db) {
+        return db.daoDaoBalance();
+    }
+
+    @Singleton
+    @Provides
+    DaoJournal provideDaoJournal(MyRoomDatabase db) {
+        return db.daoDaoJournal();
+    }
+
+    @Singleton
+    @Provides
+    DaoPosting provideDaoPosting(MyRoomDatabase db) {
+        return db.daoDaoPosting();
+    }
+
+    @Singleton
+    @Provides
+    DaoPayment provideDaoPayment(MyRoomDatabase db) {
+        return db.daoDaoPayment();
+    }
+
+
 
 
     @Singleton

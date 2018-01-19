@@ -27,7 +27,10 @@ public class MyIntroducedStore {
     public long lastUpdated;
 
 
-    public MyIntroducedStore(@NonNull String storeUuid, String storeName, String storeLogo, Double lat, Double lon, long created, long lastUpdated) {
+    public MyIntroducedStore() {
+    }
+
+    private MyIntroducedStore(@NonNull String storeUuid, String storeName, String storeLogo, Double lat, Double lon, long created, long lastUpdated) {
         this.storeUuid = storeUuid;
         this.storeName = storeName;
         this.storeLogo = storeLogo;
