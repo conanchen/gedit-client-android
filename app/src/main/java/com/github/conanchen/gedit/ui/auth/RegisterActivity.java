@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
@@ -39,8 +38,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 注册界面   进入界面先获取问题及
@@ -159,7 +158,12 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable RegisterResponse registerResponse) {
                 Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(registerResponse));
-                registerViewModel.saveToken(registerResponse);
+                Observable.just(true)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(Schedulers.io())
+                        .subscribe(aBoolean -> {
+                            registerViewModel.saveToken(registerResponse);
+                        });
                 finish();
             }
         });

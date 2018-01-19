@@ -43,4 +43,7 @@ public class KeyValueRepository {
         ).subscribeOn(Schedulers.io());
     }
 
+    public void saveToken(KeyValue keyValue) {
+        roomFascade.daoKeyValue.save(keyValue);
+    }
 }

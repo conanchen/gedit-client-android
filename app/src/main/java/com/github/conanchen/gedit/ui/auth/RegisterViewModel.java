@@ -106,7 +106,7 @@ public class RegisterViewModel extends ViewModel {
 
 
     public void saveToken(RegisterResponse registerResponse) {
-        repositoryFascade.keyValueRepository.save(KeyValue.builder()
+        repositoryFascade.keyValueRepository.saveToken(KeyValue.builder()
                 .setKey(KeyValue.KEY.USER_CURRENT_ACCESSTOKEN)
                 .setValue(Value.builder()
                         .setVoAccessToken(VoAccessToken.builder()
