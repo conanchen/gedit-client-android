@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class ForgetPasswordActivity extends BaseActivity {
 
@@ -148,7 +149,12 @@ public class ForgetPasswordActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable RegisterResponse registerResponse) {
                 Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(registerResponse));
-                registerViewModel.saveToken(registerResponse);
+                Observable.just(true)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(Schedulers.io())
+                        .subscribe(aBoolean -> {
+                            registerViewModel.saveToken(registerResponse);
+                        });
                 finish();
             }
         });
