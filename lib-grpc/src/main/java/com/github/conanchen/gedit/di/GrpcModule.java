@@ -1,6 +1,7 @@
 package com.github.conanchen.gedit.di;
 
 
+import com.github.conanchen.gedit.grpc.fan.MyFansService;
 import com.github.conanchen.gedit.grpc.hello.HelloService;
 import com.github.conanchen.gedit.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.grpc.auth.SigninService;
@@ -31,6 +32,7 @@ public class GrpcModule {
             MyWorkinStoreService myWorkinStoreService,
             MyIntroducedStoreService myIntroducedStoreService,
             MyMemberStoreService myMemberStoreService,
+            MyFansService myFansService,
             SigninService signinService,
             RegisterService registerService
 
@@ -42,6 +44,7 @@ public class GrpcModule {
                 myWorkinStoreService,
                 myIntroducedStoreService,
                 myMemberStoreService,
+                myFansService,
                 signinService,
                 registerService);
     }
@@ -69,6 +72,12 @@ public class GrpcModule {
     @Provides
     public MyIntroducedStoreService provideMyIntroducedStoreService() {
         return new MyIntroducedStoreService();
+    }
+
+    @Singleton
+    @Provides
+    public MyFansService provideMyFansService() {
+        return new MyFansService();
     }
 
     @Singleton

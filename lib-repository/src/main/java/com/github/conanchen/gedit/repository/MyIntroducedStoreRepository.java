@@ -54,11 +54,11 @@ public class MyIntroducedStoreRepository {
             grpcFascade.myIntroducedStoreService.loadMyIntroducedStores(
                     ListMyIntroducedStoreRequest.newBuilder().build(), response -> {
                 MyIntroducedStore myStore = MyIntroducedStore.builder()
-                        .setStoreUuid(response.getOwnership().getStoreUuid())
-                        .setLat(response.getOwnership().getLocation().getLat())
-                        .setLon(response.getOwnership().getLocation().getLon())
-                        .setStoreLogo(response.getOwnership().getStoreLogo())
-                        .setStoreName(response.getOwnership().getStoreName())
+                        .setStoreUuid(response.getIntroducership().getStoreUuid())
+                        .setLat(response.getIntroducership().getLocation().getLat())
+                        .setLon(response.getIntroducership().getLocation().getLon())
+                        .setStoreLogo(response.getIntroducership().getStoreLogo())
+                        .setStoreName(response.getIntroducership().getStoreName())
                         .build();
                 roomFascade.daoMyIntroducedStore.save(myStore);
             });

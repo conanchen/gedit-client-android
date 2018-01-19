@@ -9,6 +9,7 @@ import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.RegisterViewModel;
 import com.github.conanchen.gedit.ui.auth.SigninViewModel;
 import com.github.conanchen.gedit.ui.hello.HelloViewModel;
+import com.github.conanchen.gedit.ui.my.myfans.MyFansViewModel;
 import com.github.conanchen.gedit.ui.my.myintroducedstore.MyIntroducedStoresViewModel;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoreEmployeesViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryViewModel;
@@ -102,5 +103,10 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MyStoreEmployeesViewModel.class)
     abstract ViewModel bindMyStoreEmployeesViewModel(MyStoreEmployeesViewModel myIntroducedStoresViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MyFansViewModel.class)
+    abstract ViewModel bindMyFansViewModel(MyFansViewModel myFansViewModel);
 
 }

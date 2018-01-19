@@ -88,7 +88,7 @@
             android:name=".ui.store.StoreDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyFansActivity"
+            android:name=".ui.my.myfans.MyFansActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.payment.GaptureActivity"
