@@ -9,7 +9,7 @@ import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.RegisterViewModel;
 import com.github.conanchen.gedit.ui.auth.SigninViewModel;
 import com.github.conanchen.gedit.ui.hello.HelloViewModel;
-import com.github.conanchen.gedit.ui.my.MyIntroducedStoresViewModel;
+import com.github.conanchen.gedit.ui.my.myintroducedstore.MyIntroducedStoresViewModel;
 import com.github.conanchen.gedit.ui.my.MyStoreEmployeesViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryViewModel;
 import com.github.conanchen.gedit.ui.my.MyWorkStoresViewModel;

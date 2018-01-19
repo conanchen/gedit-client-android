@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.ui.my;
+package com.github.conanchen.gedit.ui.my.myintroducedstore;
 
 import android.arch.paging.PagedListAdapter;
 import android.support.constraint.ConstraintLayout;
@@ -10,15 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.room.my.store.MyIntroducedStore;
 import com.github.conanchen.gedit.room.store.Store;
 
 /**
- * Created by Administrator on 2018/1/17.
+ * Created by Conan Chen on 2018/1/17.
  */
 
-public class MyIntroducedStoresAdapter  extends PagedListAdapter<Store, MyIntroducedStoresAdapter.ViewHolder> {
+public class MyIntroducedStoresAdapter  extends PagedListAdapter<MyIntroducedStore, MyIntroducedStoresAdapter.ViewHolder> {
     protected MyIntroducedStoresAdapter() {
-        super(Store.DIFF_CALLBACK);
+        super(MyIntroducedStore.DIFF_CALLBACK);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class MyIntroducedStoresAdapter  extends PagedListAdapter<Store, MyIntrod
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Store store = getItem(position);
+        MyIntroducedStore store = getItem(position);
         if (store != null) {
             holder.bindTo(store);
         }
@@ -51,9 +52,9 @@ public class MyIntroducedStoresAdapter  extends PagedListAdapter<Store, MyIntrod
             layout = itemView.findViewById(R.id.layout);
         }
 
-        public void bindTo(Store store) {
-            name.setText(store.address);
-            status.setText(store.uuid);
+        public void bindTo(MyIntroducedStore store) {
+            name.setText(store.storeName);
+            status.setText(store.storeUuid);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -66,7 +67,7 @@ public class MyIntroducedStoresAdapter  extends PagedListAdapter<Store, MyIntrod
     private OnItemClickListener listener;
 
     interface OnItemClickListener {
-        void OnItemClick(Store store);
+        void OnItemClick(MyIntroducedStore store);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

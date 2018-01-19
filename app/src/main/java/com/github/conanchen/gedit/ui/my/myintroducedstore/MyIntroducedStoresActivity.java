@@ -1,4 +1,4 @@
-package com.github.conanchen.gedit.ui.my;
+package com.github.conanchen.gedit.ui.my.myintroducedstore;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -11,6 +11,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
+import com.github.conanchen.gedit.room.my.store.MyIntroducedStore;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.vo.Location;
 
@@ -52,7 +53,7 @@ public class MyIntroducedStoresActivity extends BaseActivity {
 
         mAdapter.setOnItemClickListener(new MyIntroducedStoresAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClick(Store store) {
+            public void OnItemClick(MyIntroducedStore store) {
                 startActivity(new Intent(MyIntroducedStoresActivity.this, MyIntroducedStoreActivity.class));
             }
         });
@@ -60,12 +61,12 @@ public class MyIntroducedStoresActivity extends BaseActivity {
 
     private void setupViewModel() {
         myIntroduceStoresViewModel = ViewModelProviders.of(this, viewModelFactory).get(MyIntroducedStoresViewModel.class);
-        myIntroduceStoresViewModel.getLiveStores().observe(this, stores -> {
+        myIntroduceStoresViewModel.getMyIntroducedStorePagedListLiveData().observe(this, stores -> {
             if (stores != null) {
                 mAdapter.setList(stores);
             }
         });
-        myIntroduceStoresViewModel.updateLocation(Location.builder().setLat(1).setLon(2).build());
+        myIntroduceStoresViewModel.refresh();
     }
 
     @OnClick({R.id.back})

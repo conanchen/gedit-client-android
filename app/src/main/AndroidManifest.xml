@@ -73,7 +73,7 @@
             android:name=".ui.my.mystore.MyStoreActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyIntroducedStoreActivity"
+            android:name=".ui.my.myintroducedstore.MyIntroducedStoreActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.my.MyPointsActivity"
@@ -82,7 +82,7 @@
             android:name=".ui.store.ExchangePointsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyIntroducedStoresActivity"
+            android:name=".ui.my.myintroducedstore.MyIntroducedStoresActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.store.StoreDetailActivity"

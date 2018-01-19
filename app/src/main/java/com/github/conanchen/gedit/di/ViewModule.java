@@ -7,7 +7,7 @@ import com.github.conanchen.gedit.ui.auth.ForgetPasswordActivity;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.auth.RegisterActivity;
 import com.github.conanchen.gedit.ui.hello.HelloActivity;
-import com.github.conanchen.gedit.ui.my.MyIntroducedStoresActivity;
+import com.github.conanchen.gedit.ui.my.myintroducedstore.MyIntroducedStoresActivity;
 import com.github.conanchen.gedit.ui.my.MyStoreEmployeesActivity;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.my.MyWorkStoresActivity;

@@ -123,8 +123,10 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    public RoomFascade provideRoomFascade(DaoHello daoHello, DaoStore daoStore, DaoKeyValue daoKeyValue,
-                                          DaoMyStore daoMyStore) {
-        return new RoomFascade(daoHello, daoStore, daoKeyValue, daoMyStore);
+    public RoomFascade provideRoomFascade(DaoHello daoHello, DaoStore daoStore,
+                                          DaoKeyValue daoKeyValue,
+                                          DaoMyStore daoMyStore,
+                                          DaoMyIntroducedStore daoMyIntroducedStore) {
+        return new RoomFascade(daoHello, daoStore, daoKeyValue, daoMyStore,daoMyIntroducedStore);
     }
 }

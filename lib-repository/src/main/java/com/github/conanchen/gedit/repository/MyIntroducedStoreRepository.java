@@ -6,8 +6,10 @@ import android.arch.paging.PagedList;
 
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.gedit.room.my.store.MyIntroducedStore;
 import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
+import com.github.conanchen.gedit.store.introducer.grpc.ListMyIntroducedStoreRequest;
 import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
 import com.google.gson.Gson;
 
@@ -47,21 +49,22 @@ public class MyIntroducedStoreRepository {
             .setPageSize(20).build();
 
 
-    public LiveData<PagedList<MyStore>> loadMyStores(Long times) {
+    public LiveData<PagedList<MyIntroducedStore>> loadMyIntroducedStores(Long times) {
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.myStoreService.loadMyStores(ListMyStoreRequest.newBuilder().build(), response -> {
-                MyStore myStore = MyStore.builder()
+            grpcFascade.myIntroducedStoreService.loadMyIntroducedStores(
+                    ListMyIntroducedStoreRequest.newBuilder().build(), response -> {
+                MyIntroducedStore myStore = MyIntroducedStore.builder()
                         .setStoreUuid(response.getOwnership().getStoreUuid())
                         .setLat(response.getOwnership().getLocation().getLat())
                         .setLon(response.getOwnership().getLocation().getLon())
                         .setStoreLogo(response.getOwnership().getStoreLogo())
                         .setStoreName(response.getOwnership().getStoreName())
                         .build();
-                roomFascade.daoMyStore.save(myStore);
+                roomFascade.daoMyIntroducedStore.save(myStore);
             });
         });
 
-        return (new LivePagedListBuilder(roomFascade.daoMyStore.listLivePagedMyStore(), pagedListConfig))
+        return (new LivePagedListBuilder(roomFascade.daoMyIntroducedStore.listLivePagedMyStore(), pagedListConfig))
                 .build();
     }
 }

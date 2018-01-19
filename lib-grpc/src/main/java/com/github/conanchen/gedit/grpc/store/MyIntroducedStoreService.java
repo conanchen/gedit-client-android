@@ -2,11 +2,16 @@ package com.github.conanchen.gedit.grpc.store;
 
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
-import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
+import com.github.conanchen.gedit.store.introducer.grpc.Introducership;
+import com.github.conanchen.gedit.store.introducer.grpc.IntroducershipResponse;
+import com.github.conanchen.gedit.store.introducer.grpc.ListMyIntroducedStoreRequest;
+import com.github.conanchen.gedit.store.introducer.grpc.StoreIntroducerApiGrpc;
 import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
-import com.github.conanchen.gedit.store.owner.grpc.StoreOwnerApiGrpc;
+
+import java.util.UUID;
 
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
@@ -20,7 +25,7 @@ public class MyIntroducedStoreService {
     private final static String TAG = MyIntroducedStoreService.class.getSimpleName();
 
     public interface OwnershipCallBack {
-        void onOwnershipResponse(OwnershipResponse response);
+        void onIntroducershipResponse(IntroducershipResponse response);
 
     }
 
@@ -35,23 +40,27 @@ public class MyIntroducedStoreService {
 
 
 
-    public void loadMyIntroducedStores(ListMyStoreRequest request,OwnershipCallBack callBack) {
+    public void loadMyIntroducedStores(ListMyIntroducedStoreRequest request, OwnershipCallBack callBack) {
         ManagedChannel channel = getManagedChannel();
-        StoreOwnerApiGrpc.StoreOwnerApiStub storeOwnerApiStub = StoreOwnerApiGrpc.newStub(channel);
-        Log.i("-=-=-", "进来了没");
-        storeOwnerApiStub.listMyStore(request, new StreamObserver<OwnershipResponse>() {
+        StoreIntroducerApiGrpc.StoreIntroducerApiStub storeIntroducerApiStub = StoreIntroducerApiGrpc.newStub(channel);
+        storeIntroducerApiStub.listMyIntroducedStore(request, new StreamObserver<IntroducershipResponse>() {
             @Override
-            public void onNext(OwnershipResponse value) {
-                Log.i("-=-=-", "onNext");
-                callBack.onOwnershipResponse(value);
+            public void onNext(IntroducershipResponse value) {
+                callBack.onIntroducershipResponse(value);
             }
 
             @Override
             public void onError(Throwable t) {
                 Log.i("-=-=-", "onError");
-                callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
+                callBack.onIntroducershipResponse(IntroducershipResponse.newBuilder()
                         .setStatus(Status.newBuilder().setCode("FAILED")
                                 .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
+                                .build())
+                        .setOwnership(Introducership.newBuilder()
+                                .setStoreUuid(UUID.randomUUID().toString())
+                                .setLocation(Location.newBuilder().setLat(234).setLon(232).build())
+                                .setStoreLogo("logo url"+System.currentTimeMillis())
+                                .setStoreName("strore name "+ System.currentTimeMillis())
                                 .build())
                         .build());
             }
@@ -59,9 +68,15 @@ public class MyIntroducedStoreService {
             @Override
             public void onCompleted() {
                 Log.i("-=-=-", "onCompleted");
-                callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
+                callBack.onIntroducershipResponse(IntroducershipResponse.newBuilder()
                         .setStatus(Status.newBuilder().setCode("onCompleted()")
                                 .setDetails(String.format("onCompleted（）"))
+                                .build())
+                        .setOwnership(Introducership.newBuilder()
+                                .setStoreUuid(UUID.randomUUID().toString())
+                                .setLocation(Location.newBuilder().setLat(234).setLon(232).build())
+                                .setStoreLogo("logo url"+System.currentTimeMillis())
+                                .setStoreName("strore name "+ System.currentTimeMillis())
                                 .build())
                         .build());
             }
