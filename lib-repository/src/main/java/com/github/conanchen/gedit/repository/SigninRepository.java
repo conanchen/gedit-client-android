@@ -10,7 +10,7 @@ import com.github.conanchen.gedit.grpc.auth.SigninService;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.room.kv.Value;
-import com.github.conanchen.gedit.vo.SigninResponse;
+import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.gson.Gson;
 
@@ -77,12 +77,12 @@ public class SigninRepository {
                                     public void accept(@NonNull Long rowId) throws Exception {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
-                                            setValue(SigninResponse.builder()
+                                            setValue(SigninResponse.newBuilder()
                                                     .setAccessToken(response.getAccessToken())
                                                     .setExpiresIn(response.getExpiresIn())
                                                     .build());
                                         } else {
-                                            setValue(SigninResponse.builder()
+                                            setValue(SigninResponse.newBuilder()
                                                     .setAccessToken(response.getStatus().getCode())
                                                     .setExpiresIn(response.getStatus().getDetails())
                                                     .build());

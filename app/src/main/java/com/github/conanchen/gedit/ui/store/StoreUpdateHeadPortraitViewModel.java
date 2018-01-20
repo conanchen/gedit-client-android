@@ -6,10 +6,10 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
+import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.gedit.repository.StoreRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-import com.github.conanchen.gedit.vo.StoreUpdateResponse;
 
 import javax.inject.Inject;
 
@@ -20,7 +20,7 @@ import javax.inject.Inject;
 public class StoreUpdateHeadPortraitViewModel extends ViewModel {
     @VisibleForTesting
     final MutableLiveData<StoreUpdateInfo> storeUpdateInfoMutableLiveData = new MutableLiveData<>();
-    private final LiveData<StoreUpdateResponse> updateResponseLiveData;
+    private final LiveData<UpdateStoreResponse> updateResponseLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
@@ -35,7 +35,7 @@ public class StoreUpdateHeadPortraitViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public LiveData<StoreUpdateResponse> getStoreUpdateResponseLiveData() {
+    public LiveData<UpdateStoreResponse> getStoreUpdateResponseLiveData() {
         return updateResponseLiveData;
     }
 

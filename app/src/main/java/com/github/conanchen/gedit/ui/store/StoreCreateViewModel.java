@@ -7,9 +7,9 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.repository.StoreRepository;
+import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-import com.github.conanchen.gedit.vo.StoreCreateResponse;
 
 import javax.inject.Inject;
 
@@ -20,7 +20,7 @@ import javax.inject.Inject;
 public class StoreCreateViewModel extends ViewModel {
     @VisibleForTesting
     final MutableLiveData<StoreCreateInfo> storeCreateInfoMutableLiveData = new MutableLiveData<>();
-    private final LiveData<StoreCreateResponse> storeCreateResponseLiveData;
+    private final LiveData<CreateStoreResponse> storeCreateResponseLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
@@ -37,7 +37,7 @@ public class StoreCreateViewModel extends ViewModel {
 
 
     @VisibleForTesting
-    public LiveData<StoreCreateResponse> getStoreCreateResponseLiveData() {
+    public LiveData<CreateStoreResponse> getStoreCreateResponseLiveData() {
         return storeCreateResponseLiveData;
     }
 

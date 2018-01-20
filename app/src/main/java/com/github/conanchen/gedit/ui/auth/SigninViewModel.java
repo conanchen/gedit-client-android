@@ -8,8 +8,8 @@ import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.grpc.auth.SigninInfo;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
+import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-import com.github.conanchen.gedit.vo.SigninResponse;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;

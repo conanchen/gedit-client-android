@@ -7,18 +7,17 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Location;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
-import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.gedit.grpc.store.StoreService;
-import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
-import com.github.conanchen.gedit.vo.StoreCreateResponse;
-import com.github.conanchen.gedit.vo.StoreUpdateResponse;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
+import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -104,8 +103,8 @@ public class StoreRepository {
         return roomFascade.daoStore.findLive(uuid);
     }
 
-    public LiveData<StoreCreateResponse> createStore(StoreCreateInfo storeCreateInfo) {
-        return new LiveData<StoreCreateResponse>() {
+    public LiveData<CreateStoreResponse> createStore(StoreCreateInfo storeCreateInfo) {
+        return new LiveData<CreateStoreResponse>() {
             @Override
             protected void onActive() {
                 grpcFascade.storeService.storeCreate(storeCreateInfo, new StoreService.StoreCreateCallback() {
@@ -139,16 +138,20 @@ public class StoreRepository {
                                     public void accept(@NonNull Long rowId) throws Exception {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
-                                            setValue(StoreCreateResponse.builder()
-                                                    .setStausCode("OK")
-                                                    .setStatusDetail("Create Store successfully")
-                                                    .setStoreUuid("set jia shu ju uuid")
+                                            setValue(CreateStoreResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode("OK")
+                                                            .setDetails("Create Store successfully")
+                                                            .build())
+                                                    .setUuid("set jia shu ju uuid")
                                                     .build());
                                         } else {
-                                            setValue(StoreCreateResponse.builder()
-                                                    .setStausCode(createResponse.getStatus().getCode())
-                                                    .setStatusDetail(createResponse.getStatus().getDetails())
-                                                    .setStoreUuid(createResponse.getUuid())
+                                            setValue(CreateStoreResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode("Fail")
+                                                            .setDetails("Create Store Fail")
+                                                            .build())
+                                                    .setUuid("set jia shu ju uuid")
                                                     .build());
                                         }
                                     }
@@ -161,9 +164,9 @@ public class StoreRepository {
         };
     }
 
-    public LiveData<StoreUpdateResponse> updateStore(StoreUpdateInfo storeUpdateInfo) {
+    public LiveData<UpdateStoreResponse> updateStore(StoreUpdateInfo storeUpdateInfo) {
         Log.i(TAG, "enter updateStoreWith()");
-        return new LiveData<StoreUpdateResponse>() {
+        return new LiveData<UpdateStoreResponse>() {
             @Override
             protected void onActive() {
                 grpcFascade.storeService.updateStore(storeUpdateInfo, new StoreService.UpdateCallback() {
@@ -186,16 +189,18 @@ public class StoreRepository {
                                     public void accept(@NonNull Long rowId) throws Exception {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
-                                            setValue(StoreUpdateResponse.builder()
-                                                    .setStausCode("OK")
-                                                    .setStatusDetail("update Store successfully")
-                                                    .setStoreUuid(response.getUuid())
+                                            setValue(UpdateStoreResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                            .setDetails("update Store successfully")
+                                                            .build())
+                                                    .setUuid(response.getUuid())
                                                     .build());
                                         } else {
-                                            setValue(StoreUpdateResponse.builder()
-                                                    .setStausCode(response.getStatus().getCode())
-                                                    .setStatusDetail(response.getStatus().getDetails())
-                                                    .setStoreUuid(response.getUuid())
+                                            setValue(UpdateStoreResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("FAIL")
+                                                            .setDetails("bottom fail")
+                                                            .build())
+                                                    .setUuid(response.getUuid())
                                                     .build());
                                         }
                                     }
@@ -213,8 +218,8 @@ public class StoreRepository {
      * @param storeUpdateInfo
      * @return
      */
-    public LiveData<StoreUpdateResponse> updateHeadPortrait(StoreUpdateInfo storeUpdateInfo) {
-        return new LiveData<StoreUpdateResponse>() {
+    public LiveData<UpdateStoreResponse> updateHeadPortrait(StoreUpdateInfo storeUpdateInfo) {
+        return new LiveData<UpdateStoreResponse>() {
             @Override
             protected void onActive() {
                 grpcFascade.storeService.updateHeadPortrait(storeUpdateInfo, new StoreService.UpdateHeadPortraitCallback() {
@@ -241,16 +246,18 @@ public class StoreRepository {
                                     public void accept(@NonNull Long rowId) throws Exception {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
-                                            setValue(StoreUpdateResponse.builder()
-                                                    .setStausCode("OK")
-                                                    .setStatusDetail("update head portrait Store successfully")
-                                                    .setStoreUuid(response.getUuid())
+                                            setValue(UpdateStoreResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                            .setDetails("update Store successfully")
+                                                            .build())
+                                                    .setUuid(response.getUuid())
                                                     .build());
                                         } else {
-                                            setValue(StoreUpdateResponse.builder()
-                                                    .setStausCode(response.getStatus().getCode())
-                                                    .setStatusDetail(response.getStatus().getDetails())
-                                                    .setStoreUuid(response.getUuid())
+                                            setValue(UpdateStoreResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("FAIL")
+                                                            .setDetails("bottom fail")
+                                                            .build())
+                                                    .setUuid(response.getUuid())
                                                     .build());
                                         }
                                     }
@@ -268,8 +275,8 @@ public class StoreRepository {
      * @param storeUpdateInfo
      * @return
      */
-    public LiveData<StoreUpdateResponse> updateAddress(StoreUpdateInfo storeUpdateInfo) {
-        return new LiveData<StoreUpdateResponse>() {
+    public LiveData<UpdateStoreResponse> updateAddress(StoreUpdateInfo storeUpdateInfo) {
+        return new LiveData<UpdateStoreResponse>() {
             @Override
             protected void onActive() {
                 grpcFascade.storeService.updateAddress(storeUpdateInfo, new StoreService.UpdateHeadPortraitCallback() {
@@ -291,16 +298,18 @@ public class StoreRepository {
                                     public void accept(@NonNull Long rowId) throws Exception {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
-                                            setValue(StoreUpdateResponse.builder()
-                                                    .setStausCode("OK")
-                                                    .setStatusDetail("update head portrait Store successfully")
-                                                    .setStoreUuid(response.getUuid())
+                                            setValue(UpdateStoreResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                            .setDetails("update Store successfully")
+                                                            .build())
+                                                    .setUuid(response.getUuid())
                                                     .build());
                                         } else {
-                                            setValue(StoreUpdateResponse.builder()
-                                                    .setStausCode(response.getStatus().getCode())
-                                                    .setStatusDetail(response.getStatus().getDetails())
-                                                    .setStoreUuid(response.getUuid())
+                                            setValue(UpdateStoreResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("FAIL")
+                                                            .setDetails("bottom fail")
+                                                            .build())
+                                                    .setUuid(response.getUuid())
                                                     .build());
                                         }
                                     }
