@@ -1,63 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.conanchen.gedit.ui.my.mystore.MyStoreActivity">
+    android:fitsSystemWindows="true"
+    tools:context="com.github.conanchen.gedit.ui.hello.HelloActivity">
 
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#4000">
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:expanded="false">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp">
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
 
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/title"
-                app:layout_constraintTop_toTopOf="parent"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="我的商铺详情"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/back"
-                app:layout_constraintLeft_toRightOf="@+id/back"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/back"/>
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp">
 
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"
-                android:visibility="invisible"
-                app:layout_constraintLeft_toRightOf="@+id/title"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.Toolbar>
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/add"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/title"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/title"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="我的商铺详情"
+                        android:textAlignment="center"
+                        app:layout_constraintBottom_toBottomOf="@+id/back"
+                        app:layout_constraintLeft_toRightOf="@+id/back"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/back" />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/add"
+                        android:visibility="invisible"
+                        app:layout_constraintLeft_toRightOf="@+id/title"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginBottom="16dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -72,7 +90,7 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/view_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
             </RelativeLayout>
 
             <android.support.v7.widget.AppCompatTextView
@@ -83,7 +101,7 @@
                 android:text="21000"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/view4"
-                app:layout_constraintTop_toBottomOf="@+id/banner"/>
+                app:layout_constraintTop_toBottomOf="@+id/banner" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/total_money_desc"
@@ -92,7 +110,7 @@
                 android:text="总营业额(元)"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/view4"
-                app:layout_constraintTop_toBottomOf="@+id/total_money"/>
+                app:layout_constraintTop_toBottomOf="@+id/total_money" />
 
             <View
                 android:id="@+id/view4"
@@ -102,7 +120,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/view1"
                 app:layout_constraintLeft_toRightOf="@+id/total_money"
                 app:layout_constraintRight_toLeftOf="@+id/today_money"
-                app:layout_constraintTop_toTopOf="@+id/total_money"/>
+                app:layout_constraintTop_toTopOf="@+id/total_money" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/today_money"
@@ -112,7 +130,7 @@
                 android:text="21000"
                 app:layout_constraintLeft_toRightOf="@+id/view4"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/banner"/>
+                app:layout_constraintTop_toBottomOf="@+id/banner" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/today_money_desc"
@@ -121,7 +139,7 @@
                 android:text="今日营业额(元)"
                 app:layout_constraintLeft_toRightOf="@+id/view4"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/today_money"/>
+                app:layout_constraintTop_toBottomOf="@+id/today_money" />
 
             <View
                 android:id="@+id/view5"
@@ -131,7 +149,7 @@
                 android:background="#000"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/total_money_desc"/>
+                app:layout_constraintTop_toBottomOf="@+id/total_money_desc" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/total_integral"
@@ -142,7 +160,7 @@
                 android:text="21000"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/view4"
-                app:layout_constraintTop_toBottomOf="@+id/view5"/>
+                app:layout_constraintTop_toBottomOf="@+id/view5" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/total_integral_desc"
@@ -151,7 +169,7 @@
                 android:text="总积分"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/view4"
-                app:layout_constraintTop_toBottomOf="@+id/total_integral"/>
+                app:layout_constraintTop_toBottomOf="@+id/total_integral" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/today_integral"
@@ -162,7 +180,7 @@
                 android:text="21000"
                 app:layout_constraintLeft_toRightOf="@id/view4"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view5"/>
+                app:layout_constraintTop_toBottomOf="@+id/view5" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/today_integral_desc"
@@ -171,7 +189,7 @@
                 android:text="今日积分"
                 app:layout_constraintLeft_toRightOf="@+id/view4"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/total_integral"/>
+                app:layout_constraintTop_toBottomOf="@+id/total_integral" />
 
             <View
                 android:id="@+id/view1"
@@ -179,7 +197,7 @@
                 android:layout_height="5dp"
                 android:layout_marginTop="10dp"
                 android:background="#3000"
-                app:layout_constraintTop_toBottomOf="@id/total_integral_desc"/>
+                app:layout_constraintTop_toBottomOf="@id/total_integral_desc" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/my_employees"
@@ -195,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:src="@mipmap/add"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/my_employees_desc"
@@ -205,7 +223,7 @@
                     android:padding="10dp"
                     android:text="我的员工"
                     app:layout_constraintLeft_toRightOf="@+id/my_employees_icon"
-                    app:layout_constraintRight_toLeftOf="@+id/my_employees_right"/>
+                    app:layout_constraintRight_toLeftOf="@+id/my_employees_right" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/my_employees_right"
@@ -214,13 +232,13 @@
                     android:padding="10dp"
                     android:src="@mipmap/add"
                     app:layout_constraintLeft_toRightOf="@+id/my_employees_desc"
-                    app:layout_constraintRight_toRightOf="parent"/>
+                    app:layout_constraintRight_toRightOf="parent" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#3000"
-                    app:layout_constraintTop_toBottomOf="@+id/my_employees_icon"/>
+                    app:layout_constraintTop_toBottomOf="@+id/my_employees_icon" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -237,7 +255,7 @@
                     android:padding="10dp"
                     android:src="@mipmap/add"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view2"/>
+                    app:layout_constraintTop_toBottomOf="@id/view2" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/code_desc"
@@ -247,7 +265,7 @@
                     android:padding="10dp"
                     android:text="收款二维码"
                     app:layout_constraintLeft_toRightOf="@+id/code_icon"
-                    app:layout_constraintRight_toLeftOf="@+id/code_right"/>
+                    app:layout_constraintRight_toLeftOf="@+id/code_right" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/code_right"
@@ -256,7 +274,7 @@
                     android:padding="10dp"
                     android:src="@mipmap/add"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view2"/>
+                    app:layout_constraintTop_toBottomOf="@id/view2" />
             </android.support.constraint.ConstraintLayout>
 
             <View
@@ -264,7 +282,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
                 android:background="#3000"
-                app:layout_constraintTop_toBottomOf="@id/code"/>
+                app:layout_constraintTop_toBottomOf="@id/code" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/address"
@@ -278,7 +296,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:src="@mipmap/add"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/address_desc"
@@ -290,7 +308,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/address_icon"
                     app:layout_constraintLeft_toRightOf="@+id/address_icon"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/address_icon"/>
+                    app:layout_constraintTop_toTopOf="@+id/address_icon" />
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
@@ -305,7 +323,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:src="@mipmap/add"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/phone_desc"
@@ -316,7 +334,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/phone_icon"
                     app:layout_constraintLeft_toRightOf="@+id/phone_icon"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/phone_icon"/>
+                    app:layout_constraintTop_toTopOf="@+id/phone_icon" />
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
@@ -332,7 +350,7 @@
                     android:layout_marginTop="10dp"
                     android:padding="10dp"
                     android:src="@mipmap/add"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/time_desc"
@@ -343,7 +361,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/time_icon"
                     app:layout_constraintLeft_toRightOf="@id/time_icon"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/time_icon"/>
+                    app:layout_constraintTop_toTopOf="@id/time_icon" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -360,7 +378,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:src="@mipmap/add"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/prompt_desc"
@@ -371,7 +389,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/prompt_icon"
                     app:layout_constraintLeft_toRightOf="@+id/prompt_icon"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/prompt_icon"/>
+                    app:layout_constraintTop_toTopOf="@id/prompt_icon" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -381,11 +399,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="店铺介绍：XXXXXXXXXXXXXXX"
+                android:text="店铺介绍：不依赖设置的回调支付URL。商户后台系统先调用微信支付的统一下单接口，微信后台系统返回链接参数code_url，商户后台系统将code_url值生成二维码图片，用户使用微信客户端扫码后发起支付。不依赖设置的回调支付URL。商户后台系统先调用微信支付的统一下单接口，微信后台系统返回链接参数code_url，商户后台系统将code_url值生成二维码图片，用户使用微信客户端扫码后发起支付。不依赖设置的回调支付URL。商户后台系统先调用微信支付的统一下单接口，微信后台系统返回链接参数code_url，商户后台系统将code_url值生成二维码图片，用户使用微信客户端扫码后发起支付。"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/prompt"/>
+                app:layout_constraintTop_toBottomOf="@+id/prompt" />
 
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:textAlignment="center"
+                android:text="~~~~~这是我的底线~~~~~"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/store_introduce" />
         </android.support.constraint.ConstraintLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>
 
-</android.support.constraint.ConstraintLayout>
+
