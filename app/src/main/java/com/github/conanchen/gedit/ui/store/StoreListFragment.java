@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.amap.livelocation.AmapLiveLocation;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.gedit.vo.Location;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -98,7 +98,7 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
                             Snackbar.make(recyclerView, text, Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             if (aMapLocation.getLatitude() > 0 && aMapLocation.getLongitude() > 0) {
-                                storeListViewModel.updateLocation(Location.builder()
+                                storeListViewModel.updateLocation(Location.newBuilder()
                                         .setLat(aMapLocation.getLatitude())
                                         .setLon(aMapLocation.getLongitude()).build());
                             }
