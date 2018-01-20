@@ -59,7 +59,7 @@ public class StoreUpdateInfo {
                 missing += " uuid ";
             }
             if (name == null) {
-                missing += " uuid ";
+                missing += " name ";
             }
             if (value == null) {
                 missing += " value ";
