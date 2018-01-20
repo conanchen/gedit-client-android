@@ -6,6 +6,7 @@ import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.gedit.grpc.store.StoreService;
@@ -16,7 +17,6 @@ import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
-import com.github.conanchen.gedit.vo.Location;
 import com.github.conanchen.gedit.vo.StoreCreateResponse;
 import com.github.conanchen.gedit.vo.StoreUpdateResponse;
 import com.google.gson.Gson;
@@ -63,7 +63,10 @@ public class StoreRepository {
         //  call grpc api to refresh near stores
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
             grpcFascade.storeService.searchStoresNearAt(
-                    SearchStoreRequest.newBuilder().setLat(location.lat).setLon(location.lon).build(),
+                    SearchStoreRequest.newBuilder()
+                            .setLat(location.getLat())
+                            .setLon(location.getLon())
+                            .build(),
                     response -> {
                         //TODO 填写完整信息
                         Store s = Store.builder()

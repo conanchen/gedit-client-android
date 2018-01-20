@@ -7,10 +7,10 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
+import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.repository.StoreRepository;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-import com.github.conanchen.gedit.vo.Location;
 
 import javax.inject.Inject;
 

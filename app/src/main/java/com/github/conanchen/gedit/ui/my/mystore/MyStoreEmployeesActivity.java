@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.gedit.vo.Location;
 
 import javax.inject.Inject;
 
@@ -65,7 +65,7 @@ public class MyStoreEmployeesActivity extends BaseActivity {
             }
         });
 
-        myStoreEmployeesViewModel.updateLocation(Location.builder().setLat(1).setLon(2).build());
+        myStoreEmployeesViewModel.updateLocation(Location.newBuilder().setLat(1).setLon(2).build());
     }
 
     @OnClick(R.id.back)

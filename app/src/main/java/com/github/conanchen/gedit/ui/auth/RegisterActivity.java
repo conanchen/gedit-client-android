@@ -162,7 +162,7 @@ public class RegisterActivity extends BaseActivity {
                         .subscribeOn(Schedulers.computation())
                         .observeOn(Schedulers.io())
                         .subscribe(aBoolean -> {
-                            registerViewModel.saveToken(registerResponse);
+                            registerViewModel.saveRegisterOKAccessToken(registerResponse);
                         });
                 finish();
             }

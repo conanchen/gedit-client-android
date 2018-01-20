@@ -48,7 +48,7 @@ public class MyPointsActivity extends AppCompatActivity {
                 break;
             case R.id.right:
                 //兑换
-                startActivity(new Intent(MyPointsActivity.this, ExchangePointsActivity.class));
+                ARouter.getInstance().build("/app/ExchangePointsActivity").navigation();
                 break;
             case R.id.exchange_points:
                 //跳转到积分兑换界面
