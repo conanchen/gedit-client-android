@@ -148,7 +148,6 @@ public class ForgetPasswordActivity extends BaseActivity {
         registerViewModel.getRegisterLiveData().observe(this, new Observer<RegisterResponse>() {
             @Override
             public void onChanged(@Nullable RegisterResponse registerResponse) {
-                Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(registerResponse));
                 registerViewModel.saveRegisterOKAccessToken(registerResponse);
                 finish();
             }

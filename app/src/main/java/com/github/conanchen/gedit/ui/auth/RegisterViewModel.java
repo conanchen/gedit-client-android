@@ -18,6 +18,7 @@ import com.github.conanchen.utils.vo.VoAccessToken;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/1/13.
@@ -106,14 +107,19 @@ public class RegisterViewModel extends ViewModel {
 
 
     public void saveRegisterOKAccessToken(RegisterResponse registerResponse) {
-        repositoryFascade.keyValueRepository.saveToken(KeyValue.builder()
-                .setKey(KeyValue.KEY.USER_CURRENT_ACCESSTOKEN)
-                .setValue(Value.builder()
-                        .setVoAccessToken(VoAccessToken.builder()
-                                .setAccessToken(registerResponse.getAccessToken())
-                                .setExpiresIn(registerResponse.getExpiresIn())
-                                .build())
-                        .build())
-                .build());
+        Observable.just(true)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.io())
+                .subscribe(aBoolean -> {
+                    repositoryFascade.keyValueRepository.saveToken(KeyValue.builder()
+                            .setKey(KeyValue.KEY.USER_CURRENT_ACCESSTOKEN)
+                            .setValue(Value.builder()
+                                    .setVoAccessToken(VoAccessToken.builder()
+                                            .setAccessToken(registerResponse.getAccessToken())
+                                            .setExpiresIn(registerResponse.getExpiresIn())
+                                            .build())
+                                    .build())
+                            .build());
+                });
     }
 }

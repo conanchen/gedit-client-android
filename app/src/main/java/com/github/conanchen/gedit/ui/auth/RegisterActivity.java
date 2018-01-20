@@ -157,13 +157,7 @@ public class RegisterActivity extends BaseActivity {
         registerViewModel.getRegisterLiveData().observe(this, new Observer<RegisterResponse>() {
             @Override
             public void onChanged(@Nullable RegisterResponse registerResponse) {
-                Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(registerResponse));
-                Observable.just(true)
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(Schedulers.io())
-                        .subscribe(aBoolean -> {
-                            registerViewModel.saveRegisterOKAccessToken(registerResponse);
-                        });
+                registerViewModel.saveRegisterOKAccessToken(registerResponse);
                 finish();
             }
         });
