@@ -24,6 +24,7 @@ import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
+import com.github.conanchen.gedit.ui.my.myinvestpayment.BuyInvestPaymentActivity;
 import com.github.conanchen.gedit.ui.my.myinvestpayment.MyInvestPaymentsActivity;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
 import com.github.conanchen.gedit.ui.payment.PayeeQRCodeActivity;
@@ -227,7 +228,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
             startActivity(new Intent(this, PayeeQRCodeActivity.class));
         } else {
             //录单
-            startActivity(new Intent(this, MyInvestPaymentsActivity.class));
+            startActivity(new Intent(this, BuyInvestPaymentActivity.class));
         }
     }
 
