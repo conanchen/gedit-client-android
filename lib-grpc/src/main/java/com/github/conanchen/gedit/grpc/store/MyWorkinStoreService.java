@@ -27,7 +27,7 @@ public class MyWorkinStoreService {
 
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
-                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT)
+                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_AUTH)
                 .usePlaintext(true)
                 //                .keepAliveTime(60, TimeUnit.SECONDS)
                 .build();

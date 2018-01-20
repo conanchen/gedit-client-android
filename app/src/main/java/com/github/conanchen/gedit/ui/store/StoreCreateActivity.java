@@ -47,7 +47,7 @@ public class StoreCreateActivity extends BaseActivity {
     @BindView(R.id.name)
     AppCompatEditText mNameEditText;
 
-    @BindView(R.id.introducerPhone)
+    @BindView(R.id.districtUuid)
     AppCompatEditText introducerPhone;
 
 
@@ -88,6 +88,7 @@ public class StoreCreateActivity extends BaseActivity {
                     //创建商铺
                     String storeName = mNameEditText.getText().toString().trim();
                     String storeTel = introducerPhone.getText().toString().trim();
+
 //创建店铺需提供名称、地理位置、行政区编号、详细地址，其他内容通过单项修改完善
 //        string name = 1; //unique
 //        Location location = 4;
@@ -97,8 +98,8 @@ public class StoreCreateActivity extends BaseActivity {
 
                     StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
                             .setName(storeName)
-                            .setLat(11.0)
-                            .setLon(22.0)
+                            .setLat(104.056508)
+                            .setLon(30.733657)
                             .setDistrictUuid("441400")
                             .setDetailAddress("si chun sheng ")
                             .build();
@@ -129,6 +130,7 @@ public class StoreCreateActivity extends BaseActivity {
             Log.i(TAG, message);
             if (storeCreateResponse != null) {
                 startActivity(new Intent(StoreCreateActivity.this, MyStoreActivity.class));
+                finish();
             }
         });
 

@@ -29,7 +29,7 @@ public class MyFansService {
 
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
-                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT)
+                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_AUTH)
                 .usePlaintext(true)
                 //                .keepAliveTime(60, TimeUnit.SECONDS)
                 .build();
@@ -56,7 +56,7 @@ public class MyFansService {
                                 .build())
                         .setFanship( com.github.conanchen.gedit.user.fans.grpc.Fanship.newBuilder()
                                 .setFanUuid("fanUuid"+System.currentTimeMillis())
-                                .setName("fanname "+System.currentTimeMillis())
+                                .setFanName("fanname "+System.currentTimeMillis())
                                 .setCreated(System.currentTimeMillis())
                                 .build())
                         .build());
@@ -71,7 +71,7 @@ public class MyFansService {
                                 .build())
                         .setFanship( com.github.conanchen.gedit.user.fans.grpc.Fanship.newBuilder()
                                 .setFanUuid("fanUuid"+System.currentTimeMillis())
-                                .setName("fanname "+System.currentTimeMillis())
+                                .setFanName("fanname "+System.currentTimeMillis())
                                 .setCreated(System.currentTimeMillis())
                                 .build())
                         .build());

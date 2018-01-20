@@ -24,7 +24,8 @@ android {
             signingConfig signingConfigs.debug
             buildConfigField 'String', 'ENVIRONMENT', '"PRODUCTION"'
             buildConfigField 'String', 'GRPC_SERVER_HOST', '"118.178.237.46"'
-            buildConfigField 'Integer', 'GRPC_SERVER_PORT', '9980'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_AUTH', '9980'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_STORE', '8980'
         }
 
         debug {
@@ -35,7 +36,8 @@ android {
 //            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.0.103"' //本机家里
             buildConfigField 'String', 'GRPC_SERVER_HOST', '"118.178.237.46"' //本机公司
 //            buildConfigField 'String', 'GRPC_SERVER_HOST', '"172.18.31.159"'  //PC公司
-            buildConfigField 'Integer', 'GRPC_SERVER_PORT', '9980'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_AUTH', '9980'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_STORE', '8980'
         }
     }
 

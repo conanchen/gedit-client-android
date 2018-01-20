@@ -62,7 +62,7 @@ public class StoreService {
 
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
-                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT)
+                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_AUTH)
                 .usePlaintext(true)
                 //                .keepAliveTime(60, TimeUnit.SECONDS)
                 .build();
@@ -124,6 +124,9 @@ public class StoreService {
         ManagedChannel channel = getManagedChannel();
         Log.i(TAG, "enter service -- storeCreate");
 
+        Log.i("-=-=-=-***", "name:" + storeCreateInfo.name + "---lon:" + storeCreateInfo.lon + "---lat:" + storeCreateInfo.lat
+                + "---districtUuid:" + storeCreateInfo.districtUuid + "---detailAddress:" + storeCreateInfo.detailAddress);
+
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
@@ -154,7 +157,7 @@ public class StoreService {
 
                             @Override
                             public void onCompleted() {
-                                Log.i("-=-=-=---", "onCompleted" );
+                                Log.i("-=-=-=---", "onCompleted");
                             }
                         });
 

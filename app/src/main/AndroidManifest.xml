@@ -76,7 +76,7 @@
             android:name=".ui.my.myintroducedstore.MyIntroducedStoreActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.my.MyPointsActivity"
+            android:name=".ui.my.mypoints.MyPointsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.store.ExchangePointsActivity"

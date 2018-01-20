@@ -48,7 +48,7 @@ public class MyFansRepository {
                     ListMyFanRequest.newBuilder().build(), response -> {
                         Fanship myFanship = Fanship.builder()
                                 .setFanUuid(response.getFanship().getFanUuid())
-                                .setFanName(response.getFanship().getName())
+                                .setFanName(response.getFanship().getFanName())
                                 .setCreated(response.getFanship().getCreated())
                                 .build();
                         roomFascade.daoFanship.save(myFanship);

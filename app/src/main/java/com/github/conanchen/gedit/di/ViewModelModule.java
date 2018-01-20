@@ -9,12 +9,16 @@ import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.RegisterViewModel;
 import com.github.conanchen.gedit.ui.auth.SigninViewModel;
 import com.github.conanchen.gedit.ui.hello.HelloViewModel;
+import com.github.conanchen.gedit.ui.my.MySummaryViewModel;
 import com.github.conanchen.gedit.ui.my.myfans.MyFansViewModel;
 import com.github.conanchen.gedit.ui.my.myintroducedstore.MyIntroducedStoresViewModel;
+import com.github.conanchen.gedit.ui.my.mypoints.CanConsumptionPointsFragmentViewModel;
+import com.github.conanchen.gedit.ui.my.mypoints.CanExchangePointsFragmentViewModel;
+import com.github.conanchen.gedit.ui.my.mypoints.MyPointsViewModel;
+import com.github.conanchen.gedit.ui.my.mypoints.TodayAddPointsFragmentViewModel;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoreEmployeesViewModel;
-import com.github.conanchen.gedit.ui.my.MySummaryViewModel;
-import com.github.conanchen.gedit.ui.my.myworkinstore.MyWorkStoresViewModel;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoresViewModel;
+import com.github.conanchen.gedit.ui.my.myworkinstore.MyWorkStoresViewModel;
 import com.github.conanchen.gedit.ui.store.StoreCreateViewModel;
 import com.github.conanchen.gedit.ui.store.StoreListViewModel;
 import com.github.conanchen.gedit.ui.store.StoreUpdateHeadPortraitViewModel;
@@ -108,5 +112,27 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MyFansViewModel.class)
     abstract ViewModel bindMyFansViewModel(MyFansViewModel myFansViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MyPointsViewModel.class)
+    abstract ViewModel bindMyPointsViewModel(MyPointsViewModel myPointsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TodayAddPointsFragmentViewModel.class)
+    abstract ViewModel bindTodayAddPointsFragmentViewModel(TodayAddPointsFragmentViewModel todayAddPointsFragmentViewModel);
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CanExchangePointsFragmentViewModel.class)
+    abstract ViewModel bindCanExchangePointsFragmentViewModel(CanExchangePointsFragmentViewModel todayAddPointsFragmentViewModel);
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CanConsumptionPointsFragmentViewModel.class)
+    abstract ViewModel bindCanConsumptionPointsFragmentViewModel(CanConsumptionPointsFragmentViewModel todayAddPointsFragmentViewModel);
 
 }
