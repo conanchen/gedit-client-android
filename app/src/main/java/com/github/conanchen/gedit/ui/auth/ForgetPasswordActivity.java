@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
@@ -148,7 +147,7 @@ public class ForgetPasswordActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable RegisterResponse registerResponse) {
                 Log.i("-=-=-=", "注册是否成功的观察者" + gson.toJson(registerResponse));
-                registerViewModel.saveToken(registerResponse);
+                registerViewModel.saveRegisterOKAccessToken(registerResponse);
                 finish();
             }
         });
