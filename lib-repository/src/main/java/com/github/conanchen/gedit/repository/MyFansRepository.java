@@ -3,6 +3,7 @@ package com.github.conanchen.gedit.repository;
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.support.annotation.NonNull;
 
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
@@ -43,19 +44,23 @@ public class MyFansRepository {
 
 
     public LiveData<PagedList<Fanship>> loadMyFanships(Long times) {
-        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.myFansService.loadMyFans(
-                    ListMyFanRequest.newBuilder().build(), response -> {
-                        Fanship myFanship = Fanship.builder()
-                                .setFanUuid(response.getFanship().getFanUuid())
-                                .setFanName(response.getFanship().getFanName())
-                                .setCreated(response.getFanship().getCreated())
-                                .build();
-                        roomFascade.daoFanship.save(myFanship);
-                    });
-        });
-
         return (new LivePagedListBuilder(roomFascade.daoFanship.listLivePagedFanship(), pagedListConfig))
+                .setBoundaryCallback(new PagedList.BoundaryCallback() {
+                    @Override
+                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
+                        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+                            grpcFascade.myFansService.loadMyFans(
+                                    ListMyFanRequest.newBuilder().build(), response -> {
+                                        Fanship myFanship = Fanship.builder()
+                                                .setFanUuid(response.getFanship().getFanUuid())
+                                                .setFanName(response.getFanship().getFanName())
+                                                .setCreated(response.getFanship().getCreated())
+                                                .build();
+                                        roomFascade.daoFanship.save(myFanship);
+                                    });
+                        });
+                    }
+                })
                 .build();
     }
 }
