@@ -103,7 +103,7 @@ public class HelloRepository {
                     @Override
                     public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
                         super.onItemAtEndLoaded(itemAtEnd);
-                        grpcFascade.helloService.downloadOldHellos(100, new HelloService.HelloCallback() {
+                        grpcFascade.helloService.downloadOldHellos(3, new HelloService.HelloCallback() {
                             @Override
                             public void onHelloReply(HelloReply helloReply) {
                                 Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {

@@ -115,7 +115,7 @@ public class HelloService {
         HelloGrpc.HelloStub helloStub = HelloGrpc.newStub(channel);
         helloStub.withDeadlineAfter(60, TimeUnit.SECONDS)
                 .listOldHello(
-                        ListHelloRequest.newBuilder().setSize(20).build(), new StreamObserver<HelloReply>() {
+                        ListHelloRequest.newBuilder().setSize(size).build(), new StreamObserver<HelloReply>() {
                             @Override
                             public void onNext(HelloReply value) {
                                 callback.onHelloReply(value);
