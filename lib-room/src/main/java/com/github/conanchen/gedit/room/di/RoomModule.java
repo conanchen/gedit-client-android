@@ -131,8 +131,13 @@ public class RoomModule {
                                           DaoKeyValue daoKeyValue,
                                           DaoMyStore daoMyStore,
                                           DaoMyIntroducedStore daoMyIntroducedStore,
-                                          DaoFanship daoFanship) {
+                                          DaoFanship daoFanship,
+                                          DaoAccount daoAccount,
+                                          DaoBalance daoBalance,
+                                          DaoJournal daoJournal,
+                                          DaoPosting daoPosting
+    ) {
         return new RoomFascade(daoHello, daoStore, daoKeyValue, daoMyStore,
-                daoMyIntroducedStore, daoFanship);
+                daoMyIntroducedStore, daoFanship, daoAccount, daoBalance, daoJournal, daoPosting);
     }
 }

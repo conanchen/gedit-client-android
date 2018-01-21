@@ -17,25 +17,9 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface DaoAccount {
     @Insert(onConflict = REPLACE)
-    Long save(Balance store);
+    Long save(Account account);
 
-    @Insert(onConflict = REPLACE)
-    Long[] saveAll(Balance... stores);
-
-    @Delete
-    void delete(Balance store);
-
-    @Query("SELECT * FROM Balance WHERE accountUuid = :accountUuid LIMIT 1")
-    LiveData<Balance> findLive(String accountUuid);
-
-    @Query("SELECT * FROM Balance WHERE accountUuid = :accountUuid LIMIT 1")
-    Maybe<Balance> findMaybe(String accountUuid);
-
-    @Query("SELECT * FROM Balance WHERE accountUuid = :accountUuid LIMIT 1")
-    Balance findOne(String accountUuid);
-
-
-    @Query("SELECT * FROM Balance ORDER by lastUpdated DESC ")
-    public abstract DataSource.Factory<Integer, Balance> listLivePagedMyStore();
+    @Query("SELECT * FROM Account ORDER by lastUpdated DESC ")
+    public abstract DataSource.Factory<Integer, Account> listLivePagedMyAccounts();
 
 }

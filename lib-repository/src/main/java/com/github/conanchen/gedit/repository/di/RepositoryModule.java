@@ -1,8 +1,10 @@
 package com.github.conanchen.gedit.repository.di;
 
 
+import com.github.conanchen.gedit.accounting.account.grpc.AccountResponse;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.di.GrpcModule;
+import com.github.conanchen.gedit.repository.AccountingRepository;
 import com.github.conanchen.gedit.repository.MyIntroducedStoreRepository;
 import com.github.conanchen.gedit.repository.MyMemberStoreRepository;
 import com.github.conanchen.gedit.repository.MyWorkinStoreRepository;
@@ -15,6 +17,7 @@ import com.github.conanchen.gedit.repository.StoreRepository;
 import com.github.conanchen.gedit.repository.kv.KeyValueRepository;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.di.RoomModule;
+import com.github.conanchen.gedit.room.my.accounting.Account;
 
 import javax.inject.Singleton;
 
@@ -39,7 +42,8 @@ public class RepositoryModule {
             MyStoreRepository myStoreRepository,
             SigninRepository signinRepository,
             KeyValueRepository keyValueRepository,
-            RegisterRepository registerRepository
+            RegisterRepository registerRepository,
+            AccountingRepository accountingRepository
     ) {
         return new RepositoryFascade(
                 helloRepository,
@@ -47,7 +51,8 @@ public class RepositoryModule {
                 myStoreRepository,
                 signinRepository,
                 keyValueRepository,
-                registerRepository);
+                registerRepository,
+                accountingRepository);
     }
 
 
@@ -121,6 +126,14 @@ public class RepositoryModule {
     public RegisterRepository provideRegisterRepository(
             RoomFascade roomFascade, GrpcFascade grpcFascade) {
         return new RegisterRepository(roomFascade, grpcFascade);
+    }
+
+
+    @Singleton
+    @Provides
+    public AccountingRepository provideAccountingRepository(
+            RoomFascade roomFascade, GrpcFascade grpcFascade) {
+        return new AccountingRepository(roomFascade, grpcFascade);
     }
 
 

@@ -25,20 +25,33 @@ public class Account {
 //            | user-uuid-001 | POINTS   | account-uuid-102   |20180101 |
 //            | user-uuid-002 | CASH     | account-uuid-103   |20180102 |
 //            | user-uuid-002 | POINTS   | account-uuid-104   |20180102 |
-    
+
     @PrimaryKey
     @NonNull
     public String uuid;
     public String type;
+    public int previousBalance;
+    public long previousDate;
+    public int currentChanges;
+    public long currentDate;
+    public int currentBalance;
+
     public long created;
+    public long lastUpdated;
 
     public Account() {
     }
 
-    private Account(@NonNull String uuid, String type, long created) {
+    private Account(@NonNull String uuid, String type, int previousBalance, long previousDate, int currentChanges, long currentDate, int currentBalance, long created, long lastUpdated) {
         this.uuid = uuid;
         this.type = type;
+        this.previousBalance = previousBalance;
+        this.previousDate = previousDate;
+        this.currentChanges = currentChanges;
+        this.currentDate = currentDate;
+        this.currentBalance = currentBalance;
         this.created = created;
+        this.lastUpdated = lastUpdated;
     }
 
     public static DiffCallback<Account> DIFF_CALLBACK = new DiffCallback<Account>() {
@@ -71,7 +84,14 @@ public class Account {
 
         private String uuid;
         private String type;
+        private int previousBalance;
+        private long previousDate;
+        private int currentChanges;
+        private long currentDate;
+        private int currentBalance;
+
         private long created;
+        private long lastUpdated;
 
         public Builder() {
         }
@@ -88,7 +108,7 @@ public class Account {
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new Account(uuid,type,created);
+            return new Account(  uuid,   type,   previousBalance,   previousDate,   currentChanges,   currentDate,   currentBalance,   created,   lastUpdated);
         }
 
         public Builder setUuid(String uuid) {
@@ -101,8 +121,38 @@ public class Account {
             return this;
         }
 
+        public Builder setPreviousBalance(int previousBalance) {
+            this.previousBalance = previousBalance;
+            return this;
+        }
+
+        public Builder setPreviousDate(long previousDate) {
+            this.previousDate = previousDate;
+            return this;
+        }
+
+        public Builder setCurrentChanges(int currentChanges) {
+            this.currentChanges = currentChanges;
+            return this;
+        }
+
+        public Builder setCurrentDate(long currentDate) {
+            this.currentDate = currentDate;
+            return this;
+        }
+
+        public Builder setCurrentBalance(int currentBalance) {
+            this.currentBalance = currentBalance;
+            return this;
+        }
+
         public Builder setCreated(long created) {
             this.created = created;
+            return this;
+        }
+
+        public Builder setLastUpdated(long lastUpdated) {
+            this.lastUpdated = lastUpdated;
             return this;
         }
     }

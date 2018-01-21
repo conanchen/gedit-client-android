@@ -8,11 +8,13 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
+import com.github.conanchen.gedit.room.my.accounting.Account;
 import com.github.conanchen.gedit.ui.store.ExchangePointsActivity;
 
 import java.util.ArrayList;
@@ -27,11 +29,13 @@ import butterknife.OnClick;
 @Route(path = "/app/MyPointsActivity")
 public class MyPointsActivity extends BaseFragmentActivity {
 
+    private final static String TAG= MyPointsActivity.class.getSimpleName();
+
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     MyPointsViewModel myPointsViewModel;
 
-    @BindView(R.id.today_add_points)
+    @BindView(R.id.today_added_points)
     AppCompatTextView mTvTodayAddPoints;
     @BindView(R.id.today_points_layout)
     ConstraintLayout mLayoutTodayPoints;
@@ -70,6 +74,27 @@ public class MyPointsActivity extends BaseFragmentActivity {
 
     private void setupViewModel() {
         myPointsViewModel = ViewModelProviders.of(this, viewModelFactory).get(MyPointsViewModel.class);
+
+        myPointsViewModel.getMyAccountListLiveData().observe(this, accounts -> {
+            if (accounts != null && accounts.size() > 0) {
+                for (int i = 0; i < accounts.size(); i++) {
+                    Account account = accounts.get(i);
+                    switch (account.type) {
+                        case "CASH":
+                            break;
+                        case "LIVE_POINTS"://可消费积分
+                            mTvTodayAddPoints.setText(account.currentChanges);
+                            mTvCanConsumptionPoints.setText(account.currentBalance);
+                            break;
+                        case "FIXED_POINTS"://可兑换积分
+                            mTvEanExchangePoints.setText(account.currentBalance);
+                            break;
+                        default:
+                                Log.e(TAG,"ERROR Unknown Type:"+account.type);
+                    }
+                }
+            }
+        });
     }
 
     @OnClick({R.id.back, R.id.right, R.id.today_points_layout, R.id.can_consumption_points_layout, R.id.can_exchange_points_layout})

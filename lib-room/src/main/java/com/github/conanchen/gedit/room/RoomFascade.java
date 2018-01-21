@@ -3,6 +3,10 @@ package com.github.conanchen.gedit.room;
 
 import com.github.conanchen.gedit.room.hello.DaoHello;
 import com.github.conanchen.gedit.room.kv.DaoKeyValue;
+import com.github.conanchen.gedit.room.my.accounting.DaoAccount;
+import com.github.conanchen.gedit.room.my.accounting.DaoBalance;
+import com.github.conanchen.gedit.room.my.accounting.DaoJournal;
+import com.github.conanchen.gedit.room.my.accounting.DaoPosting;
 import com.github.conanchen.gedit.room.my.fan.DaoFanship;
 import com.github.conanchen.gedit.room.my.store.DaoMyIntroducedStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyStore;
@@ -21,6 +25,10 @@ public class RoomFascade {
     public final DaoMyStore daoMyStore;
     public final DaoMyIntroducedStore daoMyIntroducedStore;
     public final DaoFanship daoFanship;
+    public final DaoAccount daoAccount;
+    public final DaoBalance daoBalance;
+    public final DaoJournal daoJournal;
+    public final DaoPosting daoPosting;
 
     @Inject
     String strAmir;
@@ -32,7 +40,11 @@ public class RoomFascade {
                        DaoKeyValue daoKeyValue,
                        DaoMyStore daoMyStore,
                        DaoMyIntroducedStore daoMyIntroducedStore,
-                       DaoFanship daoFanship
+                       DaoFanship daoFanship,
+                       DaoAccount daoAccount,
+                       DaoBalance daoBalance,
+                       DaoJournal daoJournal,
+                       DaoPosting daoPosting
     ) {
         this.daoStore = daoStore;
         this.daoHello = daoHello;
@@ -40,6 +52,10 @@ public class RoomFascade {
         this.daoMyStore = daoMyStore;
         this.daoMyIntroducedStore = daoMyIntroducedStore;
         this.daoFanship = daoFanship;
+        this.daoAccount = daoAccount;
+        this.daoBalance = daoBalance;
+        this.daoJournal = daoJournal;
+        this.daoPosting = daoPosting;
         System.out.println(strAmir);
 
     }

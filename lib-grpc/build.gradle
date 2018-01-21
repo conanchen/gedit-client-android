@@ -39,6 +39,7 @@ android {
             buildConfigField 'Integer', 'GRPC_SERVER_PORT_HELLO', '8980'
             buildConfigField 'Integer', 'GRPC_SERVER_PORT_AUTH', '9980'
             buildConfigField 'Integer', 'GRPC_SERVER_PORT_STORE', '8980'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_ACCOUNTING', '8980'
         }
     }
 
