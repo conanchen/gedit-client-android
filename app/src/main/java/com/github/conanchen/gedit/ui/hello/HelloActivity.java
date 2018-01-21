@@ -45,6 +45,9 @@ public class HelloActivity extends BaseActivity {
     @BindView(R.id.addbutton)
     AppCompatButton addbutton;
 
+    @BindView(R.id.clearbutton)
+    AppCompatButton clearbutton;
+
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -73,11 +76,6 @@ public class HelloActivity extends BaseActivity {
 
     private void setupViewModel() {
         helloViewModel = ViewModelProviders.of(this, viewModelFactory).get(HelloViewModel.class);
-        helloViewModel.getHelloPagedListLiveData().observe(this, hellos -> {
-            if (hellos != null) {
-                helloAdapter.setList(hellos);
-            }
-        });
 
         edithello.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,21 +120,29 @@ public class HelloActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.fab)
-    public void onFabClicked(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+    @OnClick({R.id.fab, R.id.listbutton, R.id.clearbutton, R.id.addbutton})
+    public void onButtonClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fab:
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                break;
+            case R.id.listbutton:
+                helloViewModel.getHelloPagedListLiveData().observe(this, hellos -> {
+                    if (hellos != null) {
+                        helloAdapter.setList(hellos);
+                    }
+                });
+                helloViewModel.reloadHellos();
+                break;
+            case R.id.addbutton:
+                String helloTxt = edithello.getText().toString();
+                helloViewModel.setHelloName(helloTxt);
+                break;
+            case R.id.clearbutton:
+                helloViewModel.clearHellos();
+                helloViewModel.getHelloPagedListLiveData().removeObservers(this);
+                break;
+        }
     }
-
-    @OnClick(R.id.listbutton)
-    public void onListButtonClicked(View view) {
-        helloViewModel.reloadHellos();
-    }
-
-    @OnClick(R.id.addbutton)
-    public void onAddButtonClicked(View view) {
-        String helloTxt = edithello.getText().toString();
-        helloViewModel.setHelloName(helloTxt);
-    }
-
 }

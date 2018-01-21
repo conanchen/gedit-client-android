@@ -28,7 +28,12 @@ import com.github.conanchen.gedit.repository.HelloRepository;
 import com.github.conanchen.gedit.room.hello.Hello;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 
+
+
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class HelloViewModel extends ViewModel {
 
@@ -65,5 +70,13 @@ public class HelloViewModel extends ViewModel {
     @VisibleForTesting
     public void reloadHellos() {
         this.helloTime.setValue(System.currentTimeMillis());
+    }
+
+    @VisibleForTesting
+    public void clearHellos() {
+        Observable.just(true).subscribeOn(Schedulers.computation()).observeOn(Schedulers.io())
+                .subscribe(aBoolean -> {
+                    helloRepository.clearHellos();
+                });
     }
 }

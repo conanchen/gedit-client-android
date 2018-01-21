@@ -110,12 +110,12 @@ public class HelloService {
 
     }
 
-    public void downloadOldHellos(int size, HelloCallback callback) {
+    public void downloadOldHellos(ListHelloRequest request, HelloCallback callback) {
         ManagedChannel channel = getManagedChannel();
         HelloGrpc.HelloStub helloStub = HelloGrpc.newStub(channel);
         helloStub.withDeadlineAfter(60, TimeUnit.SECONDS)
                 .listOldHello(
-                        ListHelloRequest.newBuilder().setSize(size).build(), new StreamObserver<HelloReply>() {
+                        request, new StreamObserver<HelloReply>() {
                             @Override
                             public void onNext(HelloReply value) {
                                 callback.onHelloReply(value);

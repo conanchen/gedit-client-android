@@ -9,6 +9,7 @@ import android.util.Log;
 import com.github.conanchen.gedit.hello.grpc.HelloReply;
 import com.github.conanchen.gedit.grpc.hello.HelloService;
 import com.github.conanchen.gedit.di.GrpcFascade;
+import com.github.conanchen.gedit.hello.grpc.ListHelloRequest;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.Hello;
 import com.google.common.base.Strings;
@@ -92,18 +93,7 @@ public class HelloRepository {
                     @Override
                     public void onZeroItemsLoaded() {
                         super.onZeroItemsLoaded();
-                        sayHello("First-Hello");
-                    }
-
-                    @Override
-                    public void onItemAtFrontLoaded(@NonNull Object itemAtFront) {
-                        super.onItemAtFrontLoaded(itemAtFront);
-                    }
-
-                    @Override
-                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
-                        super.onItemAtEndLoaded(itemAtEnd);
-                        grpcFascade.helloService.downloadOldHellos(3, new HelloService.HelloCallback() {
+                        grpcFascade.helloService.downloadOldHellos(ListHelloRequest.newBuilder().setSize(3).setLastUpdated(System.currentTimeMillis()).build(), new HelloService.HelloCallback() {
                             @Override
                             public void onHelloReply(HelloReply helloReply) {
                                 Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
@@ -121,7 +111,21 @@ public class HelloRepository {
                             }
                         });
                     }
+
+                    @Override
+                    public void onItemAtFrontLoaded(@NonNull Object itemAtFront) {
+                        super.onItemAtFrontLoaded(itemAtFront);
+                    }
+
+                    @Override
+                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
+                        super.onItemAtEndLoaded(itemAtEnd);
+                    }
                 })
                 .build();
+    }
+
+    public void clearHellos() {
+        roomFascade.daoHello.deleteAll();
     }
 }

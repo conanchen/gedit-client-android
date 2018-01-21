@@ -46,4 +46,7 @@ public interface DaoHello {
 
     @Query("SELECT * FROM Hello ORDER by lastUpdated DESC LIMIT :size")
     LiveData<List<Hello>> getLiveHellos(Integer size);
+
+    @Query("DELETE FROM Hello")
+    void deleteAll();
 }
