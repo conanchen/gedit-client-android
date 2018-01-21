@@ -7,6 +7,7 @@ import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.hello.grpc.HelloGrpc;
 import com.github.conanchen.gedit.hello.grpc.HelloReply;
 import com.github.conanchen.gedit.hello.grpc.HelloRequest;
+import com.github.conanchen.gedit.hello.grpc.ListHelloRequest;
 import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
@@ -45,7 +46,7 @@ public class HelloService {
 
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
-                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_AUTH)
+                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_HELLO)
                 .usePlaintext(true)
                 //                .keepAliveTime(60, TimeUnit.SECONDS)
                 .build();
@@ -108,5 +109,32 @@ public class HelloService {
                 });
 
     }
+
+    public void downloadOldHellos(int size, HelloCallback callback) {
+        ManagedChannel channel = getManagedChannel();
+        HelloGrpc.HelloStub helloStub = HelloGrpc.newStub(channel);
+        helloStub.withDeadlineAfter(60, TimeUnit.SECONDS)
+                .listOldHello(
+                        ListHelloRequest.newBuilder().setSize(20).build(), new StreamObserver<HelloReply>() {
+                            @Override
+                            public void onNext(HelloReply value) {
+                                callback.onHelloReply(value);
+                            }
+
+                            @Override
+                            public void onError(Throwable t) {
+                                Log.i(TAG, String.format("helloStub.listOldHello() onError %s", t.getMessage()));
+
+                            }
+
+                            @Override
+                            public void onCompleted() {
+                                Log.i(TAG, String.format("helloStub.listOldHello() onCompleted"));
+                            }
+                        }
+                );
+
+    }
+
 
 }

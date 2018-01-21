@@ -3,6 +3,7 @@ package com.github.conanchen.gedit.repository;
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.conanchen.gedit.hello.grpc.HelloReply;
@@ -87,6 +88,40 @@ public class HelloRepository {
     public LiveData<PagedList<Hello>> loadHellos(Long time) {
         Log.i("-=-=-=-", "hello 查询");
         return (new LivePagedListBuilder(roomFascade.daoHello.listLivePagedHellos(), pagedListConfig))
+                .setBoundaryCallback(new PagedList.BoundaryCallback() {
+                    @Override
+                    public void onZeroItemsLoaded() {
+                        super.onZeroItemsLoaded();
+                        sayHello("First-Hello");
+                    }
+
+                    @Override
+                    public void onItemAtFrontLoaded(@NonNull Object itemAtFront) {
+                        super.onItemAtFrontLoaded(itemAtFront);
+                    }
+
+                    @Override
+                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
+                        super.onItemAtEndLoaded(itemAtEnd);
+                        grpcFascade.helloService.downloadOldHellos(100, new HelloService.HelloCallback() {
+                            @Override
+                            public void onHelloReply(HelloReply helloReply) {
+                                Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+                                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(helloReply.getStatus().getCode()) == 0) {
+                                        Log.i(TAG, String.format("HelloReply: %s", gson.toJson(helloReply)));
+                                        Hello hello = Hello.builder()
+                                                .setUuid(Strings.isNullOrEmpty(helloReply.getUuid()) ? "1" : helloReply.getUuid())
+                                                .setMessage(Strings.isNullOrEmpty(helloReply.getMessage()) ? String.format("%s", "hello is null") : helloReply.getMessage())
+                                                .setCreated(helloReply.getCreated())
+                                                .setLastUpdated(helloReply.getLastUpdated())
+                                                .build();
+                                        roomFascade.daoHello.save(hello);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                })
                 .build();
     }
 }
