@@ -7,6 +7,8 @@ import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeRequest;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PaymentInappApiGrpc;
 import com.google.gson.Gson;
 
@@ -26,6 +28,10 @@ public class PaymentService {
 
     public interface GetQRCodeUrlCallback {
         void onGetQRCodeUrlCallback(GetMyReceiptCodeResponse response);
+    }
+
+    public interface GetPaymentStoreDetailsCallback {
+        void onGetPaymentStoreDetailsCallback(GetReceiptCodeResponse response);
     }
 
     private ManagedChannel getManagedChannel() {
@@ -73,4 +79,83 @@ public class PaymentService {
                     }
                 });
     }
+
+
+    /**
+     * 获取二维码的字符串
+     *
+     * @param url
+     * @param callback
+     */
+    public void getPaymentStoreDetails(String url, GetPaymentStoreDetailsCallback callback) {
+
+        ManagedChannel channel = getManagedChannel();
+        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
+        paymentInappApiStub
+                .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .getReceiptCode(GetReceiptCodeRequest.newBuilder()
+                        .setCode(url)
+                        .build(), new StreamObserver<GetReceiptCodeResponse>() {
+                    @Override
+                    public void onNext(GetReceiptCodeResponse value) {
+                        Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
+                        callback.onGetPaymentStoreDetailsCallback(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
+                        callback.onGetPaymentStoreDetailsCallback(GetReceiptCodeResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode("Fail")
+                                        .setDetails("enter onError() method"))
+                                .build());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
+    }
+//
+//    /**
+//     * 获取二维码的字符串
+//     *
+//     * @param url
+//     * @param callback
+//     */
+//    public void getPayment(String url, GetPaymentStoreDetailsCallback callback) {
+//
+//        ManagedChannel channel = getManagedChannel();
+//        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
+//        paymentInappApiStub
+//                .withDeadlineAfter(60, TimeUnit.SECONDS)
+//                .getReceiptCode(GetReceiptCodeRequest.newBuilder()
+//                        .setCode(url)
+//                        .build(), new StreamObserver<GetReceiptCodeResponse>() {
+//                    @Override
+//                    public void onNext(GetReceiptCodeResponse value) {
+//                        Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
+//                        callback.onGetPaymentStoreDetailsCallback(value);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable t) {
+//                        Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
+//                        callback.onGetPaymentStoreDetailsCallback(GetReceiptCodeResponse.newBuilder()
+//                                .setStatus(Status.newBuilder()
+//                                        .setCode("Fail")
+//                                        .setDetails("enter onError() method"))
+//                                .build());
+//                    }
+//
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//                });
+//    }
+
+
 }
