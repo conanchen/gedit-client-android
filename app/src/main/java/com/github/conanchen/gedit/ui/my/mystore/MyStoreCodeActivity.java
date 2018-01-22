@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 
 import butterknife.BindView;
@@ -14,6 +15,7 @@ import butterknife.OnClick;
 /**
  * 我的店铺的二维码
  */
+@Route(path = "/app/MyStoreCodeActivity")
 public class MyStoreCodeActivity extends AppCompatActivity {
 
     @BindView(R.id.image_code)

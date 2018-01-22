@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.di.common.BaseActivity;
@@ -23,6 +24,7 @@ import butterknife.OnClick;
 /**
  * 我的员工列表界面
  */
+@Route(path = "/app/MyStoreEmployeesActivity")
 public class MyStoreEmployeesActivity extends BaseActivity {
 
     @Inject

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 
 import butterknife.BindView;
@@ -74,17 +75,18 @@ public class MyStoreActivity extends AppCompatActivity {
                 break;
             case R.id.my_employees:
                 //我的员工
-                startActivity(new Intent(MyStoreActivity.this, MyStoreEmployeesActivity.class));
+                ARouter.getInstance().build("/app/MyStoreEmployeesActivity").navigation();
                 break;
             case R.id.code:
                 //二维码
-                startActivity(new Intent(MyStoreActivity.this, MyStoreCodeActivity.class));
+                ARouter.getInstance().build("/app/MyStoreCodeActivity").navigation();
                 break;
             case R.id.address:
                 //地址
                 break;
             case R.id.phone:
                 //电话
+
                 break;
             case R.id.time:
                 //营业时间和关闭时间
