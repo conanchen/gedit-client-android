@@ -97,7 +97,7 @@ public class LoginActivity extends BaseActivity {
         loginViewModel.getSigninResponseLiveData()
                 .observe(this, signinResponse -> {
                     Log.i("-=-=-", gson.toJson(signinResponse));
-                    mResultTextView.setText("登陆结果：" + gson.toJson(signinResponse));
+//                    mResultTextView.setText("登陆结果：" + gson.toJson(signinResponse));
                     finish();
                 });
     }

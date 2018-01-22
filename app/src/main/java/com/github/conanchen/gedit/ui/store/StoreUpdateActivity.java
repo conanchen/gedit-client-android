@@ -136,7 +136,6 @@ public class StoreUpdateActivity extends BaseActivity {
 
             }
         });
-
     }
 
     private void setupInputChecker() {
@@ -149,7 +148,7 @@ public class StoreUpdateActivity extends BaseActivity {
                 .throttleFirst(3, TimeUnit.SECONDS) //防止3秒内连续点击,或者只使用doOnNext部分
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
-                    if (!isLogin) {
+                    if (isLogin) {
                         Toast.makeText(StoreUpdateActivity.this, "修改中....", Toast.LENGTH_SHORT).show();
                         String value = mEdit.getText().toString().trim();
 

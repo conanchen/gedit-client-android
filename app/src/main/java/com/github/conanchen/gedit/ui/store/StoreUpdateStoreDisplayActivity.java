@@ -62,7 +62,7 @@ public class StoreUpdateStoreDisplayActivity extends BaseActivity {
     RecyclerView recyclerView;
 
     @Autowired
-    private String uuid;
+    String uuid;
 
     private List<LocalMedia> selectMedia = new ArrayList<>();//已选择图片数据
     private List<String> sharePathList = new ArrayList<>();//分享图片未经过压缩的路径
