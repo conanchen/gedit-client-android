@@ -13,12 +13,12 @@ import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.room.store.Store;
 
 /**
- * Created by Administrator on 2018/1/20.
+ * Created by Administrator on 2018/1/15.
  */
 
-public class TodayAddPointsAdapter extends PagedListAdapter<Store, TodayAddPointsAdapter.ViewHolder> {
+public class CanExchangePointsAdapter extends PagedListAdapter<Store, CanExchangePointsAdapter.ViewHolder> {
 
-    protected TodayAddPointsAdapter() {
+    protected CanExchangePointsAdapter() {
         super(Store.DIFF_CALLBACK);
     }
 
@@ -26,7 +26,7 @@ public class TodayAddPointsAdapter extends PagedListAdapter<Store, TodayAddPoint
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.item_home_store_list, parent, false);
-        return new ViewHolder(view);
+        return new CanExchangePointsAdapter.ViewHolder(view);
     }
 
     @Override

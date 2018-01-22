@@ -15,7 +15,7 @@ import com.github.conanchen.gedit.ui.my.myintroducedstore.MyIntroducedStoresView
 import com.github.conanchen.gedit.ui.my.mypoints.CanConsumptionPointsFragmentViewModel;
 import com.github.conanchen.gedit.ui.my.mypoints.CanExchangePointsFragmentViewModel;
 import com.github.conanchen.gedit.ui.my.mypoints.MyPointsViewModel;
-import com.github.conanchen.gedit.ui.my.mypoints.TodayAddPointsFragmentViewModel;
+import com.github.conanchen.gedit.ui.my.mypoints.TodayAddedPointsFragmentViewModel;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoreEmployeesViewModel;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoresViewModel;
 import com.github.conanchen.gedit.ui.my.myworkinstore.MyWorkStoresViewModel;
@@ -120,8 +120,8 @@ public abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(TodayAddPointsFragmentViewModel.class)
-    abstract ViewModel bindTodayAddPointsFragmentViewModel(TodayAddPointsFragmentViewModel todayAddPointsFragmentViewModel);
+    @ViewModelKey(TodayAddedPointsFragmentViewModel.class)
+    abstract ViewModel bindTodayAddPointsFragmentViewModel(TodayAddedPointsFragmentViewModel todayAddedPointsFragmentViewModel);
 
 
     @Binds

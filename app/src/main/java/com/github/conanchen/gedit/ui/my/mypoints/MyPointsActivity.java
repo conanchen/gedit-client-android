@@ -65,7 +65,7 @@ public class MyPointsActivity extends BaseFragmentActivity {
     }
 
     private void setViewPager() {
-        viewPagerList.add(new TodayAddPointsFragment());
+        viewPagerList.add(new TodayAddedPointsFragment());
         viewPagerList.add(new CanConsumptionPointsFragment());
         viewPagerList.add(new CanExchangePointsFragment());
         mAdapter = new MyPointsViewPagerAdapter(getSupportFragmentManager(), viewPagerList);

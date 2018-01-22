@@ -13,10 +13,10 @@ import com.google.common.base.Strings;
  */
 @Entity(indices = {
         @Index(value = {"uuid"}),
-        @Index(value = {"accountUuid","created"})
+        @Index(value = {"accountUuid", "created"})
 })
 public class Posting {
-//### 账户流水Postings
+    //### 账户流水Postings
 //`根据系统记账需要的事实计算奖励积分、转换积分，记录在相应账户流水里。`
 //
 //            | 流水编号UUID      | 用户编号UUID     | 账户编号UUID        |   日志编号UUID    | 数量   | 创建日期  |
@@ -31,20 +31,19 @@ public class Posting {
     public String uuid;
     public String journalUuid;
     public String accountUuid;
-
-    public String type;//posting type
     public int amount; //posting amount
+    public String comment;
     public long created;
 
     public Posting() {
     }
 
-    private Posting(@NonNull String uuid, String journalUuid, String accountUuid, String type, int amount, long created) {
+    private Posting(@NonNull String uuid, String journalUuid, String accountUuid, int amount, String comment, long created) {
         this.uuid = uuid;
         this.journalUuid = journalUuid;
         this.accountUuid = accountUuid;
-        this.type = type;
         this.amount = amount;
+        this.comment = comment;
         this.created = created;
     }
 
@@ -78,9 +77,8 @@ public class Posting {
         private String uuid;
         private String journalUuid;
         private String accountUuid;
-
-        private String type;//posting type
         private int amount; //posting amount
+        private String comment;
         private long created;
 
         public Builder() {
@@ -91,20 +89,15 @@ public class Posting {
             if (Strings.isNullOrEmpty(uuid)) {
                 missing += " uuid ";
             }
-            if (Strings.isNullOrEmpty(journalUuid)) {
-                missing += " journalUuid ";
-            }
+
             if (Strings.isNullOrEmpty(accountUuid)) {
                 missing += " accountUuid ";
-            }
-            if (Strings.isNullOrEmpty(type)) {
-                missing += " type";
             }
 
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new Posting(uuid,   journalUuid,   accountUuid,   type,   amount,   created);
+            return new Posting(uuid, journalUuid, accountUuid, amount, comment, created);
         }
 
         public Builder setUuid(String uuid) {
@@ -122,13 +115,14 @@ public class Posting {
             return this;
         }
 
-        public Builder setType(String type) {
-            this.type = type;
-            return this;
-        }
 
         public Builder setAmount(int amount) {
             this.amount = amount;
+            return this;
+        }
+
+        public Builder setComment(String comment) {
+            this.comment = comment;
             return this;
         }
 

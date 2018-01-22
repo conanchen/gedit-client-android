@@ -12,7 +12,7 @@ import com.github.conanchen.gedit.ui.my.myintroducedstore.MyIntroducedStoresActi
 import com.github.conanchen.gedit.ui.my.mypoints.CanConsumptionPointsFragment;
 import com.github.conanchen.gedit.ui.my.mypoints.CanExchangePointsFragment;
 import com.github.conanchen.gedit.ui.my.mypoints.MyPointsActivity;
-import com.github.conanchen.gedit.ui.my.mypoints.TodayAddPointsFragment;
+import com.github.conanchen.gedit.ui.my.mypoints.TodayAddedPointsFragment;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoreEmployeesActivity;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.my.myworkinstore.MyWorkStoresActivity;
@@ -40,7 +40,7 @@ public abstract class ViewModule {
     abstract StoreDetailActivity contributeStoreDetailActivity();
 
     @ContributesAndroidInjector
-    abstract TodayAddPointsFragment contributeTodayAddPointsFragment();
+    abstract TodayAddedPointsFragment contributeTodayAddPointsFragment();
 
     @ContributesAndroidInjector
     abstract CanConsumptionPointsFragment contributeCanConsumptionPointsFragment();

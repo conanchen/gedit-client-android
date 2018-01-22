@@ -33,7 +33,7 @@ public class CanConsumptionPointsFragment extends BaseFragment implements Inject
     RecyclerView recyclerView;
 
 
-    private TodayAddPointsAdapter mAdapter;
+    private CanConsumptionPointsAdapter mAdapter;
 
     @Nullable
     @Override
@@ -50,7 +50,7 @@ public class CanConsumptionPointsFragment extends BaseFragment implements Inject
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
 
         recyclerView.setLayoutManager(manager);
-        mAdapter = new TodayAddPointsAdapter();
+        mAdapter = new CanConsumptionPointsAdapter();
         recyclerView.setAdapter(mAdapter);
     }
 

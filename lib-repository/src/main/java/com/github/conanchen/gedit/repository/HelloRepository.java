@@ -88,11 +88,10 @@ public class HelloRepository {
 
     public LiveData<PagedList<Hello>> loadHellos(Long time) {
         Log.i("-=-=-=-", "hello 查询");
-        return (new LivePagedListBuilder(roomFascade.daoHello.listLivePagedHellos(), pagedListConfig))
-                .setBoundaryCallback(new PagedList.BoundaryCallback() {
+        return (new LivePagedListBuilder<Integer, Hello>(roomFascade.daoHello.listLivePagedHellos(), pagedListConfig))
+                .setBoundaryCallback(new PagedList.BoundaryCallback<Hello>() {
                     @Override
                     public void onZeroItemsLoaded() {
-                        super.onZeroItemsLoaded();
                         grpcFascade.helloService.downloadOldHellos(ListHelloRequest.newBuilder().setSize(3).setLastUpdated(System.currentTimeMillis()).build(), new HelloService.HelloCallback() {
                             @Override
                             public void onHelloReply(HelloReply helloReply) {
@@ -111,19 +110,10 @@ public class HelloRepository {
                             }
                         });
                     }
-
-                    @Override
-                    public void onItemAtFrontLoaded(@NonNull Object itemAtFront) {
-                        super.onItemAtFrontLoaded(itemAtFront);
-                    }
-
-                    @Override
-                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
-                        super.onItemAtEndLoaded(itemAtEnd);
-                    }
                 })
                 .build();
     }
+
 
     public void clearHellos() {
         roomFascade.daoHello.deleteAll();

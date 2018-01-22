@@ -32,7 +32,7 @@ public class CanExchangePointsFragment extends BaseFragment implements Injectabl
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    private TodayAddPointsAdapter mAdapter;
+    private CanExchangePointsAdapter mAdapter;
 
 
     @Nullable
@@ -51,7 +51,7 @@ public class CanExchangePointsFragment extends BaseFragment implements Injectabl
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
 
         recyclerView.setLayoutManager(manager);
-        mAdapter = new TodayAddPointsAdapter();
+        mAdapter = new CanExchangePointsAdapter();
         recyclerView.setAdapter(mAdapter);
     }
 

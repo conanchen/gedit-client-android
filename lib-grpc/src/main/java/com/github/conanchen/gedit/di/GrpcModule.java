@@ -1,6 +1,7 @@
 package com.github.conanchen.gedit.di;
 
 
+import com.github.conanchen.gedit.grpc.accounting.PostingService;
 import com.github.conanchen.gedit.grpc.fan.MyFansService;
 import com.github.conanchen.gedit.grpc.accounting.AccountService;
 import com.github.conanchen.gedit.grpc.hello.HelloService;
@@ -36,7 +37,8 @@ public class GrpcModule {
             MyFansService myFansService,
             SigninService signinService,
             RegisterService registerService,
-            AccountService accountService
+            AccountService accountService,
+            PostingService postingService
 
     ) {
         return new GrpcFascade(
@@ -49,7 +51,8 @@ public class GrpcModule {
                 myFansService,
                 signinService,
                 registerService,
-                accountService);
+                accountService,
+                postingService);
     }
 
     @Singleton
@@ -111,5 +114,11 @@ public class GrpcModule {
     @Provides
     public AccountService provideAccountingService() {
         return new AccountService();
+    }
+
+    @Singleton
+    @Provides
+    public PostingService providePostingService() {
+        return new PostingService();
     }
 }

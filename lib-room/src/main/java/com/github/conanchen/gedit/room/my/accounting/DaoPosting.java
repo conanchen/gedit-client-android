@@ -17,25 +17,28 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface DaoPosting {
     @Insert(onConflict = REPLACE)
-    Long save(Balance store);
+    Long save(Posting store);
 
     @Insert(onConflict = REPLACE)
-    Long[] saveAll(Balance... stores);
+    Long[] saveAll(Posting... stores);
 
     @Delete
-    void delete(Balance store);
+    void delete(Posting store);
 
-    @Query("SELECT * FROM Balance WHERE accountUuid = :accountUuid LIMIT 1")
-    LiveData<Balance> findLive(String accountUuid);
+    @Query("SELECT * FROM Posting WHERE accountUuid = :accountUuid LIMIT 1")
+    LiveData<Posting> findLive(String accountUuid);
 
-    @Query("SELECT * FROM Balance WHERE accountUuid = :accountUuid LIMIT 1")
-    Maybe<Balance> findMaybe(String accountUuid);
+    @Query("SELECT * FROM Posting WHERE accountUuid = :accountUuid LIMIT 1")
+    Maybe<Posting> findMaybe(String accountUuid);
 
-    @Query("SELECT * FROM Balance WHERE accountUuid = :accountUuid LIMIT 1")
-    Balance findOne(String accountUuid);
+    @Query("SELECT * FROM Posting WHERE accountUuid = :accountUuid LIMIT 1")
+    Posting findOne(String accountUuid);
 
 
-    @Query("SELECT * FROM Balance ORDER by lastUpdated DESC ")
-    public abstract DataSource.Factory<Integer, Balance> listLivePagedMyStore();
+    @Query("SELECT * FROM Posting WHERE :start < created AND created < :end ORDER by created DESC ")
+    public abstract DataSource.Factory<Integer, Posting> listLivePagedMyPostingByDate(Long start,Long end);
+
+    @Query("SELECT * FROM Posting ORDER by created DESC ")
+    public abstract DataSource.Factory<Integer, Posting> listLivePagedMyPosting();
 
 }
