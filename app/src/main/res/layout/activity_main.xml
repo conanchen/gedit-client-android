@@ -1,75 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true"
+    tools:context="com.github.conanchen.gedit.ui.store.StoreCreateActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#4000">
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:expanded="false">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp">
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
 
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"
-                android:visibility="invisible"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/title"
-                app:layout_constraintTop_toTopOf="parent"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="首页"
-                android:textAlignment="center"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/back"
-                app:layout_constraintLeft_toRightOf="@+id/back"
-                app:layout_constraintRight_toLeftOf="@id/right"
-                app:layout_constraintTop_toTopOf="@+id/back"/>
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"
-                android:visibility="visible"
-                app:layout_constraintLeft_toRightOf="@+id/title"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.Toolbar>
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_back_black_24dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/title"/>
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/title"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/text_margin"
+                        android:text="首页"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="@+id/back"
+                        app:layout_constraintLeft_toRightOf="@+id/back"
+                        app:layout_constraintRight_toLeftOf="@id/right"
+                        app:layout_constraintTop_toTopOf="@+id/back"/>
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/add"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toRightOf="@+id/title"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/rg"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </android.support.v4.view.ViewPager>
 
     <RadioGroup
         android:id="@+id/rg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewPager">
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="?android:attr/windowBackground">
 
         <RadioButton
             android:id="@+id/home"
@@ -94,4 +121,4 @@
             android:text="我的"/>
     </RadioGroup>
 
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>
