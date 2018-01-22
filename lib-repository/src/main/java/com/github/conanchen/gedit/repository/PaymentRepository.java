@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.payment.PaymentService;
-import com.github.conanchen.gedit.grpc.store.StoreService;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.ReceiptCode;
 import com.github.conanchen.gedit.room.RoomFascade;
