@@ -64,9 +64,9 @@ public class Posting {
         if (obj == this)
             return true;
 
-        Posting myStore = (Posting) obj;
+        Posting posting = (Posting) obj;
 
-        return myStore.accountUuid == this.accountUuid;
+        return posting.uuid == this.uuid;
     }
 
     public static Posting.Builder builder() {
