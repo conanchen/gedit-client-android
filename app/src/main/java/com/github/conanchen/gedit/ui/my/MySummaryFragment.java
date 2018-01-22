@@ -94,7 +94,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
     }
 
     @OnClick({R.id.me_login, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_points, R.id.my_extension_stores,
-            R.id.my_works_stores,R.id.my_invest_payments, R.id.customer_service, R.id.setting, R.id.jifenbao})
+            R.id.my_works_stores, R.id.my_invest_payments, R.id.my_payments, R.id.customer_service, R.id.setting, R.id.jifenbao})
     public void onViewClicked(View view) {
 //        if (isLogin) {
         switch (view.getId()) {
@@ -129,6 +129,10 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
             case R.id.my_invest_payments:
                 //我的投资录单
                 ARouter.getInstance().build("/app/MyInvestPaymentsActivity").navigation();
+                break;
+            case R.id.my_payments:
+                //我的付款记录
+                ARouter.getInstance().build("/app/MyPaymentRecordActivity").navigation();
                 break;
             case R.id.my_works_stores:
                 //我工作的店铺
