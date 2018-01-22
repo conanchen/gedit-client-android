@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -91,11 +92,31 @@ public class PointsPayActivity extends BaseActivity {
 //                    string payeeWorkerName = 29; //店员/收银员昵称
                     //需要  payeeReceiptCode
                     // TODO: 2018/1/22  处理界面显示
+
+                    String payeeReceiptCode = "oooooo";//服务器返回
+                    pointsPayViewModel.getPayment(payeeReceiptCode);
                 }
             }
         });
         pointsPayViewModel.getPaymentStoreDetails(code);
 
+        pointsPayViewModel.getPaymentLiveData().observe(this, new Observer<PrepareMyPaymentResponse>() {
+            @Override
+            public void onChanged(@Nullable PrepareMyPaymentResponse prepareMyPaymentResponse) {
+                Log.i("-=-=-=-=-=getPayment()", gson.toJson(prepareMyPaymentResponse));
+                if (prepareMyPaymentResponse != null) {
+//                    string payeeReceiptCode = 11; //收款码
+//                    string payeeUuid = 12; //收款人（其实是店主）
+//                    string payeeStoreUuid = 13; //收款店铺
+//                    string payeeWorkerUuid = 14; //收款员工
+//
+//                    int32 shouldPay = 15; //应付金额 = 实付金额 + 实付积分等价金额
+//                    int32 actualPay = 16; //实付金额
+//                    int32 pointsPay = 17; //实付积分代替金额
+//                    int32 pointsRepay = 18; //返还积分
+                }
+            }
+        });
 
 
     }

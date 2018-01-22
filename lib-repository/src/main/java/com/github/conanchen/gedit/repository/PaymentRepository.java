@@ -8,6 +8,7 @@ import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.payment.PaymentService;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.ReceiptCode;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.google.gson.Gson;
@@ -90,7 +91,7 @@ public class PaymentRepository {
 
 
     /**
-     * 联网获取生成二维码的字符串
+     * 获取商家信息
      *
      * @param url
      * @return
@@ -127,6 +128,56 @@ public class PaymentRepository {
                                                     .build());
                                         } else {
                                             setValue(GetReceiptCodeResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(response.getStatus().getCode())
+                                                            .setDetails(response.getStatus().getDetails())
+                                                            .build())
+                                                    .build());
+                                        }
+                                    }
+                                });
+                        ;
+                    }
+                });
+            }
+        };
+    }
+
+
+    /**
+     * 顾客扫码店员/收银员的收款码后获取如果支付一定金额
+     *
+     * @param url
+     * @return
+     */
+    public LiveData<PrepareMyPaymentResponse> getPayment(String url) {
+        return new LiveData<PrepareMyPaymentResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.paymentService.getPayment(url, new PaymentService.GetPaymentCallback() {
+                    @Override
+                    public void onGetPaymentCallback(PrepareMyPaymentResponse response) {
+                        Observable.fromCallable(() -> {
+
+                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                                return response;
+                            } else {
+//                                PrepareMyPaymentResponse prepareMyPaymentResponse=  PrepareMyPaymentResponse.newBuilder().setStatus(Status.newBuilder().setCode("fail").build());
+                                return response;
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<PrepareMyPaymentResponse>() {
+                                    @Override
+                                    public void accept(@NonNull PrepareMyPaymentResponse getReceiptCodeResponse) throws Exception {
+                                        if (!"fail".equals(getReceiptCodeResponse.getStatus().getCode())) {
+                                            setValue(PrepareMyPaymentResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                            .setDetails("update Store successfully")
+                                                            .build())
+                                                    .build());
+                                        } else {
+                                            setValue(PrepareMyPaymentResponse.newBuilder()
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())

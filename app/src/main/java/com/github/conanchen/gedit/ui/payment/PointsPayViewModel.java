@@ -8,6 +8,7 @@ import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.github.conanchen.gedit.repository.PaymentRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.google.common.base.Strings;
@@ -23,9 +24,9 @@ public class PointsPayViewModel extends ViewModel {
     final MutableLiveData<String> paymentStoreDetailsMutableLiveData = new MutableLiveData<>();
     private final LiveData<GetReceiptCodeResponse> paymentStoreDetailsLiveData;
 
-//    @VisibleForTesting
-//    final MutableLiveData<String> paymentMutableLiveData = new MutableLiveData<>();
-//    private final LiveData<PaymentResponse> paymentLiveData;
+    @VisibleForTesting
+    final MutableLiveData<String> paymentMutableLiveData = new MutableLiveData<>();
+    private final LiveData<PrepareMyPaymentResponse> paymentLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
@@ -38,13 +39,13 @@ public class PointsPayViewModel extends ViewModel {
             }
         });
 
-//        paymentLiveData = Transformations.switchMap(paymentMutableLiveData, string -> {
-//            if (Strings.isNullOrEmpty(string)) {
-//                return AbsentLiveData.create();
-//            } else {
-//                return paymentRepository.getPayment(string);
-//            }
-//        });
+        paymentLiveData = Transformations.switchMap(paymentMutableLiveData, string -> {
+            if (Strings.isNullOrEmpty(string)) {
+                return AbsentLiveData.create();
+            } else {
+                return paymentRepository.getPayment(string);
+            }
+        });
 
 
     }
@@ -58,12 +59,12 @@ public class PointsPayViewModel extends ViewModel {
         paymentStoreDetailsMutableLiveData.setValue(url);
     }
 
-//    @VisibleForTesting
-//    public LiveData<PaymentResponse> getPaymentLiveData() {
-//        return paymentLiveData;
-//    }
-//
-//    public void getPayment(String url) {
-//        paymentMutableLiveData.setValue(url);
-//    }
+    @VisibleForTesting
+    public LiveData<PrepareMyPaymentResponse> getPaymentLiveData() {
+        return paymentLiveData;
+    }
+
+    public void getPayment(String url) {
+        paymentMutableLiveData.setValue(url);
+    }
 }
