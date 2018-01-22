@@ -123,7 +123,7 @@ public class StoreCreateActivity extends BaseActivity {
             String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
             Log.i(TAG, message);
             if (storeCreateResponse != null) {
-                startActivity(new Intent(StoreCreateActivity.this, MyStoreActivity.class));
+                ARouter.getInstance().build("/app/MyStoreActivity").withString("uuid", storeCreateResponse.getUuid()).navigation();
                 finish();
             }
         });

@@ -17,6 +17,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
+import com.github.conanchen.gedit.util.JudgeISMobileNo;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
@@ -24,6 +25,8 @@ import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -48,6 +51,10 @@ public class StoreUpdateActivity extends BaseActivity {
 
     @BindView(R.id.edit)
     AppCompatEditText mEdit;
+    @BindView(R.id.edit_tel2)
+    AppCompatEditText mEditTel2;
+    @BindView(R.id.edit_tel3)
+    AppCompatEditText mEditTel3;
     @BindView(R.id.desc)
     AppCompatTextView mTvDesc;
     @BindView(R.id.title)
@@ -57,6 +64,10 @@ public class StoreUpdateActivity extends BaseActivity {
 
     @Autowired
     public String MODIFY_TYPE;//从我的店铺详情传递过来
+
+    @Autowired
+    public String uuid;//从我的店铺详情传递过来
+
     private boolean isLogin = false;//是否登录
     private String accessToken;
     private String expiresIn;
@@ -81,6 +92,8 @@ public class StoreUpdateActivity extends BaseActivity {
                 mEdit.setMaxLines(11);
                 mEdit.setHint("请输入电话号码");
                 mEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                mEditTel2.setVisibility(View.VISIBLE);
+//                mEditTel3.setVisibility(View.VISIBLE);
                 break;
             case "DESC":
                 mTvTitle.setText("修改描述");
@@ -89,6 +102,11 @@ public class StoreUpdateActivity extends BaseActivity {
             case "DETAIL_ADDRESS":
                 mTvTitle.setText("修改详细地址");
                 mEdit.setHint("商铺详细地址");
+                break;
+            case "POINTS_RATE":
+                mTvTitle.setText("修改优惠额度");
+                mEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
+                mEdit.setHint("消费可获得百分之几的积分");
                 break;
             default:
 
@@ -131,39 +149,42 @@ public class StoreUpdateActivity extends BaseActivity {
                 .throttleFirst(3, TimeUnit.SECONDS) //防止3秒内连续点击,或者只使用doOnNext部分
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
-//                    if (isLogin) {
+                    if (!isLogin) {
                         Toast.makeText(StoreUpdateActivity.this, "修改中....", Toast.LENGTH_SHORT).show();
                         String value = mEdit.getText().toString().trim();
-                        //获取uuid   传入数据库查询 ?? 为什么要到数据库查询，
-                        String uuid = "1";//获取当前商铺的uuid
 
+                        StoreUpdateInfo storeUpdateInfo = getStoreUpdateInfo(value);
 
-                        StoreUpdateInfo storeUpdateInfo = getStoreUpdateInfo(value, uuid);
-
+                        Log.i("-=-=-=-", "uuid" + storeUpdateInfo.uuid);
                         storeUpdateViewModel.updateStoreWith(storeUpdateInfo);
-//                    } else {
-//                        ARouter.getInstance().build("/app/LoginActivity").navigation();
-//                    }
-
-
+                    } else {
+                        ARouter.getInstance().build("/app/LoginActivity").navigation();
+                    }
                 });
     }
 
+    /**
+     * 联网时候的数据封装
+     *
+     * @param value
+     * @return
+     */
     @Nullable
-    private StoreUpdateInfo getStoreUpdateInfo(String value, String uuid) {
+    private StoreUpdateInfo getStoreUpdateInfo(String value) {
 
         VoAccessToken voAccessToken = VoAccessToken.builder()
                 .setAccessToken(Strings.isNullOrEmpty(accessToken) ? System.currentTimeMillis() + "" : accessToken)
                 .setExpiresIn(Strings.isNullOrEmpty(expiresIn) ? System.currentTimeMillis() + "" : expiresIn)
                 .build();
-        
         StoreUpdateInfo storeUpdateInfo = null;
         switch (MODIFY_TYPE) {
             case "PHONE":
+                List<String> listTel = new ArrayList<>();
+                listTel.add(value);
                 storeUpdateInfo = StoreUpdateInfo.builder()
                         .setVoAccessToken(voAccessToken)
                         .setName(StoreUpdateInfo.Field.PHONE)
-                        .setValue(value)
+                        .setValue(listTel)
                         .setUuid(uuid)
                         .build();
                 break;
@@ -183,14 +204,29 @@ public class StoreUpdateActivity extends BaseActivity {
                         .setUuid(uuid)
                         .build();
                 break;
+            case "POINTS_RATE":
+                storeUpdateInfo = StoreUpdateInfo.builder()
+                        .setVoAccessToken(voAccessToken)
+                        .setName(StoreUpdateInfo.Field.POINTS_RATE)
+                        .setValue(value)
+                        .setUuid(uuid)
+                        .build();
+                break;
         }
         return storeUpdateInfo;
     }
 
+    /**
+     * 对输入框的监听
+     *
+     * @param s 输入框输入的文字
+     * @return
+     */
     private boolean isEditValid(String s) {
         switch (MODIFY_TYPE) {
             case "PHONE":
-                if (!Strings.isNullOrEmpty(s) && s.length() == 11) {
+
+                if (JudgeISMobileNo.isMobileNO(s)) {
                     return true;
                 }
                 break;
@@ -200,6 +236,11 @@ public class StoreUpdateActivity extends BaseActivity {
                 }
                 break;
             case "DETAIL_ADDRESS":
+                if (!Strings.isNullOrEmpty(s)) {
+                    return true;
+                }
+                break;
+            case "POINTS_RATE":
                 if (!Strings.isNullOrEmpty(s)) {
                     return true;
                 }

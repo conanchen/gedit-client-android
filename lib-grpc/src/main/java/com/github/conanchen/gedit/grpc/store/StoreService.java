@@ -8,6 +8,8 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
+import com.github.conanchen.gedit.store.profile.grpc.ListTel;
+import com.github.conanchen.gedit.store.profile.grpc.ListURL;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
@@ -20,6 +22,8 @@ import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -158,7 +162,6 @@ public class StoreService {
                                 Log.i("-=-=-=---", "onCompleted");
                             }
                         });
-
     }
 
 
@@ -206,21 +209,47 @@ public class StoreService {
         UpdateStoreRequest updateStoreRequest = null;
         switch (storeUpdateInfo.name) {
             case PHONE:
+                //修改电话   门店电话可以有很多个
+                Iterable<String> listTel = new ArrayList<String>((List<String>) storeUpdateInfo.value);
                 updateStoreRequest = UpdateStoreRequest.newBuilder()
                         .setUuid(storeUpdateInfo.uuid)
-                        .setName((String) storeUpdateInfo.value)
+                        .setTels(ListTel.newBuilder().addAllUrls(listTel).build())
                         .build();
                 break;
             case DESC:
+                //修改描述
                 updateStoreRequest = UpdateStoreRequest.newBuilder()
                         .setUuid(storeUpdateInfo.uuid)
                         .setDesc((String) storeUpdateInfo.value)
                         .build();
                 break;
             case DETAIL_ADDRESS:
+                //修改详细地址
                 updateStoreRequest = UpdateStoreRequest.newBuilder()
                         .setUuid(storeUpdateInfo.uuid)
                         .setDetailAddress((String) storeUpdateInfo.value)
+                        .build();
+                break;
+            case POINTS_RATE:
+                //消费可得百分之几的积分
+                int pointsRate = 0;
+                try {
+                    pointsRate = Integer.parseInt((String) storeUpdateInfo.value);
+                } catch (NumberFormatException e) {
+                    pointsRate = 0;
+                }
+
+                updateStoreRequest = UpdateStoreRequest.newBuilder()
+                        .setUuid(storeUpdateInfo.uuid)
+                        .setPointsRate(pointsRate)
+                        .build();
+                break;
+            case LIST_URL:
+                //门店展示
+                Iterable<String> listUrl = new ArrayList<String>((List<String>) storeUpdateInfo.value);
+                updateStoreRequest = UpdateStoreRequest.newBuilder()
+                        .setUuid(storeUpdateInfo.uuid)
+                        .setImages(ListURL.newBuilder().addAllUrls(listUrl).build())
                         .build();
                 break;
         }

@@ -4,22 +4,27 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.utils.vo.StoreUpdateInfo;
+import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.common.Constant;
 import com.github.conanchen.gedit.ui.common.FullyGridLayoutManager;
 import com.github.conanchen.gedit.util.ChoosePictureOrVideo;
 import com.github.conanchen.gedit.util.PictureUtil;
+import com.github.conanchen.utils.vo.StoreUpdateInfo;
+import com.github.conanchen.utils.vo.VoAccessToken;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -35,81 +40,84 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.grpc.Status;
 
 /**
- * 修改头像的界面
+ * 门店展示
  */
-@Route(path = "/app/StoreUpdateHeadPortraitActivity")
-public class StoreUpdateHeadPortraitActivity extends BaseActivity {
+@Route(path = "/app/StoreUpdateStoreDisplayActivity")
+public class StoreUpdateStoreDisplayActivity extends BaseActivity {
+
     private String TAG = StoreUpdateActivity.class.getSimpleName();
-
-    @BindView(R.id.updatebutton)
-    AppCompatButton updatebutton;
-    @BindView(R.id.show)
-    AppCompatTextView show;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-
-
     private static final Gson gson = new Gson();
-
-    private List<LocalMedia> selectMedia = new ArrayList<>();//已选择图片数据
-    private List<String> sharePathList = new ArrayList<>();//分享图片未经过的路径
-    private List<String> shareCompressList = new ArrayList<>();//分享图片经过压缩的的路径
-    private GridImageAdapter adapter;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    StoreUpdateHeadPortraitViewModel storeUpdateHeadPortraitViewModel;
+    StoreUpdateViewModel storeUpdateViewModel;
+    private CurrentSigninViewModel currentSigninViewModel;
+
+    @BindView(R.id.show)
+    AppCompatTextView mTvShow;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
+    @Autowired
+    private String uuid;
+
+    private List<LocalMedia> selectMedia = new ArrayList<>();//已选择图片数据
+    private List<String> sharePathList = new ArrayList<>();//分享图片未经过压缩的路径
+    private List<String> shareCompressList = new ArrayList<>();//分享图片经过压缩的的路径
+    private GridImageAdapter adapter;
+
+    private boolean isLogin = false;//是否登录
+    private String accessToken;
+    private String expiresIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store_update_head_portrait);
+        setContentView(R.layout.activity_store_update_store_display);
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
         setupViewModel();
         setExhibition();
     }
 
     private void setupViewModel() {
-        storeUpdateHeadPortraitViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreUpdateHeadPortraitViewModel.class);
-        storeUpdateHeadPortraitViewModel.getStoreUpdateResponseLiveData()
+
+        storeUpdateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreUpdateViewModel.class);
+        storeUpdateViewModel.getStoreUpdateResponseLiveData()
                 .observe(this, storeUpdateResponse -> {
-                    show.setText("result:" + gson.toJson(storeUpdateResponse));
+                    String message = String.format("storeUpdateResponse=%s", gson.toJson(storeUpdateResponse));
+                    Log.i(TAG, message);
+                    if (storeUpdateResponse != null) {
+                        mTvShow.setText(message);
+                    }
                 });
 
+        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+            if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                isLogin = true;
+                accessToken = signinResponse.getAccessToken();
+                expiresIn = signinResponse.getExpiresIn();
+            } else {
+                isLogin = false;
+
+            }
+        });
     }
 
-
-    @OnClick({R.id.updatebutton})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.updatebutton:
-                if (!selectMedia.isEmpty()) {
-                    for (int i = 0; i < selectMedia.size(); i++) {
-                        String path = selectMedia.get(i).getPath();
-                        Log.i(TAG, "picture path :" + path);
-                    }
-                }
-                StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
-                        .setName(StoreUpdateInfo.Field.LOGO)
-                        .setUuid("111")
-                        .setValue("http://baidu.com")
-                        .build();
-//                storeUpdateHeadPortraitViewModel.updateHeadPortrait(storeUpdateInfo);
-                break;
-        }
-    }
 
     //设置门店展示
     private void setExhibition() {
-        FullyGridLayoutManager manager = new FullyGridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false);
+        FullyGridLayoutManager manager = new FullyGridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
         //删除图片回调接口
         adapter = new GridImageAdapter(this, new GridImageAdapter.onAddPicClickListener() {
             @Override
             public void onAddPicClick() {
-                ChoosePictureOrVideo.getInstance().ChoosePictureOrVideo(StoreUpdateHeadPortraitActivity.this, PictureMimeType.ofImage(), true, selectMedia);
+                ChoosePictureOrVideo.getInstance().ChoosePictureOrVideo(StoreUpdateStoreDisplayActivity.this, PictureMimeType.ofImage(), false, selectMedia);
             }
         });
 
@@ -151,15 +159,15 @@ public class StoreUpdateHeadPortraitActivity extends BaseActivity {
                         case 1:
                             // 预览图片 可自定长按保存路径
                             //PictureSelector.mCreateButton(MainActivity.this).externalPicturePreview(position, "/custom_file", selectList);
-                            PictureSelector.create(StoreUpdateHeadPortraitActivity.this).externalPicturePreview(position, selectMedia);
+                            PictureSelector.create(StoreUpdateStoreDisplayActivity.this).externalPicturePreview(position, selectMedia);
                             break;
                         case 2:
                             // 预览视频
-                            PictureSelector.create(StoreUpdateHeadPortraitActivity.this).externalPictureVideo(media.getPath());
+                            PictureSelector.create(StoreUpdateStoreDisplayActivity.this).externalPictureVideo(media.getPath());
                             break;
                         case 3:
                             // 预览音频
-                            PictureSelector.create(StoreUpdateHeadPortraitActivity.this).externalPictureAudio(media.getPath());
+                            PictureSelector.create(StoreUpdateStoreDisplayActivity.this).externalPictureAudio(media.getPath());
                             break;
                     }
                 }
@@ -215,22 +223,10 @@ public class StoreUpdateHeadPortraitActivity extends BaseActivity {
                                 String path = media.getPath();
                             }
                         }
+
                         if (selectMedia != null) {
                             adapter.setList(selectMedia);
                             adapter.notifyDataSetChanged();
-
-                            if (!selectMedia.isEmpty()) {
-                                for (int i = 0; i < selectMedia.size(); i++) {
-                                    String path = selectMedia.get(i).getPath();
-                                    Log.i(TAG, "picture path :" + path);
-                                }
-                            }
-                            StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
-                                    .setName(StoreUpdateInfo.Field.LOGO)
-                                    .setUuid("111")
-                                    .setValue(selectMedia.get(0).getPath())
-                                    .build();
-                            storeUpdateHeadPortraitViewModel.updateHeadPortrait(storeUpdateInfo);
                         }
                     }
 
@@ -240,4 +236,38 @@ public class StoreUpdateHeadPortraitActivity extends BaseActivity {
         }
     }
 
+    @OnClick()
+    public void onViewClicked() {
+        finish();
+    }
+
+    @OnClick({R.id.back, R.id.save})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.save:
+                if (sharePathList == null || sharePathList.isEmpty()) {
+                    Toast.makeText(StoreUpdateStoreDisplayActivity.this, "选择门店展示图片", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (isLogin) {
+                    StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
+                            .setName(StoreUpdateInfo.Field.LIST_URL)
+                            .setUuid(uuid)
+                            .setVoAccessToken(VoAccessToken.builder()
+                                    .setAccessToken(Strings.isNullOrEmpty(accessToken) ? System.currentTimeMillis() + "" : accessToken)
+                                    .setExpiresIn(Strings.isNullOrEmpty(expiresIn) ? System.currentTimeMillis() + "" : expiresIn)
+                                    .build())
+                            .setValue(sharePathList)
+                            .build();
+                    storeUpdateViewModel.updateStoreWith(storeUpdateInfo);
+                } else {
+                    ARouter.getInstance().build("/app/LoginActivity").navigation();
+                }
+                break;
+        }
+    }
 }

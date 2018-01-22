@@ -22,7 +22,7 @@ import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 import com.github.conanchen.gedit.ui.store.StoreDetailActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
 import com.github.conanchen.gedit.ui.store.StoreUpdateActivity;
-import com.github.conanchen.gedit.ui.store.StoreUpdateHeadPortraitActivity;
+import com.github.conanchen.gedit.ui.store.StoreUpdateStoreDisplayActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -66,7 +66,7 @@ public abstract class ViewModule {
     abstract StoreUpdateActivity contributeStoreUpdateActivity();
 
     @ContributesAndroidInjector
-    abstract StoreUpdateHeadPortraitActivity contributeStoreUpdateHeadPortraitActivity();
+    abstract StoreUpdateStoreDisplayActivity contributeStoreUpdateStoreDisplayActivity();
 
     @ContributesAndroidInjector
     abstract LoginActivity contributeLoginActivity();

@@ -2,17 +2,17 @@ package com.github.conanchen.gedit.ui.my.mystore;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.my.store.MyStore;
-import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
+import com.google.common.base.Strings;
 
 import javax.inject.Inject;
 
@@ -53,7 +53,10 @@ public class MyStoresActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new MyStoresAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(MyStore myStore) {
-                startActivity(new Intent(MyStoresActivity.this, MyStoreActivity.class));
+                ARouter.getInstance().build("/app/MyStoreActivity")
+                        .withString("uuid", Strings.isNullOrEmpty(myStore.storeUuid) ? System.currentTimeMillis() + "" : myStore.storeUuid)
+                        .navigation();
+//                startActivity(new Intent(MyStoresActivity.this, MyStoreActivity.class));
             }
         });
     }
@@ -75,7 +78,7 @@ public class MyStoresActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.right:
-                startActivity(new Intent(MyStoresActivity.this, StoreCreateActivity.class));
+                ARouter.getInstance().build("/app/StoreCreateActivity").navigation();
                 break;
         }
     }

@@ -8,6 +8,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
@@ -50,28 +51,38 @@ public class MyStoreActivity extends AppCompatActivity {
     AppCompatTextView timeDesc;
     @BindView(R.id.time)
     ConstraintLayout time;
-    @BindView(R.id.prompt_desc)
-    AppCompatTextView promptDesc;
     @BindView(R.id.prompt)
     ConstraintLayout prompt;
     @BindView(R.id.store_introduce)
     AppCompatTextView storeIntroduce;
+
+
+    @Autowired
+    public String uuid;//从我的店铺详情传递过来
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_store_details);
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
 
     }
 
 
-    @OnClick({R.id.back, R.id.my_employees, R.id.code, R.id.address, R.id.phone, R.id.time, R.id.prompt,
+    @OnClick({R.id.back, R.id.banner, R.id.my_employees, R.id.code, R.id.address, R.id.phone, R.id.time, R.id.prompt,
             R.id.store_introduce})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
+                break;
+            case R.id.banner:
+                //如果没有图片就去修改门店展示的图片
+                ARouter.getInstance()
+                        .build("/app/StoreUpdateStoreDisplayActivity")
+                        .withString("uuid", uuid)
+                        .navigation();
                 break;
             case R.id.my_employees:
                 //我的员工
@@ -83,21 +94,37 @@ public class MyStoreActivity extends AppCompatActivity {
                 break;
             case R.id.address:
                 //地址
-                ARouter.getInstance().build("/app/StoreUpdateActivity").withString("MODIFY_TYPE", "DETAIL_ADDRESS").navigation();
+                ARouter.getInstance()
+                        .build("/app/StoreUpdateActivity")
+                        .withString("MODIFY_TYPE", "DETAIL_ADDRESS")
+                        .withString("uuid", uuid).navigation();
                 break;
             case R.id.phone:
                 //电话
-                ARouter.getInstance().build("/app/StoreUpdateActivity").withString("MODIFY_TYPE", "PHONE").navigation();
+                ARouter.getInstance()
+                        .build("/app/StoreUpdateActivity")
+                        .withString("MODIFY_TYPE", "PHONE")
+                        .withString("uuid", uuid)
+                        .navigation();
                 break;
             case R.id.time:
                 //营业时间和关闭时间
                 break;
             case R.id.prompt:
                 //优惠描述
+                ARouter.getInstance()
+                        .build("/app/StoreUpdateActivity")
+                        .withString("MODIFY_TYPE", "POINTS_RATE")
+                        .withString("uuid", uuid)
+                        .navigation();
                 break;
             case R.id.store_introduce:
                 //商铺描述
-                ARouter.getInstance().build("/app/StoreUpdateActivity").withString("MODIFY_TYPE", "DESC").navigation();
+                ARouter.getInstance()
+                        .build("/app/StoreUpdateActivity")
+                        .withString("MODIFY_TYPE", "DESC")
+                        .withString("uuid", uuid)
+                        .navigation();
                 break;
         }
     }

@@ -37,7 +37,7 @@ public class ChoosePictureOrVideo {
 
         //判断是否是单选
         if (isSingle){
-            maxSelectNum = Constant.maxSelectNumVideo;
+            maxSelectNum = Constant.MAX_SELECT_NUM_ONE;
             selectionMode = PictureConfig.SINGLE;
         }else {
             maxSelectNum = Constant.MAX_SELECT_NUM_NINE;
@@ -128,7 +128,6 @@ public class ChoosePictureOrVideo {
                         .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
                 break;
         }
-
     }
 
 

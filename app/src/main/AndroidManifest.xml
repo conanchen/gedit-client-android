@@ -58,7 +58,7 @@
             android:name=".ui.store.StoreUpdateActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.store.StoreUpdateHeadPortraitActivity"
+            android:name=".ui.store.StoreUpdateStoreDisplayActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.auth.LoginActivity"
