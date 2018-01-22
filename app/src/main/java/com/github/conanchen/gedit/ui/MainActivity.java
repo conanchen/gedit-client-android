@@ -66,19 +66,6 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
     RadioButton mRbMine;
     @BindView(R.id.rg)
     RadioGroup rg;
-    @BindView(R.id.main_pic)
-    ImageView mainPic;
-    @BindView(R.id.main_text)
-    TextView mainText;
-    @BindView(R.id.main_frame_layout)
-    FrameLayout mainFrameLayout;
-    @BindView(R.id.me_pic)
-    ImageView mePic;
-    @BindView(R.id.me_text)
-    TextView meText;
-    @BindView(R.id.me_frame_layout)
-    FrameLayout meFrameLayout;
-
 
     private List<Fragment> viewPagerList = new ArrayList<>();//装viewPager中的Fragment
     private MainViewPagerAdapter mainViewPagerAdapter; //ViewPager的适配器
