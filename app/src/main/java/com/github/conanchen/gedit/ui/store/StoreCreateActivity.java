@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
@@ -84,29 +85,22 @@ public class StoreCreateActivity extends BaseActivity {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                     Toast.makeText(StoreCreateActivity.this, "创建中....", Toast.LENGTH_SHORT).show();
-//                    if (isLogin) {
-                    //创建商铺
-                    String storeName = mNameEditText.getText().toString().trim();
-                    String storeTel = introducerPhone.getText().toString().trim();
+                    if (isLogin) {
+                        //创建商铺
+                        String storeName = mNameEditText.getText().toString().trim();
+                        String storeTel = introducerPhone.getText().toString().trim();
 
-//创建店铺需提供名称、地理位置、行政区编号、详细地址，其他内容通过单项修改完善
-//        string name = 1; //unique
-//        Location location = 4;
-//        string districtUuid = 9;
-//        string detailAddress = 10;
-//        string introducerUuid = 12;
-
-                    StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
-                            .setName(storeName)
-                            .setLat(104.056508)
-                            .setLon(30.733657)
-                            .setDistrictUuid("441400")
-                            .setDetailAddress("si chun sheng ")
-                            .build();
-                    storeCreateViewModel.createStoreWith(storeCreateInfo);
-//                    } else {
-//                        startActivity(new Intent(StoreCreateActivity.this, LoginActivity.class));
-//                    }
+                        StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
+                                .setName(storeName)
+                                .setLat(104.056508)
+                                .setLon(30.733657)
+                                .setDistrictUuid("441400")
+                                .setDetailAddress("si chun sheng ")
+                                .build();
+                        storeCreateViewModel.createStoreWith(storeCreateInfo);
+                    } else {
+                        ARouter.getInstance().build("/app/LoginActivity").navigation();
+                    }
 
                 });
 

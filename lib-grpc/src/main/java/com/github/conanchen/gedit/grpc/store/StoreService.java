@@ -1,5 +1,6 @@
 package com.github.conanchen.gedit.grpc.store;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Location;
@@ -9,6 +10,7 @@ import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileResponse;
+import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreResponse;
@@ -122,10 +124,6 @@ public class StoreService {
 
     public void storeCreate(StoreCreateInfo storeCreateInfo, StoreCreateCallback callback) {
         ManagedChannel channel = getManagedChannel();
-        Log.i(TAG, "enter service -- storeCreate");
-
-        Log.i("-=-=-=-***", "name:" + storeCreateInfo.name + "---lon:" + storeCreateInfo.lon + "---lat:" + storeCreateInfo.lat
-                + "---districtUuid:" + storeCreateInfo.districtUuid + "---detailAddress:" + storeCreateInfo.detailAddress);
 
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
@@ -165,6 +163,7 @@ public class StoreService {
 
 
     public void updateStore(StoreUpdateInfo storeUpdateInfo, StoreService.UpdateCallback callback) {
+
         CallCredentials callCredentials = JcaUtils
                 .getCallCredentials(storeUpdateInfo.voAccessToken.accessToken,
                         Long.valueOf(storeUpdateInfo.voAccessToken.expiresIn));
@@ -175,23 +174,17 @@ public class StoreService {
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .withCallCredentials(callCredentials)
-                .update(com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest.newBuilder()
-                                .setUuid(storeUpdateInfo.uuid)
-                                .build(),
+                .update(getUpdateStoreRequest(storeUpdateInfo),
                         new StreamObserver<UpdateStoreResponse>() {
                             @Override
                             public void onNext(UpdateStoreResponse value) {
                                 Log.i(TAG, "enter onNext()");
                                 callback.onUpdateStoreResponse(value);
-                                Status status = value.getStatus();
-                                String code = status.getCode();
-                                Log.i(TAG, "staus:" + status + ",code:" + code);
                             }
 
                             @Override
                             public void onError(Throwable t) {
                                 Log.i(TAG, "enter onError()");
-                                Log.e(TAG, t.getMessage());
                                 callback.onUpdateStoreResponse(
                                         UpdateStoreResponse.newBuilder()
                                                 .setStatus(Status.newBuilder().setCode("FAILED")
@@ -206,6 +199,32 @@ public class StoreService {
                             }
                         });
 
+    }
+
+    @Nullable
+    private UpdateStoreRequest getUpdateStoreRequest(StoreUpdateInfo storeUpdateInfo) {
+        UpdateStoreRequest updateStoreRequest = null;
+        switch (storeUpdateInfo.name) {
+            case PHONE:
+                updateStoreRequest = UpdateStoreRequest.newBuilder()
+                        .setUuid(storeUpdateInfo.uuid)
+                        .setName((String) storeUpdateInfo.value)
+                        .build();
+                break;
+            case DESC:
+                updateStoreRequest = UpdateStoreRequest.newBuilder()
+                        .setUuid(storeUpdateInfo.uuid)
+                        .setDesc((String) storeUpdateInfo.value)
+                        .build();
+                break;
+            case DETAIL_ADDRESS:
+                updateStoreRequest = UpdateStoreRequest.newBuilder()
+                        .setUuid(storeUpdateInfo.uuid)
+                        .setDetailAddress((String) storeUpdateInfo.value)
+                        .build();
+                break;
+        }
+        return updateStoreRequest;
     }
 
 

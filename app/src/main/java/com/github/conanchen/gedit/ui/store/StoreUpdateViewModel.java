@@ -33,10 +33,7 @@ public class StoreUpdateViewModel extends ViewModel {
                 return storeRepository.updateStore(storeUpdateInfo);
             }
         });
-
-
     }
-
 
     @VisibleForTesting
     public LiveData<UpdateStoreResponse> getStoreUpdateResponseLiveData() {

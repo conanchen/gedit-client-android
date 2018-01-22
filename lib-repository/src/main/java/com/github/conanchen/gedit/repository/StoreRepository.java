@@ -159,13 +159,11 @@ public class StoreRepository {
                         ;
                     }
                 });
-
             }
         };
     }
 
     public LiveData<UpdateStoreResponse> updateStore(StoreUpdateInfo storeUpdateInfo) {
-        Log.i(TAG, "enter updateStoreWith()");
         return new LiveData<UpdateStoreResponse>() {
             @Override
             protected void onActive() {
@@ -177,7 +175,6 @@ public class StoreRepository {
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
                                 s.lastUpdated = response.getLastUpdated();
-//                                s.address = storeUpdateInfo.detailAddress;
                                 return roomFascade.daoStore.save(s);
                             } else {
                                 return new Long(-1);
@@ -197,8 +194,8 @@ public class StoreRepository {
                                                     .build());
                                         } else {
                                             setValue(UpdateStoreResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder().setCode("FAIL")
-                                                            .setDetails("bottom fail")
+                                                    .setStatus(Status.newBuilder().setCode(response.getStatus().getCode())
+                                                            .setDetails(response.getStatus().getDetails())
                                                             .build())
                                                     .setUuid(response.getUuid())
                                                     .build());

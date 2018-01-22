@@ -14,19 +14,8 @@ public class StoreUpdateInfo {
     public Object value;
 
     public enum Field {
-        NAME, LOGO, TYPE, DESC, DISTRICT_UUID, DETAIL_ADDRESS, LOCATION, POINTS_RATE, IMAGES
+        NAME, LOGO, TYPE, DESC, DISTRICT_UUID, DETAIL_ADDRESS, LOCATION, POINTS_RATE, IMAGES, PHONE
     }
-//
-//    public String name;
-//    public String logo;
-//    public String type;
-//    public String desc;
-//    public String districtUuid;
-//    public String detailAddress;
-//    public Location location;
-//    public int pointsRate;
-//    public List<String> images;
-
 
     private StoreUpdateInfo(VoAccessToken voAccessToken, String uuid, Field name, Object value) {
         this.voAccessToken = voAccessToken;
@@ -52,7 +41,7 @@ public class StoreUpdateInfo {
 
         public StoreUpdateInfo build() {
             String missing = "";
-            if (voAccessToken ==null) {
+            if (voAccessToken == null) {
                 missing += " voAccessToken ";
             }
             if (Strings.isNullOrEmpty(uuid)) {
@@ -69,7 +58,7 @@ public class StoreUpdateInfo {
             if (!missing.isEmpty()) {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
-            return new StoreUpdateInfo(voAccessToken,uuid, name, value);
+            return new StoreUpdateInfo(voAccessToken, uuid, name, value);
         }
 
         public Builder setVoAccessToken(VoAccessToken voAccessToken) {

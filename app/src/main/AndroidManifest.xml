@@ -54,7 +54,9 @@
             android:name=".ui.MainActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.store.StoreUpdateActivity"/>
+        <activity
+            android:name=".ui.store.StoreUpdateActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.store.StoreUpdateHeadPortraitActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

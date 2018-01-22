@@ -1,6 +1,5 @@
 package com.github.conanchen.gedit.ui.my.mystore;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
@@ -67,7 +66,8 @@ public class MyStoreActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.back, R.id.my_employees, R.id.code, R.id.address, R.id.phone, R.id.time, R.id.prompt})
+    @OnClick({R.id.back, R.id.my_employees, R.id.code, R.id.address, R.id.phone, R.id.time, R.id.prompt,
+            R.id.store_introduce})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -83,16 +83,21 @@ public class MyStoreActivity extends AppCompatActivity {
                 break;
             case R.id.address:
                 //地址
+                ARouter.getInstance().build("/app/StoreUpdateActivity").withString("MODIFY_TYPE", "DETAIL_ADDRESS").navigation();
                 break;
             case R.id.phone:
                 //电话
-
+                ARouter.getInstance().build("/app/StoreUpdateActivity").withString("MODIFY_TYPE", "PHONE").navigation();
                 break;
             case R.id.time:
                 //营业时间和关闭时间
                 break;
             case R.id.prompt:
                 //优惠描述
+                break;
+            case R.id.store_introduce:
+                //商铺描述
+                ARouter.getInstance().build("/app/StoreUpdateActivity").withString("MODIFY_TYPE", "DESC").navigation();
                 break;
         }
     }
