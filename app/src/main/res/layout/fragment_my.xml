@@ -139,22 +139,6 @@
         app:layout_constraintTop_toBottomOf="@id/my_works_stores"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/my_invest_payments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@mipmap/add"
-        android:drawablePadding="20dp"
-        android:padding="10dp"
-        android:text="我的投资录单"
-        app:layout_constraintTop_toBottomOf="@id/my_works_stores"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000"
-        app:layout_constraintTop_toBottomOf="@id/my_invest_payments"/>
-
-    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/my_payments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -162,7 +146,7 @@
         android:drawablePadding="20dp"
         android:padding="10dp"
         android:text="我的付款记录"
-        app:layout_constraintTop_toBottomOf="@id/my_invest_payments"/>
+        app:layout_constraintTop_toBottomOf="@id/my_works_stores"/>
 
     <View
         android:layout_width="match_parent"
@@ -170,6 +154,39 @@
         android:background="#000"
         app:layout_constraintTop_toBottomOf="@id/my_payments"/>
 
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/my_receipts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="我的收款记录"
+        app:layout_constraintTop_toBottomOf="@id/my_payments"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/my_receipts"/>
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/my_invest_payments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/add"
+        android:drawablePadding="20dp"
+        android:padding="10dp"
+        android:text="我的投资录单"
+        app:layout_constraintTop_toBottomOf="@id/my_receipts"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintTop_toBottomOf="@id/my_invest_payments"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/qudaili"
@@ -179,7 +196,7 @@
         android:drawablePadding="20dp"
         android:padding="10dp"
         android:text="去代理"
-        app:layout_constraintTop_toBottomOf="@id/my_payments"/>
+        app:layout_constraintTop_toBottomOf="@id/my_invest_payments"/>
 
     <View
         android:layout_width="match_parent"
