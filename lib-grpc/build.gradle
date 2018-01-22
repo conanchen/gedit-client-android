@@ -23,9 +23,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
             buildConfigField 'String', 'ENVIRONMENT', '"PRODUCTION"'
-            buildConfigField 'String', 'GRPC_SERVER_HOST', '"118.178.237.46"'
+            buildConfigField 'String', 'GRPC_SERVER_HOST', '"cloud.jifenpz.com"'  //公司产品服务器
             buildConfigField 'Integer', 'GRPC_SERVER_PORT_AUTH', '9980'
-            buildConfigField 'Integer', 'GRPC_SERVER_PORT_STORE', '8980'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_STORE', '9981'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_PAYMENT', '9982'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_ACCOUNTING', '9983'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_PROMOTION', '9984'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_STORESEARCH', '9985'
         }
 
         debug {
@@ -42,6 +46,7 @@ android {
             buildConfigField 'Integer', 'GRPC_SERVER_PORT_PAYMENT', '9982'
             buildConfigField 'Integer', 'GRPC_SERVER_PORT_ACCOUNTING', '9983'
             buildConfigField 'Integer', 'GRPC_SERVER_PORT_PROMOTION', '9984'
+            buildConfigField 'Integer', 'GRPC_SERVER_PORT_STORESEARCH', '9985'
         }
     }
 
