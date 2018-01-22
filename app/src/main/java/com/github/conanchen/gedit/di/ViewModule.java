@@ -18,6 +18,7 @@ import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.my.myworkinstore.MyWorkStoresActivity;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoresActivity;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
+import com.github.conanchen.gedit.ui.payment.PayeeQRCodeActivity;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
 import com.github.conanchen.gedit.ui.store.StoreDetailActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
@@ -100,6 +101,9 @@ public abstract class ViewModule {
 
     @ContributesAndroidInjector
     abstract MyPointsActivity contributeMyPointsActivity();
+
+    @ContributesAndroidInjector
+    abstract PayeeQRCodeActivity contributePayeeQRCodeActivity();
 
 
 

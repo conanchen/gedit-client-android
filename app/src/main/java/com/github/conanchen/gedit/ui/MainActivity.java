@@ -241,14 +241,14 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
 //                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
-                    Toast.makeText(this, "我要去积分抵扣付款", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, result, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(this, PointsPayActivity.class));
+
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
             }
         }
-
     }
 
 

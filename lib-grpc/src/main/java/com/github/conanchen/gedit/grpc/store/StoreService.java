@@ -6,6 +6,9 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeRequest;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PaymentInappApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.ListTel;
@@ -64,6 +67,11 @@ public class StoreService {
 
     public interface UpdateHeadPortraitCallback {
         void onUpdateHeadPortraitResponse(UpdateStoreResponse response);
+    }
+
+
+    public interface GetQRCodeUrlCallback {
+        void onGetQRCodeUrlCallback(GetMyReceiptCodeResponse response);
     }
 
     private ManagedChannel getManagedChannel() {
@@ -346,5 +354,44 @@ public class StoreService {
                             }
                         });
 
+    }
+
+
+    /**
+     * 获取二维码的字符串
+     *
+     * @param url
+     * @param callback
+     */
+    public void getQRCode(String url, StoreService.GetQRCodeUrlCallback callback) {
+
+        ManagedChannel channel = getManagedChannel();
+        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
+        paymentInappApiStub
+                .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .getMyReceiptCode(GetMyReceiptCodeRequest.newBuilder()
+                        .setPayeeStoreUuid(url)
+                        .build(), new StreamObserver<GetMyReceiptCodeResponse>() {
+                    @Override
+                    public void onNext(GetMyReceiptCodeResponse value) {
+                        Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
+                        callback.onGetQRCodeUrlCallback(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
+                        callback.onGetQRCodeUrlCallback(GetMyReceiptCodeResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode("Fail")
+                                        .setDetails("enter onError() method"))
+                                .build());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
     }
 }

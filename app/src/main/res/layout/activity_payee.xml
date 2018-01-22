@@ -48,6 +48,19 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="积分铺子扫一扫，向我付钱"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/code"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/code"
         android:layout_width="300dp"

@@ -19,6 +19,7 @@ import com.github.conanchen.gedit.ui.my.mypoints.TodayAddedPointsFragmentViewMod
 import com.github.conanchen.gedit.ui.my.mystore.MyStoreEmployeesViewModel;
 import com.github.conanchen.gedit.ui.my.mystore.MyStoresViewModel;
 import com.github.conanchen.gedit.ui.my.myworkinstore.MyWorkStoresViewModel;
+import com.github.conanchen.gedit.ui.payment.PayeeQRCodeViewModel;
 import com.github.conanchen.gedit.ui.store.StoreCreateViewModel;
 import com.github.conanchen.gedit.ui.store.StoreListViewModel;
 import com.github.conanchen.gedit.ui.store.StoreUpdateHeadPortraitViewModel;
@@ -134,5 +135,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CanConsumptionPointsFragmentViewModel.class)
     abstract ViewModel bindCanConsumptionPointsFragmentViewModel(CanConsumptionPointsFragmentViewModel todayAddPointsFragmentViewModel);
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PayeeQRCodeViewModel.class)
+    abstract ViewModel bindPayeeQRCodeViewModel(PayeeQRCodeViewModel payeeQRCodeViewModel);
 
 }
