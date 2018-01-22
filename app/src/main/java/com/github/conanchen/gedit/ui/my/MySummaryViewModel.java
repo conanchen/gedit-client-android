@@ -27,7 +27,11 @@ import com.github.conanchen.gedit.repository.HelloRepository;
 import com.github.conanchen.gedit.room.hello.Hello;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 
+
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MySummaryViewModel extends ViewModel {
 
@@ -53,7 +57,10 @@ public class MySummaryViewModel extends ViewModel {
 
     @VisibleForTesting
     public void setHelloName(String helloName) {
-        helloRepository.sayHello(helloName);
+        Observable.just(true).subscribeOn(Schedulers.computation()).observeOn(Schedulers.io())
+                .subscribe(aBoolean -> {
+                    helloRepository.sayHello(helloName);
+                });
     }
 
     @VisibleForTesting

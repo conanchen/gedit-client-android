@@ -59,7 +59,10 @@ public class HelloViewModel extends ViewModel {
 
     @VisibleForTesting
     public void setHelloName(String helloName) {
-        helloRepository.sayHello(helloName);
+        Observable.just(true).subscribeOn(Schedulers.computation()).observeOn(Schedulers.io())
+                .subscribe(aBoolean -> {
+                    helloRepository.sayHello(helloName);
+                });
     }
 
     @VisibleForTesting
