@@ -40,10 +40,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_arrow_back_black_24dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toLeftOf="@+id/title"/>
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/title"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/title"
@@ -55,7 +55,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/back"
                         app:layout_constraintLeft_toRightOf="@+id/back"
                         app:layout_constraintRight_toLeftOf="@id/right"
-                        app:layout_constraintTop_toTopOf="@+id/back"/>
+                        app:layout_constraintTop_toTopOf="@+id/back" />
 
                     <android.support.v7.widget.AppCompatImageButton
                         android:id="@+id/right"
@@ -65,60 +65,37 @@
                         android:visibility="visible"
                         app:layout_constraintLeft_toRightOf="@+id/title"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
 
-    </android.support.v4.view.ViewPager>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    <RadioGroup
-        android:id="@+id/rg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:background="?android:attr/windowBackground">
+            </android.support.v4.view.ViewPager>
 
-        <RadioButton
-            android:id="@+id/home"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@mipmap/add"
-            android:gravity="center_horizontal"
-            android:padding="5dp"
-            android:text="首页"/>
-
-        <RadioButton
-            android:id="@+id/mine"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@mipmap/add"
-            android:gravity="center_horizontal"
-            android:padding="5dp"
-            android:text="我的"/>
-    </RadioGroup>
-
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/bottom_navigation"
+                style="@style/BottomNavigation"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:menu="@menu/bottom_navigation_menu" />
+        </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

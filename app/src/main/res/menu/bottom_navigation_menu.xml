@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.github.conanchen.gedit.ui.MainActivity">
+
+    <item
+        android:id="@+id/bottom_navigation_main"
+        android:title="首页"
+        android:icon="@drawable/ic_arrow_back_black_24dp"/>
+    <item
+        android:id="@+id/bottom_navigation_scan"
+        android:title="扫一扫"
+        android:icon="@drawable/ic_arrow_back_black_24dp"/>
+    <item
+        android:id="@+id/bottom_navigation_my"
+        android:title="我的"
+        android:icon="@drawable/ic_arrow_back_black_24dp"/>
+
+</menu>
