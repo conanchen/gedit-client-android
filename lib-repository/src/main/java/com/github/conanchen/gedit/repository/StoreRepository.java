@@ -10,8 +10,6 @@ import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.store.StoreService;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.ReceiptCode;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
@@ -320,57 +318,5 @@ public class StoreRepository {
         };
     }
 
-    /**
-     * 联网获取生成二维码的字符串
-     *
-     * @param url
-     * @return
-     */
-    public LiveData<GetMyReceiptCodeResponse> getQRCode(String url) {
-        return new LiveData<GetMyReceiptCodeResponse>() {
-            @Override
-            protected void onActive() {
-                grpcFascade.storeService.getQRCode(url, new StoreService.GetQRCodeUrlCallback() {
-                    @Override
-                    public void onGetQRCodeUrlCallback(GetMyReceiptCodeResponse response) {
-                        Observable.fromCallable(() -> {
 
-                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
-                                return response;
-                            } else {
-                                GetMyReceiptCodeResponse getMyReceiptCodeResponse = GetMyReceiptCodeResponse.newBuilder()
-                                        .setReceiptCode(ReceiptCode.newBuilder()
-                                                .setCode("fail")
-                                                .build())
-                                        .build();
-                                return getMyReceiptCodeResponse;
-                            }
-                        }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<GetMyReceiptCodeResponse>() {
-                                    @Override
-                                    public void accept(@NonNull GetMyReceiptCodeResponse getMyReceiptCodeResponse) throws Exception {
-                                        if (!"fail".equals(getMyReceiptCodeResponse.getReceiptCode().getCode())) {
-                                            setValue(GetMyReceiptCodeResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder().setCode("OK")
-                                                            .setDetails("update Store successfully")
-                                                            .build())
-                                                    .build());
-                                        } else {
-                                            setValue(GetMyReceiptCodeResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder()
-                                                            .setCode(response.getStatus().getCode())
-                                                            .setDetails(response.getStatus().getDetails())
-                                                            .build())
-                                                    .build());
-                                        }
-                                    }
-                                });
-                        ;
-                    }
-                });
-            }
-        };
-
-    }
 }

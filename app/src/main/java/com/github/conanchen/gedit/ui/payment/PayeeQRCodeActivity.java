@@ -18,12 +18,6 @@ import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;

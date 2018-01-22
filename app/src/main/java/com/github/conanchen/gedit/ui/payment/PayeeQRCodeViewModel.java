@@ -1,6 +1,5 @@
 package com.github.conanchen.gedit.ui.payment;
 
-import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
@@ -8,10 +7,8 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
-import com.github.conanchen.gedit.repository.StoreRepository;
-import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
+import com.github.conanchen.gedit.repository.PaymentRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.google.common.base.Strings;
 
 import javax.inject.Inject;
@@ -22,27 +19,27 @@ import javax.inject.Inject;
 
 public class PayeeQRCodeViewModel extends ViewModel {
     @VisibleForTesting
-    final MutableLiveData<String> storeUpdateInfoMutableLiveData = new MutableLiveData<>();
-    private final LiveData<GetMyReceiptCodeResponse> storeQRCodeLiveData;
+    final MutableLiveData<String> paymentMutableLiveData = new MutableLiveData<>();
+    private final LiveData<GetMyReceiptCodeResponse> paymentQRCodeLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
-    public PayeeQRCodeViewModel(StoreRepository storeRepository) {
-        storeQRCodeLiveData = Transformations.switchMap(storeUpdateInfoMutableLiveData, string->{
-            if(Strings.isNullOrEmpty(string)){
+    public PayeeQRCodeViewModel(PaymentRepository paymentRepository) {
+        paymentQRCodeLiveData = Transformations.switchMap(paymentMutableLiveData, string -> {
+            if (Strings.isNullOrEmpty(string)) {
                 return AbsentLiveData.create();
-            }else{
-                return  storeRepository.getQRCode(string);
+            } else {
+                return paymentRepository.getQRCode(string);
             }
         });
     }
 
     @VisibleForTesting
     public LiveData<GetMyReceiptCodeResponse> getStoreQRCodeLiveData() {
-        return storeQRCodeLiveData;
+        return paymentQRCodeLiveData;
     }
 
     public void getQRCode(String url) {
-        storeUpdateInfoMutableLiveData.setValue(url);
+        paymentMutableLiveData.setValue(url);
     }
 }

@@ -357,41 +357,5 @@ public class StoreService {
     }
 
 
-    /**
-     * 获取二维码的字符串
-     *
-     * @param url
-     * @param callback
-     */
-    public void getQRCode(String url, StoreService.GetQRCodeUrlCallback callback) {
 
-        ManagedChannel channel = getManagedChannel();
-        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
-        paymentInappApiStub
-                .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .getMyReceiptCode(GetMyReceiptCodeRequest.newBuilder()
-                        .setPayeeStoreUuid(url)
-                        .build(), new StreamObserver<GetMyReceiptCodeResponse>() {
-                    @Override
-                    public void onNext(GetMyReceiptCodeResponse value) {
-                        Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
-                        callback.onGetQRCodeUrlCallback(value);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
-                        callback.onGetQRCodeUrlCallback(GetMyReceiptCodeResponse.newBuilder()
-                                .setStatus(Status.newBuilder()
-                                        .setCode("Fail")
-                                        .setDetails("enter onError() method"))
-                                .build());
-                    }
-
-                    @Override
-                    public void onCompleted() {
-
-                    }
-                });
-    }
 }

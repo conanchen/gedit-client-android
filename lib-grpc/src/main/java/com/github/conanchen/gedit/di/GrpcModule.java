@@ -7,6 +7,7 @@ import com.github.conanchen.gedit.grpc.accounting.AccountService;
 import com.github.conanchen.gedit.grpc.hello.HelloService;
 import com.github.conanchen.gedit.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.grpc.auth.SigninService;
+import com.github.conanchen.gedit.grpc.payment.PaymentService;
 import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.grpc.store.MyMemberStoreService;
 import com.github.conanchen.gedit.grpc.store.MyStoreService;
@@ -38,7 +39,8 @@ public class GrpcModule {
             SigninService signinService,
             RegisterService registerService,
             AccountService accountService,
-            PostingService postingService
+            PostingService postingService,
+           PaymentService paymentService
 
     ) {
         return new GrpcFascade(
@@ -52,7 +54,8 @@ public class GrpcModule {
                 signinService,
                 registerService,
                 accountService,
-                postingService);
+                postingService,
+                paymentService);
     }
 
     @Singleton
@@ -120,5 +123,11 @@ public class GrpcModule {
     @Provides
     public PostingService providePostingService() {
         return new PostingService();
+    }
+
+    @Singleton
+    @Provides
+    public PaymentService providePaymentService() {
+        return new PaymentService();
     }
 }
