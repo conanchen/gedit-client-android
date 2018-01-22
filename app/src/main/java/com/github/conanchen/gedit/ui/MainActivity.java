@@ -138,6 +138,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                         break;
                     case R.id.bottom_navigation_scan:
                         startScan();
+                        mViewPager.setCurrentItem(0);
                         break;
                     case R.id.bottom_navigation_my:
                         mViewPager.setCurrentItem(1);
