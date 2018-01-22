@@ -73,7 +73,7 @@ public class AccountingRepository {
     }
 
 
-    public LiveData<PagedList<Posting>> loadMyPointsByDate(Long time) {
+    public LiveData<PagedList<Posting>> loadMyPointsByDate(String accountId, Long time) {
         // Use the Calendar class to subtract one day
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
@@ -82,7 +82,7 @@ public class AccountingRepository {
         calendar.add(Calendar.DAY_OF_YEAR, +2);
         Long end = calendar.getTimeInMillis();
 
-        return (new LivePagedListBuilder<Integer, Posting>(roomFascade.daoPosting.listLivePagedMyPostingByDate(start,end), pagedListConfig))
+        return (new LivePagedListBuilder<Integer, Posting>(roomFascade.daoPosting.listLivePagedMyPostingByDate(accountId,start,end), pagedListConfig))
                 .setBoundaryCallback(new PagedList.BoundaryCallback<Posting>() {
                     @Override
                     public void onZeroItemsLoaded() {

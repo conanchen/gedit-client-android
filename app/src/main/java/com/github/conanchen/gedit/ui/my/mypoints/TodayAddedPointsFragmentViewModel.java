@@ -29,7 +29,7 @@ public class TodayAddedPointsFragmentViewModel extends ViewModel {
             if (time == null) {
                 return AbsentLiveData.create();
             } else {
-                return accountingRepository.loadMyPointsByDate(time);
+                return accountingRepository.loadMyPointsByDate("000001",time);
             }
         });
     }

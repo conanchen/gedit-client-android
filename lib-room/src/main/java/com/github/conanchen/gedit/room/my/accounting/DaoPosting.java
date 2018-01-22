@@ -17,13 +17,13 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface DaoPosting {
     @Insert(onConflict = REPLACE)
-    Long save(Posting store);
+    Long save(Posting posting);
 
     @Insert(onConflict = REPLACE)
-    Long[] saveAll(Posting... stores);
+    Long[] saveAll(Posting... postings);
 
     @Delete
-    void delete(Posting store);
+    void delete(Posting posting);
 
     @Query("SELECT * FROM Posting WHERE accountUuid = :accountUuid LIMIT 1")
     LiveData<Posting> findLive(String accountUuid);
@@ -35,10 +35,10 @@ public interface DaoPosting {
     Posting findOne(String accountUuid);
 
 
-    @Query("SELECT * FROM Posting WHERE :start < created AND created < :end ORDER by created DESC ")
-    public abstract DataSource.Factory<Integer, Posting> listLivePagedMyPostingByDate(Long start,Long end);
+    @Query("SELECT * FROM Posting WHERE accountUuid = :accountUuid AND :start < created AND created < :end ORDER by created DESC ")
+    public abstract DataSource.Factory<Integer, Posting> listLivePagedMyPostingByDate(String accountUuid, Long start,Long end);
 
-    @Query("SELECT * FROM Posting ORDER by created DESC ")
-    public abstract DataSource.Factory<Integer, Posting> listLivePagedMyPosting();
+    @Query("SELECT * FROM Posting WHERE accountUuid = :accountUuid ORDER by created DESC ")
+    public abstract DataSource.Factory<Integer, Posting> listLivePagedMyPosting(String accountUuid);
 
 }
