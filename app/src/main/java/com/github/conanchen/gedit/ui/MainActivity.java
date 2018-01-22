@@ -132,12 +132,12 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.bottom_navigation_main:
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.bottom_navigation_scan:
-                        ARouter.getInstance().build("/app/GaptureActivity").navigation();
+                        startScan();
                         break;
                     case R.id.bottom_navigation_my:
                         mViewPager.setCurrentItem(1);
@@ -173,36 +173,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
     public void onClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
             //扫一扫
-            Observable.just(true).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
-                Dexter.withActivity(MainActivity.this)
-                        .withPermission(Manifest.permission.CAMERA)
-                        .withListener(new PermissionListener() {
-                            @Override
-                            public void onPermissionGranted(PermissionGrantedResponse response) {
-//                                    ARouter.getInstance().build("/app/GaptureActivity").navigation();
-                                Intent intent = new Intent(MainActivity.this, GaptureActivity.class);
-                                startActivityForResult(intent, REQUEST_CODE);
-                            }
-
-                            @Override
-                            public void onPermissionDenied(PermissionDeniedResponse response) {
-                                Toast.makeText(MainActivity.this, "我们需要摄像头访问权限来启动扫码功能，can not open GaptureActivity ", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                                MainActivity.this.showPermissionRationale(token);
-                            }
-                        })
-                        .withErrorListener(new PermissionRequestErrorListener() {
-                            @Override
-                            public void onError(DexterError error) {
-
-                            }
-                        })
-                        .onSameThread()
-                        .check();
-            });
+            startScan();
         } else if (position == 1) {
             //收款界面
 //            startActivity(new Intent(this, PointsPayActivity.class));
@@ -211,6 +182,40 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
             //录单
             startActivity(new Intent(this, BuyInvestPaymentActivity.class));
         }
+    }
+
+    private void startScan() {
+        Observable.just(true).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+            Dexter.withActivity(MainActivity.this)
+                    .withPermission(Manifest.permission.CAMERA)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+//                                    ARouter.getInstance().build("/app/GaptureActivity").navigation();
+                            Intent intent = new Intent(MainActivity.this, GaptureActivity.class);
+                            startActivityForResult(intent, REQUEST_CODE);
+                        }
+
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                            Toast.makeText(MainActivity.this, "我们需要摄像头访问权限来启动扫码功能，can not open GaptureActivity ", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                            MainActivity.this.showPermissionRationale(token);
+                        }
+                    })
+                    .withErrorListener(new PermissionRequestErrorListener() {
+                        @Override
+                        public void onError(DexterError error) {
+
+                        }
+                    })
+                    .onSameThread()
+                    .check();
+        });
+
     }
 
     /**
