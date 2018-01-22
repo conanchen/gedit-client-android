@@ -9,8 +9,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
@@ -20,6 +25,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
@@ -60,12 +66,10 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
-    @BindView(R.id.home)
-    RadioButton mRbHome;
-    @BindView(R.id.mine)
-    RadioButton mRbMine;
-    @BindView(R.id.rg)
-    RadioGroup rg;
+
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView mBottomNavigationView;
+
 
     private List<Fragment> viewPagerList = new ArrayList<>();//装viewPager中的Fragment
     private MainViewPagerAdapter mainViewPagerAdapter; //ViewPager的适配器
@@ -105,8 +109,6 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
 
         //默认选中首页
-        mRbHome.setTextColor(getResources().getColor(R.color.blue));
-        mRbMine.setTextColor(getResources().getColor(R.color.black));
         mViewPager.setCurrentItem(0);
 
 
@@ -118,16 +120,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
             @Override
             public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        mRbHome.setTextColor(getResources().getColor(R.color.blue));
-                        mRbMine.setTextColor(getResources().getColor(R.color.black));
-                        break;
-                    case 1:
-                        mRbHome.setTextColor(getResources().getColor(R.color.black));
-                        mRbMine.setTextColor(getResources().getColor(R.color.blue));
-                        break;
-                }
+                mBottomNavigationView.getMenu().getItem(position).setChecked(true);
             }
 
             @Override
@@ -136,21 +129,22 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
             }
         });
 
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.home:
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.bottom_navigation_main:
                         mViewPager.setCurrentItem(0);
-                        mRbHome.setTextColor(getResources().getColor(R.color.blue));
-                        mRbMine.setTextColor(getResources().getColor(R.color.black));
                         break;
-                    case R.id.mine:
+                    case R.id.bottom_navigation_scan:
+                        ARouter.getInstance().build("/app/GaptureActivity").navigation();
+                        break;
+                    case R.id.bottom_navigation_my:
                         mViewPager.setCurrentItem(1);
-                        mRbHome.setTextColor(getResources().getColor(R.color.black));
-                        mRbMine.setTextColor(getResources().getColor(R.color.blue));
                         break;
                 }
+
+                return true;//要return true否则点击各个item就没法选中了
             }
         });
     }
