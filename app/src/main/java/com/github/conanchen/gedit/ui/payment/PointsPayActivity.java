@@ -217,7 +217,7 @@ public class PointsPayActivity extends BaseActivity {
                     paymentRequest = CreatePaymentRequest.newBuilder()
                             .setActualPay(1)
                             .setPayerIp(NetworkUtils.getIPAddress(true))
-                            .setChannel(PaymentChannel.WXPAY)
+                            .setChannel(PaymentChannel.WECHAT)
                             .build();
                 }
                 Log.i("-=-=-=-", "使不使用积分:" + usePoints + "----微信还是支付宝:" + selected);
