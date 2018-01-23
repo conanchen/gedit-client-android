@@ -173,11 +173,10 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
             startScan();
         } else if (position == 1) {
             //收款界面
-//            startActivity(new Intent(this, PointsPayActivity.class));
-            startActivity(new Intent(this, PayeeQRCodeActivity.class));
+            ARouter.getInstance().build("/app/PayeeQRCodeActivity").navigation();
         } else {
             //录单
-            startActivity(new Intent(this, BuyInvestPaymentActivity.class));
+            ARouter.getInstance().build("/app/BuyInvestPaymentActivity").navigation();
         }
     }
 

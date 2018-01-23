@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.github.conanchen.gedit.repository.PaymentRepository;
@@ -28,6 +29,10 @@ public class PointsPayViewModel extends ViewModel {
     final MutableLiveData<String> paymentMutableLiveData = new MutableLiveData<>();
     private final LiveData<PrepareMyPaymentResponse> paymentLiveData;
 
+    @VisibleForTesting
+    final MutableLiveData<CreatePaymentRequest> createPaymentMutableLiveData = new MutableLiveData<>();
+    private final LiveData<PaymentResponse> createPaymentLiveData;
+
     @SuppressWarnings("unchecked")
     @Inject
     public PointsPayViewModel(PaymentRepository paymentRepository) {
@@ -44,6 +49,15 @@ public class PointsPayViewModel extends ViewModel {
                 return AbsentLiveData.create();
             } else {
                 return paymentRepository.getPayment(string);
+            }
+        });
+
+
+        createPaymentLiveData = Transformations.switchMap(createPaymentMutableLiveData, createPaymentRequest -> {
+            if (createPaymentRequest == null) {
+                return AbsentLiveData.create();
+            } else {
+                return paymentRepository.getCreatePayment(createPaymentRequest);
             }
         });
 
@@ -66,5 +80,15 @@ public class PointsPayViewModel extends ViewModel {
 
     public void getPayment(String url) {
         paymentMutableLiveData.setValue(url);
+    }
+
+
+    @VisibleForTesting
+    public LiveData<PaymentResponse> getCreatePaymentLiveData() {
+        return createPaymentLiveData;
+    }
+
+    public void getCreatePayment(CreatePaymentRequest createPaymentRequest) {
+        createPaymentMutableLiveData.setValue(createPaymentRequest);
     }
 }

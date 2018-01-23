@@ -17,6 +17,8 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
+import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.google.gson.Gson;
@@ -114,6 +116,18 @@ public class PointsPayActivity extends BaseActivity {
 //                    int32 actualPay = 16; //实付金额
 //                    int32 pointsPay = 17; //实付积分代替金额
 //                    int32 pointsRepay = 18; //返还积分
+                    pointsPayViewModel.getCreatePayment(CreatePaymentRequest.newBuilder().build());
+                }
+            }
+        });
+
+
+        pointsPayViewModel.getCreatePaymentLiveData().observe(this, new Observer<PaymentResponse>() {
+            @Override
+            public void onChanged(@Nullable PaymentResponse paymentResponse) {
+                Log.i("-=-=-=-=-=create()", gson.toJson(paymentResponse));
+                if (paymentResponse != null) {
+
                 }
             }
         });

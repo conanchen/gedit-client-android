@@ -11,6 +11,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
@@ -24,7 +25,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+@Route(path = "/app/PayeeQRCodeActivity")
 public class PayeeQRCodeActivity extends BaseActivity {
 
     private Gson gson = new Gson();
@@ -55,7 +56,6 @@ public class PayeeQRCodeActivity extends BaseActivity {
                     Log.i("-=-=-=-=--进来了", gson.toJson(getMyReceiptCodeResponse));
                     String code = getMyReceiptCodeResponse.getReceiptCode().getCode();
                     String logo = getMyReceiptCodeResponse.getReceiptCode().getPayeeLogo();
-                    logo = "http://sxd-moment.oss-cn-hangzhou.aliyuncs.com/advertisement/advertisement_hdpi.png";
                     Bitmap mBitmap = CodeUtils
                             .createImage(Strings.isNullOrEmpty(code) ? "you are a beautiful girl " : code, 400, 400,
                                     Strings.isNullOrEmpty(logo) ? null : BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));

@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.payment.PaymentService;
+import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
@@ -158,12 +160,15 @@ public class PaymentRepository {
                     @Override
                     public void onGetPaymentCallback(PrepareMyPaymentResponse response) {
                         Observable.fromCallable(() -> {
-
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 return response;
                             } else {
-//                                PrepareMyPaymentResponse prepareMyPaymentResponse=  PrepareMyPaymentResponse.newBuilder().setStatus(Status.newBuilder().setCode("fail").build());
-                                return response;
+                                PrepareMyPaymentResponse prepareMyPaymentResponse = PrepareMyPaymentResponse.newBuilder()
+                                        .setStatus(Status.newBuilder()
+                                                .setCode("fail")
+                                                .build())
+                                        .build();
+                                return prepareMyPaymentResponse;
                             }
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -192,4 +197,55 @@ public class PaymentRepository {
             }
         };
     }
+
+
+    public LiveData<PaymentResponse> getCreatePayment(CreatePaymentRequest request) {
+        return new LiveData<PaymentResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.paymentService.getCreatePayment(request, new PaymentService.CreatePaymentCallback() {
+                    @Override
+                    public void onCreatePaymentCallback(PaymentResponse response) {
+
+                        Observable.fromCallable(() -> {
+                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                                return response;
+                            } else {
+                                PaymentResponse paymentResponse = PaymentResponse.newBuilder()
+                                        .setStatus(Status.newBuilder()
+                                                .setCode("fail")
+                                                .build())
+                                        .build();
+                                return paymentResponse;
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<PaymentResponse>() {
+                                    @Override
+                                    public void accept(@NonNull PaymentResponse paymentResponse) throws Exception {
+                                        if (!"fail".equals(paymentResponse.getStatus().getCode())) {
+                                            setValue(PaymentResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                            .setDetails("update Store successfully")
+                                                            .build())
+                                                    .build());
+                                        } else {
+                                            setValue(PaymentResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(response.getStatus().getCode())
+                                                            .setDetails(response.getStatus().getDetails())
+                                                            .build())
+                                                    .build());
+                                        }
+                                    }
+                                });
+                        ;
+                    }
+                });
+
+            }
+        };
+
+    }
+
 }

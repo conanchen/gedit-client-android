@@ -5,6 +5,8 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
+import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeRequest;
@@ -40,6 +42,11 @@ public class PaymentService {
         void onGetPaymentCallback(PrepareMyPaymentResponse response);
     }
 
+
+    public interface CreatePaymentCallback {
+        void onCreatePaymentCallback(PaymentResponse response);
+    }
+
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
                 .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_PAYMENT)
@@ -49,7 +56,7 @@ public class PaymentService {
     }
 
     /**
-     * 获取二维码的字符串
+     * getMyReceiptCode
      *
      * @param url
      * @param callback
@@ -88,7 +95,7 @@ public class PaymentService {
 
 
     /**
-     * 获取二维码的字符串
+     * getReceiptCode
      *
      * @param url
      * @param callback
@@ -126,7 +133,7 @@ public class PaymentService {
     }
 
     /**
-     * 获取二维码的字符串
+     * prepareMyPayment
      *
      * @param url
      * @param callback
@@ -163,5 +170,40 @@ public class PaymentService {
                 });
     }
 
+    /**
+     * create
+     *
+     * @param request
+     * @param callback
+     */
+    public void getCreatePayment(CreatePaymentRequest request, CreatePaymentCallback callback) {
+
+        ManagedChannel channel = getManagedChannel();
+        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
+        paymentInappApiStub
+                .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .create(request, new StreamObserver<PaymentResponse>() {
+                    @Override
+                    public void onNext(PaymentResponse value) {
+                        Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
+                        callback.onCreatePaymentCallback(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
+                        callback.onCreatePaymentCallback(PaymentResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode("Fail")
+                                        .setDetails("enter onError() method"))
+                                .build());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
+    }
 
 }
