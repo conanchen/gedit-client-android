@@ -65,7 +65,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.auth.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.store.StoreUpdateAddressActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
@@ -125,7 +126,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.auth.ForgetPasswordActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.my.myworkinstore.MyWorkStoresActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
