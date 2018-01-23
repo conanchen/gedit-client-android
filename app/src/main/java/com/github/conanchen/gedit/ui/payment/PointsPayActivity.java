@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
@@ -15,12 +16,17 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.PaymentChannel;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
+import com.github.conanchen.gedit.util.pay.AliPayUtil;
+import com.github.conanchen.gedit.util.pay.PayResultCallBack;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -34,34 +40,41 @@ import butterknife.OnClick;
  */
 @Route(path = "/app/PointsPayActivity")
 public class PointsPayActivity extends BaseActivity {
+
     private Gson gson = new Gson();
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     PointsPayViewModel pointsPayViewModel;
 
-    @BindView(R.id.store_name)
-    AppCompatTextView storeName;
-    @BindView(R.id.need_pay)
-    AppCompatEditText needPay;
-    @BindView(R.id.use_integral_desc)
-    AppCompatTextView useIntegralDesc;
-    @BindView(R.id.use)
-    AppCompatCheckBox use;
-    @BindView(R.id.no_use_integral_desc)
-    AppCompatTextView noUseIntegralDesc;
-    @BindView(R.id.no_use)
-    AppCompatCheckBox noUse;
-    @BindView(R.id.money)
-    AppCompatTextView money;
-    @BindView(R.id.used_integral)
-    AppCompatTextView usedIntegral;
-    @BindView(R.id.submit)
-    AppCompatButton submit;
 
+    @BindView(R.id.store_name)
+    AppCompatTextView mTvStoreName;
+    @BindView(R.id.need_pay)
+    AppCompatEditText mEtNeedPay;
+    @BindView(R.id.money)
+    AppCompatTextView mTvMoney;
+    @BindView(R.id.desc)
+    AppCompatTextView desc;
+    @BindView(R.id.submit)
+    AppCompatButton mBtSubmit;
+    @BindView(R.id.use_points)
+    AppCompatCheckBox mCbUsePoints;
+    @BindView(R.id.no_use_points)
+    AppCompatCheckBox mCbNoUsePoints;
+    @BindView(R.id.ali_pay)
+    AppCompatTextView mTvAliPay;
+    @BindView(R.id.ali_bg)
+    AppCompatImageView mIvAliBg;
+    @BindView(R.id.weixin)
+    AppCompatTextView mTvWeixin;
+    @BindView(R.id.weinxin_bg)
+    AppCompatImageView mIvWeinxinBg;
 
     @Autowired
     public String code;
+
+    private int selected = 1;//选择支付  1表示支付宝， 2 表示微信
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,19 +93,6 @@ public class PointsPayActivity extends BaseActivity {
             public void onChanged(@Nullable GetReceiptCodeResponse getReceiptCodeResponse) {
                 Log.i("-=-=-=-=-=", gson.toJson(getReceiptCodeResponse));
                 if (getReceiptCodeResponse != null) {
-//                    string code = 1; //店员/收银员客户端使用这个代码生成收款码QRCode
-//                    int64 expiresIn = 3; //code的过期时间
-//                    //以下为QRCode界面可能用到的提示用信息
-//                    string payeeUuid = 5; //店主uuid
-//                    string payeeLogo = 7; //店主logo
-//                    string payeeName = 9; //店主昵称
-//                    string payeeStoreUuid = 13; //店员/收银员工作店铺的uuid
-//                    string payeeStoreLogo = 15; //工作店铺的logo
-//                    string payeeStoreNamee = 17; //工作店铺的名称
-//                    string payeeWorkerUuid = 25; //店员/收银员uuid
-//                    string payeeWorkerLogo = 27; //店员/收银员logo
-//                    string payeeWorkerName = 29; //店员/收银员昵称
-                    //需要  payeeReceiptCode
                     // TODO: 2018/1/22  处理界面显示
 
                     String payeeReceiptCode = "oooooo";//服务器返回
@@ -107,16 +107,8 @@ public class PointsPayActivity extends BaseActivity {
             public void onChanged(@Nullable PrepareMyPaymentResponse prepareMyPaymentResponse) {
                 Log.i("-=-=-=-=-=getPayment()", gson.toJson(prepareMyPaymentResponse));
                 if (prepareMyPaymentResponse != null) {
-//                    string payeeReceiptCode = 11; //收款码
-//                    string payeeUuid = 12; //收款人（其实是店主）
-//                    string payeeStoreUuid = 13; //收款店铺
-//                    string payeeWorkerUuid = 14; //收款员工
-//
-//                    int32 shouldPay = 15; //应付金额 = 实付金额 + 实付积分等价金额
-//                    int32 actualPay = 16; //实付金额
-//                    int32 pointsPay = 17; //实付积分代替金额
-//                    int32 pointsRepay = 18; //返还积分
-                    pointsPayViewModel.getCreatePayment(CreatePaymentRequest.newBuilder().build());
+                    // TODO: 2018/1/23 处理返还积分的
+
                 }
             }
         });
@@ -127,22 +119,112 @@ public class PointsPayActivity extends BaseActivity {
             public void onChanged(@Nullable PaymentResponse paymentResponse) {
                 Log.i("-=-=-=-=-=create()", gson.toJson(paymentResponse));
                 if (paymentResponse != null) {
-
+                    String channelOrderUuid = paymentResponse.getPayment().getChannelOrderUuid();
+                    if (selected == 1) {
+                        Log.i("-=-=-=-", "支付宝");
+                        aliPay(channelOrderUuid);
+                    } else if (selected == 2) {
+                        Log.i("-=-=-=-", "微信");
+//                        weXinPay(channelOrderUuid);
+                    }
                 }
             }
         });
-
-
     }
 
-    @OnClick({R.id.back, R.id.submit})
+    /**
+     * 支付宝支付
+     *
+     * @param channelOrderUuid 订单号
+     */
+    private void aliPay(String channelOrderUuid) {
+
+        //调起支付
+        AliPayUtil payUtil = new AliPayUtil(PointsPayActivity.this, new PayResultCallBack() {
+            @Override
+            public void OnSuccess(String orderInfo) {
+                //成功
+                Log.i("-=-=-=", "OnSuccess");
+            }
+
+            @Override
+            public void OnDealing(String orderInfo) {
+                //处理中
+                Log.i("-=-=-=", "OnDealing");
+            }
+
+            @Override
+            public void OnFail(int code, String error_message) {
+                //失败
+                Log.i("-=-=-=", "OnFail");
+            }
+        });
+
+        String orderInfo = "app_id=2017051607257813&biz_content=%7B%22out_trade_no%22%3A2017120616103183710%2C%22total_amount%22%3A%220." +
+                "01%22%2C%22subject%22%3A%220.01%22%2C%22body%22%3A%22%7B%5C%22desc%5C%22%3A%5C%22%E8%B4%AD%E4%B9%B0VIP%5C%22%7D%22%2C%22product" +
+                "_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22passback_params%22%3A%22%7B%5C%22unit%5C%22%3A%5C%22%E5%A4%A9%5C%22%2C%5C%22payVipDay%5C%22%3A15%2C%5C%22" +
+                "managerId%5C%22%3A1%2C%5C%22tradeType%5C%22%3A100%7D%22%7D&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=" +
+                "http%3A%2F%2F192.168.1.200%2Fapi%2FalipayUrl&sign_type=RSA&timestamp=2017-12-06%2016%3A10%3A31&version=1.0&sign=IM9v8BlHdwV1zWu6LFRm0Zea32KryyV1d5E4CCWZh4Xp7FogFkGbnDrIDuF" +
+                "2lGcnAkszDweyQrN%2FcYiJA8BotpVzZ7%2FX9s6pEOpI5W%2F5GHbZ8UyhuZIUFUx%2FUVZjuqGn8jMnFhyjuZH5ipMCuw1GX%2Bnqq6MWVQabz4it20U%2FuUc%3D";//订单号
+
+        payUtil.doAliPay(Strings.isNullOrEmpty(channelOrderUuid) ? orderInfo : channelOrderUuid);
+    }
+
+
+    @OnClick({R.id.back, R.id.submit, R.id.use_points_desc, R.id.use_points, R.id.no_use_points, R.id.no_use_points_desc,
+            R.id.ali_pay, R.id.weixin})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
+            case R.id.use_points_desc:
+            case R.id.use_points:
+                mCbUsePoints.setChecked(true);
+                mCbNoUsePoints.setChecked(false);
+                break;
+            case R.id.no_use_points_desc:
+            case R.id.no_use_points:
+                mCbNoUsePoints.setChecked(true);
+                mCbUsePoints.setChecked(false);
+                break;
+            case R.id.ali_pay:
+                mIvAliBg.setVisibility(View.VISIBLE);
+                mIvWeinxinBg.setVisibility(View.GONE);
+                selected = 1;
+                break;
+            case R.id.weixin:
+                mIvAliBg.setVisibility(View.GONE);
+                mIvWeinxinBg.setVisibility(View.VISIBLE);
+                selected = 2;
+                break;
             case R.id.submit:
+                int usePoints = 1;
+                if (mCbUsePoints.isChecked()) {
+                    usePoints = 1;
+                } else if (mCbNoUsePoints.isChecked()) {
+                    usePoints = 0;
+                }
+
+                CreatePaymentRequest paymentRequest = null;
+                if (selected == 1) {
+                    paymentRequest = CreatePaymentRequest.newBuilder()
+                            .setActualPay(1)
+                            .setPayerIp(NetworkUtils.getIPAddress(true))
+                            .setChannel(PaymentChannel.ALIPAY)
+                            .build();
+                } else if (selected == 2) {
+                    paymentRequest = CreatePaymentRequest.newBuilder()
+                            .setActualPay(1)
+                            .setPayerIp(NetworkUtils.getIPAddress(true))
+                            .setChannel(PaymentChannel.WXPAY)
+                            .build();
+                }
+                Log.i("-=-=-=-", "使不使用积分:" + usePoints + "----微信还是支付宝:" + selected);
+                pointsPayViewModel.getCreatePayment(paymentRequest);
+
                 break;
         }
     }
+
 }

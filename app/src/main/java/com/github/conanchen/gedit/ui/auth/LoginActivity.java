@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.grpc.auth.SigninInfo;
@@ -111,11 +112,11 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.register:
                 //快速注册
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                ARouter.getInstance().build("/app/RegisterActivity").withString("TYPE", "Register").navigation();
                 break;
             case R.id.forget:
                 //忘记密码
-                startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
+                ARouter.getInstance().build("/app/RegisterActivity").withString("TYPE", "ForgetPass").navigation();
                 break;
         }
     }
