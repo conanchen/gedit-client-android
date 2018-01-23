@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
@@ -39,7 +41,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 注册界面   进入界面先获取问题及
@@ -57,6 +58,8 @@ public class RegisterActivity extends BaseActivity {
     AppCompatEditText mEtVerifyCode;
     @BindView(R.id.question)
     AppCompatTextView mTvQuestionDesc;
+    @BindView(R.id.title)
+    AppCompatTextView mTvTitle;
     @BindView(R.id.get_sms_code)
     AppCompatTextView mTvGetSmsCode;
     @BindView(R.id.register)
@@ -68,6 +71,9 @@ public class RegisterActivity extends BaseActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @Autowired
+    public String TYPE;//判断是注册还是忘记密码
+
     private static final Gson gson = new Gson();
     private RegisterVerifyPicAdapter mAdapter;
     private List<Question> mData = new ArrayList<>();
@@ -78,11 +84,22 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
+
+        setTitle();
         setupViewModel();
         setupRecyclerView();
 
         setupInputChecker();
 
+    }
+
+    private void setTitle() {
+        if ("Register".equals(TYPE)) {
+            mTvTitle.setText("注册");
+        } else if ("ForgetPass".equals(TYPE)) {
+            mTvTitle.setText("修改密码");
+        }
     }
 
     private void setupInputChecker() {
