@@ -10,6 +10,8 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
@@ -75,6 +77,7 @@ public class PointsPayActivity extends BaseActivity {
     public String code;
 
     private int selected = 1;//选择支付  1表示支付宝， 2 表示微信
+    boolean isPay = false;//是否已经调起了支付
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,33 @@ public class PointsPayActivity extends BaseActivity {
         ARouter.getInstance().inject(this);
 
         setupViewModel();
+        setUpEditText();
+
+    }
+
+    private void setUpEditText() {
+        mEtNeedPay.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!Strings.isNullOrEmpty(s.toString())){
+                    String payeeReceiptCode = "oooooo";//服务器返回
+                    pointsPayViewModel.getPayment(payeeReceiptCode);
+                }else{
+
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void setupViewModel() {
@@ -94,9 +124,9 @@ public class PointsPayActivity extends BaseActivity {
                 Log.i("-=-=-=-=-=", gson.toJson(getReceiptCodeResponse));
                 if (getReceiptCodeResponse != null) {
                     // TODO: 2018/1/22  处理界面显示
+                    String payeeStoreName = getReceiptCodeResponse.getReceiptCode().getPayeeStoreNamee();
+                    mTvStoreName.setText(Strings.isNullOrEmpty(payeeStoreName) ? "商铺" : payeeStoreName);
 
-                    String payeeReceiptCode = "oooooo";//服务器返回
-                    pointsPayViewModel.getPayment(payeeReceiptCode);
                 }
             }
         });
@@ -118,7 +148,8 @@ public class PointsPayActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable PaymentResponse paymentResponse) {
                 Log.i("-=-=-=-=-=create()", gson.toJson(paymentResponse));
-                if (paymentResponse != null) {
+                if (paymentResponse != null && isPay) {
+                    isPay = false;
                     String channelOrderUuid = paymentResponse.getPayment().getChannelOrderUuid();
                     if (selected == 1) {
                         Log.i("-=-=-=-", "支付宝");
@@ -131,6 +162,7 @@ public class PointsPayActivity extends BaseActivity {
             }
         });
     }
+
 
     /**
      * 支付宝支付
@@ -220,6 +252,7 @@ public class PointsPayActivity extends BaseActivity {
                             .setChannel(PaymentChannel.WECHAT)
                             .build();
                 }
+                isPay = true;
                 Log.i("-=-=-=-", "使不使用积分:" + usePoints + "----微信还是支付宝:" + selected);
                 pointsPayViewModel.getCreatePayment(paymentRequest);
 
