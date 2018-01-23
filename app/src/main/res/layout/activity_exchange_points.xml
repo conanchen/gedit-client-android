@@ -1,215 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.github.conanchen.gedit.ui.store.ExchangePointsActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#4000">
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:expanded="false">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp">
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
 
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/title"
-                app:layout_constraintTop_toTopOf="parent"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="兑换积分"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/back"
-                app:layout_constraintLeft_toRightOf="@+id/back"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/back"/>
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/add"
-                android:visibility="invisible"
-                app:layout_constraintLeft_toRightOf="@+id/title"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.Toolbar>
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_back_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/title"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/title"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/text_margin"
+                        android:text="积分兑换"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/back"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/max_exchange_message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:singleLine="true"
-        android:text="本次最多可兑换500积分"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/exchange_all"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/exchange_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:padding="10dp"
-        android:text="全部提现"
-        app:layout_constraintLeft_toRightOf="@+id/max_exchange_message"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/points"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/max_exchange_message">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/integral_desc"
-            android:layout_width="wrap_content"
+            android:id="@+id/max_exchange_message"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:padding="10dp"
-            android:text="积分："
-            app:layout_constraintRight_toLeftOf="@id/edit_text_money"
+            android:singleLine="true"
+            android:text="本次最多可兑换500积分"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/exchange_all"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/edit_text_money"
-            android:layout_width="64dp"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/exchange_all"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:text="500"
-            android:textAlignment="center"
-            android:inputType="number"
-            app:layout_constraintBottom_toBottomOf="@+id/integral_desc"
+            android:gravity="right"
+            android:padding="10dp"
+            android:text="全部提现"
+            app:layout_constraintLeft_toRightOf="@+id/max_exchange_message"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/integral_desc" />
-    </android.support.constraint.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/rate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:padding="10dp"
-        android:text="当前兑换比率：100积分兑换￥0.8元"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/points"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/moneynow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:padding="10dp"
-        android:text="可兑换为：￥4元"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rate"/>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/ali"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/moneynow">
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/ali_icon"
-            android:layout_width="wrap_content"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/points"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@mipmap/add"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/max_exchange_message">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/integral_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="积分："
+                app:layout_constraintRight_toLeftOf="@id/edit_text_money"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_text_money"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:inputType="number"
+                android:text="500"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/integral_desc"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/integral_desc" />
+        </android.support.constraint.ConstraintLayout>
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/ali_desc"
-            android:layout_width="0dp"
+            android:id="@+id/rate"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:padding="10dp"
-            android:text="支付宝"
-            app:layout_constraintLeft_toRightOf="@+id/ali_icon"
-            app:layout_constraintRight_toLeftOf="@+id/ali_cb"/>
-
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/ali_cb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@mipmap/add"
-            app:layout_constraintLeft_toRightOf="@+id/ali_desc"
-            app:layout_constraintRight_toRightOf="parent"/>
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/wei_xin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/ali">
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/wei_xin_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@mipmap/add"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            android:text="当前兑换比率：100积分兑换￥0.8元"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/points" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/wei_xin_desc"
-            android:layout_width="0dp"
+            android:id="@+id/moneynow"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:padding="10dp"
-            android:text="微信"
-            app:layout_constraintLeft_toRightOf="@+id/wei_xin_icon"
-            app:layout_constraintRight_toLeftOf="@+id/wei_xin_cb"/>
+            android:text="可兑换为：￥4元"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rate" />
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/wei_xin_cb"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/ali"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/moneynow">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ali_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@mipmap/add"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/ali_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="支付宝"
+                app:layout_constraintLeft_toRightOf="@+id/ali_icon"
+                app:layout_constraintRight_toLeftOf="@+id/ali_cb" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/ali_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@mipmap/add"
+                app:layout_constraintLeft_toRightOf="@+id/ali_desc"
+                app:layout_constraintRight_toRightOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/wei_xin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/ali">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/wei_xin_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@mipmap/add"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/wei_xin_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="微信"
+                app:layout_constraintLeft_toRightOf="@+id/wei_xin_icon"
+                app:layout_constraintRight_toLeftOf="@+id/wei_xin_cb" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/wei_xin_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@mipmap/add"
+                app:layout_constraintLeft_toRightOf="@+id/wei_xin_desc"
+                app:layout_constraintRight_toRightOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:text="确认"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wei_xin" />
+
+        <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@mipmap/add"
-            app:layout_constraintLeft_toRightOf="@+id/wei_xin_desc"
-            app:layout_constraintRight_toRightOf="parent"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="40dp"
+            android:text="duihuanguize"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/submit" />
 
     </android.support.constraint.ConstraintLayout>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="40dp"
-        android:text="确认"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wei_xin"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
-        android:text="duihuanguize"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submit"/>
-
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>
