@@ -116,7 +116,14 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
             @Override
             public void onPageSelected(int position) {
-                mBottomNavigationView.getMenu().getItem(position).setChecked(true);
+                switch (position){
+                    case 0:
+                        mBottomNavigationView.getMenu().getItem(0).setChecked(true);
+                        break;
+                    case 1:
+                        mBottomNavigationView.getMenu().getItem(2).setChecked(true);
+                        break;
+                }
             }
 
             @Override

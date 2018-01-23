@@ -58,7 +58,17 @@ public class StoreRepository {
             .setPageSize(20).build();
 
     public LiveData<PagedList<Store>> loadStoresNearAt(Location location) {
+        return (new LivePagedListBuilder<Integer, Store>(roomFascade.daoStore.listLivePagedStore(), pagedListConfig))
+                .setBoundaryCallback(new PagedList.BoundaryCallback<Store>() {
+                    @Override
+                    public void onZeroItemsLoaded() {
+                        refreshNearStores(location);
+                    }
+                })
+                .build();
+    }
 
+    public void refreshNearStores(Location location) {
         //  call grpc api to refresh near stores
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
             grpcFascade.storeSearchService.searchStoresNearAt(
@@ -76,8 +86,6 @@ public class StoreRepository {
                         roomFascade.daoStore.save(s);
                     });
         });
-        return (new LivePagedListBuilder(roomFascade.daoStore.listLivePagedStore(), pagedListConfig))
-                .build();
     }
 
     public LiveData<Store> findStore(String uuid) {
