@@ -1,7 +1,6 @@
 package com.github.conanchen.gedit.repository.di;
 
 
-import com.github.conanchen.gedit.accounting.account.grpc.AccountResponse;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.di.GrpcModule;
 import com.github.conanchen.gedit.repository.AccountingRepository;
@@ -13,11 +12,10 @@ import com.github.conanchen.gedit.repository.HelloRepository;
 import com.github.conanchen.gedit.repository.MyStoreRepository;
 import com.github.conanchen.gedit.repository.RegisterRepository;
 import com.github.conanchen.gedit.repository.SigninRepository;
-import com.github.conanchen.gedit.repository.StoreRepository;
+import com.github.conanchen.gedit.repository.StoreProfileRepository;
 import com.github.conanchen.gedit.repository.kv.KeyValueRepository;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.di.RoomModule;
-import com.github.conanchen.gedit.room.my.accounting.Account;
 
 import javax.inject.Singleton;
 
@@ -38,7 +36,7 @@ public class RepositoryModule {
     @Provides
     public RepositoryFascade provideRepositoryFascade(
             HelloRepository helloRepository,
-            StoreRepository storeRepository,
+            StoreProfileRepository storeProfileRepository,
             MyStoreRepository myStoreRepository,
             SigninRepository signinRepository,
             KeyValueRepository keyValueRepository,
@@ -47,7 +45,7 @@ public class RepositoryModule {
     ) {
         return new RepositoryFascade(
                 helloRepository,
-                storeRepository,
+                storeProfileRepository,
                 myStoreRepository,
                 signinRepository,
                 keyValueRepository,
@@ -65,9 +63,9 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public StoreRepository provideStoreRepository(
+    public StoreProfileRepository provideStoreRepository(
             RoomFascade roomFascade, GrpcFascade grpcFascade) {
-        return new StoreRepository(roomFascade, grpcFascade);
+        return new StoreProfileRepository(roomFascade, grpcFascade);
     }
 
 

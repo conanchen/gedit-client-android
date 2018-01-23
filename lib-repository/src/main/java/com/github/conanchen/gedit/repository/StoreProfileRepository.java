@@ -34,15 +34,15 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Conan Chen on 2018/1/8.
  */
 @Singleton
-public class StoreRepository {
-    private final static String TAG = StoreRepository.class.getSimpleName();
+public class StoreProfileRepository {
+    private final static String TAG = StoreProfileRepository.class.getSimpleName();
 
     private final static Gson gson = new Gson();
     private RoomFascade roomFascade;
     private GrpcFascade grpcFascade;
 
     @Inject
-    public StoreRepository(RoomFascade roomFascade, GrpcFascade grpcFascade) {
+    public StoreProfileRepository(RoomFascade roomFascade, GrpcFascade grpcFascade) {
         this.roomFascade = roomFascade;
         this.grpcFascade = grpcFascade;
     }

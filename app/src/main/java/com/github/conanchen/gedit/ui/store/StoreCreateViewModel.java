@@ -6,7 +6,7 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.repository.StoreRepository;
+import com.github.conanchen.gedit.repository.StoreProfileRepository;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.gedit.util.AbsentLiveData;
@@ -24,12 +24,12 @@ public class StoreCreateViewModel extends ViewModel {
 
     @SuppressWarnings("unchecked")
     @Inject
-    public StoreCreateViewModel(StoreRepository storeRepository) {
+    public StoreCreateViewModel(StoreProfileRepository storeProfileRepository) {
         storeCreateResponseLiveData = Transformations.switchMap(storeCreateInfoMutableLiveData, storeCreateInfo -> {
             if (storeCreateInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeRepository.createStore(storeCreateInfo);
+                return storeProfileRepository.createStore(storeCreateInfo);
             }
         });
 

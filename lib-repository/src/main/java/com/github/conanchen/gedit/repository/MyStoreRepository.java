@@ -64,4 +64,5 @@ public class MyStoreRepository {
         return (new LivePagedListBuilder(roomFascade.daoMyStore.listLivePagedMyStore(), pagedListConfig))
                 .build();
     }
+
 }

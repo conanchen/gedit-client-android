@@ -12,6 +12,7 @@ import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.github.conanchen.gedit.repository.PaymentRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
+import com.github.conanchen.utils.vo.PaymentInfo;
 import com.google.common.base.Strings;
 
 import javax.inject.Inject;
@@ -30,7 +31,7 @@ public class PointsPayViewModel extends ViewModel {
     private final LiveData<PrepareMyPaymentResponse> paymentLiveData;
 
     @VisibleForTesting
-    final MutableLiveData<CreatePaymentRequest> createPaymentMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<PaymentInfo> createPaymentMutableLiveData = new MutableLiveData<>();
     private final LiveData<PaymentResponse> createPaymentLiveData;
 
     @SuppressWarnings("unchecked")
@@ -53,11 +54,11 @@ public class PointsPayViewModel extends ViewModel {
         });
 
 
-        createPaymentLiveData = Transformations.switchMap(createPaymentMutableLiveData, createPaymentRequest -> {
-            if (createPaymentRequest == null) {
+        createPaymentLiveData = Transformations.switchMap(createPaymentMutableLiveData, paymentInfo -> {
+            if (paymentInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return paymentRepository.getCreatePayment(createPaymentRequest);
+                return paymentRepository.getCreatePayment(paymentInfo);
             }
         });
 
@@ -88,7 +89,7 @@ public class PointsPayViewModel extends ViewModel {
         return createPaymentLiveData;
     }
 
-    public void getCreatePayment(CreatePaymentRequest createPaymentRequest) {
-        createPaymentMutableLiveData.setValue(createPaymentRequest);
+    public void getCreatePayment(PaymentInfo paymentInfo) {
+        createPaymentMutableLiveData.setValue(paymentInfo);
     }
 }

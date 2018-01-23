@@ -13,6 +13,7 @@ import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.ReceiptCode;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.utils.vo.PaymentInfo;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -199,11 +200,11 @@ public class PaymentRepository {
     }
 
 
-    public LiveData<PaymentResponse> getCreatePayment(CreatePaymentRequest request) {
+    public LiveData<PaymentResponse> getCreatePayment(PaymentInfo paymentInfo) {
         return new LiveData<PaymentResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.paymentService.getCreatePayment(request, new PaymentService.CreatePaymentCallback() {
+                grpcFascade.paymentService.getCreatePayment(paymentInfo, new PaymentService.CreatePaymentCallback() {
                     @Override
                     public void onCreatePaymentCallback(PaymentResponse response) {
 

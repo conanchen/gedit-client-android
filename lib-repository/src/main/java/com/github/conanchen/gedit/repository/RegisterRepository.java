@@ -26,7 +26,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class RegisterRepository {
-    private final static String TAG = StoreRepository.class.getSimpleName();
+    private final static String TAG = StoreProfileRepository.class.getSimpleName();
 
     private final static Gson gson = new Gson();
     private RoomFascade roomFascade;

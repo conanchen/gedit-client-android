@@ -8,7 +8,7 @@ import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.common.grpc.Location;
-import com.github.conanchen.gedit.repository.StoreRepository;
+import com.github.conanchen.gedit.repository.StoreProfileRepository;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 
@@ -22,15 +22,16 @@ public class MyStoreEmployeesViewModel extends ViewModel{
     @VisibleForTesting
     final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
     private final LiveData<PagedList<Store>> liveStores;
+    //StoreWorkerRepository
 
     @SuppressWarnings("unchecked")
     @Inject
-    public MyStoreEmployeesViewModel(StoreRepository storeRepository) {
+    public MyStoreEmployeesViewModel(StoreProfileRepository storeProfileRepository) {
         liveStores = Transformations.switchMap(locationMutableLiveData, location -> {
             if (location == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeRepository.loadStoresNearAt(location);
+                return storeProfileRepository.loadStoresNearAt(location);
             }
         });
     }

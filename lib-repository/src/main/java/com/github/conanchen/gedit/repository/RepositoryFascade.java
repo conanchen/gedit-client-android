@@ -13,7 +13,7 @@ public class RepositoryFascade {
     String strAmir;
 
     public HelloRepository helloRepository;
-    public StoreRepository storeRepository;
+    public StoreProfileRepository storeProfileRepository;
     public MyStoreRepository myStoreRepository;
     public KeyValueRepository keyValueRepository;
     public SigninRepository signinRepository;
@@ -22,7 +22,7 @@ public class RepositoryFascade {
 
     @Inject
     public RepositoryFascade(HelloRepository helloRepository,
-                             StoreRepository storeRepository,
+                             StoreProfileRepository storeProfileRepository,
                              MyStoreRepository myStoreRepository,
                              SigninRepository signinRepository,
                              KeyValueRepository keyValueRepository,
@@ -30,7 +30,7 @@ public class RepositoryFascade {
                              AccountingRepository accountingRepository
                              ) {
         this.helloRepository = helloRepository;
-        this.storeRepository = storeRepository;
+        this.storeProfileRepository = storeProfileRepository;
         this.myStoreRepository = myStoreRepository;
         this.signinRepository = signinRepository;
         this.keyValueRepository = keyValueRepository;

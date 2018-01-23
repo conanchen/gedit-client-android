@@ -23,11 +23,13 @@ import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.common.grpc.PaymentChannel;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
+import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.util.pay.AliPayUtil;
 import com.github.conanchen.gedit.util.pay.PayResultCallBack;
+import com.github.conanchen.utils.vo.PaymentInfo;
+import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
@@ -36,6 +38,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.grpc.Status;
 
 /**
  * 积分付款界面
@@ -48,6 +51,7 @@ public class PointsPayActivity extends BaseActivity {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     PointsPayViewModel pointsPayViewModel;
+    private CurrentSigninViewModel currentSigninViewModel;
 
 
     @BindView(R.id.store_name)
@@ -78,6 +82,9 @@ public class PointsPayActivity extends BaseActivity {
 
     private int selected = 1;//选择支付  1表示支付宝， 2 表示微信
     boolean isPay = false;//是否已经调起了支付
+    private boolean isLogin = false;//是否登录
+    private String accessToken;
+    private String expiresIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +107,10 @@ public class PointsPayActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!Strings.isNullOrEmpty(s.toString())){
+                if (!Strings.isNullOrEmpty(s.toString())) {
                     String payeeReceiptCode = "oooooo";//服务器返回
                     pointsPayViewModel.getPayment(payeeReceiptCode);
-                }else{
+                } else {
 
                 }
 
@@ -148,17 +155,29 @@ public class PointsPayActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable PaymentResponse paymentResponse) {
                 Log.i("-=-=-=-=-=create()", gson.toJson(paymentResponse));
-                if (paymentResponse != null && isPay) {
-                    isPay = false;
-                    String channelOrderUuid = paymentResponse.getPayment().getChannelOrderUuid();
-                    if (selected == 1) {
-                        Log.i("-=-=-=-", "支付宝");
-                        aliPay(channelOrderUuid);
-                    } else if (selected == 2) {
-                        Log.i("-=-=-=-", "微信");
-//                        weXinPay(channelOrderUuid);
-                    }
-                }
+//                if (paymentResponse != null && isPay) {
+//                    isPay = false;
+//                    String channelOrderUuid = paymentResponse.getPayment().getChannelOrderUuid();
+//                    if (selected == 1) {
+//                        Log.i("-=-=-=-", "支付宝");
+//                        aliPay(channelOrderUuid);
+//                    } else if (selected == 2) {
+//                        Log.i("-=-=-=-", "微信");
+////                        weXinPay(channelOrderUuid);
+//                    }
+//                }
+            }
+        });
+
+
+        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+            if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                isLogin = true;
+                accessToken = signinResponse.getAccessToken();
+                expiresIn = signinResponse.getExpiresIn();
+            } else {
+                isLogin = false;
             }
         });
     }
@@ -238,23 +257,40 @@ public class PointsPayActivity extends BaseActivity {
                     usePoints = 0;
                 }
 
-                CreatePaymentRequest paymentRequest = null;
+
+                VoAccessToken voAccessToken = VoAccessToken.builder()
+                        .setAccessToken(Strings.isNullOrEmpty(accessToken) ? System.currentTimeMillis() + "" : accessToken)
+                        .setExpiresIn(Strings.isNullOrEmpty(expiresIn) ? System.currentTimeMillis() + "" : expiresIn)
+                        .build();
+
+                PaymentInfo paymentInfo = null;
                 if (selected == 1) {
-                    paymentRequest = CreatePaymentRequest.newBuilder()
+                    paymentInfo = PaymentInfo.builder()
+                            .setVoAccessToken(voAccessToken)
                             .setActualPay(1)
                             .setPayerIp(NetworkUtils.getIPAddress(true))
-                            .setChannel(PaymentChannel.ALIPAY)
+                            .setPayeeReceiptCode("qazwsxedc")
+                            .setShouldPay(21)
+                            .setPointsPay(10)
+                            .setPayType("1")//支付宝
                             .build();
                 } else if (selected == 2) {
-                    paymentRequest = CreatePaymentRequest.newBuilder()
+                    paymentInfo = PaymentInfo.builder()
+                            .setVoAccessToken(voAccessToken)
                             .setActualPay(1)
                             .setPayerIp(NetworkUtils.getIPAddress(true))
-                            .setChannel(PaymentChannel.WECHAT)
+                            .setPayeeReceiptCode("qazwsxedc")
+                            .setShouldPay(21)
+                            .setPointsPay(10)
+                            .setPayType("2")//微信
                             .build();
+
                 }
+
+
                 isPay = true;
                 Log.i("-=-=-=-", "使不使用积分:" + usePoints + "----微信还是支付宝:" + selected);
-                pointsPayViewModel.getCreatePayment(paymentRequest);
+                pointsPayViewModel.getCreatePayment(paymentInfo);
 
                 break;
         }

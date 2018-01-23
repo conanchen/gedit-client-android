@@ -60,11 +60,6 @@ public class StoreProfileService {
         void onUpdateHeadPortraitResponse(UpdateStoreResponse response);
     }
 
-
-    public interface GetQRCodeUrlCallback {
-        void onGetQRCodeUrlCallback(GetMyReceiptCodeResponse response);
-    }
-
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
                 .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_STORE)

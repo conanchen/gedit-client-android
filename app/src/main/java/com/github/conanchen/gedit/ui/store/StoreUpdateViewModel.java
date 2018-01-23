@@ -6,10 +6,9 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
-import com.github.conanchen.gedit.repository.StoreRepository;
+import com.github.conanchen.gedit.repository.StoreProfileRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 
 import javax.inject.Inject;
@@ -25,12 +24,12 @@ public class StoreUpdateViewModel extends ViewModel {
 
     @SuppressWarnings("unchecked")
     @Inject
-    public StoreUpdateViewModel(StoreRepository storeRepository) {
+    public StoreUpdateViewModel(StoreProfileRepository storeProfileRepository) {
         storeUpdateResponseLiveData = Transformations.switchMap(storeUpdateInfoMutableLiveData, storeUpdateInfo -> {
             if (storeUpdateInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeRepository.updateStore(storeUpdateInfo);
+                return storeProfileRepository.updateStore(storeUpdateInfo);
             }
         });
     }
