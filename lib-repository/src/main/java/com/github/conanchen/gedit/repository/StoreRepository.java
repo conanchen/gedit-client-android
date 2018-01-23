@@ -9,7 +9,7 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
-import com.github.conanchen.gedit.grpc.store.StoreService;
+import com.github.conanchen.gedit.grpc.store.StoreProfileService;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
@@ -61,7 +61,7 @@ public class StoreRepository {
 
         //  call grpc api to refresh near stores
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.storeService.searchStoresNearAt(
+            grpcFascade.storeSearchService.searchStoresNearAt(
                     SearchStoreRequest.newBuilder()
                             .setLat(location.getLat())
                             .setLon(location.getLon())
@@ -81,7 +81,7 @@ public class StoreRepository {
     }
 
     public LiveData<Store> findStore(String uuid) {
-        grpcFascade.storeService.downloadStoreProfile(
+        grpcFascade.storeProfileService.downloadStoreProfile(
                 GetStoreRequest.newBuilder().setUuid(uuid).setLastUpdated(-1).build(),
                 response -> {
                     Observable
@@ -107,7 +107,7 @@ public class StoreRepository {
         return new LiveData<CreateStoreResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.storeService.storeCreate(storeCreateInfo, new StoreService.StoreCreateCallback() {
+                grpcFascade.storeProfileService.storeCreate(storeCreateInfo, new StoreProfileService.StoreCreateCallback() {
                     @Override
                     public void onStoreCreateResponse(CreateStoreResponse createResponse) {
                         Observable.fromCallable(() -> {
@@ -167,7 +167,7 @@ public class StoreRepository {
         return new LiveData<UpdateStoreResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.storeService.updateStore(storeUpdateInfo, new StoreService.UpdateCallback() {
+                grpcFascade.storeProfileService.updateStore(storeUpdateInfo, new StoreProfileService.UpdateCallback() {
                     @Override
                     public void onUpdateStoreResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {
@@ -219,7 +219,7 @@ public class StoreRepository {
         return new LiveData<UpdateStoreResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.storeService.updateHeadPortrait(storeUpdateInfo, new StoreService.UpdateHeadPortraitCallback() {
+                grpcFascade.storeProfileService.updateHeadPortrait(storeUpdateInfo, new StoreProfileService.UpdateHeadPortraitCallback() {
                     @Override
                     public void onUpdateHeadPortraitResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {
@@ -276,7 +276,7 @@ public class StoreRepository {
         return new LiveData<UpdateStoreResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.storeService.updateAddress(storeUpdateInfo, new StoreService.UpdateHeadPortraitCallback() {
+                grpcFascade.storeProfileService.updateAddress(storeUpdateInfo, new StoreProfileService.UpdateHeadPortraitCallback() {
                     @Override
                     public void onUpdateHeadPortraitResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {

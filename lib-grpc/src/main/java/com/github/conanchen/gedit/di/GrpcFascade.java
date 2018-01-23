@@ -11,7 +11,8 @@ import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.grpc.store.MyMemberStoreService;
 import com.github.conanchen.gedit.grpc.store.MyStoreService;
 import com.github.conanchen.gedit.grpc.store.MyWorkinStoreService;
-import com.github.conanchen.gedit.grpc.store.StoreService;
+import com.github.conanchen.gedit.grpc.store.StoreProfileService;
+import com.github.conanchen.gedit.grpc.store.StoreSearchService;
 
 import javax.inject.Inject;
 
@@ -25,7 +26,8 @@ public class GrpcFascade {
     String strAmir;
 
     public HelloService helloService;
-    public StoreService storeService;
+    public StoreProfileService storeProfileService;
+    public StoreSearchService storeSearchService;
     public MyStoreService myStoreService;
     public MyWorkinStoreService myWorkinStoreService;
     public MyIntroducedStoreService myIntroducedStoreService;
@@ -40,7 +42,8 @@ public class GrpcFascade {
 
     @Inject
     public GrpcFascade(HelloService helloService,
-                       StoreService storeService,
+                       StoreProfileService storeProfileService,
+                       StoreSearchService storeSearchService,
                        MyStoreService myStoreService,
                        MyWorkinStoreService myWorkinStoreService,
                        MyIntroducedStoreService myIntroducedStoreService,
@@ -53,7 +56,8 @@ public class GrpcFascade {
                        PaymentService paymentService
                        ) {
         this.helloService = helloService;
-        this.storeService = storeService;
+        this.storeProfileService = storeProfileService;
+        this.storeSearchService = storeSearchService;
         this.myStoreService = myStoreService;
         this.myWorkinStoreService = myWorkinStoreService;
         this.myIntroducedStoreService = myIntroducedStoreService;

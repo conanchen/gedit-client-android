@@ -12,7 +12,8 @@ import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.grpc.store.MyMemberStoreService;
 import com.github.conanchen.gedit.grpc.store.MyStoreService;
 import com.github.conanchen.gedit.grpc.store.MyWorkinStoreService;
-import com.github.conanchen.gedit.grpc.store.StoreService;
+import com.github.conanchen.gedit.grpc.store.StoreProfileService;
+import com.github.conanchen.gedit.grpc.store.StoreSearchService;
 
 import javax.inject.Singleton;
 
@@ -30,7 +31,8 @@ public class GrpcModule {
     @Provides
     public GrpcFascade provideGrpcFascade(
             HelloService helloService,
-            StoreService storeService,
+            StoreProfileService storeProfileService,
+            StoreSearchService storeSearchService,
             MyStoreService myStoreService,
             MyWorkinStoreService myWorkinStoreService,
             MyIntroducedStoreService myIntroducedStoreService,
@@ -40,12 +42,13 @@ public class GrpcModule {
             RegisterService registerService,
             AccountService accountService,
             PostingService postingService,
-           PaymentService paymentService
+            PaymentService paymentService
 
     ) {
         return new GrpcFascade(
                 helloService,
-                storeService,
+                storeProfileService,
+                storeSearchService,
                 myStoreService,
                 myWorkinStoreService,
                 myIntroducedStoreService,
@@ -67,8 +70,14 @@ public class GrpcModule {
 
     @Singleton
     @Provides
-    public StoreService provideStoreService() {
-        return new StoreService();
+    public StoreProfileService provideStoreProfileService() {
+        return new StoreProfileService();
+    }
+
+    @Singleton
+    @Provides
+    public StoreSearchService provideStoreSearchService() {
+        return new StoreSearchService();
     }
 
     @Singleton

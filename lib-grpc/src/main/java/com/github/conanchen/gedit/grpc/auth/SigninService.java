@@ -3,7 +3,7 @@ package com.github.conanchen.gedit.grpc.auth;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
-import com.github.conanchen.gedit.grpc.store.StoreService;
+import com.github.conanchen.gedit.grpc.store.StoreProfileService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.gedit.user.auth.grpc.SigninWithPasswordRequest;
@@ -21,7 +21,7 @@ import io.grpc.stub.StreamObserver;
  */
 
 public class SigninService {
-    private final static String TAG = StoreService.class.getSimpleName();
+    private final static String TAG = StoreProfileService.class.getSimpleName();
     private Gson gson = new Gson();
 
     public interface SigninCallback {
