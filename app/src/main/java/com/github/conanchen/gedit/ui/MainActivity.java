@@ -18,11 +18,8 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -31,7 +28,6 @@ import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.my.myinvestpayment.BuyInvestPaymentActivity;
-import com.github.conanchen.gedit.ui.my.myinvestpayment.MyInvestPaymentsActivity;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
 import com.github.conanchen.gedit.ui.payment.PayeeQRCodeActivity;
 import com.github.conanchen.gedit.ui.payment.PointsPayActivity;
@@ -240,10 +236,12 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
-//                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
-                    Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(this, PointsPayActivity.class));
 
+                    Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                    String code = "fuwuqifanhui";//这个code是由扫码获取
+                    ARouter.getInstance().build("/app/PointsPayActivity")
+                            .withString("code", code)
+                            .navigation();
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }

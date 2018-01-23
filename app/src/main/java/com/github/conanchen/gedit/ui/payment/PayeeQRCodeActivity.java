@@ -14,6 +14,7 @@ import android.view.View;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.uuzuche.lib_zxing.activity.CodeUtils;

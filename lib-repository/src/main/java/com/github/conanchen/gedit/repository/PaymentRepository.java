@@ -7,6 +7,8 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.payment.PaymentService;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.ReceiptCode;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.google.gson.Gson;
@@ -72,6 +74,110 @@ public class PaymentRepository {
                                                     .build());
                                         } else {
                                             setValue(GetMyReceiptCodeResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(response.getStatus().getCode())
+                                                            .setDetails(response.getStatus().getDetails())
+                                                            .build())
+                                                    .build());
+                                        }
+                                    }
+                                });
+                        ;
+                    }
+                });
+            }
+        };
+    }
+
+
+    /**
+     * 获取商家信息
+     *
+     * @param url
+     * @return
+     */
+    public LiveData<GetReceiptCodeResponse> getPaymentStoreDetails(String url) {
+        return new LiveData<GetReceiptCodeResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.paymentService.getPaymentStoreDetails(url, new PaymentService.GetPaymentStoreDetailsCallback() {
+                    @Override
+                    public void onGetPaymentStoreDetailsCallback(GetReceiptCodeResponse response) {
+                        Observable.fromCallable(() -> {
+
+                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                                return response;
+                            } else {
+                                GetReceiptCodeResponse getReceiptCodeResponse = GetReceiptCodeResponse.newBuilder()
+                                        .setReceiptCode(ReceiptCode.newBuilder()
+                                                .setCode("fail")
+                                                .build())
+                                        .build();
+                                return getReceiptCodeResponse;
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<GetReceiptCodeResponse>() {
+                                    @Override
+                                    public void accept(@NonNull GetReceiptCodeResponse getReceiptCodeResponse) throws Exception {
+                                        if (!"fail".equals(getReceiptCodeResponse.getReceiptCode().getCode())) {
+                                            setValue(GetReceiptCodeResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                            .setDetails("update Store successfully")
+                                                            .build())
+                                                    .build());
+                                        } else {
+                                            setValue(GetReceiptCodeResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(response.getStatus().getCode())
+                                                            .setDetails(response.getStatus().getDetails())
+                                                            .build())
+                                                    .build());
+                                        }
+                                    }
+                                });
+                        ;
+                    }
+                });
+            }
+        };
+    }
+
+
+    /**
+     * 顾客扫码店员/收银员的收款码后获取如果支付一定金额
+     *
+     * @param url
+     * @return
+     */
+    public LiveData<PrepareMyPaymentResponse> getPayment(String url) {
+        return new LiveData<PrepareMyPaymentResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.paymentService.getPayment(url, new PaymentService.GetPaymentCallback() {
+                    @Override
+                    public void onGetPaymentCallback(PrepareMyPaymentResponse response) {
+                        Observable.fromCallable(() -> {
+
+                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                                return response;
+                            } else {
+//                                PrepareMyPaymentResponse prepareMyPaymentResponse=  PrepareMyPaymentResponse.newBuilder().setStatus(Status.newBuilder().setCode("fail").build());
+                                return response;
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<PrepareMyPaymentResponse>() {
+                                    @Override
+                                    public void accept(@NonNull PrepareMyPaymentResponse getReceiptCodeResponse) throws Exception {
+                                        if (!"fail".equals(getReceiptCodeResponse.getStatus().getCode())) {
+                                            setValue(PrepareMyPaymentResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                            .setDetails("update Store successfully")
+                                                            .build())
+                                                    .build());
+                                        } else {
+                                            setValue(PrepareMyPaymentResponse.newBuilder()
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())
