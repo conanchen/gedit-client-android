@@ -3,7 +3,6 @@ package com.github.conanchen.gedit.ui.my.myworkinstore;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -43,7 +42,7 @@ public class MyWorkStoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_word_store);
+        setContentView(R.layout.activity_my_workin_store);
         ButterKnife.bind(this);
     }
 

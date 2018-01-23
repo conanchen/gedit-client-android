@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.conanchen.gedit.ui.my.myworkinstore.MyWorkStoresActivity">
+    tools:context="com.github.conanchen.gedit.ui.my.mystore.MyStoresActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -31,7 +31,7 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="我工作过的店铺"
+                android:text="我的商铺"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/back"
                 app:layout_constraintLeft_toRightOf="@+id/back"
@@ -43,8 +43,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
+                android:src="@mipmap/add"
                 android:text="增加"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintLeft_toRightOf="@+id/title"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

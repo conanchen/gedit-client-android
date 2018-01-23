@@ -36,7 +36,7 @@ public class MyWorkStoresActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_work_stores);
+        setContentView(R.layout.activity_my_workin_stores);
         ButterKnife.bind(this);
 
         setupRecyclerView();
