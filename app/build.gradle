@@ -120,6 +120,8 @@ dependencies {
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
 
     implementation 'com.github.conanchen:AmapLiveLocation:1.0.3'
+    implementation 'com.blankj:utilcode:1.8.1'
+    compile files('libs/alipaySdk-20170922.jar')
 
 
 

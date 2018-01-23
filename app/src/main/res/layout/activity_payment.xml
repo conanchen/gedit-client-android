@@ -90,6 +90,7 @@
         android:id="@+id/need_pay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
         app:layout_constraintLeft_toRightOf="@+id/need_pay_desc"
         app:layout_constraintRight_toRightOf="@+id/unit"
         app:layout_constraintTop_toBottomOf="@+id/store_name"/>
@@ -105,81 +106,119 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/store_name"/>
 
-
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/use_integral_desc"
+        android:id="@+id/use_points_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="可用500积分抵扣5元"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/use"
+        app:layout_constraintRight_toLeftOf="@+id/use_points"
         app:layout_constraintTop_toBottomOf="@+id/need_pay_desc"/>
 
     <android.support.v7.widget.AppCompatCheckBox
-        android:id="@+id/use"
+        android:id="@+id/use_points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:padding="10dp"
         android:src="@mipmap/add"
-        app:layout_constraintLeft_toRightOf="@+id/use_integral_desc"
+        app:layout_constraintLeft_toRightOf="@+id/use_points_desc"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/need_pay_desc"/>
 
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/no_use_integral_desc"
+        android:id="@+id/no_use_points_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="不适用积分可获得300积分"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/no_use"
-        app:layout_constraintTop_toBottomOf="@+id/use_integral_desc"/>
+        app:layout_constraintRight_toLeftOf="@+id/no_use_points"
+        app:layout_constraintTop_toBottomOf="@+id/use_points_desc"/>
 
     <android.support.v7.widget.AppCompatCheckBox
-        android:id="@+id/no_use"
+        android:id="@+id/no_use_points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:src="@mipmap/add"
-        app:layout_constraintLeft_toRightOf="@+id/no_use_integral_desc"
+        app:layout_constraintLeft_toRightOf="@+id/no_use_points_desc"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/use_integral_desc"/>
+        app:layout_constraintTop_toBottomOf="@+id/use_points_desc"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/money_unit"
+        android:id="@+id/should_pay_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
-        android:text="￥"
+        android:padding="10dp"
+        android:text="实付金额：￥"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/money"
-        app:layout_constraintTop_toBottomOf="@+id/no_use_integral_desc"/>
+        app:layout_constraintTop_toBottomOf="@id/no_use_points"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/money"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
         android:text="95"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toRightOf="@+id/money_unit"
-        app:layout_constraintRight_toLeftOf="@+id/used_integral"
-        app:layout_constraintTop_toBottomOf="@+id/no_use_integral_desc"/>
+        app:layout_constraintBottom_toBottomOf="@id/should_pay_desc"
+        app:layout_constraintLeft_toRightOf="@id/should_pay_desc"
+        app:layout_constraintTop_toTopOf="@id/should_pay_desc"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/used_integral"
+        android:id="@+id/desc"
         android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:text="(已使用500积分)"
+        app:layout_constraintBottom_toBottomOf="@id/should_pay_desc"
+        app:layout_constraintLeft_toRightOf="@id/money"
+        app:layout_constraintTop_toTopOf="@id/should_pay_desc"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/ali_pay"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
-        android:text="95"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toRightOf="@+id/money"
-        app:layout_constraintTop_toBottomOf="@+id/no_use_integral_desc"/>
+        android:drawableTop="@mipmap/add"
+        android:gravity="center_horizontal"
+        android:text="ali"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/weixin"
+        app:layout_constraintTop_toBottomOf="@id/desc"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/ali_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#3000"
+        app:layout_constraintBottom_toBottomOf="@id/ali_pay"
+        app:layout_constraintLeft_toLeftOf="@id/ali_pay"
+        app:layout_constraintRight_toRightOf="@id/ali_pay"
+        app:layout_constraintTop_toTopOf="@id/ali_pay"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/weixin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/add"
+        android:gravity="center_horizontal"
+        android:text="weixin"
+        app:layout_constraintLeft_toRightOf="@id/ali_pay"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/desc"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/weinxin_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#3000"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/weixin"
+        app:layout_constraintLeft_toLeftOf="@id/weixin"
+        app:layout_constraintRight_toRightOf="@id/weixin"
+        app:layout_constraintTop_toTopOf="@id/weixin"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/submit"
@@ -188,7 +227,7 @@
         android:layout_margin="40dp"
         android:text="确认付款"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/money"/>
+        app:layout_constraintTop_toBottomOf="@+id/should_pay_desc"/>
 
 
 </android.support.constraint.ConstraintLayout>
