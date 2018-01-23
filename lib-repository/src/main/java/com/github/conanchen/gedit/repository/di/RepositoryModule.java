@@ -13,6 +13,7 @@ import com.github.conanchen.gedit.repository.MyStoreRepository;
 import com.github.conanchen.gedit.repository.RegisterRepository;
 import com.github.conanchen.gedit.repository.SigninRepository;
 import com.github.conanchen.gedit.repository.StoreProfileRepository;
+import com.github.conanchen.gedit.repository.StoreWorkerRepository;
 import com.github.conanchen.gedit.repository.kv.KeyValueRepository;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.di.RoomModule;
@@ -41,7 +42,8 @@ public class RepositoryModule {
             SigninRepository signinRepository,
             KeyValueRepository keyValueRepository,
             RegisterRepository registerRepository,
-            AccountingRepository accountingRepository
+            AccountingRepository accountingRepository,
+            StoreWorkerRepository storeWorkerRepository
     ) {
         return new RepositoryFascade(
                 helloRepository,
@@ -50,7 +52,8 @@ public class RepositoryModule {
                 signinRepository,
                 keyValueRepository,
                 registerRepository,
-                accountingRepository);
+                accountingRepository,
+                storeWorkerRepository);
     }
 
 
@@ -132,6 +135,15 @@ public class RepositoryModule {
     public AccountingRepository provideAccountingRepository(
             RoomFascade roomFascade, GrpcFascade grpcFascade) {
         return new AccountingRepository(roomFascade, grpcFascade);
+    }
+
+
+
+    @Singleton
+    @Provides
+    public StoreWorkerRepository provideStoreWorkerRepository(
+            RoomFascade roomFascade, GrpcFascade grpcFascade) {
+        return new StoreWorkerRepository(roomFascade, grpcFascade);
     }
 
 

@@ -18,6 +18,7 @@ import com.github.conanchen.gedit.room.my.store.DaoMyMemberStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyWorkinStore;
 import com.github.conanchen.gedit.room.store.DaoStore;
+import com.github.conanchen.gedit.room.store.DaoStoreWorker;
 
 import javax.inject.Singleton;
 
@@ -124,6 +125,12 @@ public class RoomModule {
         return db.daoDaoPayment();
     }
 
+    @Singleton
+    @Provides
+    DaoStoreWorker provideDaoStoreWorker(MyRoomDatabase db) {
+        return db.daoStoreWorker();
+    }
+
 
     @Singleton
     @Provides
@@ -135,9 +142,10 @@ public class RoomModule {
                                           DaoAccount daoAccount,
                                           DaoBalance daoBalance,
                                           DaoJournal daoJournal,
-                                          DaoPosting daoPosting
+                                          DaoPosting daoPosting,
+                                          DaoStoreWorker daoStoreWorker
     ) {
         return new RoomFascade(daoHello, daoStore, daoKeyValue, daoMyStore,
-                daoMyIntroducedStore, daoFanship, daoAccount, daoBalance, daoJournal, daoPosting);
+                daoMyIntroducedStore, daoFanship, daoAccount, daoBalance, daoJournal, daoPosting, daoStoreWorker);
     }
 }

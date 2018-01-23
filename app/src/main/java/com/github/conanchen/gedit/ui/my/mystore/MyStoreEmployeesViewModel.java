@@ -9,8 +9,14 @@ import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.repository.StoreProfileRepository;
+import com.github.conanchen.gedit.repository.StoreWorkerRepository;
+import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
+import com.github.conanchen.gedit.room.store.StoreWorker;
+import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
 import com.github.conanchen.gedit.util.AbsentLiveData;
+import com.github.conanchen.utils.vo.VoAccessToken;
+import com.google.common.base.Strings;
 
 import javax.inject.Inject;
 
@@ -20,29 +26,50 @@ import javax.inject.Inject;
 
 public class MyStoreEmployeesViewModel extends ViewModel{
     @VisibleForTesting
-    final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
-    private final LiveData<PagedList<Store>> liveStores;
-    //StoreWorkerRepository
+    final MutableLiveData<VoAccessToken> locationMutableLiveData = new MutableLiveData<>();
+    private final LiveData<PagedList<StoreWorker>> liveStores;
+
+    @VisibleForTesting
+    final MutableLiveData<String> addWorkerMutableLiveData = new MutableLiveData<>();
+    private final LiveData<WorkshipResponse> addWorkerLivaData;
 
     @SuppressWarnings("unchecked")
     @Inject
-    public MyStoreEmployeesViewModel(StoreProfileRepository storeProfileRepository) {
-        liveStores = Transformations.switchMap(locationMutableLiveData, location -> {
-            if (location == null) {
+    public MyStoreEmployeesViewModel(StoreWorkerRepository storeWorkerRepository) {
+        liveStores = Transformations.switchMap(locationMutableLiveData, voAccessToken -> {
+            if (voAccessToken == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeProfileRepository.loadStoresNearAt(location);
+                return storeWorkerRepository.loadAllEmployees(voAccessToken);
+            }
+        });
+
+        addWorkerLivaData = Transformations.switchMap(addWorkerMutableLiveData, string -> {
+            if (Strings.isNullOrEmpty(string)) {
+                return AbsentLiveData.create();
+            } else {
+                return storeWorkerRepository.addWorker(string);
             }
         });
     }
 
     @VisibleForTesting
-    public void updateLocation(Location location) {
-        locationMutableLiveData.setValue(location);
+    public void getAllEmployees(VoAccessToken voAccessToken) {
+        locationMutableLiveData.setValue(voAccessToken);
     }
 
     @VisibleForTesting
-    public LiveData<PagedList<Store>> getLiveStores() {
+    public LiveData<PagedList<StoreWorker>> getLiveStores() {
         return liveStores;
+    }
+
+    @VisibleForTesting
+    public void addWorker(String workerUuid) {
+        addWorkerMutableLiveData.setValue(workerUuid);
+    }
+
+    @VisibleForTesting
+    public LiveData<WorkshipResponse> getAddWorkerLiveData() {
+        return addWorkerLivaData;
     }
 }

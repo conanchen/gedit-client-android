@@ -24,12 +24,14 @@ import com.github.conanchen.gedit.room.my.store.DaoMyIntroducedStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyMemberStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyWorkinStore;
-import com.github.conanchen.gedit.room.store.DaoStore;
 import com.github.conanchen.gedit.room.my.store.MyIntroducedStore;
 import com.github.conanchen.gedit.room.my.store.MyMemberStore;
 import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.my.store.MyWorkinStore;
+import com.github.conanchen.gedit.room.store.DaoStore;
+import com.github.conanchen.gedit.room.store.DaoStoreWorker;
 import com.github.conanchen.gedit.room.store.Store;
+import com.github.conanchen.gedit.room.store.StoreWorker;
 
 
 @Database(entities =
@@ -46,7 +48,8 @@ import com.github.conanchen.gedit.room.store.Store;
                 Journal.class,
                 Posting.class,
                 Payment.class,
-                Fanship.class
+                Fanship.class,
+                StoreWorker.class
         },
         version = 1,
         exportSchema = false)
@@ -77,4 +80,6 @@ public abstract class MyRoomDatabase extends android.arch.persistence.room.RoomD
     public abstract DaoJournal daoDaoJournal();
 
     public abstract DaoPosting daoDaoPosting();
+
+    public abstract DaoStoreWorker daoStoreWorker();
 }

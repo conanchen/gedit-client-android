@@ -11,6 +11,7 @@ import com.github.conanchen.gedit.room.my.fan.DaoFanship;
 import com.github.conanchen.gedit.room.my.store.DaoMyIntroducedStore;
 import com.github.conanchen.gedit.room.my.store.DaoMyStore;
 import com.github.conanchen.gedit.room.store.DaoStore;
+import com.github.conanchen.gedit.room.store.DaoStoreWorker;
 
 import javax.inject.Inject;
 
@@ -29,6 +30,7 @@ public class RoomFascade {
     public final DaoBalance daoBalance;
     public final DaoJournal daoJournal;
     public final DaoPosting daoPosting;
+    public final DaoStoreWorker daoStoreWorker;
 
     @Inject
     String strAmir;
@@ -44,7 +46,8 @@ public class RoomFascade {
                        DaoAccount daoAccount,
                        DaoBalance daoBalance,
                        DaoJournal daoJournal,
-                       DaoPosting daoPosting
+                       DaoPosting daoPosting,
+                       DaoStoreWorker daoStoreWorker
     ) {
         this.daoStore = daoStore;
         this.daoHello = daoHello;
@@ -56,6 +59,7 @@ public class RoomFascade {
         this.daoBalance = daoBalance;
         this.daoJournal = daoJournal;
         this.daoPosting = daoPosting;
+        this.daoStoreWorker = daoStoreWorker;
         System.out.println(strAmir);
 
     }

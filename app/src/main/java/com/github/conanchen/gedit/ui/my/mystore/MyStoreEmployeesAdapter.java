@@ -10,15 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
+import com.github.conanchen.gedit.room.store.StoreWorker;
 
 /**
  * Created by Administrator on 2018/1/17.
  */
 
-public class MyStoreEmployeesAdapter extends PagedListAdapter<Store, MyStoreEmployeesAdapter.ViewHolder> {
+public class MyStoreEmployeesAdapter extends PagedListAdapter<StoreWorker, MyStoreEmployeesAdapter.ViewHolder> {
     protected MyStoreEmployeesAdapter() {
-        super(Store.DIFF_CALLBACK);
+        super(StoreWorker.DIFF_CALLBACK);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class MyStoreEmployeesAdapter extends PagedListAdapter<Store, MyStoreEmpl
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Store store = getItem(position);
+        StoreWorker store = getItem(position);
         if (store != null) {
             holder.bindTo(store);
         }
@@ -49,8 +51,8 @@ public class MyStoreEmployeesAdapter extends PagedListAdapter<Store, MyStoreEmpl
             layout = itemView.findViewById(R.id.layout);
         }
 
-        public void bindTo(Store store) {
-            name.setText(store.address);
+        public void bindTo(StoreWorker store) {
+            name.setText(store.storeName);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -63,7 +65,7 @@ public class MyStoreEmployeesAdapter extends PagedListAdapter<Store, MyStoreEmpl
     private OnItemClickListener listener;
 
     interface OnItemClickListener {
-        void OnItemClick(Store store);
+        void OnItemClick(StoreWorker store);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

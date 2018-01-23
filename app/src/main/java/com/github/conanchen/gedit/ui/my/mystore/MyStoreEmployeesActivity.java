@@ -12,17 +12,19 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
-import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.gedit.ui.MainActivity;
+import com.github.conanchen.gedit.room.store.StoreWorker;
+import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
+import com.github.conanchen.utils.vo.VoAccessToken;
+import com.google.common.base.Strings;
+import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
@@ -38,6 +40,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.grpc.Status;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -47,9 +50,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 @Route(path = "/app/MyStoreEmployeesActivity")
 public class MyStoreEmployeesActivity extends BaseActivity {
 
+    private Gson gson = new Gson();
+
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     MyStoreEmployeesViewModel myStoreEmployeesViewModel;
+    private CurrentSigninViewModel currentSigninViewModel;
 
     @BindView(R.id.back)
     AppCompatImageButton back;
@@ -61,6 +67,9 @@ public class MyStoreEmployeesActivity extends BaseActivity {
      * 扫描跳转Activity RequestCode
      */
     public static final int REQUEST_CODE = 111;
+    private boolean isLogin = false;//是否登录
+    private String accessToken;
+    private String expiresIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +87,8 @@ public class MyStoreEmployeesActivity extends BaseActivity {
 
         mAdapter.setOnItemClickListener(new MyStoreEmployeesAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClick(Store store) {
-                Toast.makeText(MyStoreEmployeesActivity.this, "员工详情", Toast.LENGTH_LONG).show();
+            public void OnItemClick(StoreWorker store) {
+//                Toast.makeText(MyStoreEmployeesActivity.this, "员工详情", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -92,10 +101,34 @@ public class MyStoreEmployeesActivity extends BaseActivity {
             }
         });
 
-        myStoreEmployeesViewModel.updateLocation(Location.newBuilder().setLat(1).setLon(2).build());
+        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+            if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                isLogin = true;
+                accessToken = signinResponse.getAccessToken();
+                expiresIn = signinResponse.getExpiresIn();
+            } else {
+                isLogin = false;
+            }
+        });
+
+
+        VoAccessToken voAccessToken = VoAccessToken.builder()
+                .setAccessToken(Strings.isNullOrEmpty(accessToken) ? System.currentTimeMillis() + "" : accessToken)
+                .setExpiresIn(Strings.isNullOrEmpty(expiresIn) ? System.currentTimeMillis() + "" : expiresIn)
+                .build();
+
+        myStoreEmployeesViewModel.getAllEmployees(voAccessToken);
+
+        myStoreEmployeesViewModel.getAddWorkerLiveData().observe(this, workshipResponse -> {
+            if (workshipResponse != null) {
+                Log.i("-=-=-=-", gson.toJson(workshipResponse));
+            }
+        });
+
     }
 
-    @OnClick({R.id.back,R.id.right})
+    @OnClick({R.id.back, R.id.right})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -141,7 +174,6 @@ public class MyStoreEmployeesActivity extends BaseActivity {
 
     }
 
-
     /**
      * 回调
      *
@@ -167,6 +199,7 @@ public class MyStoreEmployeesActivity extends BaseActivity {
                     Toast.makeText(this, result, Toast.LENGTH_LONG).show();
                     String workerUuid = "fuwuqifanhui";//员工的uuid
 
+                    myStoreEmployeesViewModel.addWorker(workerUuid);
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }

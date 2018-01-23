@@ -19,6 +19,7 @@ public class RepositoryFascade {
     public SigninRepository signinRepository;
     public RegisterRepository registerRepository;
     public AccountingRepository accountingRepository;
+    public StoreWorkerRepository storeWorkerRepository;
 
     @Inject
     public RepositoryFascade(HelloRepository helloRepository,
@@ -27,7 +28,8 @@ public class RepositoryFascade {
                              SigninRepository signinRepository,
                              KeyValueRepository keyValueRepository,
                              RegisterRepository registerRepository,
-                             AccountingRepository accountingRepository
+                             AccountingRepository accountingRepository,
+                             StoreWorkerRepository storeWorkerRepository
                              ) {
         this.helloRepository = helloRepository;
         this.storeProfileRepository = storeProfileRepository;
@@ -36,6 +38,7 @@ public class RepositoryFascade {
         this.keyValueRepository = keyValueRepository;
         this.registerRepository = registerRepository;
         this.accountingRepository = accountingRepository;
+        this.storeWorkerRepository = storeWorkerRepository;
         System.out.println(strAmir);
     }
 
