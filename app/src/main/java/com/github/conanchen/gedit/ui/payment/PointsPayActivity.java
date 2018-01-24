@@ -163,6 +163,7 @@ public class PointsPayActivity extends BaseActivity {
                     String signature = paymentResponse.getPayment().getSignature();
                     String returnStr = "";
                     try {
+
                         JSONObject jsonObject = new JSONObject(signature);
                         returnStr = jsonObject.getString("returnStr");
                         if (selected == 1) {
@@ -170,7 +171,7 @@ public class PointsPayActivity extends BaseActivity {
                             aliPay(returnStr);
                         } else if (selected == 2) {
                             Log.i("-=-=-=-", "微信");
-                            weiXinPay(returnStr);
+                            wechatPay(returnStr);
                         }
                     } catch (JSONException e) {
                         Log.i(TAG, "返回的订单号解析失败");
@@ -236,7 +237,7 @@ public class PointsPayActivity extends BaseActivity {
      * 微信支付
      * @param signStr
      */
-    private void weiXinPay(String signStr) {
+    private void wechatPay(String signStr) {
 //        String signStr = "{\n" +
 //                "      \"appid\" : \"wx452cb36207ea45c8\",\n" +
 //                "      \"noncestr\" : \"x5f4oul4591pwizx\",\n" +
