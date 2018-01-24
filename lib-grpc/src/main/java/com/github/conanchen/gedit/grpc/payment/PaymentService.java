@@ -87,7 +87,7 @@ public class PaymentService {
 
                     @Override
                     public void onError(Throwable t) {
-                        Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
+                        Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
                         callback.onGetQRCodeUrlCallback(GetMyPayeeCodeResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode("Fail")

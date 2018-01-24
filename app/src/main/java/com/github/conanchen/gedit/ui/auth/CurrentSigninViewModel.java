@@ -96,4 +96,54 @@ public class CurrentSigninViewModel extends ViewModel {
 
         };
     }
+
+    /**
+     * 查询WorkingStore的payeeStoreUuid
+     *
+     * @return
+     */
+    public LiveData<String> getCurrentWorkingStore() {
+        return new LiveData<String>() {
+            @Override
+            protected void onActive() {
+                repositoryFascade.keyValueRepository
+                        .findMaybe(KeyValue.KEY.USER_CURRENT_WORKING_STORE)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .map(keyValue -> keyValue.value.payeeStoreUuid)
+                        .subscribe(new MaybeObserver<String>() {
+                            boolean hasValue = false;
+
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                Log.i(TAG, "onSubscribe");
+                            }
+
+                            @Override
+                            public void onSuccess(String payeeStoreUuid) {
+                                //found payeeStoreUuid
+                                Log.i(TAG, "onSuccess  Working Store ");
+
+                                postValue(payeeStoreUuid);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                //access database error
+                                Log.i(TAG, "onError  Working Store ");
+                                postValue("");
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                //not found payeeStoreUuid
+                                Log.i(TAG, "onComplete  Working Store ");
+
+                            }
+                        });
+            }
+
+        };
+    }
+
 }

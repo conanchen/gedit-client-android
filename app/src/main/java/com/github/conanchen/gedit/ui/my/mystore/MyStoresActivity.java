@@ -82,7 +82,6 @@ public class MyStoresActivity extends BaseActivity {
                                 .setExpiresIn(signinResponse.getExpiresIn())
                                 .build())
                         .build();
-                Log.i("-=-=-=-=-=", "列表");
                 myStoresViewModel.loadMyStores(storeCreateInfo);
             }
         });

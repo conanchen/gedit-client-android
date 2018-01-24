@@ -56,22 +56,27 @@ public class PayeeQRCodeActivity extends BaseActivity {
     private void setupViewModel() {
 
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
-        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
-                voAccessToken = VoAccessToken.builder()
-                        .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())
-                        .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())
-                        .build();
+        //获取WorkingStore的payeeStoreUuid
+        currentSigninViewModel.getCurrentWorkingStore().observe(this, string -> {
+            //获取token
+            currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+                if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                    voAccessToken = VoAccessToken.builder()
+                            .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())
+                            .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())
+                            .build();
 
-                //获取商铺信息
-                PaymentInfo paymentInfo = PaymentInfo.builder()
-                        .setVoAccessToken(voAccessToken)
-                        .setPayeeStoreUuid("test")
-                        .build();
+                    //获取商铺信息
+                    PaymentInfo paymentInfo = PaymentInfo.builder()
+                            .setVoAccessToken(voAccessToken)
+                            .setPayeeStoreUuid(Strings.isNullOrEmpty(string) ? "1111" : string)
+                            .build();
 
-                payeeQRCodeViewModel.getQRCode(paymentInfo);
+                    payeeQRCodeViewModel.getQRCode(paymentInfo);
 
-            }
+                }
+            });
+
         });
 
 

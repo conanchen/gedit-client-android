@@ -340,7 +340,7 @@ public class PointsPayActivity extends BaseActivity {
                 }
                 isPay = true;
 
-                Log.i("-=-=-=-", "使不使用积分:" + isPointsPay + "----微信还是支付宝:" + paymentChannelSelected);
+                Log.i("-=-=-=-", (isPointsPay ? "使用积分" : "不适用积分") + "----微信还是支付宝:" + paymentChannelSelected);
                 pointsPayViewModel.createPayment(paymentInfo);
 
                 break;
