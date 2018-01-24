@@ -2,7 +2,6 @@ package com.github.conanchen.gedit.ui.store;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
@@ -16,8 +15,8 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
-import com.github.conanchen.gedit.ui.my.mystore.MyStoreActivity;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
+import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -54,8 +53,7 @@ public class StoreCreateActivity extends BaseActivity {
 
     public static String TAG = StoreCreateActivity.class.getSimpleName();
     private static final Gson gson = new Gson();
-    private String accessToken;
-    private String expiresIn;
+    private VoAccessToken voAccessToken;
 
 
     @Override
@@ -91,6 +89,7 @@ public class StoreCreateActivity extends BaseActivity {
                         String storeTel = introducerPhone.getText().toString().trim();
 
                         StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
+                                .setVoAccessToken(voAccessToken)
                                 .setName(storeName)
                                 .setLat(104.056508)
                                 .setLon(30.733657)
@@ -119,6 +118,7 @@ public class StoreCreateActivity extends BaseActivity {
     private void setupViewModel() {
         storeCreateViewModel = ViewModelProviders.of(this, viewModelFactory).get(StoreCreateViewModel.class);
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+
         storeCreateViewModel.getStoreCreateResponseLiveData().observe(this, storeCreateResponse -> {
             String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
             Log.i(TAG, message);
@@ -132,8 +132,10 @@ public class StoreCreateActivity extends BaseActivity {
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
             if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
                 isLogin = true;
-                accessToken = signinResponse.getAccessToken();
-                expiresIn = signinResponse.getExpiresIn();
+                voAccessToken = VoAccessToken.builder()
+                        .setAccessToken(signinResponse.getAccessToken())
+                        .setExpiresIn(signinResponse.getExpiresIn())
+                        .build();
             } else {
                 isLogin = false;
             }

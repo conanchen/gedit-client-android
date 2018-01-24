@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -12,6 +13,9 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.my.store.MyStore;
+import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
+import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
 
 import javax.inject.Inject;
@@ -29,6 +33,7 @@ public class MyStoresActivity extends BaseActivity {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     MyStoresViewModel myStoresViewModel;
+    private CurrentSigninViewModel currentSigninViewModel;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -56,7 +61,6 @@ public class MyStoresActivity extends BaseActivity {
                 ARouter.getInstance().build("/app/MyStoreActivity")
                         .withString("uuid", Strings.isNullOrEmpty(myStore.storeUuid) ? System.currentTimeMillis() + "" : myStore.storeUuid)
                         .navigation();
-//                startActivity(new Intent(MyStoresActivity.this, MyStoreActivity.class));
             }
         });
     }
@@ -68,7 +72,20 @@ public class MyStoresActivity extends BaseActivity {
                 mAdapter.setList(stores);
             }
         });
-        myStoresViewModel.loadMyStores(System.currentTimeMillis());
+
+        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+            if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
+                        .setVoAccessToken(VoAccessToken.builder()
+                                .setAccessToken(signinResponse.getAccessToken())
+                                .setExpiresIn(signinResponse.getExpiresIn())
+                                .build())
+                        .build();
+                Log.i("-=-=-=-=-=", "列表");
+                myStoresViewModel.loadMyStores(storeCreateInfo);
+            }
+        });
     }
 
     @OnClick({R.id.back, R.id.right})

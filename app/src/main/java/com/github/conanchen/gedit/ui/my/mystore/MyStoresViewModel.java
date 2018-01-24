@@ -10,6 +10,7 @@ import android.support.annotation.VisibleForTesting;
 import com.github.conanchen.gedit.repository.MyStoreRepository;
 import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.util.AbsentLiveData;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
 
 import javax.inject.Inject;
 
@@ -20,24 +21,24 @@ import javax.inject.Inject;
 public class MyStoresViewModel extends ViewModel {
 
     @VisibleForTesting
-    final MutableLiveData<Long> lastUpdatedMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<StoreCreateInfo> lastUpdatedMutableLiveData = new MutableLiveData<>();
     private final LiveData<PagedList<MyStore>> myStorePagedListLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
     public MyStoresViewModel(MyStoreRepository myStoreRepository) {
-        myStorePagedListLiveData = Transformations.switchMap(lastUpdatedMutableLiveData, times -> {
-            if (times == null) {
+        myStorePagedListLiveData = Transformations.switchMap(lastUpdatedMutableLiveData, storeCreateInfo -> {
+            if (storeCreateInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return myStoreRepository.loadMyStores(times);
+                return myStoreRepository.loadMyStores(storeCreateInfo);
             }
         });
     }
 
     @VisibleForTesting
-    public void loadMyStores(Long times) {
-        lastUpdatedMutableLiveData.setValue(times);
+    public void loadMyStores(StoreCreateInfo storeCreateInfo) {
+        lastUpdatedMutableLiveData.setValue(storeCreateInfo);
     }
 
     @VisibleForTesting

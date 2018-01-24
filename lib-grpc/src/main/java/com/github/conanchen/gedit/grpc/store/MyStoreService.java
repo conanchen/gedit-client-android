@@ -8,7 +8,13 @@ import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
 import com.github.conanchen.gedit.store.owner.grpc.Ownership;
 import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.gedit.store.owner.grpc.StoreOwnerApiGrpc;
+import com.github.conanchen.gedit.utils.JcaUtils;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
+import com.google.gson.Gson;
 
+import java.util.concurrent.TimeUnit;
+
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -19,6 +25,7 @@ import io.grpc.stub.StreamObserver;
 
 public class MyStoreService {
     private final static String TAG = MyStoreService.class.getSimpleName();
+    private Gson gson = new Gson();
 
     public interface OwnershipCallBack {
         void onOwnershipResponse(OwnershipResponse response);
@@ -35,37 +42,46 @@ public class MyStoreService {
     }
 
 
-    public void loadMyStores(ListMyStoreRequest request, OwnershipCallBack callBack) {
+    public void loadMyStores(StoreCreateInfo storeCreateInfo, OwnershipCallBack callBack) {
+
+        Log.i("-=-=-=-=-=", "列表 token:" + storeCreateInfo.voAccessToken.accessToken + "----------expiresIn:" + storeCreateInfo.voAccessToken.expiresIn);
         ManagedChannel channel = getManagedChannel();
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(storeCreateInfo.voAccessToken.accessToken
+                        , Long.valueOf(storeCreateInfo.voAccessToken.expiresIn));
+
         StoreOwnerApiGrpc.StoreOwnerApiStub storeOwnerApiStub = StoreOwnerApiGrpc.newStub(channel);
-        storeOwnerApiStub.listMyStore(request, new StreamObserver<OwnershipResponse>() {
-            @Override
-            public void onNext(OwnershipResponse value) {
-                Log.i("-=-=-", "onNext");
-                callBack.onOwnershipResponse(value);
-            }
+        storeOwnerApiStub
+                .withCallCredentials(callCredentials)
+                .listMyStore(ListMyStoreRequest.newBuilder()
+                        .build(), new StreamObserver<OwnershipResponse>() {
+                    @Override
+                    public void onNext(OwnershipResponse value) {
+                        Log.i("-=-=-", "onNext");
+                        callBack.onOwnershipResponse(value);
+                    }
 
-            @Override
-            public void onError(Throwable t) {
-                Log.i("-=-=-", "onError");
-                callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
-                        .setOwnership(Ownership.newBuilder()
-                                .setStoreUuid("uuid" + System.currentTimeMillis())
-                                .setStoreName("name" + System.currentTimeMillis())
-                                .build())
-                        .build());
-            }
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.i("-=-=-", "onError" + gson.toJson(t));
+                        callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
+                                .setOwnership(Ownership.newBuilder()
+                                        .setStoreUuid("uuid" + System.currentTimeMillis())
+                                        .setStoreName("name" + System.currentTimeMillis())
+                                        .build())
+                                .build());
+                    }
 
-            @Override
-            public void onCompleted() {
-                Log.i("-=-=-", "onCompleted");
-                callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
-                        .setStatus(Status.newBuilder().setCode("onCompleted()")
-                                .setDetails(String.format("onCompleted（）"))
-                                .build())
-                        .build());
-            }
-        });
+                    @Override
+                    public void onCompleted() {
+                        Log.i("-=-=-", "onCompleted");
+                        callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
+                                .setStatus(Status.newBuilder().setCode("onCompleted()")
+                                        .setDetails(String.format("onCompleted（）"))
+                                        .build())
+                                .build());
+                    }
+                });
     }
 
 

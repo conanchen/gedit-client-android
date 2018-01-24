@@ -9,6 +9,7 @@ import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -47,9 +48,9 @@ public class MyStoreRepository {
             .setPageSize(20).build();
 
 
-    public LiveData<PagedList<MyStore>> loadMyStores(Long times) {
+    public LiveData<PagedList<MyStore>> loadMyStores(StoreCreateInfo storeCreateInfo) {
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.myStoreService.loadMyStores(ListMyStoreRequest.newBuilder().build(), response -> {
+            grpcFascade.myStoreService.loadMyStores(storeCreateInfo, response -> {
                 MyStore myStore = MyStore.builder()
                         .setStoreUuid(response.getOwnership().getStoreUuid())
                         .setLat(response.getOwnership().getLocation().getLat())
@@ -57,7 +58,7 @@ public class MyStoreRepository {
                         .setStoreLogo(response.getOwnership().getStoreLogo())
                         .setStoreName(response.getOwnership().getStoreName())
                         .build();
-                 roomFascade.daoMyStore.save(myStore);
+                roomFascade.daoMyStore.save(myStore);
             });
         });
 
