@@ -88,7 +88,7 @@ public class PointsPayViewModel extends ViewModel {
         return createPaymentLiveData;
     }
 
-    public void getCreatePayment(PaymentInfo paymentInfo) {
+    public void createPayment(PaymentInfo paymentInfo) {
         createPaymentMutableLiveData.setValue(paymentInfo);
     }
 }
