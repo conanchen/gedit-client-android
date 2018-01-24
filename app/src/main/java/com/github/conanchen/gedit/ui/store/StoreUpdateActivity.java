@@ -69,8 +69,7 @@ public class StoreUpdateActivity extends BaseActivity {
     public String uuid;//从我的店铺详情传递过来
 
     private boolean isLogin = false;//是否登录
-    private String accessToken;
-    private String expiresIn;
+    private VoAccessToken voAccessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,8 +128,10 @@ public class StoreUpdateActivity extends BaseActivity {
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
             if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
                 isLogin = true;
-                accessToken = signinResponse.getAccessToken();
-                expiresIn = signinResponse.getExpiresIn();
+                voAccessToken = VoAccessToken.builder()
+                        .setAccessToken(signinResponse.getAccessToken())
+                        .setExpiresIn(signinResponse.getExpiresIn())
+                        .build();
             } else {
                 isLogin = false;
 
@@ -171,10 +172,6 @@ public class StoreUpdateActivity extends BaseActivity {
     @Nullable
     private StoreUpdateInfo getStoreUpdateInfo(String value) {
 
-        VoAccessToken voAccessToken = VoAccessToken.builder()
-                .setAccessToken(Strings.isNullOrEmpty(accessToken) ? System.currentTimeMillis() + "" : accessToken)
-                .setExpiresIn(Strings.isNullOrEmpty(expiresIn) ? System.currentTimeMillis() + "" : expiresIn)
-                .build();
         StoreUpdateInfo storeUpdateInfo = null;
         switch (MODIFY_TYPE) {
             case "PHONE":

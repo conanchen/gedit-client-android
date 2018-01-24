@@ -93,10 +93,14 @@ public class StoreProfileService {
 
     public void storeCreate(StoreCreateInfo storeCreateInfo, StoreCreateCallback callback) {
         ManagedChannel channel = getManagedChannel();
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(storeCreateInfo.voAccessToken.accessToken
+                        , Long.valueOf(storeCreateInfo.voAccessToken.expiresIn));
 
         StoreProfileApiGrpc.StoreProfileApiStub storeProfileApiStub = StoreProfileApiGrpc.newStub(channel);
         storeProfileApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .withCallCredentials(callCredentials)
                 .create(com.github.conanchen.gedit.store.profile.grpc.CreateStoreRequest
                                 .newBuilder()
                                 .setName(storeCreateInfo.name)

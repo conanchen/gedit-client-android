@@ -9,6 +9,7 @@ import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
+import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class MyMemberStoreRepository {
 
     public LiveData<PagedList<MyStore>> loadMyStores(Long times) {
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.myStoreService.loadMyStores(ListMyStoreRequest.newBuilder().build(), response -> {
+            grpcFascade.myStoreService.loadMyStores(StoreCreateInfo.builder().build(), response -> {
                 MyStore myStore = MyStore.builder()
                         .setStoreUuid(response.getOwnership().getStoreUuid())
                         .setLat(response.getOwnership().getLocation().getLat())
