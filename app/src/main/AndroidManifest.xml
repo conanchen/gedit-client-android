@@ -62,7 +62,7 @@
 
         <!-- ***************************     微信开始     *************************** -->
         <activity
-            android:name="com.jifenpz.gedit.wxapi.WXPayEntryActivity"
+            android:name="com.jifenpz.gedit.wxapi.WechatPayEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"

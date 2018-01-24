@@ -28,7 +28,7 @@ import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.util.pay.AliPayUtil;
 import com.github.conanchen.gedit.util.pay.PayResultCallBack;
-import com.github.conanchen.gedit.util.pay.WxPay;
+import com.github.conanchen.gedit.util.pay.WechatPay;
 import com.github.conanchen.utils.vo.PaymentInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
@@ -250,8 +250,8 @@ public class PointsPayActivity extends BaseActivity {
 //                "      \"sign\" : \"078E94BFA385D5136949138BD5DD5941\",\n" +
 //                "      \"timestamp\" : \"1512550439\"\n" +
 //                "    }\n";//订单号
-        WxPay.init(PointsPayActivity.this);
-        WxPay.getInstance().doPay(signStr, new WxPay.WXPayResultCallBack() {
+        WechatPay.init(PointsPayActivity.this);
+        WechatPay.getInstance().doPay(signStr, new WechatPay.WXPayResultCallBack() {
             @Override
             public void onSuccess() {
                 //成功
