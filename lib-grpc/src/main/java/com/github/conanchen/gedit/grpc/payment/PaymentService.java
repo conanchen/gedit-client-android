@@ -184,7 +184,7 @@ public class PaymentService {
                         Long.valueOf(paymentInfo.voAccessToken.expiresIn));
 
         CreateInappPaymentRequest createPaymentRequest = null;
-        if ("1".equals(paymentInfo.payType)) {
+        if ("1".equals(paymentInfo.paymentChannelName)) {
             createPaymentRequest = CreateInappPaymentRequest.newBuilder()
                     .setActualPay(paymentInfo.actualPay)
                     .setChannel(PaymentChannel.ALIPAY)
@@ -193,7 +193,7 @@ public class PaymentService {
                     .setPayeePayeeCode(paymentInfo.payeeReceiptCode)
                     .setPayerIp(paymentInfo.payerIp)
                     .build();
-        } else if ("2".equals(paymentInfo.payType)) {
+        } else if ("2".equals(paymentInfo.paymentChannelName)) {
             createPaymentRequest = CreateInappPaymentRequest.newBuilder()
                     .setActualPay(paymentInfo.actualPay)
                     .setChannel(PaymentChannel.WECHAT)

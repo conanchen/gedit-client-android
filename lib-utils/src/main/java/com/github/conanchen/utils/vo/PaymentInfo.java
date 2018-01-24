@@ -12,12 +12,13 @@ public class PaymentInfo {
     public int shouldPay; //应付金额 = 实付金额 + 实付积分等价金额
     public int actualPay; //实付金额
     public int pointsPay; //实付积分代替金额
+    public boolean isPointsPay;//是否使用积分抵扣金额
     public String payerIp; //付款人客户端的实际ip地址
-    public String payType;//支付类型
+    public String paymentChannelName;//支付类型
     public String returnStr;//订单号
 
     private PaymentInfo(VoAccessToken voAccessToken, String payeeStoreUuid, String payeeWorkerUuid, String payeeReceiptCode,
-                        int shouldPay, int actualPay, int pointsPay, String payerIp,String payType,String returnStr) {
+                        int shouldPay, int actualPay, int pointsPay, String payerIp, String paymentChannelName, String returnStr) {
         this.voAccessToken = voAccessToken;
         this.payeeStoreUuid = payeeStoreUuid;
         this.payeeWorkerUuid = payeeWorkerUuid;
@@ -26,7 +27,7 @@ public class PaymentInfo {
         this.actualPay = actualPay;
         this.pointsPay = pointsPay;
         this.payerIp = payerIp;
-        this.payType = payType;
+        this.paymentChannelName = paymentChannelName;
         this.returnStr = returnStr;
     }
 

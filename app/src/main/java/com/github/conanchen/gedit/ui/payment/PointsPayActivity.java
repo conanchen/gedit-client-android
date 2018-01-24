@@ -20,6 +20,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.PaymentChannel;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeResponse;
@@ -84,7 +85,7 @@ public class PointsPayActivity extends BaseActivity {
     @Autowired
     public String code;
 
-    private int selected = 1;//选择支付  1表示支付宝， 2 表示微信
+    private PaymentChannel paymentChannelSelected = PaymentChannel.ALIPAY;//选择支付  1表示支付宝， 2 表示微信
     boolean isPay = false;//是否已经调起了支付
     private boolean isLogin = false;//是否登录
     private String accessToken;
@@ -160,16 +161,17 @@ public class PointsPayActivity extends BaseActivity {
                 Log.i("-=-=-=-=-=create()", gson.toJson(paymentResponse));
                 if (paymentResponse != null && isPay) {
                     isPay = false;
+                    PaymentChannel paymentChannel = paymentResponse.getPayment().getChannel();
                     String signature = paymentResponse.getPayment().getSignature();
                     String returnStr = "";
                     try {
 
                         JSONObject jsonObject = new JSONObject(signature);
                         returnStr = jsonObject.getString("returnStr");
-                        if (selected == 1) {
+                        if (PaymentChannel.ALIPAY.name().equalsIgnoreCase(paymentChannel.name())) {
                             Log.i("-=-=-=-", "支付宝");
                             aliPay(returnStr);
-                        } else if (selected == 2) {
+                        } else if (PaymentChannel.WECHAT.name().equalsIgnoreCase(paymentChannel.name())) {
                             Log.i("-=-=-=-", "微信");
                             wechatPay(returnStr);
                         }
@@ -235,6 +237,7 @@ public class PointsPayActivity extends BaseActivity {
 
     /**
      * 微信支付
+     *
      * @param signStr
      */
     private void wechatPay(String signStr) {
@@ -290,12 +293,12 @@ public class PointsPayActivity extends BaseActivity {
             case R.id.ali_pay:
                 mIvAliBg.setVisibility(View.VISIBLE);
                 mIvWeinxinBg.setVisibility(View.GONE);
-                selected = 1;
+                paymentChannelSelected = PaymentChannel.ALIPAY;
                 break;
             case R.id.weixin:
                 mIvAliBg.setVisibility(View.GONE);
                 mIvWeinxinBg.setVisibility(View.VISIBLE);
-                selected = 2;
+                paymentChannelSelected = PaymentChannel.WECHAT;
                 break;
             case R.id.submit:
                 int usePoints = 1;
@@ -311,7 +314,7 @@ public class PointsPayActivity extends BaseActivity {
                         .build();
 
                 PaymentInfo paymentInfo = null;
-                if (selected == 1) {
+                if (paymentChannelSelected == PaymentChannel.ALIPAY) {
                     paymentInfo = PaymentInfo.builder()
                             .setVoAccessToken(voAccessToken)
                             .setActualPay(1)
@@ -321,7 +324,7 @@ public class PointsPayActivity extends BaseActivity {
                             .setPointsPay(0)
                             .setPayType("1")//支付宝
                             .build();
-                } else if (selected == 2) {
+                } else if (paymentChannelSelected == PaymentChannel.WECHAT) {
                     paymentInfo = PaymentInfo.builder()
                             .setVoAccessToken(voAccessToken)
                             .setActualPay(1)
@@ -334,7 +337,7 @@ public class PointsPayActivity extends BaseActivity {
                 }
 
                 isPay = true;
-                Log.i("-=-=-=-", "使不使用积分:" + usePoints + "----微信还是支付宝:" + selected);
+                Log.i("-=-=-=-", "使不使用积分:" + usePoints + "----微信还是支付宝:" + paymentChannelSelected);
                 pointsPayViewModel.getCreatePayment(paymentInfo);
 
                 break;
