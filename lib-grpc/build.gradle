@@ -37,7 +37,7 @@ android {
             buildConfigField 'String', 'AMAPKEY', '"4d83adc4a7dea5315096f8629a8c9a02"'
             buildConfigField 'String', 'ENVIRONMENT', '"DEBUG"'
 //            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.1.102"' //本机公司
-//            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.0.101"' //本机家里
+//            buildConfigField 'String', 'GRPC_SERVER_HOST', '"192.168.1.101"' //本机家里
 //            buildConfigField 'String', 'GRPC_SERVER_HOST', '"118.178.237.46"' //本机公司
             buildConfigField 'String', 'GRPC_SERVER_HOST', '"dev.jifenpz.com"'  //公司开发服务器
             buildConfigField 'Integer', 'GRPC_SERVER_PORT_HELLO', '8980'
