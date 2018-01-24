@@ -4,13 +4,12 @@ package com.github.conanchen.gedit.repository.di;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.di.GrpcModule;
 import com.github.conanchen.gedit.repository.AccountingRepository;
-import com.github.conanchen.gedit.repository.MyIntroducedStoreRepository;
-import com.github.conanchen.gedit.repository.MyMemberStoreRepository;
-import com.github.conanchen.gedit.repository.MyWorkinStoreRepository;
-import com.github.conanchen.gedit.repository.RepositoryFascade;
 import com.github.conanchen.gedit.repository.HelloRepository;
+import com.github.conanchen.gedit.repository.MyIntroducedStoreRepository;
 import com.github.conanchen.gedit.repository.MyStoreRepository;
+import com.github.conanchen.gedit.repository.MyWorkinStoreRepository;
 import com.github.conanchen.gedit.repository.RegisterRepository;
+import com.github.conanchen.gedit.repository.RepositoryFascade;
 import com.github.conanchen.gedit.repository.SigninRepository;
 import com.github.conanchen.gedit.repository.StoreProfileRepository;
 import com.github.conanchen.gedit.repository.StoreWorkerRepository;
@@ -96,14 +95,6 @@ public class RepositoryModule {
         return new MyWorkinStoreRepository(roomFascade, grpcFascade);
     }
 
-
-
-    @Singleton
-    @Provides
-    public MyMemberStoreRepository provideMyMemberStoreRepository(
-            RoomFascade roomFascade, GrpcFascade grpcFascade) {
-        return new MyMemberStoreRepository(roomFascade, grpcFascade);
-    }
 
 
     @Singleton
