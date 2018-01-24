@@ -7,8 +7,8 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.payment.PaymentService;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.ReceiptCode;
@@ -96,16 +96,18 @@ public class PaymentRepository {
     /**
      * 获取商家信息
      *
-     * @param url
+     * @param receiptCode
      * @return
      */
-    public LiveData<GetReceiptCodeResponse> getPaymentStoreDetails(String url) {
+    public LiveData<GetReceiptCodeResponse> getPayeeStoreDetails(String receiptCode) {
         return new LiveData<GetReceiptCodeResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.paymentService.getPaymentStoreDetails(url, new PaymentService.GetPaymentStoreDetailsCallback() {
+                grpcFascade.paymentService.getPaymentStoreDetails(GetReceiptCodeRequest.newBuilder()
+                        .setCode(receiptCode)
+                        .build(), new PaymentService.GetPayeeStoreDetailsCallback() {
                     @Override
-                    public void onGetPaymentStoreDetailsCallback(GetReceiptCodeResponse response) {
+                    public void onGetPayeeStoreDetailsCallback(GetReceiptCodeResponse response) {
                         Observable.fromCallable(() -> {
 
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {

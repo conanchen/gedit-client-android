@@ -7,7 +7,6 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
 import com.github.conanchen.gedit.repository.PaymentRepository;
@@ -41,7 +40,7 @@ public class PointsPayViewModel extends ViewModel {
             if (Strings.isNullOrEmpty(string)) {
                 return AbsentLiveData.create();
             } else {
-                return paymentRepository.getPaymentStoreDetails(string);
+                return paymentRepository.getPayeeStoreDetails(string);
             }
         });
 

@@ -38,8 +38,8 @@ public class PaymentService {
         void onGetQRCodeUrlCallback(GetMyReceiptCodeResponse response);
     }
 
-    public interface GetPaymentStoreDetailsCallback {
-        void onGetPaymentStoreDetailsCallback(GetReceiptCodeResponse response);
+    public interface GetPayeeStoreDetailsCallback {
+        void onGetPayeeStoreDetailsCallback(GetReceiptCodeResponse response);
     }
 
     public interface GetPaymentCallback {
@@ -101,28 +101,26 @@ public class PaymentService {
     /**
      * getReceiptCode
      *
-     * @param url
+     * @param request
      * @param callback
      */
-    public void getPaymentStoreDetails(String url, GetPaymentStoreDetailsCallback callback) {
+    public void getPaymentStoreDetails(GetReceiptCodeRequest request, GetPayeeStoreDetailsCallback callback) {
 
         ManagedChannel channel = getManagedChannel();
         PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
         paymentInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .getReceiptCode(GetReceiptCodeRequest.newBuilder()
-                        .setCode(url)
-                        .build(), new StreamObserver<GetReceiptCodeResponse>() {
+                .getReceiptCode(request, new StreamObserver<GetReceiptCodeResponse>() {
                     @Override
                     public void onNext(GetReceiptCodeResponse value) {
                         Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
-                        callback.onGetPaymentStoreDetailsCallback(value);
+                        callback.onGetPayeeStoreDetailsCallback(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
-                        callback.onGetPaymentStoreDetailsCallback(GetReceiptCodeResponse.newBuilder()
+                        callback.onGetPayeeStoreDetailsCallback(GetReceiptCodeResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode("Fail")
                                         .setDetails("enter onError() method"))
