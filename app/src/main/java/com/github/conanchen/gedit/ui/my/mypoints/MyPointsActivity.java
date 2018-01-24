@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatTextView;
@@ -29,24 +28,23 @@ import butterknife.OnClick;
 @Route(path = "/app/MyPointsActivity")
 public class MyPointsActivity extends BaseFragmentActivity {
 
-    private final static String TAG= MyPointsActivity.class.getSimpleName();
+    private final static String TAG = MyPointsActivity.class.getSimpleName();
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     MyPointsViewModel myPointsViewModel;
 
     @BindView(R.id.today_added_points)
-    AppCompatTextView mTvTodayAddPoints;
-    @BindView(R.id.today_points_layout)
-    ConstraintLayout mLayoutTodayPoints;
-    @BindView(R.id.can_consumption_integral)
-    AppCompatTextView mTvCanConsumptionPoints;
-    @BindView(R.id.can_consumption_points_layout)
-    ConstraintLayout mLayoutCanConsumptionPoints;
-    @BindView(R.id.can_exchange_points)
-    AppCompatTextView mTvEanExchangePoints;
-    @BindView(R.id.can_exchange_points_layout)
-    ConstraintLayout mLayoutEanExchangePoints;
+    AppCompatTextView today_added_points;
+
+
+    @BindView(R.id.can_exchange_points_desc)
+    AppCompatTextView can_exchange_points_desc;
+
+    @BindView(R.id.can_consumption_points)
+    AppCompatTextView can_consumption_points;
+
+
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
@@ -83,21 +81,24 @@ public class MyPointsActivity extends BaseFragmentActivity {
                         case "CASH":
                             break;
                         case "LIVE_POINTS"://可消费积分
-                            mTvTodayAddPoints.setText(account.currentChanges);
-                            mTvCanConsumptionPoints.setText(account.currentBalance);
+                            today_added_points.setText(account.currentChanges);
+                            can_consumption_points.setText(account.currentBalance);
                             break;
                         case "FIXED_POINTS"://可兑换积分
-                            mTvEanExchangePoints.setText(account.currentBalance);
+                            can_exchange_points_desc.setText(account.currentBalance);
                             break;
                         default:
-                                Log.e(TAG,"ERROR Unknown Type:"+account.type);
+                            Log.e(TAG, "ERROR Unknown Type:" + account.type);
                     }
                 }
             }
         });
     }
 
-    @OnClick({R.id.back, R.id.right, R.id.today_points_layout, R.id.can_consumption_points_layout, R.id.can_exchange_points_layout})
+    @OnClick({R.id.back, R.id.right,
+            R.id.today_added_points,R.id.today_added_points_desc ,
+            R.id.can_consumption_points,R.id.can_consumption_points_desc,
+            R.id.can_exchange_points,R.id.can_exchange_points_desc})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -107,15 +108,18 @@ public class MyPointsActivity extends BaseFragmentActivity {
                 //兑换
                 startActivity(new Intent(MyPointsActivity.this, ExchangePointsActivity.class));
                 break;
-            case R.id.today_points_layout:
+            case R.id.today_added_points:
+            case R.id.today_added_points_desc:
                 //今日新增列表
                 viewPager.setCurrentItem(0);
                 break;
-            case R.id.can_consumption_points_layout:
+            case R.id.can_consumption_points:
+            case R.id.can_consumption_points_desc:
                 //可消费积分列表
                 viewPager.setCurrentItem(1);
                 break;
-            case R.id.can_exchange_points_layout:
+            case R.id.can_exchange_points:
+            case R.id.can_exchange_points_desc:
                 //可兑换积分列表
                 viewPager.setCurrentItem(2);
                 break;
