@@ -21,24 +21,7 @@ import butterknife.OnClick;
 @Route(path = "/app/MyIntroducedStoreActivity")
 public class MyIntroducedStoreActivity extends AppCompatActivity {
 
-    @BindView(R.id.view_pager)
-    ViewPager viewPager;
-    @BindView(R.id.banner)
-    RelativeLayout banner;
-    @BindView(R.id.total_integral)
-    AppCompatTextView totalIntegral;
-    @BindView(R.id.today_integral)
-    AppCompatTextView todayIntegral;
-    @BindView(R.id.address)
-    AppCompatTextView address;
-    @BindView(R.id.phone)
-    AppCompatTextView phone;
-    @BindView(R.id.time)
-    AppCompatTextView time;
-    @BindView(R.id.prompt)
-    AppCompatTextView prompt;
-    @BindView(R.id.store_introduce)
-    AppCompatTextView storeIntroduce;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
