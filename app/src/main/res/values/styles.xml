@@ -28,7 +28,7 @@
         <item name="android:background">@color/colorPrimary</item>
         <!--item的背景色，可以设置按压下的水波纹效果，水泼纹效果要放置在drawable-v21下，或者在drawable下用targetApi约束 @drawable/bottom_bar_ripple-->
 
-        <item name="itemBackground">@color/color_4d</item>
+        <item name="itemBackground">@drawable/bottom_bar_ripple</item>
         <!--图标颜色-->
         <item name="itemIconTint">@drawable/bottom_bar_item_selector</item>
         <!--字体颜色-->
