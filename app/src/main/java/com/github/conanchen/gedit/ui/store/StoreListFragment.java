@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.room.store.Store;
+import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -28,6 +30,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -40,6 +43,8 @@ import butterknife.ButterKnife;
 
 public class StoreListFragment extends BaseFragment implements Injectable, StoreListAdapter.OnItemClickListener {
 
+    private static final String TAG = StoreListFragment.class.getSimpleName();
+    private static final Gson gson = new Gson();
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private StoreListViewModel storeListViewModel;
@@ -89,14 +94,21 @@ public class StoreListFragment extends BaseFragment implements Injectable, Store
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        Snackbar.make(view, "访问位置权限打开了，测试定位,请等待HelloWorld的变化。", Snackbar.LENGTH_LONG)
+                        Snackbar.make(view, "访问位置权限打开了，正在定位,请等待StoreList的变化。", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         amapLiveLocation.locate().observe(StoreListFragment.this, aMapLocation -> {
-                            String text = String.format("Test now:%s@(lat,lon)=(%f,%f) address=%s",
+                            String text = String.format(Locale.CHINA,"Test now:%s@(lat,lon)=(%f,%f) address=%s " +
+                                            "aMapLocation={AdCode:%s, AoiName=%s, BuildingId=%s, Street=%s, StreetNum=%s, District=%s, CityCode=%s, City=%s, Province=%s, Country=%s}",
                                     DateFormat.getTimeInstance().format(new Date()),
-                                    aMapLocation.getLatitude(), aMapLocation.getLongitude(), aMapLocation.getAddress());
+                                    aMapLocation.getLatitude(), aMapLocation.getLongitude(), aMapLocation.getAddress(),
+                                    aMapLocation.getAdCode(),aMapLocation.getAoiName(),aMapLocation.getBuildingId(),
+                                    aMapLocation.getStreet(),aMapLocation.getStreetNum(),
+                                    aMapLocation.getDistrict(),aMapLocation.getCityCode(),aMapLocation.getCity(),
+                                    aMapLocation.getProvince(),aMapLocation.getCountry()
+                            );
                             Snackbar.make(recyclerView, text, Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
+                            Log.i(TAG,text);
                             if (aMapLocation.getLatitude() > 0 && aMapLocation.getLongitude() > 0) {
                                 storeListViewModel.updateLocation(Location.newBuilder()
                                         .setLat(aMapLocation.getLatitude())
