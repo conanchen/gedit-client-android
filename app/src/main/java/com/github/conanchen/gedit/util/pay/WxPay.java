@@ -18,9 +18,9 @@ import org.json.JSONObject;
 /**
  * Created by Administrator on 2017/6/21.
  */
-public class WechatPay {
+public class WxPay {
 
-    private static WechatPay mWechatPay;
+    private static WxPay mWXPay;
     private IWXAPI mWXApi;
     private String mPayParam;
     private WXPayResultCallBack mCallback;
@@ -37,19 +37,19 @@ public class WechatPay {
         void onCancel();    //支付取消
     }
 
-    public WechatPay(Context context) {
+    public WxPay(Context context) {
         mWXApi = WXAPIFactory.createWXAPI(context, null);
         mWXApi.registerApp(getWeixinKey(context));//appId
     }
 
     public static void init(Context context) {
-        if (mWechatPay == null) {
-            mWechatPay = new WechatPay(context);
+        if (mWXPay == null) {
+            mWXPay = new WxPay(context);
         }
     }
 
-    public static WechatPay getInstance() {
-        return mWechatPay;
+    public static WxPay getInstance() {
+        return mWXPay;
     }
 
     public IWXAPI getWXApi() {

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.github.conanchen.gedit.util.pay.WechatPay;
+import com.github.conanchen.gedit.util.pay.WxPay;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -14,14 +14,14 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 /**
  * Created by Administrator on 2017/6/21.
  */
-public class WechatPayEntryActivity extends Activity implements IWXAPIEventHandler {
+public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (WechatPay.getInstance() != null) {
-            WechatPay.getInstance().getWXApi().handleIntent(getIntent(), this);
+        if (WxPay.getInstance() != null) {
+            WxPay.getInstance().getWXApi().handleIntent(getIntent(), this);
         } else {
             finish();
         }
@@ -30,8 +30,8 @@ public class WechatPayEntryActivity extends Activity implements IWXAPIEventHandl
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (WechatPay.getInstance() != null) {
-            WechatPay.getInstance().getWXApi().handleIntent(intent, this);
+        if (WxPay.getInstance() != null) {
+            WxPay.getInstance().getWXApi().handleIntent(intent, this);
         }
     }
 
@@ -44,9 +44,9 @@ public class WechatPayEntryActivity extends Activity implements IWXAPIEventHandl
     public void onResp(BaseResp resp) {
 
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            if (WechatPay.getInstance() != null) {
+            if (WxPay.getInstance() != null) {
 
-                WechatPay.getInstance().onResp(resp.errCode);
+                WxPay.getInstance().onResp(resp.errCode);
                 finish();
             }
         }
