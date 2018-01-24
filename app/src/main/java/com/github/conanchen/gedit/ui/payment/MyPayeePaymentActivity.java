@@ -10,8 +10,9 @@ import com.github.conanchen.gedit.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-@Route(path = "/app/MyPaymentRecordActivity")
-public class MyPaymentRecordActivity extends AppCompatActivity {
+
+@Route(path = "/app/MyPayeePaymentActivity")
+public class MyPayeePaymentActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -19,7 +20,7 @@ public class MyPaymentRecordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_payment_record);
+        setContentView(R.layout.activity_my_payeepayments);
         ButterKnife.bind(this);
     }
 
