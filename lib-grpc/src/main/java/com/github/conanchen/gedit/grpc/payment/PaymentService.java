@@ -7,14 +7,14 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.CreatePaymentRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.CreateInappPaymentRequest;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeRequest;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeRequest;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeResponse;
 import com.github.conanchen.gedit.payment.inapp.grpc.PaymentInappApiGrpc;
-import com.github.conanchen.gedit.payment.inapp.grpc.PreparMyPaymentRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentRequest;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse;
 import com.github.conanchen.gedit.utils.JcaUtils;
 import com.github.conanchen.utils.vo.PaymentInfo;
 import com.google.gson.Gson;
@@ -35,15 +35,15 @@ public class PaymentService {
     private Gson gson = new Gson();
 
     public interface GetQRCodeUrlCallback {
-        void onGetQRCodeUrlCallback(GetMyReceiptCodeResponse response);
+        void onGetQRCodeUrlCallback(GetMyPayeeCodeResponse response);
     }
 
     public interface GetPayeeStoreDetailsCallback {
-        void onGetPayeeStoreDetailsCallback(GetReceiptCodeResponse response);
+        void onGetPayeeStoreDetailsCallback(GetPayeeCodeResponse response);
     }
 
     public interface GetPaymentCallback {
-        void onGetPaymentCallback(PrepareMyPaymentResponse response);
+        void onGetPaymentCallback(PrepareInappPaymentResponse response);
     }
 
 
@@ -60,7 +60,7 @@ public class PaymentService {
     }
 
     /**
-     * getMyReceiptCode
+     * getMyPayeeCode
      *
      * @param url
      * @param callback
@@ -71,11 +71,11 @@ public class PaymentService {
         PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
         paymentInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .getMyReceiptCode(GetMyReceiptCodeRequest.newBuilder()
+                .getMyPayeeCode(GetMyPayeeCodeRequest.newBuilder()
                         .setPayeeStoreUuid(url)
-                        .build(), new StreamObserver<GetMyReceiptCodeResponse>() {
+                        .build(), new StreamObserver<GetMyPayeeCodeResponse>() {
                     @Override
-                    public void onNext(GetMyReceiptCodeResponse value) {
+                    public void onNext(GetMyPayeeCodeResponse value) {
                         Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
                         callback.onGetQRCodeUrlCallback(value);
                     }
@@ -83,7 +83,7 @@ public class PaymentService {
                     @Override
                     public void onError(Throwable t) {
                         Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
-                        callback.onGetQRCodeUrlCallback(GetMyReceiptCodeResponse.newBuilder()
+                        callback.onGetQRCodeUrlCallback(GetMyPayeeCodeResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode("Fail")
                                         .setDetails("enter onError() method"))
@@ -99,20 +99,20 @@ public class PaymentService {
 
 
     /**
-     * getReceiptCode
+     * getPayeeCode
      *
      * @param request
      * @param callback
      */
-    public void getPaymentStoreDetails(GetReceiptCodeRequest request, GetPayeeStoreDetailsCallback callback) {
+    public void getPaymentStoreDetails(GetPayeeCodeRequest request, GetPayeeStoreDetailsCallback callback) {
 
         ManagedChannel channel = getManagedChannel();
         PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
         paymentInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .getReceiptCode(request, new StreamObserver<GetReceiptCodeResponse>() {
+                .getPayeeCode(request, new StreamObserver<GetPayeeCodeResponse>() {
                     @Override
-                    public void onNext(GetReceiptCodeResponse value) {
+                    public void onNext(GetPayeeCodeResponse value) {
                         Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
                         callback.onGetPayeeStoreDetailsCallback(value);
                     }
@@ -120,7 +120,7 @@ public class PaymentService {
                     @Override
                     public void onError(Throwable t) {
                         Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
-                        callback.onGetPayeeStoreDetailsCallback(GetReceiptCodeResponse.newBuilder()
+                        callback.onGetPayeeStoreDetailsCallback(GetPayeeCodeResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode("Fail")
                                         .setDetails("enter onError() method"))
@@ -135,7 +135,7 @@ public class PaymentService {
     }
 
     /**
-     * prepareMyPayment
+     * prepare
      *
      * @param url
      * @param callback
@@ -146,11 +146,11 @@ public class PaymentService {
         PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
         paymentInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .prepareMyPayment(PreparMyPaymentRequest.newBuilder()
-                        .setPayeeReceiptCode("ceshi")
-                        .build(), new StreamObserver<PrepareMyPaymentResponse>() {
+                .prepare(PrepareInappPaymentRequest.newBuilder()
+                        .setPayeePayeeCode("ceshi")
+                        .build(), new StreamObserver<PrepareInappPaymentResponse>() {
                     @Override
-                    public void onNext(PrepareMyPaymentResponse value) {
+                    public void onNext(PrepareInappPaymentResponse value) {
                         Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
                         callback.onGetPaymentCallback(value);
                     }
@@ -158,7 +158,7 @@ public class PaymentService {
                     @Override
                     public void onError(Throwable t) {
                         Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
-                        callback.onGetPaymentCallback(PrepareMyPaymentResponse.newBuilder()
+                        callback.onGetPaymentCallback(PrepareInappPaymentResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode("Fail")
                                         .setDetails("enter onError() method"))
@@ -183,29 +183,26 @@ public class PaymentService {
                 .getCallCredentials(paymentInfo.voAccessToken.accessToken,
                         Long.valueOf(paymentInfo.voAccessToken.expiresIn));
 
-        CreatePaymentRequest createPaymentRequest = null;
+        CreateInappPaymentRequest createPaymentRequest = null;
         if ("1".equals(paymentInfo.payType)) {
-            createPaymentRequest = CreatePaymentRequest.newBuilder()
+            createPaymentRequest = CreateInappPaymentRequest.newBuilder()
                     .setActualPay(paymentInfo.actualPay)
                     .setChannel(PaymentChannel.ALIPAY)
                     .setPointsPay(paymentInfo.pointsPay)
                     .setShouldPay(paymentInfo.shouldPay)
-                    .setPayeeReceiptCode(paymentInfo.payeeReceiptCode)
+                    .setPayeePayeeCode(paymentInfo.payeeReceiptCode)
                     .setPayerIp(paymentInfo.payerIp)
                     .build();
         } else if ("2".equals(paymentInfo.payType)) {
-            createPaymentRequest = CreatePaymentRequest.newBuilder()
+            createPaymentRequest = CreateInappPaymentRequest.newBuilder()
                     .setActualPay(paymentInfo.actualPay)
                     .setChannel(PaymentChannel.WECHAT)
                     .setPointsPay(paymentInfo.pointsPay)
                     .setShouldPay(paymentInfo.shouldPay)
-                    .setPayeeReceiptCode(paymentInfo.payeeReceiptCode)
+                    .setPayeePayeeCode(paymentInfo.payeeReceiptCode)
                     .setPayerIp(paymentInfo.payerIp)
                     .build();
         }
-
-        Log.i("-=-=-=-=-", "Token:" + paymentInfo.voAccessToken.accessToken + "----------expiresIn:" + paymentInfo.voAccessToken.expiresIn);
-
 
         ManagedChannel channel = getManagedChannel();
         PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);

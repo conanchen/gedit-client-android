@@ -10,16 +10,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -27,10 +23,7 @@ import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
-import com.github.conanchen.gedit.ui.my.myinvestpayment.BuyInvestPaymentActivity;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
-import com.github.conanchen.gedit.ui.payment.PayeeQRCodeActivity;
-import com.github.conanchen.gedit.ui.payment.PointsPayActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
 import com.github.conanchen.gedit.util.CustomPopWindow;
 import com.karumi.dexter.Dexter;
@@ -116,7 +109,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         mBottomNavigationView.getMenu().getItem(0).setChecked(true);
                         break;
@@ -140,7 +133,8 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.bottom_navigation_scan:
-                        startScan();
+//                        startScan();
+                        ARouter.getInstance().build("/app/PointsPayActivity").navigation();
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.bottom_navigation_my:

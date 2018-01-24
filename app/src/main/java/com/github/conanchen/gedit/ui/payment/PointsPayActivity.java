@@ -20,18 +20,21 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.github.conanchen.gedit.R;
-import com.github.conanchen.gedit.common.grpc.PaymentChannel;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.util.pay.AliPayUtil;
 import com.github.conanchen.gedit.util.pay.PayResultCallBack;
+import com.github.conanchen.gedit.util.pay.WxPay;
 import com.github.conanchen.utils.vo.PaymentInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 
@@ -46,6 +49,7 @@ import io.grpc.Status;
 @Route(path = "/app/PointsPayActivity")
 public class PointsPayActivity extends BaseActivity {
 
+    private static final String TAG = PointsPayActivity.class.getSimpleName();
     private Gson gson = new Gson();
 
     @Inject
@@ -125,13 +129,13 @@ public class PointsPayActivity extends BaseActivity {
 
     private void setupViewModel() {
         pointsPayViewModel = ViewModelProviders.of(this, viewModelFactory).get(PointsPayViewModel.class);
-        pointsPayViewModel.getPaymentStoreDetailsLiveData().observe(this, new Observer<GetReceiptCodeResponse>() {
+        pointsPayViewModel.getPaymentStoreDetailsLiveData().observe(this, new Observer<GetPayeeCodeResponse>() {
             @Override
-            public void onChanged(@Nullable GetReceiptCodeResponse getReceiptCodeResponse) {
+            public void onChanged(@Nullable GetPayeeCodeResponse getReceiptCodeResponse) {
                 Log.i("-=-=-=-=-=", gson.toJson(getReceiptCodeResponse));
                 if (getReceiptCodeResponse != null) {
                     // TODO: 2018/1/22  处理界面显示
-                    String payeeStoreName = getReceiptCodeResponse.getReceiptCode().getPayeeStoreNamee();
+                    String payeeStoreName = getReceiptCodeResponse.getPaymentCode().getPayeeStoreNamee();
                     mTvStoreName.setText(Strings.isNullOrEmpty(payeeStoreName) ? "商铺" : payeeStoreName);
 
                 }
@@ -139,9 +143,9 @@ public class PointsPayActivity extends BaseActivity {
         });
         pointsPayViewModel.getPaymentStoreDetails(code);
 
-        pointsPayViewModel.getPaymentLiveData().observe(this, new Observer<PrepareMyPaymentResponse>() {
+        pointsPayViewModel.getPaymentLiveData().observe(this, new Observer<PrepareInappPaymentResponse>() {
             @Override
-            public void onChanged(@Nullable PrepareMyPaymentResponse prepareMyPaymentResponse) {
+            public void onChanged(@Nullable PrepareInappPaymentResponse prepareMyPaymentResponse) {
                 Log.i("-=-=-=-=-=getPayment()", gson.toJson(prepareMyPaymentResponse));
                 if (prepareMyPaymentResponse != null) {
                     // TODO: 2018/1/23 处理返还积分的
@@ -150,22 +154,28 @@ public class PointsPayActivity extends BaseActivity {
             }
         });
 
-
         pointsPayViewModel.getCreatePaymentLiveData().observe(this, new Observer<PaymentResponse>() {
             @Override
             public void onChanged(@Nullable PaymentResponse paymentResponse) {
                 Log.i("-=-=-=-=-=create()", gson.toJson(paymentResponse));
-//                if (paymentResponse != null && isPay) {
-//                    isPay = false;
-//                    String channelOrderUuid = paymentResponse.getPayment().getChannelOrderUuid();
-//                    if (selected == 1) {
-//                        Log.i("-=-=-=-", "支付宝");
-//                        aliPay(channelOrderUuid);
-//                    } else if (selected == 2) {
-//                        Log.i("-=-=-=-", "微信");
-////                        weXinPay(channelOrderUuid);
-//                    }
-//                }
+                if (paymentResponse != null && isPay) {
+                    isPay = false;
+                    String signature = paymentResponse.getPayment().getSignature();
+                    String returnStr = "";
+                    try {
+                        JSONObject jsonObject = new JSONObject(signature);
+                        returnStr = jsonObject.getString("returnStr");
+                        if (selected == 1) {
+                            Log.i("-=-=-=-", "支付宝");
+                            aliPay(returnStr);
+                        } else if (selected == 2) {
+                            Log.i("-=-=-=-", "微信");
+                            weiXinPay(returnStr);
+                        }
+                    } catch (JSONException e) {
+                        Log.i(TAG, "返回的订单号解析失败");
+                    }
+                }
             }
         });
 
@@ -182,13 +192,12 @@ public class PointsPayActivity extends BaseActivity {
         });
     }
 
-
     /**
      * 支付宝支付
      *
-     * @param channelOrderUuid 订单号
+     * @param
      */
-    private void aliPay(String channelOrderUuid) {
+    private void aliPay(String returnStr) {
 
         //调起支付
         AliPayUtil payUtil = new AliPayUtil(PointsPayActivity.this, new PayResultCallBack() {
@@ -211,14 +220,52 @@ public class PointsPayActivity extends BaseActivity {
             }
         });
 
-        String orderInfo = "app_id=2017051607257813&biz_content=%7B%22out_trade_no%22%3A2017120616103183710%2C%22total_amount%22%3A%220." +
-                "01%22%2C%22subject%22%3A%220.01%22%2C%22body%22%3A%22%7B%5C%22desc%5C%22%3A%5C%22%E8%B4%AD%E4%B9%B0VIP%5C%22%7D%22%2C%22product" +
-                "_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22passback_params%22%3A%22%7B%5C%22unit%5C%22%3A%5C%22%E5%A4%A9%5C%22%2C%5C%22payVipDay%5C%22%3A15%2C%5C%22" +
-                "managerId%5C%22%3A1%2C%5C%22tradeType%5C%22%3A100%7D%22%7D&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=" +
-                "http%3A%2F%2F192.168.1.200%2Fapi%2FalipayUrl&sign_type=RSA&timestamp=2017-12-06%2016%3A10%3A31&version=1.0&sign=IM9v8BlHdwV1zWu6LFRm0Zea32KryyV1d5E4CCWZh4Xp7FogFkGbnDrIDuF" +
-                "2lGcnAkszDweyQrN%2FcYiJA8BotpVzZ7%2FX9s6pEOpI5W%2F5GHbZ8UyhuZIUFUx%2FUVZjuqGn8jMnFhyjuZH5ipMCuw1GX%2Bnqq6MWVQabz4it20U%2FuUc%3D";//订单号
+//        String orderInfo = "app_id=2017051607257813&biz_content=%7B%22out_trade_no%22%3A2017120616103183710%2C%22total_amount%22%3A%220." +
+//                "01%22%2C%22subject%22%3A%220.01%22%2C%22body%22%3A%22%7B%5C%22desc%5C%22%3A%5C%22%E8%B4%AD%E4%B9%B0VIP%5C%22%7D%22%2C%22product" +
+//                "_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22passback_params%22%3A%22%7B%5C%22unit%5C%22%3A%5C%22%E5%A4%A9%5C%22%2C%5C%22payVipDay%5C%22%3A15%2C%5C%22" +
+//                "managerId%5C%22%3A1%2C%5C%22tradeType%5C%22%3A100%7D%22%7D&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=" +
+//                "http%3A%2F%2F192.168.1.200%2Fapi%2FalipayUrl&sign_type=RSA&timestamp=2017-12-06%2016%3A10%3A31&version=1.0&sign=IM9v8BlHdwV1zWu6LFRm0Zea32KryyV1d5E4CCWZh4Xp7FogFkGbnDrIDuF" +
+//                "2lGcnAkszDweyQrN%2FcYiJA8BotpVzZ7%2FX9s6pEOpI5W%2F5GHbZ8UyhuZIUFUx%2FUVZjuqGn8jMnFhyjuZH5ipMCuw1GX%2Bnqq6MWVQabz4it20U%2FuUc%3D";//订单号
+//        payUtil.doAliPay(Strings.isNullOrEmpty(channelOrderUuid) ? orderInfo : channelOrderUuid);
 
-        payUtil.doAliPay(Strings.isNullOrEmpty(channelOrderUuid) ? orderInfo : channelOrderUuid);
+        payUtil.doAliPay(returnStr);
+
+    }
+
+    /**
+     * 微信支付
+     * @param signStr
+     */
+    private void weiXinPay(String signStr) {
+//        String signStr = "{\n" +
+//                "      \"appid\" : \"wx452cb36207ea45c8\",\n" +
+//                "      \"noncestr\" : \"x5f4oul4591pwizx\",\n" +
+//                "      \"package\" : \"Sign=WXPay\",\n" +
+//                "      \"partnerid\" : \"1480648232\",\n" +
+//                "      \"prepayid\" : \"wx201712061653595ee9f59d7d0597214086\",\n" +
+//                "      \"sign\" : \"078E94BFA385D5136949138BD5DD5941\",\n" +
+//                "      \"timestamp\" : \"1512550439\"\n" +
+//                "    }\n";//订单号
+        WxPay.init(PointsPayActivity.this);
+        WxPay.getInstance().doPay(signStr, new WxPay.WXPayResultCallBack() {
+            @Override
+            public void onSuccess() {
+                //成功
+                Log.i("-=-=-=", "OnSuccess");
+            }
+
+            @Override
+            public void onError(int error_code) {
+                //失败
+                Log.i("-=-=-=", "onError");
+            }
+
+            @Override
+            public void onCancel() {
+                //取消
+                Log.i("-=-=-=", "onCancel");
+            }
+        });
     }
 
 
@@ -257,7 +304,6 @@ public class PointsPayActivity extends BaseActivity {
                     usePoints = 0;
                 }
 
-
                 VoAccessToken voAccessToken = VoAccessToken.builder()
                         .setAccessToken(Strings.isNullOrEmpty(accessToken) ? System.currentTimeMillis() + "" : accessToken)
                         .setExpiresIn(Strings.isNullOrEmpty(expiresIn) ? System.currentTimeMillis() + "" : expiresIn)
@@ -270,8 +316,8 @@ public class PointsPayActivity extends BaseActivity {
                             .setActualPay(1)
                             .setPayerIp(NetworkUtils.getIPAddress(true))
                             .setPayeeReceiptCode("qazwsxedc")
-                            .setShouldPay(21)
-                            .setPointsPay(10)
+                            .setShouldPay(1)
+                            .setPointsPay(0)
                             .setPayType("1")//支付宝
                             .build();
                 } else if (selected == 2) {
@@ -280,13 +326,11 @@ public class PointsPayActivity extends BaseActivity {
                             .setActualPay(1)
                             .setPayerIp(NetworkUtils.getIPAddress(true))
                             .setPayeeReceiptCode("qazwsxedc")
-                            .setShouldPay(21)
-                            .setPointsPay(10)
+                            .setShouldPay(1)
+                            .setPointsPay(0)
                             .setPayType("2")//微信
                             .build();
-
                 }
-
 
                 isPay = true;
                 Log.i("-=-=-=-", "使不使用积分:" + usePoints + "----微信还是支付宝:" + selected);

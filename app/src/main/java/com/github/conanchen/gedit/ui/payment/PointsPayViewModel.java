@@ -7,8 +7,8 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse;
 import com.github.conanchen.gedit.repository.PaymentRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.utils.vo.PaymentInfo;
@@ -23,11 +23,11 @@ import javax.inject.Inject;
 public class PointsPayViewModel extends ViewModel {
     @VisibleForTesting
     final MutableLiveData<String> paymentStoreDetailsMutableLiveData = new MutableLiveData<>();
-    private final LiveData<GetReceiptCodeResponse> paymentStoreDetailsLiveData;
+    private final LiveData<GetPayeeCodeResponse> paymentStoreDetailsLiveData;
 
     @VisibleForTesting
     final MutableLiveData<String> paymentMutableLiveData = new MutableLiveData<>();
-    private final LiveData<PrepareMyPaymentResponse> paymentLiveData;
+    private final LiveData<PrepareInappPaymentResponse> paymentLiveData;
 
     @VisibleForTesting
     final MutableLiveData<PaymentInfo> createPaymentMutableLiveData = new MutableLiveData<>();
@@ -65,7 +65,7 @@ public class PointsPayViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public LiveData<GetReceiptCodeResponse> getPaymentStoreDetailsLiveData() {
+    public LiveData<GetPayeeCodeResponse> getPaymentStoreDetailsLiveData() {
         return paymentStoreDetailsLiveData;
     }
 
@@ -74,7 +74,7 @@ public class PointsPayViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public LiveData<PrepareMyPaymentResponse> getPaymentLiveData() {
+    public LiveData<PrepareInappPaymentResponse> getPaymentLiveData() {
         return paymentLiveData;
     }
 

@@ -14,9 +14,10 @@ public class PaymentInfo {
     public int pointsPay; //实付积分代替金额
     public String payerIp; //付款人客户端的实际ip地址
     public String payType;//支付类型
+    public String returnStr;//订单号
 
     private PaymentInfo(VoAccessToken voAccessToken, String payeeStoreUuid, String payeeWorkerUuid, String payeeReceiptCode,
-                        int shouldPay, int actualPay, int pointsPay, String payerIp,String payType) {
+                        int shouldPay, int actualPay, int pointsPay, String payerIp,String payType,String returnStr) {
         this.voAccessToken = voAccessToken;
         this.payeeStoreUuid = payeeStoreUuid;
         this.payeeWorkerUuid = payeeWorkerUuid;
@@ -26,6 +27,7 @@ public class PaymentInfo {
         this.pointsPay = pointsPay;
         this.payerIp = payerIp;
         this.payType = payType;
+        this.returnStr = returnStr;
     }
 
 
@@ -43,12 +45,13 @@ public class PaymentInfo {
         private int pointsPay; //实付积分代替金额
         private String payerIp; //付款人客户端的实际ip地址
         private String payType;//支付类型
+        private String returnStr;//订单号
 
         Builder() {
         }
 
         public PaymentInfo build() {
-            return new PaymentInfo(voAccessToken, payeeStoreUuid, payeeWorkerUuid, payeeReceiptCode, shouldPay, actualPay, pointsPay, payerIp,payType);
+            return new PaymentInfo(voAccessToken, payeeStoreUuid, payeeWorkerUuid, payeeReceiptCode, shouldPay, actualPay, pointsPay, payerIp,payType,returnStr);
         }
 
         public Builder setVoAccessToken(VoAccessToken voAccessToken) {
@@ -93,6 +96,11 @@ public class PaymentInfo {
 
         public Builder setPayType(String payType) {
             this.payType = payType;
+            return this;
+        }
+
+        public Builder setReturnStr(String returnStr) {
+            this.returnStr = returnStr;
             return this;
         }
     }

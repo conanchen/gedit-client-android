@@ -6,7 +6,6 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.ListTel;
@@ -15,7 +14,6 @@ import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
-import com.github.conanchen.gedit.store.search.grpc.SearchStoreResponse;
 import com.github.conanchen.gedit.utils.JcaUtils;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
@@ -91,7 +89,6 @@ public class StoreProfileService {
                 });
 
     }
-
 
 
     public void storeCreate(StoreCreateInfo storeCreateInfo, StoreCreateCallback callback) {
@@ -314,7 +311,6 @@ public class StoreProfileService {
                             }
                         });
     }
-
 
 
 }

@@ -1,36 +1,18 @@
 package com.github.conanchen.gedit.grpc.store;
 
-import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.github.conanchen.gedit.common.grpc.Location;
-import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
-import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
-import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
-import com.github.conanchen.gedit.store.profile.grpc.ListTel;
-import com.github.conanchen.gedit.store.profile.grpc.ListURL;
-import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
-import com.github.conanchen.gedit.store.profile.grpc.StoreProfileResponse;
-import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
-import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreRequest;
 import com.github.conanchen.gedit.store.search.grpc.SearchStoreResponse;
 import com.github.conanchen.gedit.store.search.grpc.StoreSearchApiGrpc;
-import com.github.conanchen.gedit.utils.JcaUtils;
-import com.github.conanchen.utils.vo.StoreCreateInfo;
-import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
-import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -57,7 +39,6 @@ public class StoreSearchService {
                 //                .keepAliveTime(60, TimeUnit.SECONDS)
                 .build();
     }
-
 
 
     public void searchStoresNearAt(SearchStoreRequest searchRequest, StoreSearchCallback callback) {

@@ -6,12 +6,13 @@ import android.support.annotation.NonNull;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.payment.PaymentService;
+import com.github.conanchen.gedit.payment.common.grpc.Payment;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyReceiptCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetReceiptCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.PrepareMyPaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.ReceiptCode;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeRequest;
+import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeResponse;
+import com.github.conanchen.gedit.payment.inapp.grpc.PayeeCode;
+import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.utils.vo.PaymentInfo;
 import com.google.gson.Gson;
@@ -45,20 +46,20 @@ public class PaymentRepository {
      * @param url
      * @return
      */
-    public LiveData<GetMyReceiptCodeResponse> getQRCode(String url) {
-        return new LiveData<GetMyReceiptCodeResponse>() {
+    public LiveData<GetMyPayeeCodeResponse> getQRCode(String url) {
+        return new LiveData<GetMyPayeeCodeResponse>() {
             @Override
             protected void onActive() {
                 grpcFascade.paymentService.getQRCode(url, new PaymentService.GetQRCodeUrlCallback() {
                     @Override
-                    public void onGetQRCodeUrlCallback(GetMyReceiptCodeResponse response) {
+                    public void onGetQRCodeUrlCallback(GetMyPayeeCodeResponse response) {
                         Observable.fromCallable(() -> {
 
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 return response;
                             } else {
-                                GetMyReceiptCodeResponse getMyReceiptCodeResponse = GetMyReceiptCodeResponse.newBuilder()
-                                        .setReceiptCode(ReceiptCode.newBuilder()
+                                GetMyPayeeCodeResponse getMyReceiptCodeResponse = GetMyPayeeCodeResponse.newBuilder()
+                                        .setPaymentCode(PayeeCode.newBuilder()
                                                 .setCode("fail")
                                                 .build())
                                         .build();
@@ -66,17 +67,17 @@ public class PaymentRepository {
                             }
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<GetMyReceiptCodeResponse>() {
+                                .subscribe(new Consumer<GetMyPayeeCodeResponse>() {
                                     @Override
-                                    public void accept(@NonNull GetMyReceiptCodeResponse getMyReceiptCodeResponse) throws Exception {
-                                        if (!"fail".equals(getMyReceiptCodeResponse.getReceiptCode().getCode())) {
-                                            setValue(GetMyReceiptCodeResponse.newBuilder()
+                                    public void accept(@NonNull GetMyPayeeCodeResponse getMyPayeeCodeResponse) throws Exception {
+                                        if (!"fail".equals(getMyPayeeCodeResponse.getPaymentCode().getCode())) {
+                                            setValue(GetMyPayeeCodeResponse.newBuilder()
                                                     .setStatus(Status.newBuilder().setCode("OK")
                                                             .setDetails("update Store successfully")
                                                             .build())
                                                     .build());
                                         } else {
-                                            setValue(GetMyReceiptCodeResponse.newBuilder()
+                                            setValue(GetMyPayeeCodeResponse.newBuilder()
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())
@@ -99,40 +100,40 @@ public class PaymentRepository {
      * @param receiptCode
      * @return
      */
-    public LiveData<GetReceiptCodeResponse> getPayeeStoreDetails(String receiptCode) {
-        return new LiveData<GetReceiptCodeResponse>() {
+    public LiveData<GetPayeeCodeResponse> getPayeeStoreDetails(String receiptCode) {
+        return new LiveData<GetPayeeCodeResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.paymentService.getPaymentStoreDetails(GetReceiptCodeRequest.newBuilder()
+                grpcFascade.paymentService.getPaymentStoreDetails(GetPayeeCodeRequest.newBuilder()
                         .setCode(receiptCode)
                         .build(), new PaymentService.GetPayeeStoreDetailsCallback() {
                     @Override
-                    public void onGetPayeeStoreDetailsCallback(GetReceiptCodeResponse response) {
+                    public void onGetPayeeStoreDetailsCallback(GetPayeeCodeResponse response) {
                         Observable.fromCallable(() -> {
 
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 return response;
                             } else {
-                                GetReceiptCodeResponse getReceiptCodeResponse = GetReceiptCodeResponse.newBuilder()
-                                        .setReceiptCode(ReceiptCode.newBuilder()
+                                GetPayeeCodeResponse getPayeeCodeResponse = GetPayeeCodeResponse.newBuilder()
+                                        .setPaymentCode(PayeeCode.newBuilder()
                                                 .setCode("fail")
                                                 .build())
                                         .build();
-                                return getReceiptCodeResponse;
+                                return getPayeeCodeResponse;
                             }
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<GetReceiptCodeResponse>() {
+                                .subscribe(new Consumer<GetPayeeCodeResponse>() {
                                     @Override
-                                    public void accept(@NonNull GetReceiptCodeResponse getReceiptCodeResponse) throws Exception {
-                                        if (!"fail".equals(getReceiptCodeResponse.getReceiptCode().getCode())) {
-                                            setValue(GetReceiptCodeResponse.newBuilder()
+                                    public void accept(@NonNull GetPayeeCodeResponse getReceiptCodeResponse) throws Exception {
+                                        if (!"fail".equals(getReceiptCodeResponse.getPaymentCode().getCode())) {
+                                            setValue(GetPayeeCodeResponse.newBuilder()
                                                     .setStatus(Status.newBuilder().setCode("OK")
                                                             .setDetails("update Store successfully")
                                                             .build())
                                                     .build());
                                         } else {
-                                            setValue(GetReceiptCodeResponse.newBuilder()
+                                            setValue(GetPayeeCodeResponse.newBuilder()
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())
@@ -155,18 +156,18 @@ public class PaymentRepository {
      * @param url
      * @return
      */
-    public LiveData<PrepareMyPaymentResponse> getPayment(String url) {
-        return new LiveData<PrepareMyPaymentResponse>() {
+    public LiveData<PrepareInappPaymentResponse> getPayment(String url) {
+        return new LiveData<PrepareInappPaymentResponse>() {
             @Override
             protected void onActive() {
                 grpcFascade.paymentService.getPayment(url, new PaymentService.GetPaymentCallback() {
                     @Override
-                    public void onGetPaymentCallback(PrepareMyPaymentResponse response) {
+                    public void onGetPaymentCallback(PrepareInappPaymentResponse response) {
                         Observable.fromCallable(() -> {
                             if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
                                 return response;
                             } else {
-                                PrepareMyPaymentResponse prepareMyPaymentResponse = PrepareMyPaymentResponse.newBuilder()
+                                PrepareInappPaymentResponse prepareMyPaymentResponse = PrepareInappPaymentResponse.newBuilder()
                                         .setStatus(Status.newBuilder()
                                                 .setCode("fail")
                                                 .build())
@@ -175,17 +176,17 @@ public class PaymentRepository {
                             }
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<PrepareMyPaymentResponse>() {
+                                .subscribe(new Consumer<PrepareInappPaymentResponse>() {
                                     @Override
-                                    public void accept(@NonNull PrepareMyPaymentResponse getReceiptCodeResponse) throws Exception {
+                                    public void accept(@NonNull PrepareInappPaymentResponse getReceiptCodeResponse) throws Exception {
                                         if (!"fail".equals(getReceiptCodeResponse.getStatus().getCode())) {
-                                            setValue(PrepareMyPaymentResponse.newBuilder()
+                                            setValue(PrepareInappPaymentResponse.newBuilder()
                                                     .setStatus(Status.newBuilder().setCode("OK")
                                                             .setDetails("update Store successfully")
                                                             .build())
                                                     .build());
                                         } else {
-                                            setValue(PrepareMyPaymentResponse.newBuilder()
+                                            setValue(PrepareInappPaymentResponse.newBuilder()
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())
@@ -202,6 +203,12 @@ public class PaymentRepository {
     }
 
 
+    /**
+     * 生成订单号
+     *
+     * @param paymentInfo
+     * @return
+     */
     public LiveData<PaymentResponse> getCreatePayment(PaymentInfo paymentInfo) {
         return new LiveData<PaymentResponse>() {
             @Override
@@ -218,6 +225,7 @@ public class PaymentRepository {
                                         .setStatus(Status.newBuilder()
                                                 .setCode("fail")
                                                 .build())
+                                        .setPayment(Payment.newBuilder().build())
                                         .build();
                                 return paymentResponse;
                             }
@@ -229,8 +237,9 @@ public class PaymentRepository {
                                         if (!"fail".equals(paymentResponse.getStatus().getCode())) {
                                             setValue(PaymentResponse.newBuilder()
                                                     .setStatus(Status.newBuilder().setCode("OK")
-                                                            .setDetails("update Store successfully")
+                                                            .setDetails("pay success")
                                                             .build())
+                                                    .setPayment(paymentResponse.getPayment())
                                                     .build());
                                         } else {
                                             setValue(PaymentResponse.newBuilder()
@@ -238,6 +247,7 @@ public class PaymentRepository {
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())
                                                             .build())
+                                                    .setPayment(paymentResponse.getPayment())
                                                     .build());
                                         }
                                     }
