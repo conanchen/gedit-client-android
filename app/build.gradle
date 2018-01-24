@@ -121,7 +121,9 @@ dependencies {
 
     implementation 'com.github.conanchen:AmapLiveLocation:1.0.3'
     implementation 'com.blankj:utilcode:1.8.1'
+
     compile files('libs/alipaySdk-20170922.jar')
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.4.0'
 
 
 

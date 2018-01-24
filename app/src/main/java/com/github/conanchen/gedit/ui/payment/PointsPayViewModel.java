@@ -12,7 +12,6 @@ import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse
 import com.github.conanchen.gedit.repository.PaymentRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.utils.vo.PaymentInfo;
-import com.google.common.base.Strings;
 
 import javax.inject.Inject;
 
@@ -22,11 +21,11 @@ import javax.inject.Inject;
 
 public class PointsPayViewModel extends ViewModel {
     @VisibleForTesting
-    final MutableLiveData<String> paymentStoreDetailsMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<PaymentInfo> paymentStoreDetailsMutableLiveData = new MutableLiveData<>();
     private final LiveData<GetPayeeCodeResponse> paymentStoreDetailsLiveData;
 
     @VisibleForTesting
-    final MutableLiveData<String> paymentMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<PaymentInfo> paymentMutableLiveData = new MutableLiveData<>();
     private final LiveData<PrepareInappPaymentResponse> paymentLiveData;
 
     @VisibleForTesting
@@ -36,19 +35,19 @@ public class PointsPayViewModel extends ViewModel {
     @SuppressWarnings("unchecked")
     @Inject
     public PointsPayViewModel(PaymentRepository paymentRepository) {
-        paymentStoreDetailsLiveData = Transformations.switchMap(paymentStoreDetailsMutableLiveData, string -> {
-            if (Strings.isNullOrEmpty(string)) {
+        paymentStoreDetailsLiveData = Transformations.switchMap(paymentStoreDetailsMutableLiveData, paymentInfo -> {
+            if (paymentInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return paymentRepository.getPayeeStoreDetails(string);
+                return paymentRepository.getPayeeStoreDetails(paymentInfo);
             }
         });
 
-        paymentLiveData = Transformations.switchMap(paymentMutableLiveData, string -> {
-            if (Strings.isNullOrEmpty(string)) {
+        paymentLiveData = Transformations.switchMap(paymentMutableLiveData, paymentInfo -> {
+            if (paymentInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return paymentRepository.getPayment(string);
+                return paymentRepository.getPayment(paymentInfo);
             }
         });
 
@@ -57,7 +56,7 @@ public class PointsPayViewModel extends ViewModel {
             if (paymentInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return paymentRepository.getCreatePayment(paymentInfo);
+                return paymentRepository.createPayment(paymentInfo);
             }
         });
 
@@ -69,8 +68,8 @@ public class PointsPayViewModel extends ViewModel {
         return paymentStoreDetailsLiveData;
     }
 
-    public void getPaymentStoreDetails(String url) {
-        paymentStoreDetailsMutableLiveData.setValue(url);
+    public void getPaymentStoreDetails(PaymentInfo paymentInfo) {
+        paymentStoreDetailsMutableLiveData.setValue(paymentInfo);
     }
 
     @VisibleForTesting
@@ -78,8 +77,8 @@ public class PointsPayViewModel extends ViewModel {
         return paymentLiveData;
     }
 
-    public void getPayment(String url) {
-        paymentMutableLiveData.setValue(url);
+    public void getPayment(PaymentInfo paymentInfo) {
+        paymentMutableLiveData.setValue(paymentInfo);
     }
 
 

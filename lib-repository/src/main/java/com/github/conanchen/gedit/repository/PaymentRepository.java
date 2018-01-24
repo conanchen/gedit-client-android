@@ -43,14 +43,13 @@ public class PaymentRepository {
     /**
      * 联网获取生成二维码的字符串
      *
-     * @param url
      * @return
      */
-    public LiveData<GetMyPayeeCodeResponse> getQRCode(String url) {
+    public LiveData<GetMyPayeeCodeResponse> getQRCode(PaymentInfo paymentInfo) {
         return new LiveData<GetMyPayeeCodeResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.paymentService.getQRCode(url, new PaymentService.GetQRCodeUrlCallback() {
+                grpcFascade.paymentService.getQRCode(paymentInfo, new PaymentService.GetQRCodeUrlCallback() {
                     @Override
                     public void onGetQRCodeUrlCallback(GetMyPayeeCodeResponse response) {
                         Observable.fromCallable(() -> {
@@ -59,8 +58,8 @@ public class PaymentRepository {
                                 return response;
                             } else {
                                 GetMyPayeeCodeResponse getMyReceiptCodeResponse = GetMyPayeeCodeResponse.newBuilder()
-                                        .setPaymentCode(PayeeCode.newBuilder()
-                                                .setCode("fail")
+                                        .setPayeeCode(PayeeCode.newBuilder()
+                                                .setPayeeCode("fail")
                                                 .build())
                                         .build();
                                 return getMyReceiptCodeResponse;
@@ -70,14 +69,16 @@ public class PaymentRepository {
                                 .subscribe(new Consumer<GetMyPayeeCodeResponse>() {
                                     @Override
                                     public void accept(@NonNull GetMyPayeeCodeResponse getMyPayeeCodeResponse) throws Exception {
-                                        if (!"fail".equals(getMyPayeeCodeResponse.getPaymentCode().getCode())) {
+                                        if (!"fail".equals(getMyPayeeCodeResponse.getPayeeCode().getPayeeCode())) {
                                             setValue(GetMyPayeeCodeResponse.newBuilder()
+                                                    .setPayeeCode(getMyPayeeCodeResponse.getPayeeCode())
                                                     .setStatus(Status.newBuilder().setCode("OK")
                                                             .setDetails("update Store successfully")
                                                             .build())
                                                     .build());
                                         } else {
                                             setValue(GetMyPayeeCodeResponse.newBuilder()
+                                                    .setPayeeCode(getMyPayeeCodeResponse.getPayeeCode())
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())
@@ -97,16 +98,13 @@ public class PaymentRepository {
     /**
      * 获取商家信息
      *
-     * @param receiptCode
      * @return
      */
-    public LiveData<GetPayeeCodeResponse> getPayeeStoreDetails(String receiptCode) {
+    public LiveData<GetPayeeCodeResponse> getPayeeStoreDetails(PaymentInfo paymentInfo) {
         return new LiveData<GetPayeeCodeResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.paymentService.getPaymentStoreDetails(GetPayeeCodeRequest.newBuilder()
-                        .setCode(receiptCode)
-                        .build(), new PaymentService.GetPayeeStoreDetailsCallback() {
+                grpcFascade.paymentService.getPaymentStoreDetails(paymentInfo, new PaymentService.GetPayeeStoreDetailsCallback() {
                     @Override
                     public void onGetPayeeStoreDetailsCallback(GetPayeeCodeResponse response) {
                         Observable.fromCallable(() -> {
@@ -115,8 +113,8 @@ public class PaymentRepository {
                                 return response;
                             } else {
                                 GetPayeeCodeResponse getPayeeCodeResponse = GetPayeeCodeResponse.newBuilder()
-                                        .setPaymentCode(PayeeCode.newBuilder()
-                                                .setCode("fail")
+                                        .setPayeeCode(PayeeCode.newBuilder()
+                                                .setPayeeCode("fail")
                                                 .build())
                                         .build();
                                 return getPayeeCodeResponse;
@@ -126,7 +124,7 @@ public class PaymentRepository {
                                 .subscribe(new Consumer<GetPayeeCodeResponse>() {
                                     @Override
                                     public void accept(@NonNull GetPayeeCodeResponse getReceiptCodeResponse) throws Exception {
-                                        if (!"fail".equals(getReceiptCodeResponse.getPaymentCode().getCode())) {
+                                        if (!"fail".equals(getReceiptCodeResponse.getPayeeCode().getPayeeCode())) {
                                             setValue(GetPayeeCodeResponse.newBuilder()
                                                     .setStatus(Status.newBuilder().setCode("OK")
                                                             .setDetails("update Store successfully")
@@ -153,14 +151,13 @@ public class PaymentRepository {
     /**
      * 顾客扫码店员/收银员的收款码后获取如果支付一定金额
      *
-     * @param url
      * @return
      */
-    public LiveData<PrepareInappPaymentResponse> getPayment(String url) {
+    public LiveData<PrepareInappPaymentResponse> getPayment(PaymentInfo paymentInfo) {
         return new LiveData<PrepareInappPaymentResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.paymentService.getPayment(url, new PaymentService.GetPaymentCallback() {
+                grpcFascade.paymentService.getPayment(paymentInfo, new PaymentService.GetPaymentCallback() {
                     @Override
                     public void onGetPaymentCallback(PrepareInappPaymentResponse response) {
                         Observable.fromCallable(() -> {
@@ -209,11 +206,11 @@ public class PaymentRepository {
      * @param paymentInfo
      * @return
      */
-    public LiveData<PaymentResponse> getCreatePayment(PaymentInfo paymentInfo) {
+    public LiveData<PaymentResponse> createPayment(PaymentInfo paymentInfo) {
         return new LiveData<PaymentResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.paymentService.getCreatePayment(paymentInfo, new PaymentService.CreatePaymentCallback() {
+                grpcFascade.paymentService.createPayment(paymentInfo, new PaymentService.CreatePaymentCallback() {
                     @Override
                     public void onCreatePaymentCallback(PaymentResponse response) {
 

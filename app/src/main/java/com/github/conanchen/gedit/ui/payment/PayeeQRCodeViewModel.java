@@ -9,7 +9,7 @@ import android.support.annotation.VisibleForTesting;
 import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeResponse;
 import com.github.conanchen.gedit.repository.PaymentRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-import com.google.common.base.Strings;
+import com.github.conanchen.utils.vo.PaymentInfo;
 
 import javax.inject.Inject;
 
@@ -19,17 +19,17 @@ import javax.inject.Inject;
 
 public class PayeeQRCodeViewModel extends ViewModel {
     @VisibleForTesting
-    final MutableLiveData<String> paymentMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<PaymentInfo> paymentMutableLiveData = new MutableLiveData<>();
     private final LiveData<GetMyPayeeCodeResponse> paymentQRCodeLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
     public PayeeQRCodeViewModel(PaymentRepository paymentRepository) {
-        paymentQRCodeLiveData = Transformations.switchMap(paymentMutableLiveData, string -> {
-            if (Strings.isNullOrEmpty(string)) {
+        paymentQRCodeLiveData = Transformations.switchMap(paymentMutableLiveData, paymentInfo -> {
+            if (paymentInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return paymentRepository.getQRCode(string);
+                return paymentRepository.getQRCode(paymentInfo);
             }
         });
     }
@@ -39,7 +39,7 @@ public class PayeeQRCodeViewModel extends ViewModel {
         return paymentQRCodeLiveData;
     }
 
-    public void getQRCode(String url) {
-        paymentMutableLiveData.setValue(url);
+    public void getQRCode(PaymentInfo paymentInfo) {
+        paymentMutableLiveData.setValue(paymentInfo);
     }
 }

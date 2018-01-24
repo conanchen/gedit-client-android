@@ -34,9 +34,6 @@ import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -85,11 +82,11 @@ public class PointsPayActivity extends BaseActivity {
     @Autowired
     public String code;
 
-    private PaymentChannel paymentChannelSelected = PaymentChannel.ALIPAY;//选择支付  1表示支付宝， 2 表示微信
+    private PaymentChannel paymentChannelSelected = PaymentChannel.ALIPAY;
     boolean isPay = false;//是否已经调起了支付
-    private boolean isLogin = false;//是否登录
-    private String accessToken;
-    private String expiresIn;
+
+    private String payeeCode;
+    private VoAccessToken voAccessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +110,14 @@ public class PointsPayActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!Strings.isNullOrEmpty(s.toString())) {
-                    String payeeReceiptCode = "oooooo";//服务器返回
-                    pointsPayViewModel.getPayment(payeeReceiptCode);
+
+                    PaymentInfo paymentInfo = PaymentInfo.builder()
+                            .setPayeeCode(payeeCode)
+                            .setVoAccessToken(voAccessToken)
+                            .setShouldPay(Integer.parseInt(s.toString().trim()))
+                            .setPointsPay(mCbUsePoints.isChecked())
+                            .build();
+                    pointsPayViewModel.getPayment(paymentInfo);
                 } else {
 
                 }
@@ -129,25 +132,47 @@ public class PointsPayActivity extends BaseActivity {
     }
 
     private void setupViewModel() {
+
+        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+            if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                voAccessToken = VoAccessToken.builder()
+                        .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())
+                        .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())
+                        .build();
+
+                //获取商铺信息
+                PaymentInfo paymentInfo = PaymentInfo.builder()
+                        .setVoAccessToken(voAccessToken)
+                        .setPayeeCode(Strings.isNullOrEmpty(code) ? System.currentTimeMillis() + "" : code)
+                        .build();
+
+                pointsPayViewModel.getPaymentStoreDetails(paymentInfo);
+
+            }
+        });
+
+
         pointsPayViewModel = ViewModelProviders.of(this, viewModelFactory).get(PointsPayViewModel.class);
         pointsPayViewModel.getPaymentStoreDetailsLiveData().observe(this, new Observer<GetPayeeCodeResponse>() {
+
             @Override
             public void onChanged(@Nullable GetPayeeCodeResponse getReceiptCodeResponse) {
-                Log.i("-=-=-=-=-=", gson.toJson(getReceiptCodeResponse));
+                Log.i("-=-=-=-=-=GetPayeeCode", gson.toJson(getReceiptCodeResponse));
                 if (getReceiptCodeResponse != null) {
                     // TODO: 2018/1/22  处理界面显示
-                    String payeeStoreName = getReceiptCodeResponse.getPaymentCode().getPayeeStoreNamee();
+                    String payeeStoreName = getReceiptCodeResponse.getPayeeCode().getPayeeStoreNamee();
+                    payeeCode = getReceiptCodeResponse.getPayeeCode().getPayeeCode();//获取出来用来调用处理返还积分的接口
                     mTvStoreName.setText(Strings.isNullOrEmpty(payeeStoreName) ? "商铺" : payeeStoreName);
-
                 }
             }
         });
-        pointsPayViewModel.getPaymentStoreDetails(code);
+
 
         pointsPayViewModel.getPaymentLiveData().observe(this, new Observer<PrepareInappPaymentResponse>() {
             @Override
             public void onChanged(@Nullable PrepareInappPaymentResponse prepareMyPaymentResponse) {
-                Log.i("-=-=-=-=-=getPayment()", gson.toJson(prepareMyPaymentResponse));
+                Log.i("-=-=-=-=-=Prepare", gson.toJson(prepareMyPaymentResponse));
                 if (prepareMyPaymentResponse != null) {
                     // TODO: 2018/1/23 处理返还积分的
 
@@ -158,41 +183,20 @@ public class PointsPayActivity extends BaseActivity {
         pointsPayViewModel.getCreatePaymentLiveData().observe(this, new Observer<PaymentResponse>() {
             @Override
             public void onChanged(@Nullable PaymentResponse paymentResponse) {
-                Log.i("-=-=-=-=-=create()", gson.toJson(paymentResponse));
+                Log.i("-=-=-=-=-=Create", gson.toJson(paymentResponse));
                 if (paymentResponse != null && isPay) {
                     isPay = false;
-                    PaymentChannel paymentChannel = paymentResponse.getPayment().getChannel();
-                    String signature = paymentResponse.getPayment().getSignature();
-                    String returnStr = "";
-                    try {
-
-                        JSONObject jsonObject = new JSONObject(signature);
-                        returnStr = jsonObject.getString("returnStr");
-                        if (PaymentChannel.ALIPAY.name().equalsIgnoreCase(paymentChannel.name())) {
-                            Log.i("-=-=-=-", "支付宝");
-                            aliPay(returnStr);
-                        } else if (PaymentChannel.WECHAT.name().equalsIgnoreCase(paymentChannel.name())) {
-                            Log.i("-=-=-=-", "微信");
-                            wechatPay(returnStr);
-                        }
-                    } catch (JSONException e) {
-                        Log.i(TAG, "返回的订单号解析失败");
+                    PaymentChannel paymentChannel = paymentResponse.getPayment().getPaymentChannel();
+                    String returnStr = paymentResponse.getPayment().getPaymentChannelSignature();
+                    if (PaymentChannel.ALIPAY.name().equalsIgnoreCase(paymentChannel.name())) {
+                        aliPay(returnStr);
+                    } else if (PaymentChannel.WECHAT.name().equalsIgnoreCase(paymentChannel.name())) {
+                        wechatPay(returnStr);
                     }
                 }
             }
         });
 
-
-        currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
-        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
-                isLogin = true;
-                accessToken = signinResponse.getAccessToken();
-                expiresIn = signinResponse.getExpiresIn();
-            } else {
-                isLogin = false;
-            }
-        });
     }
 
     /**
@@ -241,7 +245,7 @@ public class PointsPayActivity extends BaseActivity {
      * @param signStr
      */
     private void wechatPay(String signStr) {
-//        String signStr = "{\n" +
+//        String signStr1 = "{\n" +
 //                "      \"appid\" : \"wx452cb36207ea45c8\",\n" +
 //                "      \"noncestr\" : \"x5f4oul4591pwizx\",\n" +
 //                "      \"package\" : \"Sign=WXPay\",\n" +
@@ -301,17 +305,14 @@ public class PointsPayActivity extends BaseActivity {
                 paymentChannelSelected = PaymentChannel.WECHAT;
                 break;
             case R.id.submit:
-                int usePoints = 1;
+
+                boolean isPointsPay = true;//是否使用积分支付
                 if (mCbUsePoints.isChecked()) {
-                    usePoints = 1;
+                    isPointsPay = true;
                 } else if (mCbNoUsePoints.isChecked()) {
-                    usePoints = 0;
+                    isPointsPay = false;
                 }
 
-                VoAccessToken voAccessToken = VoAccessToken.builder()
-                        .setAccessToken(Strings.isNullOrEmpty(accessToken) ? System.currentTimeMillis() + "" : accessToken)
-                        .setExpiresIn(Strings.isNullOrEmpty(expiresIn) ? System.currentTimeMillis() + "" : expiresIn)
-                        .build();
 
                 PaymentInfo paymentInfo = null;
                 if (paymentChannelSelected == PaymentChannel.ALIPAY) {
@@ -319,25 +320,27 @@ public class PointsPayActivity extends BaseActivity {
                             .setVoAccessToken(voAccessToken)
                             .setActualPay(1)
                             .setPayerIp(NetworkUtils.getIPAddress(true))
-                            .setPayeeReceiptCode("qazwsxedc")
+                            .setPayeeCode("qazwsxedc")
                             .setShouldPay(1)
                             .setPointsPay(0)
-                            .setPayType("1")//支付宝
+                            .setPointsPay(isPointsPay)
+                            .setPaymentChannelName("1")//支付宝
                             .build();
                 } else if (paymentChannelSelected == PaymentChannel.WECHAT) {
                     paymentInfo = PaymentInfo.builder()
                             .setVoAccessToken(voAccessToken)
                             .setActualPay(1)
                             .setPayerIp(NetworkUtils.getIPAddress(true))
-                            .setPayeeReceiptCode("qazwsxedc")
+                            .setPayeeCode("qazwsxedc")
                             .setShouldPay(1)
+                            .setPointsPay(isPointsPay)
                             .setPointsPay(0)
-                            .setPayType("2")//微信
+                            .setPaymentChannelName("2")//微信
                             .build();
                 }
-
                 isPay = true;
-                Log.i("-=-=-=-", "使不使用积分:" + usePoints + "----微信还是支付宝:" + paymentChannelSelected);
+
+                Log.i("-=-=-=-", "使不使用积分:" + isPointsPay + "----微信还是支付宝:" + paymentChannelSelected);
                 pointsPayViewModel.createPayment(paymentInfo);
 
                 break;

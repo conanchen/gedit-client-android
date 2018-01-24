@@ -238,9 +238,9 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
 
                     Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-                    String code = "fuwuqifanhui";//这个code是由扫码获取
+
                     ARouter.getInstance().build("/app/PointsPayActivity")
-                            .withString("code", code)
+                            .withString("code", result)
                             .navigation();
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();

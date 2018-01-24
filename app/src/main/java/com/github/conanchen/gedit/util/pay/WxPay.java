@@ -76,6 +76,7 @@ public class WxPay {
             if (mCallback != null) {
                 mCallback.onError(ERROR_PAY_PARAM);
             }
+            Log.i("weixinpay", "订单号有问题");
             return;
         }
         if (TextUtils.isEmpty(param.optString("appid")) || TextUtils.isEmpty(param.optString("partnerid"))

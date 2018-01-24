@@ -62,17 +62,22 @@ public class PaymentService {
     /**
      * getMyPayeeCode
      *
-     * @param url
      * @param callback
      */
-    public void getQRCode(String url, GetQRCodeUrlCallback callback) {
+    public void getQRCode(PaymentInfo paymentInfo, GetQRCodeUrlCallback callback) {
 
         ManagedChannel channel = getManagedChannel();
+
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(paymentInfo.voAccessToken.accessToken,
+                        Long.valueOf(paymentInfo.voAccessToken.expiresIn));
+
         PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
         paymentInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .withCallCredentials(callCredentials)
                 .getMyPayeeCode(GetMyPayeeCodeRequest.newBuilder()
-                        .setPayeeStoreUuid(url)
+                        .setPayeeStoreUuid(paymentInfo.payeeStoreUuid)
                         .build(), new StreamObserver<GetMyPayeeCodeResponse>() {
                     @Override
                     public void onNext(GetMyPayeeCodeResponse value) {
@@ -101,16 +106,23 @@ public class PaymentService {
     /**
      * getPayeeCode
      *
-     * @param request
      * @param callback
      */
-    public void getPaymentStoreDetails(GetPayeeCodeRequest request, GetPayeeStoreDetailsCallback callback) {
+    public void getPaymentStoreDetails(PaymentInfo paymentInfo, GetPayeeStoreDetailsCallback callback) {
 
         ManagedChannel channel = getManagedChannel();
+
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(paymentInfo.voAccessToken.accessToken,
+                        Long.valueOf(paymentInfo.voAccessToken.expiresIn));
+
         PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
         paymentInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
-                .getPayeeCode(request, new StreamObserver<GetPayeeCodeResponse>() {
+                .withCallCredentials(callCredentials)
+                .getPayeeCode(GetPayeeCodeRequest.newBuilder()
+                        .setPayeeCode(paymentInfo.payeeCode)
+                        .build(), new StreamObserver<GetPayeeCodeResponse>() {
                     @Override
                     public void onNext(GetPayeeCodeResponse value) {
                         Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
@@ -137,17 +149,24 @@ public class PaymentService {
     /**
      * prepare
      *
-     * @param url
      * @param callback
      */
-    public void getPayment(String url, GetPaymentCallback callback) {
+    public void getPayment(PaymentInfo paymentInfo, GetPaymentCallback callback) {
 
         ManagedChannel channel = getManagedChannel();
+
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(paymentInfo.voAccessToken.accessToken,
+                        Long.valueOf(paymentInfo.voAccessToken.expiresIn));
+
         PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
         paymentInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .withCallCredentials(callCredentials)
                 .prepare(PrepareInappPaymentRequest.newBuilder()
-                        .setPayeePayeeCode("ceshi")
+                        .setPayeeCode(paymentInfo.payeeCode)
+                        .setIsPointsPay(paymentInfo.isPointsPay)
+                        .setShouldPay(paymentInfo.shouldPay)
                         .build(), new StreamObserver<PrepareInappPaymentResponse>() {
                     @Override
                     public void onNext(PrepareInappPaymentResponse value) {
@@ -177,7 +196,7 @@ public class PaymentService {
      *
      * @param callback
      */
-    public void getCreatePayment(PaymentInfo paymentInfo, CreatePaymentCallback callback) {
+    public void createPayment(PaymentInfo paymentInfo, CreatePaymentCallback callback) {
 
         CallCredentials callCredentials = JcaUtils
                 .getCallCredentials(paymentInfo.voAccessToken.accessToken,
@@ -187,19 +206,19 @@ public class PaymentService {
         if ("1".equals(paymentInfo.paymentChannelName)) {
             createPaymentRequest = CreateInappPaymentRequest.newBuilder()
                     .setActualPay(paymentInfo.actualPay)
-                    .setChannel(PaymentChannel.ALIPAY)
+                    .setPaymentChannel(PaymentChannel.ALIPAY)
                     .setPointsPay(paymentInfo.pointsPay)
                     .setShouldPay(paymentInfo.shouldPay)
-                    .setPayeePayeeCode(paymentInfo.payeeReceiptCode)
+                    .setPayeeCode(paymentInfo.payeeCode)
                     .setPayerIp(paymentInfo.payerIp)
                     .build();
         } else if ("2".equals(paymentInfo.paymentChannelName)) {
             createPaymentRequest = CreateInappPaymentRequest.newBuilder()
                     .setActualPay(paymentInfo.actualPay)
-                    .setChannel(PaymentChannel.WECHAT)
+                    .setPaymentChannel(PaymentChannel.WECHAT)
                     .setPointsPay(paymentInfo.pointsPay)
                     .setShouldPay(paymentInfo.shouldPay)
-                    .setPayeePayeeCode(paymentInfo.payeeReceiptCode)
+                    .setPayeeCode(paymentInfo.payeeCode)
                     .setPayerIp(paymentInfo.payerIp)
                     .build();
         }
