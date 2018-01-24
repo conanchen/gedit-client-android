@@ -10,13 +10,17 @@ public class Value {
 
     public VoAccessToken voAccessToken;
 
+    public String payeeStoreUuid;
+
     public Value() {
     }
 
     private Value(
-            VoAccessToken voAccessToken
+            VoAccessToken voAccessToken,
+            String payeeStoreUuid
     ) {
         this.voAccessToken = voAccessToken;
+        this.payeeStoreUuid = payeeStoreUuid;
     }
 
     public static Builder builder() {
@@ -25,6 +29,7 @@ public class Value {
 
     public static final class Builder {
         private VoAccessToken voAccessToken;
+        private String payeeStoreUuid;
 
         Builder() {
         }
@@ -35,11 +40,16 @@ public class Value {
             if (voAccessToken == null) {
                 missing += " voAccessToken|voWordSortType one must be set";
             }
-            return new Value(voAccessToken);
+            return new Value(voAccessToken, payeeStoreUuid);
         }
 
         public Builder setVoAccessToken(VoAccessToken voAccessToken) {
             this.voAccessToken = voAccessToken;
+            return this;
+        }
+
+        public Builder setPayeeStoreUuid(String payeeStoreUuid) {
+            this.payeeStoreUuid = payeeStoreUuid;
             return this;
         }
     }

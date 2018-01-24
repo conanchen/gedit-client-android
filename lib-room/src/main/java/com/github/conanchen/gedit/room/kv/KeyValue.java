@@ -33,6 +33,7 @@ import com.google.common.base.Strings;
 public class KeyValue  {
     public  interface KEY {
         String USER_CURRENT_ACCESSTOKEN = "USER.CURRENT.LOGIN";
+        String USER_CURRENT_WORKING_STORE = "USER.CURRENT.WORKING.STORE";
         String USER_SETTING_WORDSORTTYPE = "USER.SETTING.WORDSORTTYPE";
         String USER_STATS_WORD_LEVEL1 = "USER.STATS.WORD.LEVEL1";
         String USER_STATS_WORD_LEVEL2 = "USER.STATS.WORD.LEVEL2";

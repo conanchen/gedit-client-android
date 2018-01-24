@@ -66,6 +66,14 @@ public class SigninRepository {
                                         .setKey(KeyValue.KEY.USER_CURRENT_ACCESSTOKEN)
                                         .setValue(value)
                                         .build();
+
+//                                //这里是做测试，保存WorkingStore的payeeStoreUuid
+//                                roomFascade.daoKeyValue.save(KeyValue.builder()
+//                                        .setKey(KeyValue.KEY.USER_CURRENT_WORKING_STORE)
+//                                        .setValue(Value.builder()
+//                                                .setPayeeStoreUuid("123456")
+//                                                .build())
+//                                        .build());
                                 return roomFascade.daoKeyValue.save(keyValue);
                             } else {
                                 return new Long(-1);
