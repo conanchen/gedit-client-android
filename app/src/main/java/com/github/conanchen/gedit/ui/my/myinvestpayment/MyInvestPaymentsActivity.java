@@ -23,7 +23,7 @@ public class MyInvestPaymentsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_single);
+        setContentView(R.layout.activity_my_invest_payments);
         ButterKnife.bind(this);
     }
 
