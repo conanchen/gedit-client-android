@@ -227,12 +227,14 @@ public class PointsPayActivity extends BaseActivity {
             }
         });
 
-//        String orderInfo = "app_id=2017051607257813&biz_content=%7B%22out_trade_no%22%3A2017120616103183710%2C%22total_amount%22%3A%220." +
-//                "01%22%2C%22subject%22%3A%220.01%22%2C%22body%22%3A%22%7B%5C%22desc%5C%22%3A%5C%22%E8%B4%AD%E4%B9%B0VIP%5C%22%7D%22%2C%22product" +
-//                "_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22passback_params%22%3A%22%7B%5C%22unit%5C%22%3A%5C%22%E5%A4%A9%5C%22%2C%5C%22payVipDay%5C%22%3A15%2C%5C%22" +
-//                "managerId%5C%22%3A1%2C%5C%22tradeType%5C%22%3A100%7D%22%7D&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=" +
-//                "http%3A%2F%2F192.168.1.200%2Fapi%2FalipayUrl&sign_type=RSA&timestamp=2017-12-06%2016%3A10%3A31&version=1.0&sign=IM9v8BlHdwV1zWu6LFRm0Zea32KryyV1d5E4CCWZh4Xp7FogFkGbnDrIDuF" +
-//                "2lGcnAkszDweyQrN%2FcYiJA8BotpVzZ7%2FX9s6pEOpI5W%2F5GHbZ8UyhuZIUFUx%2FUVZjuqGn8jMnFhyjuZH5ipMCuw1GX%2Bnqq6MWVQabz4it20U%2FuUc%3D";//订单号
+//        String orderInfo = "app_id=2017051607257813&biz_content=%7B%22out_trade_no%22%3A2018012510553787536%2C%22" +
+//                "total_amount%22%3A%2231%22%2C%22subject%22%3A%2231%22%2C%22" +
+//                "body%22%3A%22%7B%5C%22desc%5C%22%3A%5C%22%E8%B4%AD%E4%B9%B0%E4%BC%97%E7%AD%B9VIP%5C%22%7D%22%2C%22" +
+//                "product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22passback_params%22%3A%22%7B%5C%22unit%5C%22%3A%5C%22%E5%A4%A9%5C%22%2C%5C%22" +
+//                "vipDay%5C%22%3A30%2C%5C%22managerId%5C%22%3A30%2C%5C%22tradeType%5C%22%3A400%7D%22%7D&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fuser.ds-assistant.com%2" +
+//                "Fapi%2FalipayUrl&sign_type=RSA&timestamp=2018-01-25%2010%3A55%3A37&version=1.0&" +
+//                "sign=Io3OoULquD6DhqKZO17lItPsxRVtG99dXCljR1fzSvxMslupeu2gNAl66hMbO4GMogGMnHVw96Uc%2BgKnS%2FZ%2Fi%2F%2B895eBBpKc1P5j3b8H6nErW2rL5r8OvYjQilevOG2" +
+//                        "N9%2BT54YZjW2hFaMxrmooiNFKdtwqbavvmv2ANXnoUV0E%3D";//订单号
 //        payUtil.doAliPay(Strings.isNullOrEmpty(channelOrderUuid) ? orderInfo : channelOrderUuid);
 
         payUtil.doAliPay(returnStr);
@@ -245,14 +247,15 @@ public class PointsPayActivity extends BaseActivity {
      * @param signStr
      */
     private void wechatPay(String signStr) {
+
 //        String signStr1 = "{\n" +
 //                "      \"appid\" : \"wx452cb36207ea45c8\",\n" +
-//                "      \"noncestr\" : \"x5f4oul4591pwizx\",\n" +
+//                "      \"noncestr\" : \"oxi94kgdb5d2z4kn\",\n" +
 //                "      \"package\" : \"Sign=WXPay\",\n" +
 //                "      \"partnerid\" : \"1480648232\",\n" +
-//                "      \"prepayid\" : \"wx201712061653595ee9f59d7d0597214086\",\n" +
-//                "      \"sign\" : \"078E94BFA385D5136949138BD5DD5941\",\n" +
-//                "      \"timestamp\" : \"1512550439\"\n" +
+//                "      \"prepayid\" : \"wx2018012511001317489ac8560940724869\",\n" +
+//                "      \"sign\" : \"2ED96C63F890B182968E4A8E74E021CB\",\n" +
+//                "      \"timestamp\" : \"1516849213\"\n" +
 //                "    }\n";//订单号
         WxPay.init(PointsPayActivity.this);
         WxPay.getInstance().doPay(signStr, new WxPay.WXPayResultCallBack() {

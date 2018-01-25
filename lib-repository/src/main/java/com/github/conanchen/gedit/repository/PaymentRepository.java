@@ -126,12 +126,14 @@ public class PaymentRepository {
                                     public void accept(@NonNull GetPayeeCodeResponse getReceiptCodeResponse) throws Exception {
                                         if (!"fail".equals(getReceiptCodeResponse.getPayeeCode().getPayeeCode())) {
                                             setValue(GetPayeeCodeResponse.newBuilder()
+                                                    .setPayeeCode(response.getPayeeCode())
                                                     .setStatus(Status.newBuilder().setCode("OK")
-                                                            .setDetails("update Store successfully")
+                                                            .setDetails("sao miao successfully")
                                                             .build())
                                                     .build());
                                         } else {
                                             setValue(GetPayeeCodeResponse.newBuilder()
+                                                    .setPayeeCode(response.getPayeeCode())
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())
@@ -178,12 +180,14 @@ public class PaymentRepository {
                                     public void accept(@NonNull PrepareInappPaymentResponse getReceiptCodeResponse) throws Exception {
                                         if (!"fail".equals(getReceiptCodeResponse.getStatus().getCode())) {
                                             setValue(PrepareInappPaymentResponse.newBuilder()
+                                                    .setPreparePayment(getReceiptCodeResponse.getPreparePayment())
                                                     .setStatus(Status.newBuilder().setCode("OK")
                                                             .setDetails("update Store successfully")
                                                             .build())
                                                     .build());
                                         } else {
                                             setValue(PrepareInappPaymentResponse.newBuilder()
+                                                    .setPreparePayment(getReceiptCodeResponse.getPreparePayment())
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())

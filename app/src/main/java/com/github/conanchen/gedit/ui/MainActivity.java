@@ -133,8 +133,8 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.bottom_navigation_scan:
-//                        startScan();
-                        ARouter.getInstance().build("/app/PointsPayActivity").navigation();
+                        startScan();
+//                        ARouter.getInstance().build("/app/PointsPayActivity").navigation();
                         mViewPager.setCurrentItem(0);
                         break;
                     case R.id.bottom_navigation_my:
