@@ -3,8 +3,10 @@ package com.jifenpz.gedit.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.github.conanchen.gedit.util.pay.WxPay;
+import com.google.gson.Gson;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -40,8 +42,12 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
     }
 
+    private Gson gson = new Gson();
+
     @Override
     public void onResp(BaseResp resp) {
+
+        Log.i("-=-=-=-=-=BaseResp:", gson.toJson(resp));
 
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (WxPay.getInstance() != null) {

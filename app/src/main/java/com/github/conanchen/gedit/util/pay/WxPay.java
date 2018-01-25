@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.tencent.mm.opensdk.constants.Build;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -97,7 +98,6 @@ public class WxPay {
         req.nonceStr = param.optString("noncestr");
         req.timeStamp = param.optString("timestamp");
         req.sign = param.optString("sign");
-
 
         mWXApi.sendReq(req);
     }
