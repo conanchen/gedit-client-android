@@ -2,7 +2,6 @@ package com.github.conanchen.gedit.ui.my.mypoints;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,10 +10,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
 import com.github.conanchen.gedit.room.my.accounting.Account;
-import com.github.conanchen.gedit.ui.store.ExchangePointsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,9 +95,9 @@ public class MyPointsActivity extends BaseFragmentActivity {
     }
 
     @OnClick({R.id.back, R.id.right,
-            R.id.today_added_points,R.id.today_added_points_desc ,
-            R.id.can_consumption_points,R.id.can_consumption_points_desc,
-            R.id.can_exchange_points,R.id.can_exchange_points_desc})
+            R.id.today_added_points, R.id.today_added_points_desc,
+            R.id.can_consumption_points, R.id.can_consumption_points_desc,
+            R.id.can_exchange_points, R.id.can_exchange_points_desc})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -106,7 +105,8 @@ public class MyPointsActivity extends BaseFragmentActivity {
                 break;
             case R.id.right:
                 //兑换
-                startActivity(new Intent(MyPointsActivity.this, ExchangePointsActivity.class));
+//                startActivity(new Intent(MyPointsActivity.this, ExchangePointsActivity.class));
+                ARouter.getInstance().build("/app/ExchangePointsActivity").navigation();
                 break;
             case R.id.today_added_points:
             case R.id.today_added_points_desc:

@@ -57,7 +57,7 @@ public class MyStoreService {
                         .build(), new StreamObserver<OwnershipResponse>() {
                     @Override
                     public void onNext(OwnershipResponse value) {
-                        Log.i("-=-=-", "onNext");
+                        Log.i("-=-=-", "onNext"+ gson.toJson(value));
                         callBack.onOwnershipResponse(value);
                     }
 

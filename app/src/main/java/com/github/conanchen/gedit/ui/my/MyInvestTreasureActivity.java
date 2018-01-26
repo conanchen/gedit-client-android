@@ -16,8 +16,8 @@ import com.github.conanchen.gedit.util.ListViewAdaptToScrollView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-@Route(path = "/app/MyInvestOrAgentActivity")
-public class MyInvestOrAgentActivity extends AppCompatActivity {
+@Route(path = "/app/MyInvestTreasureActivity")
+public class MyInvestTreasureActivity extends AppCompatActivity {
 
     @BindView(R.id.had_num)
     AppCompatTextView mTextViewAdNum;
@@ -37,7 +37,7 @@ public class MyInvestOrAgentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_invest_or_agent);
+        setContentView(R.layout.activity_my_invest_treasure);
         ButterKnife.bind(this);
 
     }
@@ -49,8 +49,6 @@ public class MyInvestOrAgentActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.right:
-                //代理
-                Toast.makeText(this, "去代理", Toast.LENGTH_LONG).show();
                 break;
             case R.id.add_record:
                 //增持记录

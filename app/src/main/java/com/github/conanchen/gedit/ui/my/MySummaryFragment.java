@@ -35,16 +35,18 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    private MySummaryViewModel mySummaryViewModel;
+    private CurrentSigninViewModel currentSigninViewModel;
+
+
     @BindView(R.id.image)
     AppCompatImageView image;
+    @BindView(R.id.qrcode)
+    AppCompatImageView mIvQRCode;
     @BindView(R.id.name)
     AppCompatTextView name;
     @BindView(R.id.me_login)
     ConstraintLayout me;
-    private MySummaryViewModel mySummaryViewModel;
-    CurrentSigninViewModel currentSigninViewModel;
-
-
     @BindView(R.id.myviewmodeltext)
     AppCompatTextView myviewmodeltext;
 
@@ -68,11 +70,13 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
                 isLogin = true;
                 //如果登录就显示名字  没有显示登录或注册
                 name.setText("小花花");
+                mIvQRCode.setVisibility(View.VISIBLE);
                 myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
                 mySummaryViewModel.setHelloName("set login name");
             } else {
                 isLogin = false;
                 name.setText("登录/注册");
+                mIvQRCode.setVisibility(View.GONE);
                 myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
                 mySummaryViewModel.setHelloName("set notlogin name");
             }
@@ -94,7 +98,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
     }
 
     @OnClick({R.id.me_login, R.id.my_invest, R.id.my_store, R.id.my_fans, R.id.my_points,
-            R.id.my_extension_stores,
+            R.id.my_extension_stores, R.id.qrcode,
             R.id.my_works_stores, R.id.my_invest_payments, R.id.my_payerpayments,
             R.id.my_payeepayments, R.id.customer_service, R.id.setting, R.id.jifenbao})
     public void onViewClicked(View view) {
@@ -107,6 +111,10 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
                 } else {
                     startActivity(new Intent(this.getActivity(), LoginActivity.class));
                 }
+                break;
+            case R.id.qrcode:
+                //跳转到自己的二维码界面
+                ARouter.getInstance().build("/app/MyQRCodeActivity").navigation();
                 break;
             case R.id.my_invest:
                 //我的积分
@@ -153,7 +161,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
                 ARouter.getInstance().build("/app/SettingActivity").navigation();
                 break;
             case R.id.jifenbao:
-                ARouter.getInstance().build("/app/MyInvestOrAgentActivity").navigation();
+                ARouter.getInstance().build("/app/MyInvestTreasureActivity").navigation();
                 break;
         }
 //        } else {

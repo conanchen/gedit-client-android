@@ -9,6 +9,7 @@ import com.github.conanchen.gedit.store.worker.grpc.ListWorkshipByWorkerRequest;
 import com.github.conanchen.gedit.store.worker.grpc.StoreWorkerApiGrpc;
 import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
 import com.github.conanchen.gedit.utils.JcaUtils;
+import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.gson.Gson;
 
@@ -84,14 +85,21 @@ public class StoreWorkerService {
     /**
      * 添加员工
      *
-     * @param workerUuid
      * @param callBack
      */
-    public void addWorker(String workerUuid, AddWorkerCallBack callBack) {
+    public void addWorker(StoreUpdateInfo storeUpdateInfo, AddWorkerCallBack callBack) {
         ManagedChannel channel = getManagedChannel();
+
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(storeUpdateInfo.voAccessToken.accessToken,
+                        Long.valueOf(storeUpdateInfo.voAccessToken.expiresIn));
+
         StoreWorkerApiGrpc.StoreWorkerApiStub storeWorkerApiStub = StoreWorkerApiGrpc.newStub(channel);
         storeWorkerApiStub
-                .add(AddWorkershipRequest.newBuilder().setWorkerUuid(workerUuid).build(), new StreamObserver<WorkshipResponse>() {
+                .withCallCredentials(callCredentials)
+                .add(AddWorkershipRequest.newBuilder()
+                        .setWorkerUuid(storeUpdateInfo.uuid)
+                        .build(), new StreamObserver<WorkshipResponse>() {
                     @Override
                     public void onNext(WorkshipResponse value) {
                         Log.i("-=-=-", "onNext==========" + gson.toJson(value));

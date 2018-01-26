@@ -22,6 +22,7 @@ import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.store.StoreWorker;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
+import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
@@ -68,8 +69,7 @@ public class MyStoreEmployeesActivity extends BaseActivity {
      */
     public static final int REQUEST_CODE = 111;
     private boolean isLogin = false;//是否登录
-    private String accessToken;
-    private String expiresIn;
+    private VoAccessToken voAccessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,20 +105,18 @@ public class MyStoreEmployeesActivity extends BaseActivity {
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
             if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
                 isLogin = true;
-                accessToken = signinResponse.getAccessToken();
-                expiresIn = signinResponse.getExpiresIn();
+                voAccessToken = VoAccessToken.builder()
+                        .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())
+                        .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())
+                        .build();
+
+                myStoreEmployeesViewModel.getAllEmployees(voAccessToken);
+
             } else {
                 isLogin = false;
             }
         });
 
-
-        VoAccessToken voAccessToken = VoAccessToken.builder()
-                .setAccessToken(Strings.isNullOrEmpty(accessToken) ? System.currentTimeMillis() + "" : accessToken)
-                .setExpiresIn(Strings.isNullOrEmpty(expiresIn) ? System.currentTimeMillis() + "" : expiresIn)
-                .build();
-
-        myStoreEmployeesViewModel.getAllEmployees(voAccessToken);
 
         myStoreEmployeesViewModel.getAddWorkerLiveData().observe(this, workshipResponse -> {
             if (workshipResponse != null) {
@@ -199,7 +197,11 @@ public class MyStoreEmployeesActivity extends BaseActivity {
                     Toast.makeText(this, result, Toast.LENGTH_LONG).show();
                     String workerUuid = "fuwuqifanhui";//员工的uuid
 
-                    myStoreEmployeesViewModel.addWorker(workerUuid);
+                    StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
+                            .setVoAccessToken(voAccessToken)
+                            .setUuid(workerUuid)
+                            .build();
+                    myStoreEmployeesViewModel.addWorker(storeUpdateInfo);
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }

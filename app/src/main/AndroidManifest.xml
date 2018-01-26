@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -43,7 +42,6 @@
             </intent-filter>
         </activity>
 
-
         <!-- ***************************     支付宝开始     *************************** -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -73,8 +71,6 @@
             android:value="wx452cb36207ea45c8"/>
 
         <!-- ***************************     微信结束     *************************** -->
-
-
 
         <activity
             android:name=".ui.hello.HelloActivity"
@@ -168,7 +164,7 @@
             android:name=".ui.payment.PayeeQRCodeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.my.MyInvestOrAgentActivity"
+            android:name=".ui.my.MyInvestTreasureActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.my.mystore.MyStoreCodeActivity"
@@ -176,9 +172,11 @@
         <activity
             android:name=".ui.payment.MyPayerPaymentActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-
         <activity
             android:name=".ui.payment.MyPayeePaymentActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.my.MyQRCodeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data
@@ -186,7 +184,6 @@
             android:value="d949e7f182650c0c218f82f8510dfc7e">
             //高德开放平台申请的key
         </meta-data>
-
 
     </application>
 

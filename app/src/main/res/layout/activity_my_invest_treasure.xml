@@ -43,8 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="代理"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintLeft_toRightOf="@+id/title"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -144,6 +143,8 @@
                 android:id="@+id/add_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/white_bg_black_stroke_corners"
                 app:layout_constraintTop_toBottomOf="@id/left_num_desc">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -162,7 +163,9 @@
                     android:layout_height="0dp"
                     android:background="@null"
                     android:gravity="center_vertical|right"
-                    android:hint="可购买N个"
+                    android:hint="可购买n个"
+                    android:inputType="number"
+                    android:textCursorDrawable="@null"
                     app:layout_constraintBottom_toBottomOf="@id/add_desc"
                     app:layout_constraintLeft_toRightOf="@id/add_desc"
                     app:layout_constraintRight_toLeftOf="@id/add_unit"
@@ -184,6 +187,8 @@
                 android:id="@+id/need"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/white_bg_black_stroke_corners"
                 app:layout_constraintTop_toBottomOf="@+id/add_layout">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -238,226 +243,6 @@
                 app:layout_constraintTop_toBottomOf="@id/view3"/>
         </android.support.constraint.ConstraintLayout>
 
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:background="#4000"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:paddingTop="10dp"-->
-        <!--android:text="当前拥有(个)"-->
-        <!--android:textSize="16sp"/>-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/had_num"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:text="0"-->
-        <!--android:textSize="40sp"/>-->
-        <!--</LinearLayout>-->
-
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="4dp"-->
-        <!--android:background="#3000"/>-->
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/layout_add_record"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/white"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:drawableLeft="@mipmap/add"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:padding="10dp"-->
-        <!--android:text="  增持记录"-->
-        <!--android:textSize="16sp"/>-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/wallet_record_red_dot"-->
-        <!--android:layout_width="15dp"-->
-        <!--android:layout_height="15dp"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_marginRight="15dp"-->
-        <!--android:gravity="center"-->
-        <!--android:singleLine="true"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:textSize="10sp"-->
-        <!--android:visibility="gone"/>-->
-        <!--</LinearLayout>-->
-
-        <!--<ImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:src="@mipmap/add"/>-->
-
-        <!--</LinearLayout>-->
-
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="6dp"-->
-        <!--android:background="#3000"/>-->
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/layout_left_total"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingBottom="10dp"-->
-        <!--android:paddingLeft="10dp"-->
-        <!--android:paddingTop="10dp"-->
-        <!--android:text="当前剩余"/>-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/total_or_left_num"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingBottom="10dp"-->
-        <!--android:paddingTop="10dp"-->
-        <!--android:text="X/10000"-->
-        <!--android:textColor="@color/blue"/>-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingBottom="10dp"-->
-        <!--android:paddingTop="10dp"-->
-        <!--android:text="个"/>-->
-        <!--</LinearLayout>-->
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:padding="10dp">-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="增持个数"-->
-        <!--android:textSize="14sp"/>-->
-
-        <!--<EditText-->
-        <!--android:id="@+id/add_num"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@null"-->
-        <!--android:gravity="right|center_vertical"-->
-        <!--android:hint=""-->
-        <!--android:inputType="number"-->
-        <!--android:maxLength="5"-->
-        <!--android:paddingRight="5dp"-->
-        <!--android:textCursorDrawable="@null"-->
-        <!--android:textSize="12sp"/>-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="个"-->
-        <!--android:textSize="14sp"/>-->
-
-        <!--</LinearLayout>-->
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:layout_marginTop="6dp"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:padding="10dp">-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="应付金额"-->
-        <!--android:textSize="14sp"/>-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/need_total_money"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:gravity="right|center_vertical"/>-->
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="元"-->
-        <!--android:textSize="14sp"/>-->
-
-        <!--</LinearLayout>-->
-
-        <!--<Button-->
-        <!--android:id="@+id/submit"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="15dp"-->
-        <!--android:layout_marginLeft="40dp"-->
-        <!--android:layout_marginRight="40dp"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:gravity="center"-->
-        <!--android:padding="10dp"-->
-        <!--android:text="确认付款"/>-->
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/layout_price"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="10dp"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="6dp"-->
-        <!--android:background="#3000"/>-->
-
-        <!--<com.github.conanchen.gedit.util.ListViewAdaptToScrollView-->
-        <!--android:id="@+id/perice_list"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:divider="@null"-->
-        <!--android:scrollbars="none"/>-->
-
-        <!--</LinearLayout>-->
-
-        <!--</LinearLayout>-->
     </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

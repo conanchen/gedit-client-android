@@ -62,7 +62,9 @@
                     <android.support.v7.widget.AppCompatImageButton
                         android:id="@+id/right"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:padding="10dp"
                         android:src="@mipmap/add"
                         android:visibility="visible"
                         app:layout_constraintLeft_toRightOf="@+id/title"

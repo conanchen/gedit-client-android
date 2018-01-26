@@ -48,6 +48,7 @@ public class CustomPopWindow extends PopupWindow implements AdapterView.OnItemCl
         this.setWidth(dip2px(activity, 100));// 设置菜单的宽度（需要和菜单于右边距的距离搭配，可以自己调到合适的位置）
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
 //        this.setHeight(dip2px(activity, 260));
+        this.setHeight(dip2px(activity, 180));
         this.setFocusable(true);// 获取焦点
         this.setTouchable(true); // 设置PopupWindow可触摸
         this.setOutsideTouchable(true); // 设置非PopupWindow区域可触摸
@@ -76,8 +77,8 @@ public class CustomPopWindow extends PopupWindow implements AdapterView.OnItemCl
      * @param resourId 这里的x,y值自己调整可以
      */
     public void showLocation(int resourId) {
-        showAsDropDown(activity.findViewById(resourId), dip2px(activity, 0),
-                dip2px(activity, 0));
+        showAsDropDown(activity.findViewById(resourId), dip2px(activity, -60),
+                dip2px(activity, 10));
     }
 
 
