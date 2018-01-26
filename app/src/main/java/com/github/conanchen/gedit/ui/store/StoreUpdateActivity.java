@@ -34,7 +34,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.grpc.Status;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -126,7 +125,7 @@ public class StoreUpdateActivity extends BaseActivity {
                 });
 
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+            if (com.github.conanchen.gedit.common.grpc.Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
                 isLogin = true;
                 voAccessToken = VoAccessToken.builder()
                         .setAccessToken(signinResponse.getAccessToken())

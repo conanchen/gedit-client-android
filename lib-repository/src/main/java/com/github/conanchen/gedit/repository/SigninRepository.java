@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.auth.SigninInfo;
 import com.github.conanchen.gedit.grpc.auth.SigninService;
@@ -51,7 +52,7 @@ public class SigninRepository {
                         Observable.fromCallable(() -> {
                             Log.i("-=-=-", gson.toJson(response));
 
-                            if (response.getStatus().getCode().equals("0")) {
+                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
                                 //登录成功
                                 VoAccessToken voAccessToken = VoAccessToken.builder()
                                         .setAccessToken(response.getAccessToken())
@@ -86,13 +87,21 @@ public class SigninRepository {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
                                             setValue(SigninResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(Status.Code.OK)
+                                                            .setDetails("Signin successful")
+                                                            .build())
                                                     .setAccessToken(response.getAccessToken())
                                                     .setExpiresIn(response.getExpiresIn())
                                                     .build());
                                         } else {
                                             setValue(SigninResponse.newBuilder()
-                                                    .setAccessToken(response.getStatus().getCode())
-                                                    .setExpiresIn(response.getStatus().getDetails())
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(response.getStatus().getCode())
+                                                            .setDetails(response.getStatus().getDetails())
+                                                            .build())
+                                                    .setAccessToken(response.getAccessToken())
+                                                    .setExpiresIn(response.getExpiresIn())
                                                     .build());
                                         }
                                     }

@@ -51,7 +51,8 @@ public class MyFansService {
             public void onError(Throwable t) {
                 Log.i("-=-=-", "onError");
                 callBack.onFanshipResponse(FanshipResponse.newBuilder()
-                        .setStatus(Status.newBuilder().setCode("FAILED")
+                        .setStatus(Status.newBuilder()
+                                .setCode(Status.Code.UNKNOWN)
                                 .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                 .build())
                         .setFanship( com.github.conanchen.gedit.user.fans.grpc.Fanship.newBuilder()
@@ -65,16 +66,6 @@ public class MyFansService {
             @Override
             public void onCompleted() {
                 Log.i("-=-=-", "onCompleted");
-                callBack.onFanshipResponse(FanshipResponse.newBuilder()
-                        .setStatus(Status.newBuilder().setCode("onCompleted()")
-                                .setDetails(String.format("onCompleted（）"))
-                                .build())
-                        .setFanship( com.github.conanchen.gedit.user.fans.grpc.Fanship.newBuilder()
-                                .setFanUuid("fanUuid"+System.currentTimeMillis())
-                                .setFanName("fanname "+System.currentTimeMillis())
-                                .setCreated(System.currentTimeMillis())
-                                .build())
-                        .build());
             }
         });
     }

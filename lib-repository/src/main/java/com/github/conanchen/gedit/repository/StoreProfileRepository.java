@@ -73,8 +73,10 @@ public class StoreProfileRepository {
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
             grpcFascade.storeSearchService.searchStoresNearAt(
                     SearchStoreRequest.newBuilder()
-                            .setLat(location.getLat())
-                            .setLon(location.getLon())
+                            .setLocation(Location.newBuilder()
+                                    .setLat(location.getLat())
+                                    .setLon(location.getLon())
+                                    .build())
                             .build(),
                     response -> {
                         //TODO 填写完整信息
@@ -97,7 +99,7 @@ public class StoreProfileRepository {
                             .subscribeOn(Schedulers.io())
                             .observeOn(Schedulers.io())
                             .subscribe(aBoolean -> {
-                                if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                                if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
                                     Store s = Store.builder()
                                             .setUuid(response.getStoreProfile().getUuid())
                                             .setName(response.getStoreProfile().getName())
@@ -120,7 +122,7 @@ public class StoreProfileRepository {
                     public void onStoreCreateResponse(CreateStoreResponse createResponse) {
                         Observable.fromCallable(() -> {
                             Log.i(TAG, String.format("CreateStoreResponse: %s", createResponse.getStatus()));
-                            if ("OK".compareToIgnoreCase(createResponse.getStatus().getCode()) == 0) {
+                            if (Status.Code.OK.getNumber() == createResponse.getStatus().getCode().getNumber()) {
                                 Store s = Store.builder()
                                         .setUuid(createResponse.getUuid())
                                         .setName(storeCreateInfo.name)
@@ -148,7 +150,7 @@ public class StoreProfileRepository {
                                         if (rowId > 0) {
                                             setValue(CreateStoreResponse.newBuilder()
                                                     .setStatus(Status.newBuilder()
-                                                            .setCode("OK")
+                                                            .setCode(Status.Code.OK)
                                                             .setDetails("Create Store successfully")
                                                             .build())
                                                     .setUuid("set jia shu ju uuid")
@@ -156,7 +158,7 @@ public class StoreProfileRepository {
                                         } else {
                                             setValue(CreateStoreResponse.newBuilder()
                                                     .setStatus(Status.newBuilder()
-                                                            .setCode("Fail")
+                                                            .setCode(Status.Code.UNKNOWN)
                                                             .setDetails("Create Store Fail")
                                                             .build())
                                                     .setUuid("set jia shu ju uuid")
@@ -180,7 +182,7 @@ public class StoreProfileRepository {
                     public void onUpdateStoreResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {
                             Log.i(TAG, String.format("UpdateStoreResponse: %s", response.getStatus()));
-                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
                                 s.lastUpdated = response.getLastUpdated();
                                 return roomFascade.daoStore.save(s);
@@ -195,14 +197,16 @@ public class StoreProfileRepository {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
                                             setValue(UpdateStoreResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(Status.Code.OK)
                                                             .setDetails("update Store successfully")
                                                             .build())
                                                     .setUuid(response.getUuid())
                                                     .build());
                                         } else {
                                             setValue(UpdateStoreResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder().setCode(response.getStatus().getCode())
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(response.getStatus().getCode())
                                                             .setDetails(response.getStatus().getDetails())
                                                             .build())
                                                     .setUuid(response.getUuid())
@@ -232,7 +236,7 @@ public class StoreProfileRepository {
                     public void onUpdateHeadPortraitResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {
                             Log.i(TAG, String.format("UpdateStoreResponse: %s", response.getStatus()));
-                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
                                 if (StoreUpdateInfo.Field.DETAIL_ADDRESS.equals(storeUpdateInfo.name)) {
                                     s.address = (String) storeUpdateInfo.value;
@@ -252,15 +256,17 @@ public class StoreProfileRepository {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
                                             setValue(UpdateStoreResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(Status.Code.OK)
                                                             .setDetails("update Store successfully")
                                                             .build())
                                                     .setUuid(response.getUuid())
                                                     .build());
                                         } else {
                                             setValue(UpdateStoreResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder().setCode("FAIL")
-                                                            .setDetails("bottom fail")
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(response.getStatus().getCode())
+                                                            .setDetails(response.getStatus().getDetails())
                                                             .build())
                                                     .setUuid(response.getUuid())
                                                     .build());
@@ -289,7 +295,7 @@ public class StoreProfileRepository {
                     public void onUpdateHeadPortraitResponse(UpdateStoreResponse response) {
                         Observable.fromCallable(() -> {
                             Log.i(TAG, String.format("UpdateStoreResponse: %s", response.getStatus()));
-                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
                                 Store s = roomFascade.daoStore.findOne(storeUpdateInfo.uuid);
                                 s.address = (String) storeUpdateInfo.value;
                                 return roomFascade.daoStore.save(s);
@@ -304,15 +310,17 @@ public class StoreProfileRepository {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
                                             setValue(UpdateStoreResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder().setCode("OK")
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(Status.Code.OK)
                                                             .setDetails("update Store successfully")
                                                             .build())
                                                     .setUuid(response.getUuid())
                                                     .build());
                                         } else {
                                             setValue(UpdateStoreResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder().setCode("FAIL")
-                                                            .setDetails("bottom fail")
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(response.getStatus().getCode())
+                                                            .setDetails(response.getStatus().getDetails())
                                                             .build())
                                                     .setUuid(response.getUuid())
                                                     .build());

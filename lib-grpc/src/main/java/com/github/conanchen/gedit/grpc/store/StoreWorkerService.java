@@ -69,7 +69,8 @@ public class StoreWorkerService {
                     public void onError(Throwable t) {
                         Log.i("-=-=-", "onError==========" + gson.toJson(t));
                         callBack.onListByWorkerCallBack(WorkshipResponse.newBuilder()
-                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                .setStatus(Status.newBuilder()
+                                        .setCode(Status.Code.UNKNOWN)
                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                         .build())
                                 .build());
@@ -110,7 +111,8 @@ public class StoreWorkerService {
                     public void onError(Throwable t) {
                         Log.i("-=-=-", "onError==========" + gson.toJson(t));
                         callBack.onAddWorkerCallBack(WorkshipResponse.newBuilder()
-                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                .setStatus(Status.newBuilder()
+                                        .setCode(Status.Code.UNKNOWN)
                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                         .build())
                                 .build());

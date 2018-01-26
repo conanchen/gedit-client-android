@@ -5,12 +5,12 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
@@ -75,7 +75,7 @@ public class MyStoresActivity extends BaseActivity {
 
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+            if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
                 StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
                         .setVoAccessToken(VoAccessToken.builder()
                                 .setAccessToken(signinResponse.getAccessToken())

@@ -3,13 +3,13 @@ package com.github.conanchen.gedit.grpc.store;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.ListURL;
 import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
 import com.github.conanchen.gedit.store.profile.grpc.ListTel;
-import com.github.conanchen.gedit.store.profile.grpc.ListURL;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
@@ -120,7 +120,8 @@ public class StoreProfileService {
                                 Log.i("-=-=-=---", "onError  ====  value:" + gson.toJson(t));
                                 callback.onStoreCreateResponse(
                                         CreateStoreResponse.newBuilder()
-                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                .setStatus(Status.newBuilder()
+                                                        .setCode(Status.Code.UNKNOWN)
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())
                                                 .build());
@@ -159,7 +160,8 @@ public class StoreProfileService {
                                 Log.i(TAG, "enter onError()");
                                 callback.onUpdateStoreResponse(
                                         UpdateStoreResponse.newBuilder()
-                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                .setStatus(Status.newBuilder()
+                                                        .setCode(Status.Code.UNKNOWN)
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())
                                                 .build());
@@ -247,7 +249,7 @@ public class StoreProfileService {
                                 Log.i(TAG, "enter onNext()");
                                 callback.onUpdateHeadPortraitResponse(value);
                                 Status status = value.getStatus();
-                                String code = status.getCode();
+                                String code = status.getCode().name();
                                 Log.i(TAG, "staus:" + status + ",code:" + code);
                             }
 
@@ -257,7 +259,7 @@ public class StoreProfileService {
                                 Log.e(TAG, t.getMessage());
                                 callback.onUpdateHeadPortraitResponse(
                                         UpdateStoreResponse.newBuilder()
-                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                .setStatus(Status.newBuilder().setCode(Status.Code.UNKNOWN)
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())
                                                 .build());
@@ -292,9 +294,6 @@ public class StoreProfileService {
                             public void onNext(UpdateStoreResponse value) {
                                 Log.i(TAG, "enter onNext()");
                                 callback.onUpdateHeadPortraitResponse(value);
-                                Status status = value.getStatus();
-                                String code = status.getCode();
-                                Log.i(TAG, "staus:" + status + ",code:" + code);
                             }
 
                             @Override
@@ -303,7 +302,7 @@ public class StoreProfileService {
                                 Log.e(TAG, t.getMessage());
                                 callback.onUpdateHeadPortraitResponse(
                                         UpdateStoreResponse.newBuilder()
-                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                .setStatus(Status.newBuilder().setCode(Status.Code.UNKNOWN)
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())
                                                 .build());

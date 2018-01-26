@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.store.StoreWorker;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
@@ -41,7 +42,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.grpc.Status;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -103,7 +103,7 @@ public class MyStoreEmployeesActivity extends BaseActivity {
 
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+            if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
                 isLogin = true;
                 voAccessToken = VoAccessToken.builder()
                         .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())

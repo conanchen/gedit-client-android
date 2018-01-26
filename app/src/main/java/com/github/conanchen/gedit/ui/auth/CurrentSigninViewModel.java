@@ -55,7 +55,7 @@ public class CurrentSigninViewModel extends ViewModel {
                                 Log.i(TAG, String.format("onSuccess voAccessToken=%s", gson.toJson(voAccessToken)));
                                 com.github.conanchen.gedit.user.auth.grpc.SigninResponse signinResponse = com.github.conanchen.gedit.user.auth.grpc.SigninResponse.newBuilder()
                                         .setStatus(com.github.conanchen.gedit.common.grpc.Status.newBuilder()
-                                                .setCode(Status.Code.OK.name())
+                                                .setCode(com.github.conanchen.gedit.common.grpc.Status.Code.OK)
                                                 .setDetails("already logon!")
                                                 .build())
                                         .setAccessToken(voAccessToken.accessToken)
@@ -70,7 +70,7 @@ public class CurrentSigninViewModel extends ViewModel {
                                 Log.i(TAG, String.format("onError Throwable=%s", e.getMessage()));
                                 com.github.conanchen.gedit.user.auth.grpc.SigninResponse signinResponse = com.github.conanchen.gedit.user.auth.grpc.SigninResponse.newBuilder()
                                         .setStatus(com.github.conanchen.gedit.common.grpc.Status.newBuilder()
-                                                .setCode(Status.Code.UNAUTHENTICATED.name())
+                                                .setCode(com.github.conanchen.gedit.common.grpc.Status.Code.UNAUTHENTICATED)
                                                 .setDetails("error,not logon!")
                                                 .build())
                                         .build();
@@ -83,7 +83,7 @@ public class CurrentSigninViewModel extends ViewModel {
                                 Log.i(TAG, String.format("onComplete hasValue=%b", hasValue));
                                 com.github.conanchen.gedit.user.auth.grpc.SigninResponse signinResponse = com.github.conanchen.gedit.user.auth.grpc.SigninResponse.newBuilder()
                                         .setStatus(com.github.conanchen.gedit.common.grpc.Status.newBuilder()
-                                                .setCode(Status.Code.UNAUTHENTICATED.name())
+                                                .setCode(com.github.conanchen.gedit.common.grpc.Status.Code.UNAUTHENTICATED)
                                                 .setDetails("complete,not logon!")
                                                 .build())
                                         .build();

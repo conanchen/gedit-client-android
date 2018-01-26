@@ -90,7 +90,7 @@ public class PaymentService {
                         Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
                         callback.onGetQRCodeUrlCallback(GetMyPayeeCodeResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
-                                        .setCode("Fail")
+                                        .setCode(Status.Code.UNKNOWN)
                                         .setDetails("enter onError() method"))
                                 .build());
                     }
@@ -134,7 +134,7 @@ public class PaymentService {
                         Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
                         callback.onGetPayeeStoreDetailsCallback(GetPayeeCodeResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
-                                        .setCode("Fail")
+                                        .setCode(Status.Code.UNKNOWN)
                                         .setDetails("enter onError() method"))
                                 .build());
                     }
@@ -179,7 +179,7 @@ public class PaymentService {
                         Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
                         callback.onGetPaymentCallback(PrepareInappPaymentResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
-                                        .setCode("Fail")
+                                        .setCode(Status.Code.UNKNOWN)
                                         .setDetails("enter onError() method"))
                                 .build());
                     }
@@ -240,7 +240,7 @@ public class PaymentService {
                         Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
                         callback.onCreatePaymentCallback(PaymentResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
-                                        .setCode("Fail")
+                                        .setCode(Status.Code.UNKNOWN)
                                         .setDetails("enter onError() method"))
                                 .build());
                     }

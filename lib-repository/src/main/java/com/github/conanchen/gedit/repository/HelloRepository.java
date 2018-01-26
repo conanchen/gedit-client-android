@@ -3,12 +3,12 @@ package com.github.conanchen.gedit.repository;
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.github.conanchen.gedit.hello.grpc.HelloReply;
-import com.github.conanchen.gedit.grpc.hello.HelloService;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
+import com.github.conanchen.gedit.grpc.hello.HelloService;
+import com.github.conanchen.gedit.hello.grpc.HelloReply;
 import com.github.conanchen.gedit.hello.grpc.ListHelloRequest;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.hello.Hello;
@@ -49,7 +49,7 @@ public class HelloRepository {
             public void onHelloReply(HelloReply helloReply) {
                 Observable.fromCallable(() -> {
                     Log.i(TAG, String.format("HelloReply: %s", helloReply.getMessage()));
-                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(helloReply.getStatus().getCode()) == 0) {
+                    if (Status.Code.OK.getNumber() == helloReply.getStatus().getCode().getNumber()) {
                         Log.i(TAG, String.format("HelloReply: %s", gson.toJson(helloReply)));
                         Hello hello = Hello.builder()
                                 .setUuid(Strings.isNullOrEmpty(helloReply.getUuid()) ? "1" : helloReply.getUuid())
@@ -96,7 +96,7 @@ public class HelloRepository {
                             @Override
                             public void onHelloReply(HelloReply helloReply) {
                                 Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-                                    if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(helloReply.getStatus().getCode()) == 0) {
+                                    if (Status.Code.OK.getNumber() == helloReply.getStatus().getCode().getNumber()) {
                                         Log.i(TAG, String.format("HelloReply: %s", gson.toJson(helloReply)));
                                         Hello hello = Hello.builder()
                                                 .setUuid(Strings.isNullOrEmpty(helloReply.getUuid()) ? "1" : helloReply.getUuid())

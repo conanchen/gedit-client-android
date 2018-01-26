@@ -67,7 +67,8 @@ public class PostingService {
                             public void onError(Throwable t) {
                                 Log.i(TAG, String.format("postingApiStub.listMyPosting() onError %s", t.getMessage()));
                                 callback.onPostingResponse(PostingResponse.newBuilder()
-                                        .setStatus(Status.newBuilder().setCode("ERROR")
+                                        .setStatus(Status.newBuilder()
+                                                .setCode(Status.Code.UNKNOWN)
                                                 .setDetails("假数据")
                                                 .build())
                                         .setPosting(Posting.newBuilder()

@@ -57,9 +57,11 @@ public class SigninService {
                             @Override
                             public void onError(Throwable t) {
                                 Log.e(TAG, t.getMessage());
+                                Log.i("-=-=-=-", "Throwable" + gson.toJson(t));
                                 callback.onSigninResponse(
                                         SigninResponse.newBuilder()
-                                                .setStatus(Status.newBuilder().setCode("FAILED")
+                                                .setStatus(Status.newBuilder()
+                                                        .setCode(Status.Code.UNKNOWN)
                                                         .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                                         .build())
                                                 .build());

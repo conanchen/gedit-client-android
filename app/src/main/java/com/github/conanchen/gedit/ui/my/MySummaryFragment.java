@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseFragment;
 import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
@@ -66,7 +67,7 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
 
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+            if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
                 isLogin = true;
                 //如果登录就显示名字  没有显示登录或注册
                 name.setText("小花花");

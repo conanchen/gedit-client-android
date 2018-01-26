@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
@@ -130,7 +131,7 @@ public class StoreCreateActivity extends BaseActivity {
 
 
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (io.grpc.Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+            if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
                 isLogin = true;
                 voAccessToken = VoAccessToken.builder()
                         .setAccessToken(signinResponse.getAccessToken())

@@ -50,7 +50,8 @@ public class MyWorkinStoreService {
             public void onError(Throwable t) {
                 Log.i("-=-=-", "onError");
                 callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
-                        .setStatus(Status.newBuilder().setCode("FAILED")
+                        .setStatus(Status.newBuilder()
+                                .setCode(Status.Code.UNKNOWN)
                                 .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                 .build())
                         .build());
@@ -59,11 +60,6 @@ public class MyWorkinStoreService {
             @Override
             public void onCompleted() {
                 Log.i("-=-=-", "onCompleted");
-                callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
-                        .setStatus(Status.newBuilder().setCode("onCompleted()")
-                                .setDetails(String.format("onCompleted（）"))
-                                .build())
-                        .build());
             }
         });
     }

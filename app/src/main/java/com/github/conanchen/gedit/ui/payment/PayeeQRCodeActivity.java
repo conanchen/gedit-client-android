@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.grpc.Status;
 
 @Route(path = "/app/PayeeQRCodeActivity")
 public class PayeeQRCodeActivity extends BaseActivity {
@@ -60,7 +59,7 @@ public class PayeeQRCodeActivity extends BaseActivity {
         currentSigninViewModel.getCurrentWorkingStore().observe(this, string -> {
             //获取token
             currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-                if (Status.Code.OK.name().compareToIgnoreCase(signinResponse.getStatus().getCode()) == 0) {
+                if (com.github.conanchen.gedit.common.grpc.Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
                     voAccessToken = VoAccessToken.builder()
                             .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())
                             .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())

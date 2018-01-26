@@ -12,8 +12,6 @@ import com.github.conanchen.gedit.utils.JcaUtils;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.google.gson.Gson;
 
-import java.util.concurrent.TimeUnit;
-
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
@@ -57,7 +55,7 @@ public class MyStoreService {
                         .build(), new StreamObserver<OwnershipResponse>() {
                     @Override
                     public void onNext(OwnershipResponse value) {
-                        Log.i("-=-=-", "onNext"+ gson.toJson(value));
+                        Log.i("-=-=-", "onNext" + gson.toJson(value));
                         callBack.onOwnershipResponse(value);
                     }
 
@@ -65,6 +63,10 @@ public class MyStoreService {
                     public void onError(Throwable t) {
                         Log.i("-=-=-", "onError" + gson.toJson(t));
                         callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode(Status.Code.UNKNOWN)
+                                        .setDetails("Fail")
+                                        .build())
                                 .setOwnership(Ownership.newBuilder()
                                         .setStoreUuid("uuid" + System.currentTimeMillis())
                                         .setStoreName("name" + System.currentTimeMillis())
@@ -75,11 +77,6 @@ public class MyStoreService {
                     @Override
                     public void onCompleted() {
                         Log.i("-=-=-", "onCompleted");
-                        callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
-                                .setStatus(Status.newBuilder().setCode("onCompleted()")
-                                        .setDetails(String.format("onCompleted（）"))
-                                        .build())
-                                .build());
                     }
                 });
     }

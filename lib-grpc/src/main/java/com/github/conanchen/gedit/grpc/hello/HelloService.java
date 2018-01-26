@@ -74,7 +74,7 @@ public class HelloService {
                     public void onError(Throwable t) {
                         Log.i(TAG, String.format("helloStub.sayHello() onError %s", t.getMessage()));
                         callback.onHelloReply(HelloReply.newBuilder().setStatus(Status.newBuilder()
-                                .setCode(io.grpc.Status.Code.UNAVAILABLE.name())
+                                .setCode(com.github.conanchen.gedit.common.grpc.Status.Code.UNAVAILABLE)
                                 .setDetails("Hello API 错误：可能网络不通或服务器错误")
                                 .build()).build());
                     }

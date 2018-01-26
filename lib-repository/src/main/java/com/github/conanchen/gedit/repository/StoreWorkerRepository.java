@@ -76,12 +76,13 @@ public class StoreWorkerRepository {
                     @Override
                     public void onAddWorkerCallBack(WorkshipResponse response) {
                         Observable.fromCallable(() -> {
-                            if ("OK".compareToIgnoreCase(response.getStatus().getCode()) == 0) {
+                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
                                 return response;
                             } else {
                                 WorkshipResponse workshipResponse = WorkshipResponse.newBuilder()
                                         .setStatus(Status.newBuilder()
-                                                .setCode("fail")
+                                                .setCode(response.getStatus().getCode())
+                                                .setDetails(response.getStatus().getDetails())
                                                 .build())
                                         .build();
                                 return workshipResponse;
@@ -91,19 +92,20 @@ public class StoreWorkerRepository {
                                 .subscribe(new Consumer<WorkshipResponse>() {
                                     @Override
                                     public void accept(@NonNull WorkshipResponse workshipResponse) throws Exception {
-                                        if (!"fail".equals(workshipResponse.getStatus().getCode())) {
+                                        if (Status.Code.OK.getNumber() == workshipResponse.getStatus().getCode().getNumber()) {
                                             setValue(WorkshipResponse.newBuilder()
-                                                    .setOwnership(response.getOwnership())
-                                                    .setStatus(Status.newBuilder().setCode("OK")
-                                                            .setDetails("update Store successfully")
+                                                    .setOwnership(workshipResponse.getOwnership())
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(Status.Code.UNKNOWN)
+                                                            .setDetails("add worker successfully")
                                                             .build())
                                                     .build());
                                         } else {
                                             setValue(WorkshipResponse.newBuilder()
-                                                    .setOwnership(response.getOwnership())
+                                                    .setOwnership(workshipResponse.getOwnership())
                                                     .setStatus(Status.newBuilder()
-                                                            .setCode(response.getStatus().getCode())
-                                                            .setDetails(response.getStatus().getDetails())
+                                                            .setCode(workshipResponse.getStatus().getCode())
+                                                            .setDetails(workshipResponse.getStatus().getDetails())
                                                             .build())
                                                     .build());
                                         }

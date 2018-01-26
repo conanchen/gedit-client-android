@@ -53,7 +53,8 @@ public class MyIntroducedStoreService {
             public void onError(Throwable t) {
                 Log.i("-=-=-", "onError");
                 callBack.onIntroducershipResponse(IntroducershipResponse.newBuilder()
-                        .setStatus(Status.newBuilder().setCode("FAILED")
+                        .setStatus(Status.newBuilder()
+                                .setCode(Status.Code.UNKNOWN)
                                 .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                 .build())
                         .setIntroducership(Introducership.newBuilder()
@@ -68,17 +69,6 @@ public class MyIntroducedStoreService {
             @Override
             public void onCompleted() {
                 Log.i("-=-=-", "onCompleted");
-                callBack.onIntroducershipResponse(IntroducershipResponse.newBuilder()
-                        .setStatus(Status.newBuilder().setCode("onCompleted()")
-                                .setDetails(String.format("onCompleted（）"))
-                                .build())
-                        .setIntroducership(Introducership.newBuilder()
-                                .setStoreUuid(UUID.randomUUID().toString())
-                                .setLocation(Location.newBuilder().setLat(234).setLon(232).build())
-                                .setStoreLogo("logo url"+System.currentTimeMillis())
-                                .setStoreName("strore name "+ System.currentTimeMillis())
-                                .build())
-                        .build());
             }
         });
     }

@@ -115,7 +115,7 @@ public class RegisterService {
             public void onError(Throwable t) {
                 callback.onRegisterSmsCallback(SmsStep2AnswerResponse.newBuilder()
                         .setStatus(Status.newBuilder()
-                                .setCode("Fail")
+                                .setCode(Status.Code.UNKNOWN)
                                 .setDetails("onError()  : " + t.getMessage()))
                         .build());
             }
@@ -152,7 +152,7 @@ public class RegisterService {
                         Log.i("-=-=-=-", t.getMessage());
                         callback.onRegisterCallback(RegisterResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
-                                        .setCode("Fail")
+                                        .setCode(Status.Code.UNKNOWN)
                                         .setDetails("api没有调通" + t.getMessage()))
                                 .build());
                     }
