@@ -3,6 +3,7 @@ package com.github.conanchen.gedit.grpc.auth;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
+import com.github.conanchen.gedit.grpc.GrpcApiCallback;
 import com.github.conanchen.gedit.grpc.store.StoreProfileService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.user.auth.grpc.RegisterResponse;
@@ -30,7 +31,7 @@ public class RegisterService {
     private final static String TAG = StoreProfileService.class.getSimpleName();
     private Gson gson = new Gson();
 
-    public interface RegisterVerifyCallback {
+    public interface RegisterVerifyCallback extends GrpcApiCallback {
         void onRegisterVerifyResponse(SmsStep1QuestionResponse response);
 
     }
@@ -68,15 +69,20 @@ public class RegisterService {
 
                             @Override
                             public void onError(Throwable t) {
-                                callback.onRegisterVerifyResponse(
-                                        SmsStep1QuestionResponse.newBuilder()
-                                                .setToken("获取图片失败")
-                                                .setQuestionTip("获取图片失败")
-                                                .build());
+//                                callback.onRegisterVerifyResponse(
+//                                        SmsStep1QuestionResponse.newBuilder()
+//                                                .setToken("获取图片失败")
+//                                                .setQuestionTip("获取图片失败")
+//                                                .build());
+
+                                callback.onGrpcApiError(Status.newBuilder()
+                                        .setCode(Status.Code.UNAVAILABLE)
+                                        .setDetails("可能网络不同或者服务器死了").build());
                             }
 
                             @Override
                             public void onCompleted() {
+                                callback.onGrpcApiCompleted();
                                 Log.i(TAG, "storeProfileApiStub.create onCompleted()");
                             }
                         });
