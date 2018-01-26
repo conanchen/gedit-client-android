@@ -2,18 +2,19 @@ package com.github.conanchen.gedit.ui.auth;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
+import android.support.v7.widget.AppCompatImageView;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.grpc.auth.SigninInfo;
 import com.google.gson.Gson;
@@ -47,10 +48,11 @@ public class LoginActivity extends BaseActivity {
     AppCompatEditText mPasswordEditText;
     @BindView(R.id.login)
     AppCompatButton mLoginButton;
-    @BindView(R.id.show)
-    AppCompatTextView mResultTextView;
+    @BindView(R.id.pass_icon)
+    AppCompatImageView mIvPassIcon;
 
     private static final Gson gson = new Gson();
+    private boolean isShowPwd = false;//是否显示密码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,34 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.bind(this);
         setupViewModel();
         setupInputChecker();
+
+        setupOnClick();
+    }
+
+    private void setupOnClick() {
+        mIvPassIcon.setOnClickListener((view) -> {
+            if (isShowPwd) {
+                //当前密码为显示状态  现在需要隐藏掉
+                mIvPassIcon.setImageDrawable(getResources().getDrawable(R.mipmap.eyes_1));
+                //设置输入文本为密码
+                mPasswordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                //设置密码为用户不可见
+                mPasswordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                //设置光标位置到文本最后
+                mPasswordEditText.setSelection(mPasswordEditText.length());
+                isShowPwd = false;
+            } else {
+                //当前密码为隐藏状态  现在需要显示
+                mIvPassIcon.setImageDrawable(getResources().getDrawable(R.mipmap.eyes));
+                //设置输入文本为密码
+                mPasswordEditText.setTransformationMethod(null);
+                //设置密码为用户可见
+                mPasswordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                //设置光标位置到文本最后
+                mPasswordEditText.setSelection(mPasswordEditText.length());
+                isShowPwd = true;
+            }
+        });
     }
 
     private void setupInputChecker() {
@@ -97,9 +127,13 @@ public class LoginActivity extends BaseActivity {
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(SigninViewModel.class);
         loginViewModel.getSigninResponseLiveData()
                 .observe(this, signinResponse -> {
-                    Log.i("-=-=-", gson.toJson(signinResponse));
-//                    mResultTextView.setText("登陆结果：" + gson.toJson(signinResponse));
-                    finish();
+                    if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
+                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_LONG).show();
+                    }
+
                 });
     }
 

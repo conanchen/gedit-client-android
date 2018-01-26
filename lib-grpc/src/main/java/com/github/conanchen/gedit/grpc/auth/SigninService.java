@@ -56,7 +56,6 @@ public class SigninService {
 
                             @Override
                             public void onError(Throwable t) {
-                                Log.e(TAG, t.getMessage());
                                 Log.i("-=-=-=-", "Throwable" + gson.toJson(t));
                                 callback.onSigninResponse(
                                         SigninResponse.newBuilder()

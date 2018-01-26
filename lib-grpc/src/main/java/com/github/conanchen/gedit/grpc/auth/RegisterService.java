@@ -70,8 +70,8 @@ public class RegisterService {
                             public void onError(Throwable t) {
                                 callback.onRegisterVerifyResponse(
                                         SmsStep1QuestionResponse.newBuilder()
-                                                .setToken("get token is fail")
-                                                .setQuestionTip("get tip is fail")
+                                                .setToken("获取图片失败")
+                                                .setQuestionTip("获取图片失败")
                                                 .build());
                             }
 
@@ -144,12 +144,13 @@ public class RegisterService {
                         .build(), new StreamObserver<RegisterResponse>() {
                     @Override
                     public void onNext(RegisterResponse value) {
+                        Log.i("-=-=register", gson.toJson(value));
                         callback.onRegisterCallback(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        Log.i("-=-=-=-", t.getMessage());
+                        Log.i("-=-=register", t.getMessage());
                         callback.onRegisterCallback(RegisterResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode(Status.Code.UNKNOWN)

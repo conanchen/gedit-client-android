@@ -54,18 +54,14 @@ public class SigninRepository {
 
                             if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
                                 //登录成功
-                                VoAccessToken voAccessToken = VoAccessToken.builder()
-                                        .setAccessToken(response.getAccessToken())
-                                        .setExpiresIn(response.getExpiresIn())
-                                        .build();
-
-                                Value value = Value.builder()
-                                        .setVoAccessToken(voAccessToken)
-                                        .build();
-
                                 KeyValue keyValue = KeyValue.builder()
                                         .setKey(KeyValue.KEY.USER_CURRENT_ACCESSTOKEN)
-                                        .setValue(value)
+                                        .setValue(Value.builder()
+                                                .setVoAccessToken(VoAccessToken.builder()
+                                                        .setAccessToken(response.getAccessToken())
+                                                        .setExpiresIn(response.getExpiresIn())
+                                                        .build())
+                                                .build())
                                         .build();
 
                                 //这里是做测试，保存WorkingStore的payeeStoreUuid

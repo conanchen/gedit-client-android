@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -43,7 +44,7 @@
                         android:src="@mipmap/add"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@+id/title"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/title"
@@ -54,7 +55,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/back"
                         app:layout_constraintLeft_toRightOf="@+id/back"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/back" />
+                        app:layout_constraintTop_toTopOf="@+id/back"/>
 
                     <android.support.v7.widget.AppCompatImageButton
                         android:id="@+id/right"
@@ -64,7 +65,7 @@
                         android:visibility="invisible"
                         app:layout_constraintLeft_toRightOf="@+id/title"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"/>
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.Toolbar>
 
@@ -74,8 +75,8 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -95,7 +96,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="0dp"
-                android:background="#000"
+                android:background="@color/line_a0a1a2"
                 app:layout_constraintBottom_toBottomOf="@id/mobile_desc"
                 app:layout_constraintLeft_toRightOf="@id/mobile_desc"
                 app:layout_constraintRight_toLeftOf="@id/mobile"
@@ -115,7 +116,7 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#000"
+                android:background="@color/line_a0a1a2"
                 app:layout_constraintTop_toBottomOf="@id/mobile_desc"/>
 
             <android.support.v7.widget.AppCompatEditText
@@ -142,7 +143,7 @@
                 android:id="@+id/view1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#000"
+                android:background="@color/line_a0a1a2"
                 app:layout_constraintTop_toBottomOf="@id/verify"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -150,7 +151,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="找出下面那个最帅"
+                android:text=""
+                android:textColor="@color/color_202122"
                 app:layout_constraintTop_toBottomOf="@+id/verify"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -161,6 +163,7 @@
                 android:paddingRight="10dp"
                 android:paddingTop="10dp"
                 android:text="刷新"
+                android:textColor="@color/blue"
                 app:layout_constraintBottom_toBottomOf="@id/question"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/question"/>
@@ -168,7 +171,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="#000"
+                android:textColor="@color/blue"
                 app:layout_constraintLeft_toLeftOf="@id/refresh"
                 app:layout_constraintRight_toRightOf="@id/refresh"
                 app:layout_constraintTop_toBottomOf="@id/refresh"/>
@@ -177,6 +180,8 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 app:layout_constraintTop_toBottomOf="@+id/question"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -187,6 +192,7 @@
                 android:gravity="center_vertical"
                 android:padding="10dp"
                 android:text="密码"
+                android:textColor="@color/color_202122"
                 app:layout_constraintTop_toBottomOf="@id/recyclerView"/>
 
             <android.support.v7.widget.AppCompatEditText
@@ -205,7 +211,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="#000"
+                android:background="@color/line_a0a1a2"
                 app:layout_constraintLeft_toLeftOf="@id/pass"
                 app:layout_constraintRight_toRightOf="@id/pass"
                 app:layout_constraintTop_toBottomOf="@id/pass_desc"/>
@@ -217,6 +223,7 @@
                 android:gravity="center_vertical"
                 android:padding="10dp"
                 android:text="确认密码"
+                android:textColor="@color/color_202122"
                 app:layout_constraintTop_toBottomOf="@id/pass_desc"/>
 
             <android.support.v7.widget.AppCompatEditText
@@ -235,7 +242,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="#000"
+                android:background="@color/line_a0a1a2"
                 app:layout_constraintLeft_toLeftOf="@id/pass_again"
                 app:layout_constraintRight_toRightOf="@id/pass_again"
                 app:layout_constraintTop_toBottomOf="@id/pass_again_desc"/>
@@ -245,7 +252,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="40dp"
+                android:background="@drawable/bottom_selector"
                 android:text="完成"
+                android:textColor="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/pass_again_desc"/>
 
         </android.support.constraint.ConstraintLayout>

@@ -82,7 +82,6 @@ public class RegisterRepository {
 
                                     }
                                 });
-                        ;
                     }
                 });
             }
@@ -130,7 +129,6 @@ public class RegisterRepository {
 
                                     }
                                 });
-                        ;
                     }
                 });
             }
@@ -148,43 +146,13 @@ public class RegisterRepository {
         return new LiveData<RegisterResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.registerService.getRegister(registerInfo, new RegisterService.RegisterCallback() {
-                    @Override
-                    public void onRegisterCallback(RegisterResponse response) {
-                        Observable.fromCallable(() -> {
-
-                            RegisterResponse signinResponse = RegisterResponse.newBuilder()
-                                    .setStatus(response.getStatus())
-                                    .setAccessToken(response.getAccessToken())
-                                    .setExpiresIn(response.getExpiresIn())
-                                    .build();
-                            return signinResponse;
-                        }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<RegisterResponse>() {
-                                    @Override
-                                    public void accept(@NonNull RegisterResponse signinResponse) throws Exception {
-                                        // the uuid of the upserted record.
-                                        if (registerInfo != null) {
-                                            Log.i(TAG, gson.toJson(registerInfo));
-                                            setValue(RegisterResponse.newBuilder()
-                                                    .setAccessToken(response.getAccessToken())
-                                                    .setExpiresIn(response.getExpiresIn())
-                                                    .setStatus(response.getStatus())
-                                                    .build());
-
-                                        } else {
-                                            setValue(RegisterResponse.newBuilder()
-                                                    .setStatus(response.getStatus())
-                                                    .setAccessToken("Fail")
-                                                    .setExpiresIn("bottom")
-                                                    .build());
-                                        }
-
-                                    }
-                                });
-                        ;
-                    }
+                grpcFascade.registerService.getRegister(registerInfo, (registerResponse) -> {
+                    Observable.just(true)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe((mBooleam) -> {
+                                setValue(registerResponse);
+                            });
                 });
             }
         };

@@ -14,4 +14,9 @@
     <color name="orange">#FFA500</color>
     <color name="bg_page">#00fff9</color>
     <color name="tool_bar_bg">#f74f4f</color>
+    <color name="bottom_selected">#f74f4f</color>
+    <color name="bottom_normal">#f29494</color>
+    <color name="line_a0a1a2">#a0a1a2</color>
+    <color name="color_202122">#202122</color>
+    <color name="blue">#1690eb</color>
 </resources>

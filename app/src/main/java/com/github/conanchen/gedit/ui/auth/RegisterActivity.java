@@ -19,6 +19,7 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.grpc.auth.RegisterInfo;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
@@ -170,12 +171,25 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
-
         registerViewModel.getRegisterLiveData().observe(this, new Observer<RegisterResponse>() {
             @Override
             public void onChanged(@Nullable RegisterResponse registerResponse) {
-                registerViewModel.saveRegisterOKAccessToken(registerResponse);
-                finish();
+                if (Status.Code.OK.getNumber() == registerResponse.getStatus().getCode().getNumber()) {
+                    if ("Register".equals(TYPE)) {
+                        Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_LONG).show();
+                    } else if ("ForgetPass".equals(TYPE)) {
+                        Toast.makeText(RegisterActivity.this, "修改密码成功", Toast.LENGTH_LONG).show();
+                    }
+//                    registerViewModel.saveRegisterOKAccessToken(registerResponse);
+                    finish();
+                } else {
+                    if ("Register".equals(TYPE)) {
+                        Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_LONG).show();
+                    } else if ("ForgetPass".equals(TYPE)) {
+                        Toast.makeText(RegisterActivity.this, "修改密码失败", Toast.LENGTH_LONG).show();
+                    }
+                }
+
             }
         });
 
@@ -199,7 +213,6 @@ public class RegisterActivity extends BaseActivity {
      * @param registerInfo
      */
     private void showVerifyPicOrQuestion(RegisterInfo registerInfo) {
-        Log.i("-=-=-=", "返回token,questionTip,Question" + gson.toJson(registerInfo));
         List<Question> question = registerInfo.question;
         if (question != null && !question.isEmpty()) {
             mTvQuestionDesc.setVisibility(View.VISIBLE);
