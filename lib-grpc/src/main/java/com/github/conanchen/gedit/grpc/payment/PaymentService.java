@@ -6,15 +6,15 @@ import com.github.conanchen.gedit.common.grpc.PaymentChannel;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.CreatePayerInappPaymentRequest;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeRequest;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeResponse;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetPayeeCodeRequest;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetPayeeCodeResponse;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.PayerActiveInappApiGrpc;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.PreparePayerInappPaymentRequest;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.PreparePayerInappPaymentResponse;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.CreateInappPaymentRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.PaymentInappApiGrpc;
-import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentRequest;
-import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse;
 import com.github.conanchen.gedit.utils.JcaUtils;
 import com.github.conanchen.utils.vo.PaymentInfo;
 import com.google.gson.Gson;
@@ -43,7 +43,7 @@ public class PaymentService {
     }
 
     public interface GetPaymentCallback {
-        void onGetPaymentCallback(PrepareInappPaymentResponse response);
+        void onGetPaymentCallback(PreparePayerInappPaymentResponse response);
     }
 
 
@@ -72,8 +72,8 @@ public class PaymentService {
                 .getCallCredentials(paymentInfo.voAccessToken.accessToken,
                         Long.valueOf(paymentInfo.voAccessToken.expiresIn));
 
-        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
-        paymentInappApiStub
+        PayerActiveInappApiGrpc.PayerActiveInappApiStub payerActiveInappApiStub = PayerActiveInappApiGrpc.newStub(channel);
+        payerActiveInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .withCallCredentials(callCredentials)
                 .getMyPayeeCode(GetMyPayeeCodeRequest.newBuilder()
@@ -116,8 +116,8 @@ public class PaymentService {
                 .getCallCredentials(paymentInfo.voAccessToken.accessToken,
                         Long.valueOf(paymentInfo.voAccessToken.expiresIn));
 
-        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
-        paymentInappApiStub
+        PayerActiveInappApiGrpc.PayerActiveInappApiStub payerActiveInappApiStub = PayerActiveInappApiGrpc.newStub(channel);
+        payerActiveInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .withCallCredentials(callCredentials)
                 .getPayeeCode(GetPayeeCodeRequest.newBuilder()
@@ -159,17 +159,17 @@ public class PaymentService {
                 .getCallCredentials(paymentInfo.voAccessToken.accessToken,
                         Long.valueOf(paymentInfo.voAccessToken.expiresIn));
 
-        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
-        paymentInappApiStub
+        PayerActiveInappApiGrpc.PayerActiveInappApiStub payerActiveInappApiStub = PayerActiveInappApiGrpc.newStub(channel);
+        payerActiveInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .withCallCredentials(callCredentials)
-                .prepare(PrepareInappPaymentRequest.newBuilder()
+                .prepare(PreparePayerInappPaymentRequest.newBuilder()
                         .setPayeeCode(paymentInfo.payeeCode)
                         .setIsPointsPay(paymentInfo.isPointsPay)
                         .setShouldPay(paymentInfo.shouldPay)
-                        .build(), new StreamObserver<PrepareInappPaymentResponse>() {
+                        .build(), new StreamObserver<PreparePayerInappPaymentResponse>() {
                     @Override
-                    public void onNext(PrepareInappPaymentResponse value) {
+                    public void onNext(PreparePayerInappPaymentResponse value) {
                         Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
                         callback.onGetPaymentCallback(value);
                     }
@@ -177,7 +177,7 @@ public class PaymentService {
                     @Override
                     public void onError(Throwable t) {
                         Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
-                        callback.onGetPaymentCallback(PrepareInappPaymentResponse.newBuilder()
+                        callback.onGetPaymentCallback(PreparePayerInappPaymentResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode(Status.Code.UNKNOWN)
                                         .setDetails("enter onError() method"))
@@ -202,9 +202,9 @@ public class PaymentService {
                 .getCallCredentials(paymentInfo.voAccessToken.accessToken,
                         Long.valueOf(paymentInfo.voAccessToken.expiresIn));
 
-        CreateInappPaymentRequest createPaymentRequest = null;
+        CreatePayerInappPaymentRequest createPaymentRequest = null;
         if ("1".equals(paymentInfo.paymentChannelName)) {
-            createPaymentRequest = CreateInappPaymentRequest.newBuilder()
+            createPaymentRequest = CreatePayerInappPaymentRequest.newBuilder()
                     .setActualPay(paymentInfo.actualPay)
                     .setPaymentChannel(PaymentChannel.ALIPAY)
                     .setPointsPay(paymentInfo.pointsPay)
@@ -213,7 +213,7 @@ public class PaymentService {
                     .setPayerIp(paymentInfo.payerIp)
                     .build();
         } else if ("2".equals(paymentInfo.paymentChannelName)) {
-            createPaymentRequest = CreateInappPaymentRequest.newBuilder()
+            createPaymentRequest = CreatePayerInappPaymentRequest.newBuilder()
                     .setActualPay(paymentInfo.actualPay)
                     .setPaymentChannel(PaymentChannel.WECHAT)
                     .setPointsPay(paymentInfo.pointsPay)
@@ -224,8 +224,8 @@ public class PaymentService {
         }
 
         ManagedChannel channel = getManagedChannel();
-        PaymentInappApiGrpc.PaymentInappApiStub paymentInappApiStub = PaymentInappApiGrpc.newStub(channel);
-        paymentInappApiStub
+        PayerActiveInappApiGrpc.PayerActiveInappApiStub payerActiveInappApiStub = PayerActiveInappApiGrpc.newStub(channel);
+        payerActiveInappApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .withCallCredentials(callCredentials)
                 .create(createPaymentRequest, new StreamObserver<PaymentResponse>() {

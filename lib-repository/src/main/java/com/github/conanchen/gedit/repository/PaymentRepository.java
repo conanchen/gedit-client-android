@@ -6,12 +6,12 @@ import android.support.annotation.NonNull;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.payment.PaymentService;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeResponse;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetPayeeCodeResponse;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.PayeeCode;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.PreparePayerInappPaymentResponse;
 import com.github.conanchen.gedit.payment.common.grpc.Payment;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.PayeeCode;
-import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.utils.vo.PaymentInfo;
 import com.google.gson.Gson;
@@ -164,50 +164,18 @@ public class PaymentRepository {
      *
      * @return
      */
-    public LiveData<PrepareInappPaymentResponse> getPayment(PaymentInfo paymentInfo) {
-        return new LiveData<PrepareInappPaymentResponse>() {
+    public LiveData<PreparePayerInappPaymentResponse> getPayment(PaymentInfo paymentInfo) {
+        return new LiveData<PreparePayerInappPaymentResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.paymentService.getPayment(paymentInfo, new PaymentService.GetPaymentCallback() {
-                    @Override
-                    public void onGetPaymentCallback(PrepareInappPaymentResponse response) {
-                        Observable.fromCallable(() -> {
-                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
-                                return response;
-                            } else {
-                                PrepareInappPaymentResponse prepareMyPaymentResponse = PrepareInappPaymentResponse.newBuilder()
-                                        .setPreparePayment(response.getPreparePayment())
-                                        .setStatus(response.getStatus())
-                                        .build();
-                                return prepareMyPaymentResponse;
-                            }
-                        }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<PrepareInappPaymentResponse>() {
-                                    @Override
-                                    public void accept(@NonNull PrepareInappPaymentResponse getReceiptCodeResponse) throws Exception {
-                                        if (Status.Code.OK.getNumber() == getReceiptCodeResponse.getStatus().getCode().getNumber()) {
-                                            setValue(PrepareInappPaymentResponse.newBuilder()
-                                                    .setPreparePayment(getReceiptCodeResponse.getPreparePayment())
-                                                    .setStatus(Status.newBuilder()
-                                                            .setCode(getReceiptCodeResponse.getStatus().getCode())
-                                                            .setDetails("prepare successfully")
-                                                            .build())
-                                                    .build());
-                                        } else {
-                                            setValue(PrepareInappPaymentResponse.newBuilder()
-                                                    .setPreparePayment(getReceiptCodeResponse.getPreparePayment())
-                                                    .setStatus(Status.newBuilder()
-                                                            .setCode(getReceiptCodeResponse.getStatus().getCode())
-                                                            .setDetails(getReceiptCodeResponse.getStatus().getDetails())
-                                                            .build())
-                                                    .build());
-                                        }
-                                    }
-                                });
-                        ;
-                    }
-                });
+                Observable.just(true)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe((mBoolean) -> {
+                            grpcFascade.paymentService.getPayment(paymentInfo, response -> {
+                                setValue(response);
+                            });
+                        });
             }
         };
     }

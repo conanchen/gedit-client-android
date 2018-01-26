@@ -6,7 +6,7 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeResponse;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeResponse;
 import com.github.conanchen.gedit.repository.PaymentRepository;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.utils.vo.PaymentInfo;

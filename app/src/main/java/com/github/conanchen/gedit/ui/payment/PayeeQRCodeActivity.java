@@ -14,7 +14,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.di.common.BaseActivity;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetMyPayeeCodeResponse;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeResponse;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.utils.vo.PaymentInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;

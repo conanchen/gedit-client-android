@@ -22,9 +22,9 @@ import com.blankj.utilcode.util.NetworkUtils;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.common.grpc.PaymentChannel;
 import com.github.conanchen.gedit.di.common.BaseActivity;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetPayeeCodeResponse;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.PreparePayerInappPaymentResponse;
 import com.github.conanchen.gedit.payment.common.grpc.PaymentResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.GetPayeeCodeResponse;
-import com.github.conanchen.gedit.payment.inapp.grpc.PrepareInappPaymentResponse;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.util.pay.AliPayUtil;
 import com.github.conanchen.gedit.util.pay.PayResultCallBack;
@@ -168,9 +168,9 @@ public class PointsPayActivity extends BaseActivity {
         });
 
 
-        pointsPayViewModel.getPaymentLiveData().observe(this, new Observer<PrepareInappPaymentResponse>() {
+        pointsPayViewModel.getPaymentLiveData().observe(this, new Observer<PreparePayerInappPaymentResponse>() {
             @Override
-            public void onChanged(@Nullable PrepareInappPaymentResponse prepareMyPaymentResponse) {
+            public void onChanged(@Nullable PreparePayerInappPaymentResponse prepareMyPaymentResponse) {
                 Log.i("-=-=-=-=-=Prepare", gson.toJson(prepareMyPaymentResponse));
                 if (prepareMyPaymentResponse != null) {
                     // TODO: 2018/1/23 处理返还积分的

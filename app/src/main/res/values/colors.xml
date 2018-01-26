@@ -13,4 +13,5 @@
     <color name="scan_corner_color">#0effc2</color>
     <color name="orange">#FFA500</color>
     <color name="bg_page">#00fff9</color>
+    <color name="tool_bar_bg">#f74f4f</color>
 </resources>
