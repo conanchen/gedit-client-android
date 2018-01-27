@@ -11,7 +11,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -152,11 +151,16 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onChanged(@Nullable RegisterInfo registerInfo) {
-                mTvQuestionDesc.setText("registerInfo" + gson.toJson(registerInfo));
-                token = registerInfo.token;
-                mTvQuestionDesc.setText(Strings.isNullOrEmpty(registerInfo.questionTip) ? "找图片" : registerInfo.questionTip);
-                //获取验证数据成功
-                showVerifyPicOrQuestion(registerInfo);
+                if (Status.Code.OK == registerInfo.status.getCode()) {
+                    mTvQuestionDesc.setText("registerInfo" + gson.toJson(registerInfo));
+                    token = registerInfo.token;
+                    mTvQuestionDesc.setText(Strings.isNullOrEmpty(registerInfo.questionTip) ? "找图片" : registerInfo.questionTip);
+                    //获取验证数据成功
+                    showVerifyPicOrQuestion(registerInfo);
+                } else {
+                    Toast.makeText(RegisterActivity.this, registerInfo.status.getDetails(), Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });

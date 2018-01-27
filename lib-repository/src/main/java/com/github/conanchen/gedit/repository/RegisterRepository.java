@@ -1,8 +1,6 @@
 package com.github.conanchen.gedit.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
@@ -15,11 +13,6 @@ import com.github.conanchen.gedit.user.auth.grpc.SmsStep2AnswerResponse;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/1/13.
@@ -52,36 +45,25 @@ public class RegisterRepository {
                 grpcFascade.registerService.getVerify(registerInfo, new RegisterService.RegisterVerifyCallback() {
                     @Override
                     public void onRegisterVerifyResponse(SmsStep1QuestionResponse response) {
-                        Observable.fromCallable(() -> {
-                            RegisterInfo register = RegisterInfo.builder()
-                                    .setToken(response.getToken())
-                                    .setQuestionTip(response.getQuestionTip())
-                                    .setQuestion(response.getQuestionList())
-                                    .build();
-                            return register;
-                        }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<RegisterInfo>() {
-                                    @Override
-                                    public void accept(@NonNull RegisterInfo registerInfo) throws Exception {
-                                        // the uuid of the upserted record.
-                                        if (registerInfo != null) {
-                                            Log.i(TAG, gson.toJson(registerInfo));
-                                            setValue(RegisterInfo.builder()
-                                                    .setToken(response.getToken())
-                                                    .setQuestionTip(response.getQuestionTip())
-                                                    .setQuestion(response.getQuestionList())
-                                                    .build());
-                                        } else {
-                                            setValue(RegisterInfo.builder()
-                                                    .setToken(response.getToken())
-                                                    .setQuestionTip(response.getQuestionTip())
-                                                    .setQuestion(response.getQuestionList())
-                                                    .build());
-                                        }
+                        RegisterInfo register = RegisterInfo.builder()
+                                .setToken(response.getToken())
+                                .setQuestionTip(response.getQuestionTip())
+                                .setQuestion(response.getQuestionList())
+                                .build();
+                        setValue(register);
+                    }
 
-                                    }
-                                });
+                    @Override
+                    public void onGrpcApiError(Status status) {
+                        RegisterInfo register = RegisterInfo.builder()
+                                .setStatus(status)
+                                .build();
+                        setValue(register);
+                    }
+
+                    @Override
+                    public void onGrpcApiCompleted() {
+
                     }
                 });
             }
@@ -101,34 +83,23 @@ public class RegisterRepository {
                 grpcFascade.registerService.getMsm(registerInfo, new RegisterService.RegisterSmsCallback() {
                     @Override
                     public void onRegisterSmsCallback(SmsStep2AnswerResponse response) {
-                        Observable.fromCallable(() -> {
-                            SmsStep2AnswerResponse smsStep2AnswerResponse = SmsStep2AnswerResponse.newBuilder()
-                                    .setStatus(Status.newBuilder()
-                                            .setCode(response.getStatus().getCode())
-                                            .setDetails(response.getStatus().getDetails())
-                                            .build())
-                                    .build();
-                            return smsStep2AnswerResponse;
-                        }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<SmsStep2AnswerResponse>() {
-                                    @Override
-                                    public void accept(@NonNull SmsStep2AnswerResponse smsStep2AnswerResponse) throws Exception {
-                                        // the uuid of the upserted record.
-                                        if (registerInfo != null) {
-                                            Log.i(TAG, gson.toJson(registerInfo));
-                                            setValue(SmsStep2AnswerResponse.newBuilder()
-                                                    .setStatus(response.getStatus())
-                                                    .build());
+                        SmsStep2AnswerResponse smsStep2AnswerResponse = SmsStep2AnswerResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode(response.getStatus().getCode())
+                                        .setDetails(response.getStatus().getDetails())
+                                        .build())
+                                .build();
+                        setValue(smsStep2AnswerResponse);
+                    }
 
-                                        } else {
-                                            setValue(SmsStep2AnswerResponse.newBuilder()
-                                                    .setStatus(response.getStatus())
-                                                    .build());
-                                        }
+                    @Override
+                    public void onGrpcApiError(Status status) {
 
-                                    }
-                                });
+                    }
+
+                    @Override
+                    public void onGrpcApiCompleted() {
+
                     }
                 });
             }
@@ -147,12 +118,8 @@ public class RegisterRepository {
             @Override
             protected void onActive() {
                 grpcFascade.registerService.getRegister(registerInfo, (registerResponse) -> {
-                    Observable.just(true)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe((mBooleam) -> {
-                                setValue(registerResponse);
-                            });
+                    setValue(registerResponse);
+
                 });
             }
         };

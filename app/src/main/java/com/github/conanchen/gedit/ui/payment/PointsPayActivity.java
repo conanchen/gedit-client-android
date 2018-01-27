@@ -256,6 +256,8 @@ public class PointsPayActivity extends BaseActivity {
 //                "      \"sign\" : \"2ED96C63F890B182968E4A8E74E021CB\",\n" +
 //                "      \"timestamp\" : \"1516849213\"\n" +
 //                "    }\n";//订单号
+
+
         WxPay.init(PointsPayActivity.this);
         WxPay.getInstance().doPay(signStr, new WxPay.WXPayResultCallBack() {
             @Override

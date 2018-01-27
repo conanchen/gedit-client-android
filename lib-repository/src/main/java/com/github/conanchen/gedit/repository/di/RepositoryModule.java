@@ -7,6 +7,7 @@ import com.github.conanchen.gedit.repository.AccountingRepository;
 import com.github.conanchen.gedit.repository.HelloRepository;
 import com.github.conanchen.gedit.repository.MyIntroducedStoreRepository;
 import com.github.conanchen.gedit.repository.MyStoreRepository;
+import com.github.conanchen.gedit.repository.MySummaryRepository;
 import com.github.conanchen.gedit.repository.MyWorkinStoreRepository;
 import com.github.conanchen.gedit.repository.RegisterRepository;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
@@ -42,7 +43,8 @@ public class RepositoryModule {
             KeyValueRepository keyValueRepository,
             RegisterRepository registerRepository,
             AccountingRepository accountingRepository,
-            StoreWorkerRepository storeWorkerRepository
+            StoreWorkerRepository storeWorkerRepository,
+            MySummaryRepository mySummaryRepository
     ) {
         return new RepositoryFascade(
                 helloRepository,
@@ -52,7 +54,8 @@ public class RepositoryModule {
                 keyValueRepository,
                 registerRepository,
                 accountingRepository,
-                storeWorkerRepository);
+                storeWorkerRepository,
+                mySummaryRepository);
     }
 
 
@@ -69,7 +72,6 @@ public class RepositoryModule {
             RoomFascade roomFascade, GrpcFascade grpcFascade) {
         return new StoreProfileRepository(roomFascade, grpcFascade);
     }
-
 
 
     @Singleton
@@ -94,7 +96,6 @@ public class RepositoryModule {
             RoomFascade roomFascade, GrpcFascade grpcFascade) {
         return new MyWorkinStoreRepository(roomFascade, grpcFascade);
     }
-
 
 
     @Singleton
@@ -129,12 +130,19 @@ public class RepositoryModule {
     }
 
 
-
     @Singleton
     @Provides
     public StoreWorkerRepository provideStoreWorkerRepository(
             RoomFascade roomFascade, GrpcFascade grpcFascade) {
         return new StoreWorkerRepository(roomFascade, grpcFascade);
+    }
+
+
+    @Singleton
+    @Provides
+    public MySummaryRepository provideMySummaryRepository(
+            RoomFascade roomFascade, GrpcFascade grpcFascade) {
+        return new MySummaryRepository(roomFascade, grpcFascade);
     }
 
 

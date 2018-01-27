@@ -1,8 +1,7 @@
 package com.github.conanchen.gedit.grpc.auth;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.user.auth.grpc.Question;
-
-import org.json.JSONArray;
 
 import java.util.List;
 
@@ -18,8 +17,10 @@ public class RegisterInfo {
     public String questionTip;
     public List<Question> question;
     public String password;
+    public Status status;
 
-    public RegisterInfo(String token, String mobile, String smscode, String questionUuid, String questionTip, List<Question> question, String password) {
+    public RegisterInfo(String token, String mobile, String smscode, String questionUuid, String questionTip, List<Question> question,
+                        String password, Status status) {
         this.token = token;
         this.mobile = mobile;
         this.smscode = smscode;
@@ -27,6 +28,7 @@ public class RegisterInfo {
         this.questionTip = questionTip;
         this.question = question;
         this.password = password;
+        this.status = status;
     }
 
     public static RegisterInfo.Builder builder() {
@@ -41,12 +43,13 @@ public class RegisterInfo {
         private String questionTip;
         private List<Question> question;
         private String password;
+        private Status status;
 
         public Builder() {
         }
 
         public RegisterInfo build() {
-            return new RegisterInfo(token, mobile, smscode, questionUuid, questionTip, question, password);
+            return new RegisterInfo(token, mobile, smscode, questionUuid, questionTip, question, password, status);
         }
 
         public Builder setToken(String token) {
@@ -81,6 +84,11 @@ public class RegisterInfo {
 
         public Builder setPassword(String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder setStatus(Status status) {
+            this.status = status;
             return this;
         }
     }

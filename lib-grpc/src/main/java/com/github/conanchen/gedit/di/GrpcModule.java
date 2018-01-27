@@ -1,12 +1,13 @@
 package com.github.conanchen.gedit.di;
 
 
-import com.github.conanchen.gedit.grpc.accounting.PostingService;
-import com.github.conanchen.gedit.grpc.fan.MyFansService;
 import com.github.conanchen.gedit.grpc.accounting.AccountService;
-import com.github.conanchen.gedit.grpc.hello.HelloService;
+import com.github.conanchen.gedit.grpc.accounting.PostingService;
+import com.github.conanchen.gedit.grpc.auth.MySummaryService;
 import com.github.conanchen.gedit.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.grpc.auth.SigninService;
+import com.github.conanchen.gedit.grpc.fan.MyFansService;
+import com.github.conanchen.gedit.grpc.hello.HelloService;
 import com.github.conanchen.gedit.grpc.payment.PaymentService;
 import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.grpc.store.MyMemberStoreService;
@@ -44,7 +45,8 @@ public class GrpcModule {
             AccountService accountService,
             PostingService postingService,
             PaymentService paymentService,
-            StoreWorkerService storeWorkerService
+            StoreWorkerService storeWorkerService,
+            MySummaryService mySummaryService
 
     ) {
         return new GrpcFascade(
@@ -61,7 +63,8 @@ public class GrpcModule {
                 accountService,
                 postingService,
                 paymentService,
-                storeWorkerService);
+                storeWorkerService,
+                mySummaryService);
     }
 
     @Singleton
@@ -147,5 +150,11 @@ public class GrpcModule {
     @Provides
     public StoreWorkerService provideStoreWorkerService() {
         return new StoreWorkerService();
+    }
+
+    @Singleton
+    @Provides
+    public MySummaryService provideMySummaryService() {
+        return new MySummaryService();
     }
 }

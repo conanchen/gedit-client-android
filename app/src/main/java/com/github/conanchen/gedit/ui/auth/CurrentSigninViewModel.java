@@ -4,14 +4,17 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
+import com.github.conanchen.gedit.user.profile.grpc.UserProfile;
+import com.github.conanchen.gedit.user.profile.grpc.UserProfileResponse;
 import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoUserProfile;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
-import io.grpc.Status;
 import io.reactivex.MaybeObserver;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -123,7 +126,6 @@ public class CurrentSigninViewModel extends ViewModel {
                             public void onSuccess(String payeeStoreUuid) {
                                 //found payeeStoreUuid
                                 Log.i(TAG, "onSuccess  Working Store ");
-
                                 postValue(payeeStoreUuid);
                             }
 
@@ -143,6 +145,69 @@ public class CurrentSigninViewModel extends ViewModel {
                         });
             }
 
+        };
+    }
+
+
+    public LiveData<UserProfileResponse> getMyProfile() {
+        return new LiveData<UserProfileResponse>() {
+            @Override
+            protected void onActive() {
+                repositoryFascade.keyValueRepository
+                        .findMaybe(KeyValue.KEY.USER_CURRENT_USER_PROFILE)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .map(keyValue -> keyValue.value.voUserProfile)
+                        .subscribe(new MaybeObserver<VoUserProfile>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                Log.i(TAG, "onSubscribe");
+                            }
+
+                            @Override
+                            public void onSuccess(VoUserProfile voUserProfile) {
+                                Log.i(TAG, "onSuccess  userProfile ");
+                                UserProfileResponse userProfileResponse = UserProfileResponse.newBuilder()
+                                        .setStatus(Status.newBuilder()
+                                                .setCode(Status.Code.OK)
+                                                .setDetails("get userprofile successful")
+                                                .build())
+                                        .setUserProfile(UserProfile.newBuilder()
+                                                .setUuid(voUserProfile.uuid)
+                                                .setName(voUserProfile.name)
+                                                .setMobile(voUserProfile.mobile)
+                                                .setLogo(voUserProfile.logo)
+                                                .setDesc(voUserProfile.desc)
+                                                .setDistrictId(voUserProfile.districtId))
+                                        .build();
+                                postValue(userProfileResponse);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.i(TAG, String.format("onError Throwable=%s", e.getMessage()));
+                                UserProfileResponse userProfileResponse = UserProfileResponse.newBuilder()
+                                        .setStatus(Status.newBuilder()
+                                                .setCode(Status.Code.UNKNOWN)
+                                                .setDetails("error,not get profile!")
+                                                .build())
+                                        .build();
+                                postValue(userProfileResponse);
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                UserProfileResponse userProfileResponse = UserProfileResponse.newBuilder()
+                                        .setStatus(com.github.conanchen.gedit.common.grpc.Status.newBuilder()
+                                                .setCode(Status.Code.UNKNOWN)
+                                                .setDetails("error,not get profile!")
+                                                .build())
+                                        .build();
+                                postValue(userProfileResponse);
+                            }
+                        });
+
+            }
         };
     }
 
