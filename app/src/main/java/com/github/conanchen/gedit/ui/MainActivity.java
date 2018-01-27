@@ -69,6 +69,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
     private List<Fragment> viewPagerList = new ArrayList<>();//装viewPager中的Fragment
     private MainViewPagerAdapter mainViewPagerAdapter; //ViewPager的适配器
+    private boolean isLogin = false;//是否已经登录
 
     private CustomPopWindow popWindow;
 
@@ -95,11 +96,14 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
             if (Status.Code.OK == signinResponse.getStatus().getCode()) {
+                isLogin = true;
                 VoAccessToken voAccessToken = VoAccessToken.builder()
                         .setAccessToken(signinResponse.getAccessToken())
                         .setExpiresIn(signinResponse.getExpiresIn())
                         .build();
                 mainViewModel.getMyCurrentWorkinStore(voAccessToken);
+            } else {
+                isLogin = false;
             }
         });
 
@@ -200,11 +204,20 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
             //扫一扫
             startScan();
         } else if (position == 1) {
-            //收款界面
-            ARouter.getInstance().build("/app/PayeeQRCodeActivity").navigation();
+            if (isLogin) {
+                //收款界面
+                ARouter.getInstance().build("/app/PayeeQRCodeActivity").navigation();
+            }else{
+                ARouter.getInstance().build("/app/LoginActivity").navigation();
+            }
+
         } else {
-            //录单
-            ARouter.getInstance().build("/app/BuyInvestPaymentActivity").navigation();
+            if (isLogin) {
+                //录单
+                ARouter.getInstance().build("/app/BuyInvestPaymentActivity").navigation();
+            }else{
+                ARouter.getInstance().build("/app/LoginActivity").navigation();
+            }
         }
     }
 

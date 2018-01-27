@@ -175,11 +175,11 @@ public class CurrentSigninViewModel extends ViewModel {
                                                 .build())
                                         .setUserProfile(UserProfile.newBuilder()
                                                 .setUuid(voUserProfile.uuid)
-                                                .setName(voUserProfile.name)
+                                                .setUsername(voUserProfile.name)
                                                 .setMobile(voUserProfile.mobile)
                                                 .setLogo(voUserProfile.logo)
                                                 .setDesc(voUserProfile.desc)
-                                                .setDistrictId(voUserProfile.districtId))
+                                                .setDistrictUuid(voUserProfile.districtId))
                                         .build();
                                 postValue(userProfileResponse);
                             }

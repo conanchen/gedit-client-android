@@ -8,7 +8,6 @@ import android.support.annotation.VisibleForTesting;
 
 import com.github.conanchen.gedit.repository.MyWorkinStoreRepository;
 import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
-import com.github.conanchen.gedit.user.profile.grpc.UserProfileResponse;
 import com.github.conanchen.gedit.util.AbsentLiveData;
 import com.github.conanchen.utils.vo.VoAccessToken;
 

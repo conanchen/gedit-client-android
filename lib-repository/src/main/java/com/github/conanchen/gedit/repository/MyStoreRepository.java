@@ -4,11 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.google.gson.Gson;
 
@@ -49,17 +49,21 @@ public class MyStoreRepository {
 
 
     public LiveData<PagedList<MyStore>> loadMyStores(StoreCreateInfo storeCreateInfo) {
-        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.myStoreService.loadMyStores(storeCreateInfo, response -> {
-                MyStore myStore = MyStore.builder()
-                        .setStoreUuid(response.getOwnership().getStoreUuid())
-                        .setLat(response.getOwnership().getLocation().getLat())
-                        .setLon(response.getOwnership().getLocation().getLon())
-                        .setStoreLogo(response.getOwnership().getStoreLogo())
-                        .setStoreName(response.getOwnership().getStoreName())
-                        .build();
-                roomFascade.daoMyStore.save(myStore);
-            });
+
+        grpcFascade.myStoreService.loadMyStores(storeCreateInfo, response -> {
+            if (Status.Code.OK == response.getStatus().getCode()) {
+                Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+                    MyStore myStore = MyStore.builder()
+                            .setStoreUuid(response.getOwnership().getStoreUuid())
+                            .setLat(response.getOwnership().getLocation().getLat())
+                            .setLon(response.getOwnership().getLocation().getLon())
+                            .setStoreLogo(response.getOwnership().getStoreLogo())
+                            .setStoreName(response.getOwnership().getStoreName())
+                            .setLastUpdated(System.currentTimeMillis())
+                            .build();
+                    roomFascade.daoMyStore.save(myStore);
+                });
+            }
         });
 
         return (new LivePagedListBuilder(roomFascade.daoMyStore.listLivePagedMyStore(), pagedListConfig))

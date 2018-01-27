@@ -11,6 +11,7 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.store.StoreProfileService;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
@@ -121,25 +122,15 @@ public class StoreProfileRepository {
                     @Override
                     public void onStoreCreateResponse(CreateStoreResponse createResponse) {
                         Observable.fromCallable(() -> {
-                            Log.i(TAG, String.format("CreateStoreResponse: %s", createResponse.getStatus()));
-                            if (Status.Code.OK.getNumber() == createResponse.getStatus().getCode().getNumber()) {
-                                Store s = Store.builder()
-                                        .setUuid(createResponse.getUuid())
-                                        .setName(storeCreateInfo.name)
-                                        .setDistrictUuid(storeCreateInfo.districtUuid)
-                                        .setAddress(storeCreateInfo.address)
+                            if (Status.Code.OK == createResponse.getStatus().getCode()) {
+                                MyStore s = MyStore.builder()
+                                        .setStoreUuid(createResponse.getUuid())
+                                        .setStoreName(storeCreateInfo.name)
+                                        .setLastUpdated(System.currentTimeMillis())
                                         .build();
-                                return roomFascade.daoStore.save(s);
+                                return roomFascade.daoMyStore.save(s);
                             } else {
-                                Store s = Store.builder()
-                                        .setUuid("uuid" + System.currentTimeMillis())
-                                        .setName("name" + System.currentTimeMillis())
-                                        .setDistrictUuid("districtUuid" + System.currentTimeMillis())
-                                        .setAddress("address" + System.currentTimeMillis())
-                                        .build();
-                                Log.i(TAG, "添加假数据");
-                                return roomFascade.daoStore.save(s);
-//                                return new Long(-1);
+                                return new Long(-1);
                             }
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -149,24 +140,22 @@ public class StoreProfileRepository {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
                                             setValue(CreateStoreResponse.newBuilder()
+                                                    .setName(storeCreateInfo.name)
+                                                    .setUuid(createResponse.getUuid())
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(Status.Code.OK)
                                                             .setDetails("Create Store successfully")
                                                             .build())
-                                                    .setUuid("set jia shu ju uuid")
                                                     .build());
                                         } else {
                                             setValue(CreateStoreResponse.newBuilder()
-                                                    .setStatus(Status.newBuilder()
-                                                            .setCode(Status.Code.UNKNOWN)
-                                                            .setDetails("Create Store Fail")
-                                                            .build())
-                                                    .setUuid("set jia shu ju uuid")
+                                                    .setName(storeCreateInfo.name)
+                                                    .setUuid(createResponse.getUuid())
+                                                    .setStatus(createResponse.getStatus())
                                                     .build());
                                         }
                                     }
                                 });
-                        ;
                     }
                 });
             }

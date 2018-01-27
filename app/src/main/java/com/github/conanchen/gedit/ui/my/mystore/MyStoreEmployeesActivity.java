@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.common.grpc.Status;
@@ -23,6 +24,7 @@ import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.room.store.StoreWorker;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
+import com.github.conanchen.utils.vo.PaymentInfo;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
@@ -64,6 +66,9 @@ public class MyStoreEmployeesActivity extends BaseActivity {
     RecyclerView recyclerView;
     private MyStoreEmployeesAdapter mAdapter;
 
+    @Autowired
+    String storeUuid;
+
     /**
      * 扫描跳转Activity RequestCode
      */
@@ -103,15 +108,22 @@ public class MyStoreEmployeesActivity extends BaseActivity {
 
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
+            if (Status.Code.OK == signinResponse.getStatus().getCode()) {
                 isLogin = true;
                 voAccessToken = VoAccessToken.builder()
                         .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())
                         .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())
                         .build();
 
-                myStoreEmployeesViewModel.getAllEmployees(voAccessToken);
-
+                currentSigninViewModel.getMyProfile().observe(this, userProfileResponse -> {
+                    if (Status.Code.OK == userProfileResponse.getStatus().getCode()) {
+                        PaymentInfo paymentInfo = PaymentInfo.builder()
+                                .setPayeeWorkerUuid(userProfileResponse.getUserProfile().getUuid())
+                                .setVoAccessToken(voAccessToken)
+                                .build();
+                        myStoreEmployeesViewModel.getAllEmployees(paymentInfo);
+                    }
+                });
             } else {
                 isLogin = false;
             }
@@ -119,8 +131,8 @@ public class MyStoreEmployeesActivity extends BaseActivity {
 
 
         myStoreEmployeesViewModel.getAddWorkerLiveData().observe(this, workshipResponse -> {
-            if (workshipResponse != null) {
-                Log.i("-=-=-=-", gson.toJson(workshipResponse));
+            if (Status.Code.OK == workshipResponse.getStatus().getCode()) {
+                Log.i("-=-=-=--------------", gson.toJson(workshipResponse));
             }
         });
 

@@ -9,8 +9,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alipay.sdk.app.PayTask;
+import com.google.gson.Gson;
 
 import java.util.Map;
 
@@ -81,7 +83,6 @@ public class AliPayUtil {
 
     }
 
-
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -94,6 +95,7 @@ public class AliPayUtil {
                         Looper.loop();
                         return;
                     }
+
                     String resultStatus = msg.getData().getString("resultStatus");
                     String orderInfo = msg.getData().getString("orderInfo");
 
