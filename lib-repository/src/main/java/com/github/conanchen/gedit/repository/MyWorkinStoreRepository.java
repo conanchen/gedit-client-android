@@ -1,22 +1,24 @@
 package com.github.conanchen.gedit.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.paging.LivePagedListBuilder;
-import android.arch.paging.PagedList;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
+import com.github.conanchen.gedit.grpc.store.MyWorkinStoreService;
 import com.github.conanchen.gedit.room.RoomFascade;
-import com.github.conanchen.gedit.room.my.store.MyStore;
-import com.github.conanchen.gedit.room.store.Store;
-import com.github.conanchen.utils.vo.StoreCreateInfo;
+import com.github.conanchen.gedit.room.kv.KeyValue;
+import com.github.conanchen.gedit.room.kv.Value;
+import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
+import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoWorkingStore;
 import com.google.gson.Gson;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -37,31 +39,57 @@ public class MyWorkinStoreRepository {
     }
 
 
-    public LiveData<List<Store>> createTime(Long time) {
-        return roomFascade.daoStore.getLiveStores(100);
+    /**
+     * 获取工作商铺的详情
+     * @param voAccessToken
+     * @return
+     */
+    public LiveData<WorkshipResponse> getMyCurrentWorkinStore(VoAccessToken voAccessToken) {
+        return new LiveData<WorkshipResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.myWorkinStoreService.getMyCurrentWorkinStore(voAccessToken, new MyWorkinStoreService.WorkingStoreCallBack() {
+                    @Override
+                    public void onWorkingStoreCallBack(WorkshipResponse workshipResponse) {
+                        Observable.fromCallable(() -> {
+                            if (Status.Code.OK == workshipResponse.getStatus().getCode()) {
+                                KeyValue keyValue = KeyValue.builder()
+                                        .setKey(KeyValue.KEY.USER_CURRENT_WORKING_STORE)
+                                        .setValue(Value.builder()
+                                                .setVoWorkingStore(VoWorkingStore.builder()
+                                                        .setStoreUuid(workshipResponse.getOwnership().getStoreUuid())
+                                                        .build())
+                                                .build())
+                                        .build();
+                                return roomFascade.daoKeyValue.save(keyValue);
+                            } else {
+                                return new Long(-1);
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<Long>() {
+                                    @Override
+                                    public void accept(Long id) throws Exception {
+                                        setValue(WorkshipResponse.newBuilder()
+                                                .setOwnership(workshipResponse.getOwnership())
+                                                .setStatus(workshipResponse.getStatus())
+                                                .build());
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onGrpcApiError(Status status) {
+
+                    }
+
+                    @Override
+                    public void onGrpcApiCompleted() {
+
+                    }
+                });
+            }
+        };
     }
 
-    private static final PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
-            .setEnablePlaceholders(true)
-            .setPrefetchDistance(10)
-            .setPageSize(20).build();
-
-
-    public LiveData<PagedList<MyStore>> loadMyStores(Long times) {
-        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.myStoreService.loadMyStores(StoreCreateInfo.builder().build(), response -> {
-                MyStore myStore = MyStore.builder()
-                        .setStoreUuid(response.getOwnership().getStoreUuid())
-                        .setLat(response.getOwnership().getLocation().getLat())
-                        .setLon(response.getOwnership().getLocation().getLon())
-                        .setStoreLogo(response.getOwnership().getStoreLogo())
-                        .setStoreName(response.getOwnership().getStoreName())
-                        .build();
-                 roomFascade.daoMyStore.save(myStore);
-            });
-        });
-
-        return (new LivePagedListBuilder(roomFascade.daoMyStore.listLivePagedMyStore(), pagedListConfig))
-                .build();
-    }
 }

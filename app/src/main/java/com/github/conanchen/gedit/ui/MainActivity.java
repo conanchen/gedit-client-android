@@ -3,6 +3,7 @@ package com.github.conanchen.gedit.ui;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
@@ -10,9 +11,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,12 +23,15 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseFragmentActivity;
+import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
 import com.github.conanchen.gedit.ui.store.StoreListFragment;
 import com.github.conanchen.gedit.util.CustomPopWindow;
+import com.github.conanchen.utils.vo.VoAccessToken;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
@@ -51,6 +57,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     CurrentSigninViewModel currentSigninViewModel;
+    MainViewModel mainViewModel;
 
 
     @BindView(R.id.viewPager)
@@ -85,6 +92,26 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
 
     private void setupViewModel() {
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
+        mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
+        currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+            if (Status.Code.OK == signinResponse.getStatus().getCode()) {
+                VoAccessToken voAccessToken = VoAccessToken.builder()
+                        .setAccessToken(signinResponse.getAccessToken())
+                        .setExpiresIn(signinResponse.getExpiresIn())
+                        .build();
+                mainViewModel.getMyCurrentWorkinStore(voAccessToken);
+            }
+        });
+
+        mainViewModel.getMyWorkingStoreLiveData().observe(this, new Observer<WorkshipResponse>() {
+            @Override
+            public void onChanged(@Nullable WorkshipResponse workshipResponse) {
+                if (Status.Code.OK == workshipResponse.getStatus().getCode()) {
+                    //这里是获取我工作商铺的详情（storeUuid），获取到了之后只是做了保存，所以这几行代码没卵用可以删掉
+                    Log.i("-=-=-=-", "获取我工作商铺的信息  uuid保存了");
+                }
+            }
+        });
     }
 
 

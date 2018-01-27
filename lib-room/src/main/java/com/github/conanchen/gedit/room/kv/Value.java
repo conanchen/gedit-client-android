@@ -2,6 +2,7 @@ package com.github.conanchen.gedit.room.kv;
 
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.github.conanchen.utils.vo.VoUserProfile;
+import com.github.conanchen.utils.vo.VoWorkingStore;
 
 /**
  * Created by admin on 2017/7/20.
@@ -11,7 +12,7 @@ public class Value {
 
     public VoAccessToken voAccessToken;
 
-    public String payeeStoreUuid;
+    public VoWorkingStore voWorkingStore;
 
     public VoUserProfile voUserProfile;
 
@@ -19,10 +20,10 @@ public class Value {
     }
 
     private Value(VoAccessToken voAccessToken,
-                  String payeeStoreUuid,
+                  VoWorkingStore voWorkingStore,
                   VoUserProfile voUserProfile) {
         this.voAccessToken = voAccessToken;
-        this.payeeStoreUuid = payeeStoreUuid;
+        this.voWorkingStore = voWorkingStore;
         this.voUserProfile = voUserProfile;
     }
 
@@ -32,7 +33,7 @@ public class Value {
 
     public static final class Builder {
         private VoAccessToken voAccessToken;
-        private String payeeStoreUuid;
+        private VoWorkingStore voWorkingStore;
         private VoUserProfile voUserProfile;
 
         Builder() {
@@ -44,7 +45,7 @@ public class Value {
             if (voAccessToken == null) {
                 missing += " voAccessToken|voWordSortType one must be set";
             }
-            return new Value(voAccessToken, payeeStoreUuid,voUserProfile);
+            return new Value(voAccessToken, voWorkingStore,voUserProfile);
         }
 
         public Builder setVoAccessToken(VoAccessToken voAccessToken) {
@@ -52,8 +53,8 @@ public class Value {
             return this;
         }
 
-        public Builder setPayeeStoreUuid(String payeeStoreUuid) {
-            this.payeeStoreUuid = payeeStoreUuid;
+        public Builder setVoWorkingStore(VoWorkingStore voWorkingStore) {
+            this.voWorkingStore = voWorkingStore;
             return this;
         }
 

@@ -40,6 +40,12 @@ public class MySummaryRepository {
         this.grpcFascade = grpcFascade;
     }
 
+    /**
+     * 获取用户个人资料，比如：昵称，电话，logo等。。
+     *
+     * @param voAccessToken
+     * @return
+     */
     public LiveData<UserProfileResponse> userProfile(VoAccessToken voAccessToken) {
         return new LiveData<UserProfileResponse>() {
             @Override
@@ -108,6 +114,5 @@ public class MySummaryRepository {
             }
         };
     }
-
 
 }

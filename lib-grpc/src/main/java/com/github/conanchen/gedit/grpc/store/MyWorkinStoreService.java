@@ -3,11 +3,16 @@ package com.github.conanchen.gedit.grpc.store;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
+import com.github.conanchen.gedit.grpc.GrpcApiCallback;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
-import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
-import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
-import com.github.conanchen.gedit.store.owner.grpc.StoreOwnerApiGrpc;
+import com.github.conanchen.gedit.store.worker.grpc.GetMyCurrentWorkinStoreRequest;
+import com.github.conanchen.gedit.store.worker.grpc.StoreWorkerApiGrpc;
+import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
+import com.github.conanchen.gedit.utils.JcaUtils;
+import com.github.conanchen.utils.vo.VoAccessToken;
+import com.google.gson.Gson;
 
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -17,13 +22,12 @@ import io.grpc.stub.StreamObserver;
  */
 
 public class MyWorkinStoreService {
-    private final static String TAG = MyWorkinStoreService.class.getSimpleName();
 
-    public interface OwnershipCallBack {
-        void onOwnershipResponse(OwnershipResponse response);
+    private Gson gson = new Gson();
 
+    public interface WorkingStoreCallBack extends GrpcApiCallback {
+        void onWorkingStoreCallBack(WorkshipResponse workshipResponse);
     }
-
 
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
@@ -33,35 +37,46 @@ public class MyWorkinStoreService {
                 .build();
     }
 
+    /**
+     * 获取我工作商铺的详情
+     *
+     * @param voAccessToken
+     * @param callBack
+     */
+    public void getMyCurrentWorkinStore(VoAccessToken voAccessToken, WorkingStoreCallBack callBack) {
 
+        ManagedChannel managedChannel = getManagedChannel();
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(voAccessToken.accessToken,
+                        Long.valueOf(voAccessToken.expiresIn));
 
-    public void loadMyWorkinStores(ListMyStoreRequest request,OwnershipCallBack callBack) {
-        ManagedChannel channel = getManagedChannel();
-        StoreOwnerApiGrpc.StoreOwnerApiStub storeOwnerApiStub = StoreOwnerApiGrpc.newStub(channel);
-        Log.i("-=-=-", "进来了没");
-        storeOwnerApiStub.listMyStore(request, new StreamObserver<OwnershipResponse>() {
-            @Override
-            public void onNext(OwnershipResponse value) {
-                Log.i("-=-=-", "onNext");
-                callBack.onOwnershipResponse(value);
-            }
+        StoreWorkerApiGrpc.StoreWorkerApiStub storeWorkerApiStub = StoreWorkerApiGrpc.newStub(managedChannel);
+        storeWorkerApiStub
+                .withCallCredentials(callCredentials)
+                .getMyCurrentWorkinStore(GetMyCurrentWorkinStoreRequest.newBuilder()
+                                .build(),
+                        new StreamObserver<WorkshipResponse>() {
+                            @Override
+                            public void onNext(WorkshipResponse value) {
+                                Log.i("=======---", gson.toJson(value));
+                                callBack.onWorkingStoreCallBack(value);
+                            }
 
-            @Override
-            public void onError(Throwable t) {
-                Log.i("-=-=-", "onError");
-                callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
-                        .setStatus(Status.newBuilder()
-                                .setCode(Status.Code.UNKNOWN)
-                                .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
-                                .build())
-                        .build());
-            }
+                            @Override
+                            public void onError(Throwable t) {
+                                Log.i("=======---", gson.toJson(t));
+                                callBack.onGrpcApiError(Status.newBuilder()
+                                        .setCode(Status.Code.UNKNOWN)
+                                        .setDetails("获取工作商铺详情失败")
+                                        .build());
+                            }
 
-            @Override
-            public void onCompleted() {
-                Log.i("-=-=-", "onCompleted");
-            }
-        });
+                            @Override
+                            public void onCompleted() {
+                                callBack.onGrpcApiCompleted();
+                            }
+                        });
+
     }
 
 

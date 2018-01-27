@@ -13,6 +13,7 @@ import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.room.kv.Value;
 import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
 import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoWorkingStore;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -63,14 +64,6 @@ public class SigninRepository {
                                                         .build())
                                                 .build())
                                         .build();
-
-                                //这里是做测试，保存WorkingStore的payeeStoreUuid
-                                roomFascade.daoKeyValue.save(KeyValue.builder()
-                                        .setKey(KeyValue.KEY.USER_CURRENT_WORKING_STORE)
-                                        .setValue(Value.builder()
-                                                .setPayeeStoreUuid("123456")
-                                                .build())
-                                        .build());
                                 return roomFascade.daoKeyValue.save(keyValue);
                             } else {
                                 return new Long(-1);
@@ -108,8 +101,6 @@ public class SigninRepository {
             }
         };
     }
-
-
 
 
 }

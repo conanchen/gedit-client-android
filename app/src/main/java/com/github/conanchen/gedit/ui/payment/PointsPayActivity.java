@@ -236,7 +236,17 @@ public class PointsPayActivity extends BaseActivity {
 //                        "N9%2BT54YZjW2hFaMxrmooiNFKdtwqbavvmv2ANXnoUV0E%3D";//订单号
 //        payUtil.doAliPay(Strings.isNullOrEmpty(channelOrderUuid) ? orderInfo : channelOrderUuid);
 
-        payUtil.doAliPay(returnStr);
+        String s = "app_id=2018011701924082&biz_content=%7B%22out_trade_no%22%3A%222018012704252485067%22%2C%22to" +
+                "tal_amount%22%3A%220.01%22%2C%22subject%22%3A%22%E5%B0%9D%E8%AF%95%E6%94%AF%E4%BB%98%22%2C%22product_" +
+                "code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22body%22%3A%22%E5%B0%9D%E8%AF%95%E6%94%AF%E4%BB%98%22%7D&charse" +
+                "t=utf-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fdev.jifenpz.com%2FaliPay%2Fnotify&sign_type=" +
+                "RSA&timestamp=2018-01-27%2004%3A25%3A24&version=1.0&sign=SsmelS0tG" +
+                "dIo%2FwdEw%2B%2Fm9dY9DvPDNhQtV6jV76zBOiSwIZe1pDvgNMcQ%2FuInKlj19ylAqjLOeUBib47zn9VQRKkuUE3mZhpwclm" +
+                "yBVBu86QYuVFpnDfEHzOjGR9qQpB9TtVJOLLeSDOA3X33NY19y9s8bUWRAfNo%2FSQp4SJM0ZDAqNxYvvfe9CQj1s5xicohpihanHedA" +
+                "%2FQglfxTJtUxeNq9eokEiDQsrSntToG4v5YmuZ1C6%2FA05sq7J6ApqPTkcKmsNA6G8ZxcRIwe90ExvJfIIPNsVUbDGVHVOV" +
+                "K%2BxCg%2F6gSNNTL1rWM0wLMW8%2FKoZFMokfUuW0N%2BZ%2BcjEy%2Br1A%3D%3D";
+
+        payUtil.doAliPay(s);
 
     }
 
