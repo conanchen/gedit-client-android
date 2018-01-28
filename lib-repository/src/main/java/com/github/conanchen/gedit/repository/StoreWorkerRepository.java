@@ -12,6 +12,7 @@ import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.store.StoreWorker;
 import com.github.conanchen.gedit.store.worker.grpc.ListWorkshipByWorkerRequest;
 import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
+import com.github.conanchen.utils.vo.PaymentInfo;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.gson.Gson;
@@ -48,15 +49,17 @@ public class StoreWorkerRepository {
             .setPageSize(20).build();
 
 
-    public LiveData<PagedList<StoreWorker>> loadAllEmployees(VoAccessToken voAccessToken) {
+    public LiveData<PagedList<StoreWorker>> loadAllEmployees(PaymentInfo paymentInfo) {
         Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.storeWorkerService.loadAllEmployees(voAccessToken, ListWorkshipByWorkerRequest.newBuilder().build(), response -> {
-                StoreWorker storeWorker = StoreWorker.builder()
-                        .setStoreUuid(response.getOwnership().getStoreUuid())
-                        .setStoreLogo(response.getOwnership().getStoreLogo())
-                        .setStoreName(response.getOwnership().getStoreName())
-                        .build();
-                roomFascade.daoStoreWorker.save(storeWorker);
+            grpcFascade.storeWorkerService.loadAllEmployees(paymentInfo, response -> {
+                if (Status.Code.OK == response.getStatus().getCode()) {
+                    StoreWorker storeWorker = StoreWorker.builder()
+                            .setStoreUuid(response.getOwnership().getStoreUuid())
+                            .setStoreLogo(response.getOwnership().getStoreLogo())
+                            .setStoreName(response.getOwnership().getStoreName())
+                            .build();
+                    roomFascade.daoStoreWorker.save(storeWorker);
+                }
             });
         });
         return (new LivePagedListBuilder(roomFascade.daoStoreWorker.listLivePagedStore(), pagedListConfig)).build();

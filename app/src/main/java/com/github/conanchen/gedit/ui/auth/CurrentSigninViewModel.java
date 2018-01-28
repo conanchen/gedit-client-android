@@ -4,14 +4,18 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.repository.RepositoryFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
+import com.github.conanchen.gedit.user.profile.grpc.UserProfile;
+import com.github.conanchen.gedit.user.profile.grpc.UserProfileResponse;
 import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoUserProfile;
+import com.github.conanchen.utils.vo.VoWorkingStore;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
-import io.grpc.Status;
 import io.reactivex.MaybeObserver;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -98,21 +102,20 @@ public class CurrentSigninViewModel extends ViewModel {
     }
 
     /**
-     * 查询WorkingStore的payeeStoreUuid
+     * 查询WorkingStore的profile
      *
      * @return
      */
-    public LiveData<String> getCurrentWorkingStore() {
-        return new LiveData<String>() {
+    public LiveData<VoWorkingStore> getCurrentWorkingStore() {
+        return new LiveData<VoWorkingStore>() {
             @Override
             protected void onActive() {
                 repositoryFascade.keyValueRepository
                         .findMaybe(KeyValue.KEY.USER_CURRENT_WORKING_STORE)
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
-                        .map(keyValue -> keyValue.value.payeeStoreUuid)
-                        .subscribe(new MaybeObserver<String>() {
-                            boolean hasValue = false;
+                        .map(keyValue -> keyValue.value.voWorkingStore)
+                        .subscribe(new MaybeObserver<VoWorkingStore>() {
 
                             @Override
                             public void onSubscribe(Disposable d) {
@@ -120,18 +123,19 @@ public class CurrentSigninViewModel extends ViewModel {
                             }
 
                             @Override
-                            public void onSuccess(String payeeStoreUuid) {
+                            public void onSuccess(VoWorkingStore voWorkingStore) {
                                 //found payeeStoreUuid
                                 Log.i(TAG, "onSuccess  Working Store ");
-
-                                postValue(payeeStoreUuid);
+                                postValue(voWorkingStore);
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 //access database error
                                 Log.i(TAG, "onError  Working Store ");
-                                postValue("");
+                                VoWorkingStore voWorkingStore = VoWorkingStore.builder()
+                                        .build();
+                                postValue(voWorkingStore);
                             }
 
                             @Override
@@ -143,6 +147,68 @@ public class CurrentSigninViewModel extends ViewModel {
                         });
             }
 
+        };
+    }
+
+    public LiveData<UserProfileResponse> getMyProfile() {
+        return new LiveData<UserProfileResponse>() {
+            @Override
+            protected void onActive() {
+                repositoryFascade.keyValueRepository
+                        .findMaybe(KeyValue.KEY.USER_CURRENT_USER_PROFILE)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .map(keyValue -> keyValue.value.voUserProfile)
+                        .subscribe(new MaybeObserver<VoUserProfile>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                Log.i(TAG, "onSubscribe");
+                            }
+
+                            @Override
+                            public void onSuccess(VoUserProfile voUserProfile) {
+                                Log.i(TAG, "onSuccess  userProfile ");
+                                UserProfileResponse userProfileResponse = UserProfileResponse.newBuilder()
+                                        .setStatus(Status.newBuilder()
+                                                .setCode(Status.Code.OK)
+                                                .setDetails("get userprofile successful")
+                                                .build())
+                                        .setUserProfile(UserProfile.newBuilder()
+                                                .setUuid(voUserProfile.uuid)
+                                                .setUsername(voUserProfile.name)
+                                                .setMobile(voUserProfile.mobile)
+                                                .setLogo(voUserProfile.logo)
+                                                .setDesc(voUserProfile.desc)
+                                                .setDistrictUuid(voUserProfile.districtId))
+                                        .build();
+                                postValue(userProfileResponse);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.i(TAG, String.format("onError Throwable=%s", e.getMessage()));
+                                UserProfileResponse userProfileResponse = UserProfileResponse.newBuilder()
+                                        .setStatus(Status.newBuilder()
+                                                .setCode(Status.Code.UNKNOWN)
+                                                .setDetails("error,not get profile!")
+                                                .build())
+                                        .build();
+                                postValue(userProfileResponse);
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                UserProfileResponse userProfileResponse = UserProfileResponse.newBuilder()
+                                        .setStatus(com.github.conanchen.gedit.common.grpc.Status.newBuilder()
+                                                .setCode(Status.Code.UNKNOWN)
+                                                .setDetails("error,not get profile!")
+                                                .build())
+                                        .build();
+                                postValue(userProfileResponse);
+                            }
+                        });
+
+            }
         };
     }
 

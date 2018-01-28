@@ -30,10 +30,11 @@ import android.support.annotation.NonNull;
 import com.google.common.base.Strings;
 
 @Entity
-public class KeyValue  {
-    public  interface KEY {
+public class KeyValue {
+    public interface KEY {
         String USER_CURRENT_ACCESSTOKEN = "USER.CURRENT.LOGIN";
         String USER_CURRENT_WORKING_STORE = "USER.CURRENT.WORKING.STORE";
+        String USER_CURRENT_USER_PROFILE = "USER.CURRENT.USER.PROFILE";
         String USER_SETTING_WORDSORTTYPE = "USER.SETTING.WORDSORTTYPE";
         String USER_STATS_WORD_LEVEL1 = "USER.STATS.WORD.LEVEL1";
         String USER_STATS_WORD_LEVEL2 = "USER.STATS.WORD.LEVEL2";
@@ -86,7 +87,7 @@ public class KeyValue  {
                 throw new IllegalStateException("Missing required properties:" + missing);
             }
 
-            return new KeyValue(  key,   value,   created,   lastUpdated);
+            return new KeyValue(key, value, created, lastUpdated);
         }
 
         public Builder setKey(String key) {

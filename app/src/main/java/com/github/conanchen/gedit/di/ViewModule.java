@@ -6,6 +6,7 @@ import com.github.conanchen.gedit.ui.SplashActivity;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.auth.RegisterActivity;
 import com.github.conanchen.gedit.ui.hello.HelloActivity;
+import com.github.conanchen.gedit.ui.my.MyQRCodeActivity;
 import com.github.conanchen.gedit.ui.my.MySummaryFragment;
 import com.github.conanchen.gedit.ui.my.myfans.MyFansActivity;
 import com.github.conanchen.gedit.ui.my.myintroducedstore.MyIntroducedStoresActivity;
@@ -104,6 +105,9 @@ public abstract class ViewModule {
 
     @ContributesAndroidInjector
     abstract PointsPayActivity contributePointsPayActivity();
+
+    @ContributesAndroidInjector
+    abstract MyQRCodeActivity contributeMyQRCodeActivity();
 
 
     //

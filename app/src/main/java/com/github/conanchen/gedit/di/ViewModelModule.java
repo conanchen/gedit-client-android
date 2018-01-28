@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 
 import com.github.conanchen.gedit.di.common.ViewModelFactory;
 import com.github.conanchen.gedit.di.common.ViewModelKey;
+import com.github.conanchen.gedit.ui.MainViewModel;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.RegisterViewModel;
 import com.github.conanchen.gedit.ui.auth.SigninViewModel;
@@ -148,5 +149,12 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(PointsPayViewModel.class)
     abstract ViewModel bindPointsPayViewModel(PointsPayViewModel pointsPayViewModel);
+
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel.class)
+    abstract ViewModel bindMainViewModel(MainViewModel mainViewModel);
 
 }

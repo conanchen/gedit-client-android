@@ -1,13 +1,14 @@
-package com.github.conanchen.gedit.grpc.store;
+package com.github.conanchen.gedit.grpc.auth;
 
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.grpc.GrpcApiCallback;
+import com.github.conanchen.gedit.grpc.store.StoreProfileService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
-import com.github.conanchen.gedit.store.worker.grpc.GetMyCurrentWorkinStoreRequest;
-import com.github.conanchen.gedit.store.worker.grpc.StoreWorkerApiGrpc;
-import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
+import com.github.conanchen.gedit.user.profile.grpc.GetMyProfileRequest;
+import com.github.conanchen.gedit.user.profile.grpc.UserProfileApiGrpc;
+import com.github.conanchen.gedit.user.profile.grpc.UserProfileResponse;
 import com.github.conanchen.gedit.utils.JcaUtils;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.gson.Gson;
@@ -18,56 +19,49 @@ import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 /**
- * Created by Conan Chen on 2018/1/8.
+ * Created by Administrator on 2018/1/26.
  */
 
-public class MyWorkinStoreService {
-
+public class MySummaryService {
+    private final static String TAG = StoreProfileService.class.getSimpleName();
     private Gson gson = new Gson();
 
-    public interface WorkingStoreCallBack extends GrpcApiCallback {
-        void onWorkingStoreCallBack(WorkshipResponse workshipResponse);
+
+    public interface UserProfileCallBack extends GrpcApiCallback {
+        void onUserProfileCallBack(UserProfileResponse userProfileResponse);
     }
 
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
-                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_STORE)
+                .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_AUTH)
                 .usePlaintext(true)
                 //                .keepAliveTime(60, TimeUnit.SECONDS)
                 .build();
     }
 
-    /**
-     * 获取我工作商铺的详情
-     *
-     * @param voAccessToken
-     * @param callBack
-     */
-    public void getMyCurrentWorkinStore(VoAccessToken voAccessToken, WorkingStoreCallBack callBack) {
-
-        ManagedChannel managedChannel = getManagedChannel();
+    public void userProfile(VoAccessToken voAccessToken, UserProfileCallBack callBack) {
+        ManagedChannel channel = getManagedChannel();
         CallCredentials callCredentials = JcaUtils
                 .getCallCredentials(voAccessToken.accessToken,
                         Long.valueOf(voAccessToken.expiresIn));
-
-        StoreWorkerApiGrpc.StoreWorkerApiStub storeWorkerApiStub = StoreWorkerApiGrpc.newStub(managedChannel);
-        storeWorkerApiStub
+        UserProfileApiGrpc.UserProfileApiStub userProfileApiStub = UserProfileApiGrpc.newStub(channel);
+        userProfileApiStub
                 .withCallCredentials(callCredentials)
-                .getMyCurrentWorkinStore(GetMyCurrentWorkinStoreRequest.newBuilder()
+                .getMyProfile(GetMyProfileRequest.newBuilder()
                                 .build(),
-                        new StreamObserver<WorkshipResponse>() {
+                        new StreamObserver<UserProfileResponse>() {
                             @Override
-                            public void onNext(WorkshipResponse value) {
-                                Log.i("=======---", gson.toJson(value));
-                                callBack.onWorkingStoreCallBack(value);
+                            public void onNext(UserProfileResponse value) {
+                                Log.i("-=-=-=-=-onNext", gson.toJson(value));
+                                callBack.onUserProfileCallBack(value);
                             }
 
                             @Override
                             public void onError(Throwable t) {
-                                Log.i("=======---", gson.toJson(t));
+                                Log.i("-=-=-=-=-onError", gson.toJson(t));
                                 callBack.onGrpcApiError(Status.newBuilder()
                                         .setCode(Status.Code.UNKNOWN)
-                                        .setDetails("获取工作商铺详情失败")
+                                        .setDetails("网络不好，请稍后重试")
                                         .build());
                             }
 
@@ -77,6 +71,4 @@ public class MyWorkinStoreService {
                             }
                         });
     }
-
-
 }

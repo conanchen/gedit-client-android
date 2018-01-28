@@ -3,13 +3,11 @@ package com.github.conanchen.gedit.grpc.store;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.github.conanchen.gedit.common.grpc.ListURL;
 import com.github.conanchen.gedit.common.grpc.Location;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.store.profile.grpc.CreateStoreResponse;
 import com.github.conanchen.gedit.store.profile.grpc.GetStoreRequest;
-import com.github.conanchen.gedit.store.profile.grpc.ListTel;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileApiGrpc;
 import com.github.conanchen.gedit.store.profile.grpc.StoreProfileResponse;
 import com.github.conanchen.gedit.store.profile.grpc.UpdateStoreRequest;
@@ -184,7 +182,7 @@ public class StoreProfileService {
                 Iterable<String> listTel = new ArrayList<String>((List<String>) storeUpdateInfo.value);
                 updateStoreRequest = UpdateStoreRequest.newBuilder()
                         .setUuid(storeUpdateInfo.uuid)
-                        .setTels(ListTel.newBuilder().addAllUrls(listTel).build())
+//                        .setTels(ListTel.newBuilder().addAllUrls(listTel).build())
                         .build();
                 break;
             case DESC:
@@ -220,7 +218,7 @@ public class StoreProfileService {
                 Iterable<String> listUrl = new ArrayList<String>((List<String>) storeUpdateInfo.value);
                 updateStoreRequest = UpdateStoreRequest.newBuilder()
                         .setUuid(storeUpdateInfo.uuid)
-                        .setImages(ListURL.newBuilder().addAllUrls(listUrl).build())
+//                        .setImages(ListURL.newBuilder().addAllUrls(listUrl).build())
                         .build();
                 break;
         }

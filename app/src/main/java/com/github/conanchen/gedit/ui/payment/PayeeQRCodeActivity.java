@@ -56,26 +56,27 @@ public class PayeeQRCodeActivity extends BaseActivity {
 
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
         //获取WorkingStore的payeeStoreUuid
-        currentSigninViewModel.getCurrentWorkingStore().observe(this, string -> {
-            //获取token
-            currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-                if (com.github.conanchen.gedit.common.grpc.Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
-                    voAccessToken = VoAccessToken.builder()
-                            .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())
-                            .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())
-                            .build();
+        currentSigninViewModel.getCurrentWorkingStore().observe(this, voWorkingStore -> {
+            if (voWorkingStore != null) {
+                //获取token
+                currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+                    if (com.github.conanchen.gedit.common.grpc.Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
+                        voAccessToken = VoAccessToken.builder()
+                                .setAccessToken(Strings.isNullOrEmpty(signinResponse.getAccessToken()) ? System.currentTimeMillis() + "" : signinResponse.getAccessToken())
+                                .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())
+                                .build();
 
-                    //获取商铺信息
-                    PaymentInfo paymentInfo = PaymentInfo.builder()
-                            .setVoAccessToken(voAccessToken)
-                            .setPayeeStoreUuid(Strings.isNullOrEmpty(string) ? "1111" : string)
-                            .build();
+                        //获取商铺信息
+                        PaymentInfo paymentInfo = PaymentInfo.builder()
+                                .setVoAccessToken(voAccessToken)
+                                .setPayeeStoreUuid(Strings.isNullOrEmpty(voWorkingStore.storeUuid) ? "1111" : voWorkingStore.storeUuid)
+                                .build();
 
-                    payeeQRCodeViewModel.getQRCode(paymentInfo);
+                        payeeQRCodeViewModel.getQRCode(paymentInfo);
 
-                }
-            });
-
+                    }
+                });
+            }
         });
 
 

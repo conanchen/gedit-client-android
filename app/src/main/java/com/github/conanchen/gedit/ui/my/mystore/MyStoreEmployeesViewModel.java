@@ -11,6 +11,7 @@ import com.github.conanchen.gedit.repository.StoreWorkerRepository;
 import com.github.conanchen.gedit.room.store.StoreWorker;
 import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
 import com.github.conanchen.gedit.util.AbsentLiveData;
+import com.github.conanchen.utils.vo.PaymentInfo;
 import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 
 public class MyStoreEmployeesViewModel extends ViewModel {
     @VisibleForTesting
-    final MutableLiveData<VoAccessToken> locationMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<PaymentInfo> locationMutableLiveData = new MutableLiveData<>();
     private final LiveData<PagedList<StoreWorker>> liveStores;
 
     @VisibleForTesting
@@ -32,11 +33,11 @@ public class MyStoreEmployeesViewModel extends ViewModel {
     @SuppressWarnings("unchecked")
     @Inject
     public MyStoreEmployeesViewModel(StoreWorkerRepository storeWorkerRepository) {
-        liveStores = Transformations.switchMap(locationMutableLiveData, voAccessToken -> {
-            if (voAccessToken == null) {
+        liveStores = Transformations.switchMap(locationMutableLiveData, paymentInfo -> {
+            if (paymentInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeWorkerRepository.loadAllEmployees(voAccessToken);
+                return storeWorkerRepository.loadAllEmployees(paymentInfo);
             }
         });
 
@@ -50,8 +51,8 @@ public class MyStoreEmployeesViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public void getAllEmployees(VoAccessToken voAccessToken) {
-        locationMutableLiveData.setValue(voAccessToken);
+    public void getAllEmployees(PaymentInfo paymentInfo) {
+        locationMutableLiveData.setValue(paymentInfo);
     }
 
     @VisibleForTesting

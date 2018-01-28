@@ -20,56 +20,43 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
-import android.arch.paging.PagedList;
 import android.support.annotation.VisibleForTesting;
 
+import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeResponse;
 import com.github.conanchen.gedit.repository.HelloRepository;
-import com.github.conanchen.gedit.room.hello.Hello;
+import com.github.conanchen.gedit.repository.MySummaryRepository;
+import com.github.conanchen.gedit.repository.PaymentRepository;
+import com.github.conanchen.gedit.user.profile.grpc.UserProfileResponse;
 import com.github.conanchen.gedit.util.AbsentLiveData;
-
+import com.github.conanchen.utils.vo.PaymentInfo;
+import com.github.conanchen.utils.vo.VoAccessToken;
 
 import javax.inject.Inject;
-
-import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 
 public class MySummaryViewModel extends ViewModel {
 
     @VisibleForTesting
-    final MutableLiveData<Long> helloTime = new MutableLiveData<>();
-    private final LiveData<PagedList<Hello>> helloPagedListLiveData;
-    private HelloRepository helloRepository;
+    final MutableLiveData<VoAccessToken> mySummaryMutableLiveData = new MutableLiveData<>();
+    private final LiveData<UserProfileResponse> mySummaryLiveData;
 
     @SuppressWarnings("unchecked")
     @Inject
-    public MySummaryViewModel(HelloRepository helloRepository) {
-        this.helloRepository = helloRepository;
-        helloPagedListLiveData = Transformations.switchMap(helloTime, time -> {
-            if (time == null) {
+    public MySummaryViewModel(MySummaryRepository mySummaryRepository) {
+        mySummaryLiveData = Transformations.switchMap(mySummaryMutableLiveData, voAccessToken -> {
+            if (voAccessToken == null) {
                 return AbsentLiveData.create();
             } else {
-
-                return helloRepository.loadHellos(time);
+                return mySummaryRepository.userProfile(voAccessToken);
             }
         });
-
     }
 
     @VisibleForTesting
-    public void setHelloName(String helloName) {
-        Observable.just(true).subscribeOn(Schedulers.computation()).observeOn(Schedulers.io())
-                .subscribe(aBoolean -> {
-                    helloRepository.sayHello(helloName);
-                });
+    public LiveData<UserProfileResponse> getMySummaryLiveData() {
+        return mySummaryLiveData;
     }
 
-    @VisibleForTesting
-    public LiveData<PagedList<Hello>> getHelloPagedListLiveData() {
-        return helloPagedListLiveData;
-    }
-
-    @VisibleForTesting
-    public void reloadHellos() {
-        this.helloTime.setValue(System.currentTimeMillis());
+    public void userProfile(VoAccessToken voAccessToken) {
+        mySummaryMutableLiveData.setValue(voAccessToken);
     }
 }

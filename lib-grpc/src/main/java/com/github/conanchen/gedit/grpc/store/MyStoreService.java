@@ -42,7 +42,6 @@ public class MyStoreService {
 
     public void loadMyStores(StoreCreateInfo storeCreateInfo, OwnershipCallBack callBack) {
 
-        Log.i("-=-=-=-=-=", "列表 token:" + storeCreateInfo.voAccessToken.accessToken + "----------expiresIn:" + storeCreateInfo.voAccessToken.expiresIn);
         ManagedChannel channel = getManagedChannel();
         CallCredentials callCredentials = JcaUtils
                 .getCallCredentials(storeCreateInfo.voAccessToken.accessToken
@@ -66,10 +65,6 @@ public class MyStoreService {
                                 .setStatus(Status.newBuilder()
                                         .setCode(Status.Code.UNKNOWN)
                                         .setDetails("Fail")
-                                        .build())
-                                .setOwnership(Ownership.newBuilder()
-                                        .setStoreUuid("uuid" + System.currentTimeMillis())
-                                        .setStoreName("name" + System.currentTimeMillis())
                                         .build())
                                 .build());
                     }

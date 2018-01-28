@@ -33,12 +33,10 @@ public class RegisterService {
 
     public interface RegisterVerifyCallback extends GrpcApiCallback {
         void onRegisterVerifyResponse(SmsStep1QuestionResponse response);
-
     }
 
-    public interface RegisterSmsCallback {
+    public interface RegisterSmsCallback extends GrpcApiCallback {
         void onRegisterSmsCallback(SmsStep2AnswerResponse response);
-
     }
 
     public interface RegisterCallback {
@@ -69,15 +67,10 @@ public class RegisterService {
 
                             @Override
                             public void onError(Throwable t) {
-//                                callback.onRegisterVerifyResponse(
-//                                        SmsStep1QuestionResponse.newBuilder()
-//                                                .setToken("获取图片失败")
-//                                                .setQuestionTip("获取图片失败")
-//                                                .build());
-
                                 callback.onGrpcApiError(Status.newBuilder()
                                         .setCode(Status.Code.UNAVAILABLE)
-                                        .setDetails("可能网络不同或者服务器死了").build());
+                                        .setDetails("网络不好，请稍后重试")
+                                        .build());
                             }
 
                             @Override
@@ -119,16 +112,15 @@ public class RegisterService {
 
             @Override
             public void onError(Throwable t) {
-                callback.onRegisterSmsCallback(SmsStep2AnswerResponse.newBuilder()
-                        .setStatus(Status.newBuilder()
-                                .setCode(Status.Code.UNKNOWN)
-                                .setDetails("onError()  : " + t.getMessage()))
+                callback.onGrpcApiError(Status.newBuilder()
+                        .setCode(Status.Code.UNKNOWN)
+                        .setDetails("网络不好，请稍后重试")
                         .build());
             }
 
             @Override
             public void onCompleted() {
-
+                callback.onGrpcApiCompleted();
             }
         });
     }

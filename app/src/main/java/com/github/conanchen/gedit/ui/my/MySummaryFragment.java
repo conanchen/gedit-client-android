@@ -21,6 +21,7 @@ import com.github.conanchen.gedit.di.common.Injectable;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.auth.LoginActivity;
 import com.github.conanchen.gedit.ui.store.StoreCreateActivity;
+import com.github.conanchen.utils.vo.VoAccessToken;
 
 import javax.inject.Inject;
 
@@ -61,27 +62,46 @@ public class MySummaryFragment extends BaseFragment implements Injectable {
 
     private void setupViewModel() {
         mySummaryViewModel = ViewModelProviders.of(this, viewModelFactory).get(MySummaryViewModel.class);
-        mySummaryViewModel.getHelloPagedListLiveData().observe(this, hellos -> {
-
-        });
 
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
-            if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
+            if (Status.Code.OK == signinResponse.getStatus().getCode()) {
                 isLogin = true;
-                //如果登录就显示名字  没有显示登录或注册
-                name.setText("小花花");
-                mIvQRCode.setVisibility(View.VISIBLE);
-                myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
-                mySummaryViewModel.setHelloName("set login name");
+                //登录成功之后才可以去数据库获取个人资料
+                currentSigninViewModel.getMyProfile().observe(this, userProfileResponse -> {
+                    if (Status.Code.OK == userProfileResponse.getStatus().getCode()) {
+                        //如果登录就显示名字  没有显示登录或注册
+                        name.setText("小花花");
+                        mIvQRCode.setVisibility(View.VISIBLE);
+                        myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
+                    } else {
+                        //设置默认的名字
+                        name.setText("默认的名字,userProfile没加载出来");
+                        mIvQRCode.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                mySummaryViewModel.userProfile(VoAccessToken.builder()
+                        .setAccessToken(signinResponse.getAccessToken())
+                        .setExpiresIn(signinResponse.getExpiresIn())
+                        .build());
             } else {
                 isLogin = false;
                 name.setText("登录/注册");
                 mIvQRCode.setVisibility(View.GONE);
                 myviewmodeltext.setText(String.format("MySummaryViewModel is injected ? mySummaryViewModel=%s", mySummaryViewModel));
-                mySummaryViewModel.setHelloName("set notlogin name");
             }
         });
+
+
+        mySummaryViewModel.getMySummaryLiveData().observe(this, userProfileResponse -> {
+            if (Status.Code.OK == userProfileResponse.getStatus().getCode()) {
+                name.setText("小花花");
+                mIvQRCode.setVisibility(View.VISIBLE);
+            }
+        });
+
+
     }
 
     @Nullable

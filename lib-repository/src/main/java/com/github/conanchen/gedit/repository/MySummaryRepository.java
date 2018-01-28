@@ -6,14 +6,13 @@ import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
-import com.github.conanchen.gedit.grpc.auth.SigninInfo;
-import com.github.conanchen.gedit.grpc.auth.SigninService;
+import com.github.conanchen.gedit.grpc.auth.MySummaryService;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.room.kv.Value;
-import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
+import com.github.conanchen.gedit.user.profile.grpc.UserProfileResponse;
 import com.github.conanchen.utils.vo.VoAccessToken;
-import com.github.conanchen.utils.vo.VoWorkingStore;
+import com.github.conanchen.utils.vo.VoUserProfile;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -25,11 +24,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Administrator on 2018/1/11.
+ * Created by Administrator on 2018/1/26.
  */
-
 @Singleton
-public class SigninRepository {
+public class MySummaryRepository {
     private final static String TAG = StoreProfileRepository.class.getSimpleName();
 
     private final static Gson gson = new Gson();
@@ -37,30 +35,37 @@ public class SigninRepository {
     private GrpcFascade grpcFascade;
 
     @Inject
-    public SigninRepository(RoomFascade roomFascade, GrpcFascade grpcFascade) {
+    public MySummaryRepository(RoomFascade roomFascade, GrpcFascade grpcFascade) {
         this.roomFascade = roomFascade;
         this.grpcFascade = grpcFascade;
     }
 
-
-    public LiveData<SigninResponse> login(SigninInfo signinInfo) {
-        return new LiveData<SigninResponse>() {
+    /**
+     * 获取用户个人资料，比如：昵称，电话，logo等。。
+     *
+     * @param voAccessToken
+     * @return
+     */
+    public LiveData<UserProfileResponse> userProfile(VoAccessToken voAccessToken) {
+        return new LiveData<UserProfileResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.signinService.login(signinInfo, new SigninService.SigninCallback() {
+                grpcFascade.mySummaryService.userProfile(voAccessToken, new MySummaryService.UserProfileCallBack() {
                     @Override
-                    public void onSigninResponse(com.github.conanchen.gedit.user.auth.grpc.SigninResponse response) {
+                    public void onUserProfileCallBack(UserProfileResponse userProfileResponse) {
                         Observable.fromCallable(() -> {
-                            Log.i("-=-=-", gson.toJson(response));
-
-                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
-                                //登录成功
+                            Log.i("-=-=-", gson.toJson(userProfileResponse));
+                            if (Status.Code.OK == userProfileResponse.getStatus().getCode()) {
                                 KeyValue keyValue = KeyValue.builder()
-                                        .setKey(KeyValue.KEY.USER_CURRENT_ACCESSTOKEN)
+                                        .setKey(KeyValue.KEY.USER_CURRENT_USER_PROFILE)
                                         .setValue(Value.builder()
-                                                .setVoAccessToken(VoAccessToken.builder()
-                                                        .setAccessToken(response.getAccessToken())
-                                                        .setExpiresIn(response.getExpiresIn())
+                                                .setVoUserProfile(VoUserProfile.builder()
+                                                        .setUuid(userProfileResponse.getUserProfile().getUuid())
+                                                        .setName(userProfileResponse.getUserProfile().getUsername())
+                                                        .setMobile(userProfileResponse.getUserProfile().getMobile())
+                                                        .setLogo(userProfileResponse.getUserProfile().getLogo())
+                                                        .setDistrictId(userProfileResponse.getUserProfile().getDistrictUuid())
+                                                        .setDesc(userProfileResponse.getUserProfile().getDesc())
                                                         .build())
                                                 .build())
                                         .build();
@@ -75,32 +80,39 @@ public class SigninRepository {
                                     public void accept(@NonNull Long rowId) throws Exception {
                                         // the uuid of the upserted record.
                                         if (rowId > 0) {
-                                            setValue(SigninResponse.newBuilder()
+                                            setValue(UserProfileResponse.newBuilder()
+                                                    .setUserProfile(userProfileResponse.getUserProfile())
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(Status.Code.OK)
-                                                            .setDetails("Signin successful")
+                                                            .setDetails("save userProfile successful")
                                                             .build())
-                                                    .setAccessToken(response.getAccessToken())
-                                                    .setExpiresIn(response.getExpiresIn())
                                                     .build());
                                         } else {
-                                            setValue(SigninResponse.newBuilder()
+                                            setValue(UserProfileResponse.newBuilder()
+                                                    .setUserProfile(userProfileResponse.getUserProfile())
                                                     .setStatus(Status.newBuilder()
-                                                            .setCode(response.getStatus().getCode())
-                                                            .setDetails(response.getStatus().getDetails())
+                                                            .setCode(userProfileResponse.getStatus().getCode())
+                                                            .setDetails(userProfileResponse.getStatus().getDetails())
                                                             .build())
-                                                    .setAccessToken(response.getAccessToken())
-                                                    .setExpiresIn(response.getExpiresIn())
                                                     .build());
                                         }
                                     }
                                 });
                         ;
                     }
+
+                    @Override
+                    public void onGrpcApiError(Status status) {
+
+                    }
+
+                    @Override
+                    public void onGrpcApiCompleted() {
+
+                    }
                 });
             }
         };
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.github.conanchen.gedit.di;
 
 import com.github.conanchen.gedit.grpc.accounting.PostingService;
+import com.github.conanchen.gedit.grpc.auth.MySummaryService;
 import com.github.conanchen.gedit.grpc.auth.RegisterService;
 import com.github.conanchen.gedit.grpc.auth.SigninService;
 import com.github.conanchen.gedit.grpc.fan.MyFansService;
@@ -40,6 +41,7 @@ public class GrpcFascade {
     public PostingService postingService;
     public PaymentService paymentService;
     public StoreWorkerService storeWorkerService;
+    public MySummaryService mySummaryService;
 
 
     @Inject
@@ -56,7 +58,8 @@ public class GrpcFascade {
                        AccountService accountService,
                        PostingService postingService,
                        PaymentService paymentService,
-                       StoreWorkerService storeWorkerService
+                       StoreWorkerService storeWorkerService,
+                       MySummaryService mySummaryService
                        ) {
         this.helloService = helloService;
         this.storeProfileService = storeProfileService;
@@ -72,6 +75,7 @@ public class GrpcFascade {
         this.postingService = postingService;
         this.paymentService = paymentService;
         this.storeWorkerService = storeWorkerService;
+        this.mySummaryService = mySummaryService;
         System.out.println(strAmir);
     }
 

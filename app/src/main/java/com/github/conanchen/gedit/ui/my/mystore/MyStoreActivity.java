@@ -58,7 +58,7 @@ public class MyStoreActivity extends AppCompatActivity {
 
 
     @Autowired
-    public String uuid;//从我的店铺详情传递过来
+    public String uuid;//从我的店铺列表传递过来  商铺的id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,9 @@ public class MyStoreActivity extends AppCompatActivity {
                 break;
             case R.id.my_employees:
                 //我的员工
-                ARouter.getInstance().build("/app/MyStoreEmployeesActivity").navigation();
+                ARouter.getInstance().build("/app/MyStoreEmployeesActivity")
+                        .withString("storeUuid", uuid)
+                        .navigation();
                 break;
             case R.id.code:
                 //二维码

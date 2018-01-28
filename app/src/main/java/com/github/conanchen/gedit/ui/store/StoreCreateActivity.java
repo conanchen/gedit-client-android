@@ -121,9 +121,7 @@ public class StoreCreateActivity extends BaseActivity {
         currentSigninViewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrentSigninViewModel.class);
 
         storeCreateViewModel.getStoreCreateResponseLiveData().observe(this, storeCreateResponse -> {
-            String message = String.format("storeCreateResponse=%s", gson.toJson(storeCreateResponse));
-            Log.i(TAG, message);
-            if (storeCreateResponse != null) {
+            if (Status.Code.OK == storeCreateResponse.getStatus().getCode()) {
                 ARouter.getInstance().build("/app/MyStoreActivity").withString("uuid", storeCreateResponse.getUuid()).navigation();
                 finish();
             }

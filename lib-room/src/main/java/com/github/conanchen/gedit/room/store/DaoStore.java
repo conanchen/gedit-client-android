@@ -51,6 +51,6 @@ public interface DaoStore {
     @Query("SELECT * FROM Store ORDER by address DESC LIMIT :size")
     LiveData<List<Store>> getLiveStores(Integer size);
 
-    @Query("SELECT * FROM Store ORDER by lastUpdated DESC ")
+    @Query("SELECT * FROM Store ORDER by uuid DESC ")
     public abstract DataSource.Factory<Integer, Store> listLivePagedStore();
 }
