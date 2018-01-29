@@ -3,9 +3,9 @@ package com.github.conanchen.gedit.grpc.store;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
+import com.github.conanchen.gedit.grpc.GrpcApiCallback;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
-import com.github.conanchen.gedit.store.owner.grpc.Ownership;
 import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.gedit.store.owner.grpc.StoreOwnerApiGrpc;
 import com.github.conanchen.gedit.utils.JcaUtils;
@@ -25,7 +25,7 @@ public class MyStoreService {
     private final static String TAG = MyStoreService.class.getSimpleName();
     private Gson gson = new Gson();
 
-    public interface OwnershipCallBack {
+    public interface OwnershipCallBack extends GrpcApiCallback {
         void onOwnershipResponse(OwnershipResponse response);
 
     }
@@ -61,17 +61,15 @@ public class MyStoreService {
                     @Override
                     public void onError(Throwable t) {
                         Log.i("-=-=-", "onError" + gson.toJson(t));
-                        callBack.onOwnershipResponse(OwnershipResponse.newBuilder()
-                                .setStatus(Status.newBuilder()
-                                        .setCode(Status.Code.UNKNOWN)
-                                        .setDetails("Fail")
-                                        .build())
+                        callBack.onGrpcApiError(Status.newBuilder()
+                                .setCode(Status.Code.UNKNOWN)
+                                .setDetails("网络不佳，请稍后重试")
                                 .build());
                     }
 
                     @Override
                     public void onCompleted() {
-                        Log.i("-=-=-", "onCompleted");
+                        callBack.onGrpcApiCompleted();
                     }
                 });
     }

@@ -17,6 +17,8 @@ import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import javax.inject.Inject;
 
@@ -37,6 +39,8 @@ public class MyStoresActivity extends BaseActivity {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.refresh)
+    SmartRefreshLayout mSmartRefresh;
     private MyStoresAdapter mAdapter;
 
     @Override
@@ -47,7 +51,28 @@ public class MyStoresActivity extends BaseActivity {
 
         setupRecyclerView();
         setupViewModel();
+        setupRefresh();
 
+    }
+
+    private void setupRefresh() {
+        mSmartRefresh.setRefreshHeader(new ClassicsHeader(this));
+        mSmartRefresh.setHeaderHeight(60);
+
+        mSmartRefresh.setOnRefreshListener((refreshLayout) -> {
+            currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+                if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {
+                    StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
+                            .setVoAccessToken(VoAccessToken.builder()
+                                    .setAccessToken(signinResponse.getAccessToken())
+                                    .setExpiresIn(signinResponse.getExpiresIn())
+                                    .build())
+                            .build();
+                    myStoresViewModel.loadMyStores(storeCreateInfo);
+                }
+                mSmartRefresh.finishRefresh();
+            });
+        });
     }
 
     private void setupRecyclerView() {

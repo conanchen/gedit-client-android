@@ -27,7 +27,7 @@ public class MyStoreEmployeesViewModel extends ViewModel {
     private final LiveData<PagedList<StoreWorker>> liveStores;
 
     @VisibleForTesting
-    final MutableLiveData<StoreUpdateInfo> addWorkerMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<PaymentInfo> addWorkerMutableLiveData = new MutableLiveData<>();
     private final LiveData<WorkshipResponse> addWorkerLivaData;
 
     @SuppressWarnings("unchecked")
@@ -41,11 +41,11 @@ public class MyStoreEmployeesViewModel extends ViewModel {
             }
         });
 
-        addWorkerLivaData = Transformations.switchMap(addWorkerMutableLiveData, storeUpdateInfo -> {
-            if (storeUpdateInfo == null) {
+        addWorkerLivaData = Transformations.switchMap(addWorkerMutableLiveData, paymentInfo -> {
+            if (paymentInfo == null) {
                 return AbsentLiveData.create();
             } else {
-                return storeWorkerRepository.addWorker(storeUpdateInfo);
+                return storeWorkerRepository.addWorker(paymentInfo);
             }
         });
     }
@@ -61,8 +61,8 @@ public class MyStoreEmployeesViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public void addWorker(StoreUpdateInfo storeUpdateInfo) {
-        addWorkerMutableLiveData.setValue(storeUpdateInfo);
+    public void addWorker(PaymentInfo paymentInfo) {
+        addWorkerMutableLiveData.setValue(paymentInfo);
     }
 
     @VisibleForTesting

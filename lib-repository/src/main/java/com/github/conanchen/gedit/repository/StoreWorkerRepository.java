@@ -71,11 +71,11 @@ public class StoreWorkerRepository {
      *
      * @return
      */
-    public LiveData<WorkshipResponse> addWorker(StoreUpdateInfo storeUpdateInfo) {
+    public LiveData<WorkshipResponse> addWorker(PaymentInfo paymentInfo) {
         return new LiveData<WorkshipResponse>() {
             @Override
             protected void onActive() {
-                grpcFascade.storeWorkerService.addWorker(storeUpdateInfo, new StoreWorkerService.AddWorkerCallBack() {
+                grpcFascade.storeWorkerService.addWorker(paymentInfo, new StoreWorkerService.AddWorkerCallBack() {
                     @Override
                     public void onAddWorkerCallBack(WorkshipResponse response) {
                         Observable.fromCallable(() -> {

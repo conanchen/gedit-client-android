@@ -129,6 +129,8 @@ dependencies {
     compile files('libs/alipaySdk-20170922.jar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.4.0'
 
+    //Refresh list
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
 
     // AndroidJUnitRunner and JUnit Rules
     androidTestCompile 'com.android.support.test:runner:1.0.1'

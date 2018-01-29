@@ -5,12 +5,10 @@ import android.util.Log;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.store.worker.grpc.AddWorkershipRequest;
-import com.github.conanchen.gedit.store.worker.grpc.ListWorkshipByWorkerRequest;
 import com.github.conanchen.gedit.store.worker.grpc.StoreWorkerApiGrpc;
 import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
 import com.github.conanchen.gedit.utils.JcaUtils;
 import com.github.conanchen.utils.vo.PaymentInfo;
-import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
@@ -37,7 +35,6 @@ public class StoreWorkerService {
 
     }
 
-
     private ManagedChannel getManagedChannel() {
         return OkHttpChannelBuilder
                 .forAddress(BuildConfig.GRPC_SERVER_HOST, BuildConfig.GRPC_SERVER_PORT_STORE)
@@ -47,6 +44,12 @@ public class StoreWorkerService {
     }
 
 
+    /**
+     * 获取商铺的员工列表
+     *
+     * @param paymentInfo
+     * @param callBack
+     */
     public void loadAllEmployees(PaymentInfo paymentInfo, ListByWorkerCallBack callBack) {
         ManagedChannel channel = getManagedChannel();
         StoreWorkerApiGrpc.StoreWorkerApiStub storeWorkerApiStub = StoreWorkerApiGrpc.newStub(channel);
@@ -58,8 +61,9 @@ public class StoreWorkerService {
         storeWorkerApiStub
                 .withDeadlineAfter(60, TimeUnit.SECONDS)
                 .withCallCredentials(callCredentials)
-                .listByWorker(ListWorkshipByWorkerRequest.newBuilder()
-                        .setWorkerUuid(paymentInfo.payeeWorkerUuid)
+                .listByStore(com.github.conanchen.gedit.store.worker.grpc.ListWorkshipByStoreRequest.newBuilder()
+                        .setStoreUuid(paymentInfo.payeeStoreUuid)
+                        .setSize(10)
                         .build(), new StreamObserver<WorkshipResponse>() {
                     @Override
                     public void onNext(WorkshipResponse value) {
@@ -90,18 +94,19 @@ public class StoreWorkerService {
      *
      * @param callBack
      */
-    public void addWorker(StoreUpdateInfo storeUpdateInfo, AddWorkerCallBack callBack) {
+    public void addWorker(PaymentInfo paymentInfo, AddWorkerCallBack callBack) {
         ManagedChannel channel = getManagedChannel();
 
         CallCredentials callCredentials = JcaUtils
-                .getCallCredentials(storeUpdateInfo.voAccessToken.accessToken,
-                        Long.valueOf(storeUpdateInfo.voAccessToken.expiresIn));
+                .getCallCredentials(paymentInfo.voAccessToken.accessToken,
+                        Long.valueOf(paymentInfo.voAccessToken.expiresIn));
 
         StoreWorkerApiGrpc.StoreWorkerApiStub storeWorkerApiStub = StoreWorkerApiGrpc.newStub(channel);
         storeWorkerApiStub
                 .withCallCredentials(callCredentials)
                 .add(AddWorkershipRequest.newBuilder()
-                        .setWorkerUuid(storeUpdateInfo.uuid)
+                        .setWorkerUuid(paymentInfo.payeeWorkerUuid)
+                        .setStoreUuid(paymentInfo.payeeStoreUuid)
                         .build(), new StreamObserver<WorkshipResponse>() {
                     @Override
                     public void onNext(WorkshipResponse value) {
@@ -125,7 +130,6 @@ public class StoreWorkerService {
 
                     }
                 });
-
     }
 
 

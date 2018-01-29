@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
@@ -25,7 +26,6 @@ import com.github.conanchen.gedit.room.store.StoreWorker;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
 import com.github.conanchen.utils.vo.PaymentInfo;
-import com.github.conanchen.utils.vo.StoreUpdateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
@@ -37,6 +37,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import javax.inject.Inject;
@@ -64,10 +66,12 @@ public class MyStoreEmployeesActivity extends BaseActivity {
     AppCompatImageButton back;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.refresh)
+    SmartRefreshLayout mSmartRefresh;
     private MyStoreEmployeesAdapter mAdapter;
 
     @Autowired
-    String storeUuid;
+    String storeUuid;//商铺的uuid
 
     /**
      * 扫描跳转Activity RequestCode
@@ -81,8 +85,29 @@ public class MyStoreEmployeesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_employees);
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
+
         setupRecyclerView();
         setupViewModel();
+        setupRefresh();
+    }
+
+    private void setupRefresh() {
+        mSmartRefresh.setRefreshHeader(new ClassicsHeader(this));
+        mSmartRefresh.setHeaderHeight(60);
+
+        mSmartRefresh.setOnRefreshListener((refreshLayout) -> {
+            currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
+                if (isLogin) {
+                    PaymentInfo paymentInfo = PaymentInfo.builder()
+                            .setPayeeStoreUuid(storeUuid)
+                            .setVoAccessToken(voAccessToken)
+                            .build();
+                    myStoreEmployeesViewModel.getAllEmployees(paymentInfo);
+                }
+                mSmartRefresh.finishRefresh();
+            });
+        });
     }
 
     private void setupRecyclerView() {
@@ -115,15 +140,12 @@ public class MyStoreEmployeesActivity extends BaseActivity {
                         .setExpiresIn(Strings.isNullOrEmpty(signinResponse.getExpiresIn()) ? System.currentTimeMillis() + "" : signinResponse.getExpiresIn())
                         .build();
 
-                currentSigninViewModel.getMyProfile().observe(this, userProfileResponse -> {
-                    if (Status.Code.OK == userProfileResponse.getStatus().getCode()) {
-                        PaymentInfo paymentInfo = PaymentInfo.builder()
-                                .setPayeeWorkerUuid(userProfileResponse.getUserProfile().getUuid())
-                                .setVoAccessToken(voAccessToken)
-                                .build();
-                        myStoreEmployeesViewModel.getAllEmployees(paymentInfo);
-                    }
-                });
+                PaymentInfo paymentInfo = PaymentInfo.builder()
+                        .setPayeeStoreUuid(storeUuid)
+                        .setVoAccessToken(voAccessToken)
+                        .build();
+                myStoreEmployeesViewModel.getAllEmployees(paymentInfo);
+
             } else {
                 isLogin = false;
             }
@@ -207,13 +229,14 @@ public class MyStoreEmployeesActivity extends BaseActivity {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
 
                     Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-                    String workerUuid = "fuwuqifanhui";//员工的uuid
+                    String workerUuid = Strings.isNullOrEmpty(result) ? System.currentTimeMillis() + "" : result;//员工的uuid
 
-                    StoreUpdateInfo storeUpdateInfo = StoreUpdateInfo.builder()
+                    PaymentInfo paymentInfo = PaymentInfo.builder()
                             .setVoAccessToken(voAccessToken)
-                            .setUuid(workerUuid)
+                            .setPayeeStoreUuid(storeUuid)
+                            .setPayeeWorkerUuid(workerUuid)
                             .build();
-                    myStoreEmployeesViewModel.addWorker(storeUpdateInfo);
+                    myStoreEmployeesViewModel.addWorker(paymentInfo);
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
