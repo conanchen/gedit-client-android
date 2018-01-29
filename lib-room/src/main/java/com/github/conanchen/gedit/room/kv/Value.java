@@ -1,6 +1,7 @@
 package com.github.conanchen.gedit.room.kv;
 
 import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoLoadGrpcStatus;
 import com.github.conanchen.utils.vo.VoUserProfile;
 import com.github.conanchen.utils.vo.VoWorkingStore;
 
@@ -16,15 +17,19 @@ public class Value {
 
     public VoUserProfile voUserProfile;
 
+    public VoLoadGrpcStatus voLoadGrpcStatus;
+
     public Value() {
     }
 
     private Value(VoAccessToken voAccessToken,
                   VoWorkingStore voWorkingStore,
-                  VoUserProfile voUserProfile) {
+                  VoUserProfile voUserProfile,
+                  VoLoadGrpcStatus voLoadGrpcStatus) {
         this.voAccessToken = voAccessToken;
         this.voWorkingStore = voWorkingStore;
         this.voUserProfile = voUserProfile;
+        this.voLoadGrpcStatus = voLoadGrpcStatus;
     }
 
     public static Builder builder() {
@@ -35,6 +40,7 @@ public class Value {
         private VoAccessToken voAccessToken;
         private VoWorkingStore voWorkingStore;
         private VoUserProfile voUserProfile;
+        private VoLoadGrpcStatus voLoadGrpcStatus;
 
         Builder() {
         }
@@ -45,7 +51,7 @@ public class Value {
             if (voAccessToken == null) {
                 missing += " voAccessToken|voWordSortType one must be set";
             }
-            return new Value(voAccessToken, voWorkingStore,voUserProfile);
+            return new Value(voAccessToken, voWorkingStore, voUserProfile,voLoadGrpcStatus);
         }
 
         public Builder setVoAccessToken(VoAccessToken voAccessToken) {
@@ -60,6 +66,11 @@ public class Value {
 
         public Builder setVoUserProfile(VoUserProfile voUserProfile) {
             this.voUserProfile = voUserProfile;
+            return this;
+        }
+
+        public Builder setVoLoadGrpcStatus(VoLoadGrpcStatus voLoadGrpcStatus) {
+            this.voLoadGrpcStatus = voLoadGrpcStatus;
             return this;
         }
     }

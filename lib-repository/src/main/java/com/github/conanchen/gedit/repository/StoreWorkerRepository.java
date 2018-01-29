@@ -9,12 +9,12 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.store.StoreWorkerService;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.gedit.room.kv.KeyValue;
+import com.github.conanchen.gedit.room.kv.Value;
 import com.github.conanchen.gedit.room.store.StoreWorker;
-import com.github.conanchen.gedit.store.worker.grpc.ListWorkshipByWorkerRequest;
 import com.github.conanchen.gedit.store.worker.grpc.WorkshipResponse;
 import com.github.conanchen.utils.vo.PaymentInfo;
-import com.github.conanchen.utils.vo.StoreUpdateInfo;
-import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoLoadGrpcStatus;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -50,21 +50,59 @@ public class StoreWorkerRepository {
 
 
     public LiveData<PagedList<StoreWorker>> loadAllEmployees(PaymentInfo paymentInfo) {
-        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            grpcFascade.storeWorkerService.loadAllEmployees(paymentInfo, response -> {
-                if (Status.Code.OK == response.getStatus().getCode()) {
-                    StoreWorker storeWorker = StoreWorker.builder()
-                            .setStoreUuid(response.getOwnership().getStoreUuid())
-                            .setStoreLogo(response.getOwnership().getStoreLogo())
-                            .setStoreName(response.getOwnership().getStoreName())
-                            .build();
-                    roomFascade.daoStoreWorker.save(storeWorker);
-                }
-            });
-        });
-        return (new LivePagedListBuilder(roomFascade.daoStoreWorker.listLivePagedStore(), pagedListConfig)).build();
+        return (new LivePagedListBuilder(roomFascade.daoStoreWorker.listLivePagedStore(), pagedListConfig))
+                .setBoundaryCallback(new PagedList.BoundaryCallback() {
+                    @Override
+                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
+                        grpcFascade.storeWorkerService.loadAllEmployees(paymentInfo, new StoreWorkerService.ListByWorkerCallBack() {
+                            @Override
+                            public void onListByWorkerCallBack(WorkshipResponse response) {
+                                Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+                                    if (Status.Code.OK == response.getStatus().getCode()) {
+                                        StoreWorker storeWorker = StoreWorker.builder()
+                                                .setStoreUuid(response.getOwnership().getStoreUuid())
+                                                .setStoreLogo(response.getOwnership().getStoreLogo())
+                                                .setStoreName(response.getOwnership().getStoreName())
+                                                .build();
+                                        roomFascade.daoStoreWorker.save(storeWorker);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onGrpcApiError(Status status) {
+                                saveGrpcStatus(VoLoadGrpcStatus.builder()
+                                        .setStatus(status.getCode().toString())
+                                        .setMessage("网络不佳，请稍后重试")
+                                        .build());
+                            }
+
+                            @Override
+                            public void onGrpcApiCompleted() {
+                                saveGrpcStatus(VoLoadGrpcStatus.builder()
+                                        .setStatus("COMPLETED")
+                                        .setMessage("暂无更多数据")
+                                        .build());
+                            }
+
+                        });
+                    }
+                })
+                .build();
     }
 
+    private void saveGrpcStatus(VoLoadGrpcStatus voLoadGrpcStatus) {
+        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+            KeyValue keyValue = KeyValue.builder()
+                    .setKey(KeyValue.KEY.LOAD_GRPC_API_STATUS)
+                    .setValue(Value.builder()
+                            .setVoLoadGrpcStatus(voLoadGrpcStatus)
+                            .build())
+                    .build();
+            roomFascade.daoKeyValue.save(keyValue);
+        });
+
+    }
 
     /**
      * 添加员工

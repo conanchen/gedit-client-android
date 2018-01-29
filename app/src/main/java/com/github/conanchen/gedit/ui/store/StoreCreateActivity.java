@@ -1,28 +1,36 @@
 package com.github.conanchen.gedit.ui.store;
 
+import android.Manifest;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.github.conanchen.amap.livelocation.AmapLiveLocation;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
+import com.github.conanchen.gedit.util.JudgeISMobileNo;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -47,10 +55,13 @@ public class StoreCreateActivity extends BaseActivity {
 
     @BindView(R.id.name)
     AppCompatEditText mNameEditText;
-
     @BindView(R.id.districtUuid)
-    AppCompatEditText introducerPhone;
+    AppCompatEditText mEtDistrictPhone;
+    @BindView(R.id.detailAddress)
+    AppCompatEditText mEtDetailAddress;
 
+    private double lon;
+    private double lat;
 
     public static String TAG = StoreCreateActivity.class.getSimpleName();
     private static final Gson gson = new Gson();
@@ -68,15 +79,45 @@ public class StoreCreateActivity extends BaseActivity {
         setContentView(R.layout.activity_create_store);
         ButterKnife.bind(this);
 
+        setupLocation();
         setupViewModel();
         setupInputChecker();
+
+    }
+
+    private void setupLocation() {
+        AmapLiveLocation amapLiveLocation = AmapLiveLocation.builder().setContext(this).build();
+        Dexter.withActivity(this)
+                .withPermissions(Manifest.permission.ACCESS_FINE_LOCATION
+                        , Manifest.permission.ACCESS_COARSE_LOCATION
+                        , Manifest.permission.READ_PHONE_STATE
+                        , Manifest.permission.READ_EXTERNAL_STORAGE
+                        , Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener() {
+
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        amapLiveLocation.locate().observe(StoreCreateActivity.this, aMapLocation -> {
+                            if (aMapLocation.getLatitude() > 0 && aMapLocation.getLongitude() > 0) {
+                                lat = aMapLocation.getLatitude();
+                                lon = aMapLocation.getLongitude();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                    }
+                }).onSameThread()
+                .check();
     }
 
     private void setupInputChecker() {
         Observable<CharSequence> observableName = RxTextView.textChanges(mNameEditText);
-        Observable<CharSequence> observableAddress = RxTextView.textChanges(mNameEditText);
-        Observable.combineLatest(observableName, observableAddress,
-                (name, address) -> isNameValid(name.toString()) && isAddressValid(address.toString()))
+        Observable<CharSequence> observablePhone = RxTextView.textChanges(mEtDistrictPhone);
+        Observable<CharSequence> observableDetailAddress = RxTextView.textChanges(mEtDetailAddress);
+        Observable.combineLatest(observableName, observablePhone, observableDetailAddress,
+                (name, phone, address) -> isNameValid(name.toString()) && isPhone(phone.toString()) && isAddressValid(address.toString()))
                 .subscribe(aBoolean -> RxView.enabled(mCreateButton).accept(aBoolean));
 
         RxView.clicks(mCreateButton)
@@ -84,18 +125,24 @@ public class StoreCreateActivity extends BaseActivity {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                     Toast.makeText(StoreCreateActivity.this, "创建中....", Toast.LENGTH_SHORT).show();
+                    if (lon < 0 || lat < 0) {
+                        Toast.makeText(StoreCreateActivity.this, "定位失败,请手动输入详细位置", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     if (isLogin) {
                         //创建商铺
-                        String storeName = mNameEditText.getText().toString().trim();
-                        String storeTel = introducerPhone.getText().toString().trim();
+                        String name = mNameEditText.getText().toString().trim();
+                        String districtMobil = mEtDistrictPhone.getText().toString().trim();
+                        String address = mEtDetailAddress.getText().toString().trim();
 
                         StoreCreateInfo storeCreateInfo = StoreCreateInfo.builder()
                                 .setVoAccessToken(voAccessToken)
-                                .setName(storeName)
-                                .setLat(104.056508)
-                                .setLon(30.733657)
-                                .setDistrictUuid("441400")
-                                .setDetailAddress("si chun sheng ")
+                                .setName(name)
+                                .setMobile(districtMobil)
+                                .setDetailAddress(address)
+                                .setLon(lon)
+                                .setLat(lat)
                                 .build();
                         storeCreateViewModel.createStoreWith(storeCreateInfo);
                     } else {
@@ -111,7 +158,11 @@ public class StoreCreateActivity extends BaseActivity {
     }
 
     private boolean isAddressValid(String password) {
-        return password.length() >= 6;
+        return password.length() >= 2;
+    }
+
+    private boolean isPhone(String phone) {
+        return JudgeISMobileNo.isMobileNO(phone);
     }
 
     boolean isLogin = false;

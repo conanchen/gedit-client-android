@@ -1,11 +1,14 @@
 package com.github.conanchen.gedit.ui.my.mystore;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -16,6 +19,7 @@ import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoLoadGrpcStatus;
 import com.google.common.base.Strings;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
@@ -110,6 +114,16 @@ public class MyStoresActivity extends BaseActivity {
                 myStoresViewModel.loadMyStores(storeCreateInfo);
             }
         });
+
+        currentSigninViewModel.getGrpcApiStatus().observe(this, new Observer<VoLoadGrpcStatus>() {
+            @Override
+            public void onChanged(@Nullable VoLoadGrpcStatus voLoadGrpcStatus) {
+                if (voLoadGrpcStatus != null && !Strings.isNullOrEmpty(voLoadGrpcStatus.status)) {
+                    Toast.makeText(MyStoresActivity.this, voLoadGrpcStatus.message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     @OnClick({R.id.back, R.id.right})

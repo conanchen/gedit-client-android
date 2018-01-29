@@ -10,6 +10,7 @@ import com.github.conanchen.gedit.room.kv.KeyValue;
 import com.github.conanchen.gedit.user.profile.grpc.UserProfile;
 import com.github.conanchen.gedit.user.profile.grpc.UserProfileResponse;
 import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoLoadGrpcStatus;
 import com.github.conanchen.utils.vo.VoUserProfile;
 import com.github.conanchen.utils.vo.VoWorkingStore;
 import com.google.gson.Gson;
@@ -36,6 +37,11 @@ public class CurrentSigninViewModel extends ViewModel {
         this.repositoryFascade = repositoryFascade;
     }
 
+    /**
+     * 判断用户时候登录  查看本地数据库是否有token
+     *
+     * @return
+     */
     public LiveData<com.github.conanchen.gedit.user.auth.grpc.SigninResponse> getCurrentSigninResponse() {
         return new LiveData<com.github.conanchen.gedit.user.auth.grpc.SigninResponse>() {
             @Override
@@ -150,6 +156,11 @@ public class CurrentSigninViewModel extends ViewModel {
         };
     }
 
+    /**
+     * 获取我的个人资料
+     *
+     * @return
+     */
     public LiveData<UserProfileResponse> getMyProfile() {
         return new LiveData<UserProfileResponse>() {
             @Override
@@ -212,4 +223,44 @@ public class CurrentSigninViewModel extends ViewModel {
         };
     }
 
+    /**
+     * 从数据库获取联网的状态   联网时走的GrpcApiError方法
+     *
+     * @return
+     */
+    public LiveData<VoLoadGrpcStatus> getGrpcApiStatus() {
+        return new LiveData<VoLoadGrpcStatus>() {
+            @Override
+            protected void onActive() {
+                repositoryFascade.keyValueRepository
+                        .findMaybe(KeyValue.KEY.LOAD_GRPC_API_STATUS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .map(keyValue -> keyValue.value.voLoadGrpcStatus)
+                        .subscribe(new MaybeObserver<VoLoadGrpcStatus>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onSuccess(VoLoadGrpcStatus voLoadGrpcStatus) {
+                                //获取成功之后就直接把值返还出去
+                                postValue(voLoadGrpcStatus);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+
+            }
+        };
+    }
 }

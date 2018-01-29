@@ -103,7 +103,7 @@ public class StoreProfileService {
                                 .newBuilder()
                                 .setName(storeCreateInfo.name)
                                 .setLocation(Location.newBuilder().setLon(storeCreateInfo.lon).setLat(storeCreateInfo.lat).build())
-                                .setDistrictUuid(storeCreateInfo.districtUuid)
+                                .setIntroducerMobile(storeCreateInfo.mobile)
                                 .setDetailAddress(storeCreateInfo.detailAddress)
                                 .build(),
                         new StreamObserver<CreateStoreResponse>() {

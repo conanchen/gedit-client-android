@@ -165,7 +165,6 @@ public class PaymentService {
                 .withCallCredentials(callCredentials)
                 .prepare(PreparePayerInappPaymentRequest.newBuilder()
                         .setPayeeCode(paymentInfo.payeeCode)
-                        .setIsPointsPay(paymentInfo.isPointsPay)
                         .setShouldPay(paymentInfo.shouldPay)
                         .build(), new StreamObserver<PreparePayerInappPaymentResponse>() {
                     @Override

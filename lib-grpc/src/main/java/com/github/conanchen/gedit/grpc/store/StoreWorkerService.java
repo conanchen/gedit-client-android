@@ -3,6 +3,7 @@ package com.github.conanchen.gedit.grpc.store;
 import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
+import com.github.conanchen.gedit.grpc.GrpcApiCallback;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.store.worker.grpc.AddWorkershipRequest;
 import com.github.conanchen.gedit.store.worker.grpc.StoreWorkerApiGrpc;
@@ -26,7 +27,7 @@ public class StoreWorkerService {
     private final static String TAG = StoreWorkerService.class.getSimpleName();
     private Gson gson = new Gson();
 
-    public interface ListByWorkerCallBack {
+    public interface ListByWorkerCallBack extends GrpcApiCallback {
         void onListByWorkerCallBack(WorkshipResponse response);
     }
 
@@ -67,24 +68,20 @@ public class StoreWorkerService {
                         .build(), new StreamObserver<WorkshipResponse>() {
                     @Override
                     public void onNext(WorkshipResponse value) {
-                        Log.i("-=-=-", "onNext==========" + gson.toJson(value));
                         callBack.onListByWorkerCallBack(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        Log.i("-=-=-", "onError==========" + gson.toJson(t));
-                        callBack.onListByWorkerCallBack(WorkshipResponse.newBuilder()
-                                .setStatus(Status.newBuilder()
-                                        .setCode(Status.Code.UNKNOWN)
-                                        .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
-                                        .build())
+                        callBack.onGrpcApiError(Status.newBuilder()
+                                .setCode(Status.Code.UNKNOWN)
+                                .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
                                 .build());
                     }
 
                     @Override
                     public void onCompleted() {
-                        Log.i("-=-=-", "onCompleted");
+                        callBack.onGrpcApiCompleted();
                     }
                 });
     }

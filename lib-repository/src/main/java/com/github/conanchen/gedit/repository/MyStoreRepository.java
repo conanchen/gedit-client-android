@@ -3,15 +3,19 @@ package com.github.conanchen.gedit.repository;
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.support.annotation.NonNull;
 
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
 import com.github.conanchen.gedit.grpc.store.MyStoreService;
 import com.github.conanchen.gedit.room.RoomFascade;
+import com.github.conanchen.gedit.room.kv.KeyValue;
+import com.github.conanchen.gedit.room.kv.Value;
 import com.github.conanchen.gedit.room.my.store.MyStore;
 import com.github.conanchen.gedit.room.store.Store;
 import com.github.conanchen.gedit.store.owner.grpc.OwnershipResponse;
 import com.github.conanchen.utils.vo.StoreCreateInfo;
+import com.github.conanchen.utils.vo.VoLoadGrpcStatus;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -50,47 +54,69 @@ public class MyStoreRepository {
             .setPrefetchDistance(10)
             .setPageSize(20).build();
 
-
+    /**
+     * 获取我的商铺列表
+     *
+     * @param storeCreateInfo
+     * @return
+     */
     public LiveData<PagedList<MyStore>> loadMyStores(StoreCreateInfo storeCreateInfo) {
 
-        grpcFascade.myStoreService.loadMyStores(storeCreateInfo, new MyStoreService.OwnershipCallBack() {
-            @Override
-            public void onOwnershipResponse(OwnershipResponse response) {
-                if (Status.Code.OK == response.getStatus().getCode()) {
-                    Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-                        MyStore myStore = MyStore.builder()
-                                .setStoreUuid(response.getOwnership().getStoreUuid())
-                                .setLat(response.getOwnership().getLocation().getLat())
-                                .setLon(response.getOwnership().getLocation().getLon())
-                                .setStoreLogo(response.getOwnership().getStoreLogo())
-                                .setStoreName(response.getOwnership().getStoreName())
-                                .setLastUpdated(System.currentTimeMillis())
-                                .build();
-                        roomFascade.daoMyStore.save(myStore);
-                    });
-                }
-            }
-
-            @Override
-            public void onGrpcApiError(Status status) {
-                if (Status.Code.UNKNOWN == status.getCode()) {
-                    Observable.just(true)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(aBoolean -> {
-
-                            });
-                }
-            }
-
-            @Override
-            public void onGrpcApiCompleted() {
-
-            }
-        });
-
         return (new LivePagedListBuilder(roomFascade.daoMyStore.listLivePagedMyStore(), pagedListConfig))
+                .setBoundaryCallback(new PagedList.BoundaryCallback() {
+                    @Override
+                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
+                        grpcFascade.myStoreService.loadMyStores(storeCreateInfo, new MyStoreService.OwnershipCallBack() {
+                            @Override
+                            public void onOwnershipResponse(OwnershipResponse response) {
+                                if (Status.Code.OK == response.getStatus().getCode()) {
+                                    Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+                                        MyStore myStore = MyStore.builder()
+                                                .setStoreUuid(response.getOwnership().getStoreUuid())
+                                                .setLat(response.getOwnership().getLocation().getLat())
+                                                .setLon(response.getOwnership().getLocation().getLon())
+                                                .setStoreLogo(response.getOwnership().getStoreLogo())
+                                                .setStoreName(response.getOwnership().getStoreName())
+                                                .setLastUpdated(System.currentTimeMillis())
+                                                .build();
+                                        roomFascade.daoMyStore.save(myStore);
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onGrpcApiError(Status status) {
+                                saveGrpcStatus(VoLoadGrpcStatus.builder()
+                                        .setStatus(status.getCode().toString())
+                                        .setMessage("网络不佳，请稍后重试")
+                                        .build());
+                            }
+
+                            @Override
+                            public void onGrpcApiCompleted() {
+                                saveGrpcStatus(VoLoadGrpcStatus.builder()
+                                        .setStatus("COMPLETED")
+                                        .setMessage("暂无更多数据")
+                                        .build());
+
+                            }
+                        });
+                    }
+                })
                 .build();
+    }
+
+
+    private void saveGrpcStatus(VoLoadGrpcStatus voLoadGrpcStatus) {
+        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+            KeyValue keyValue = KeyValue.builder()
+                    .setKey(KeyValue.KEY.LOAD_GRPC_API_STATUS)
+                    .setValue(Value.builder()
+                            .setVoLoadGrpcStatus(voLoadGrpcStatus)
+                            .build())
+                    .build();
+            roomFascade.daoKeyValue.save(keyValue);
+        });
     }
 
 }

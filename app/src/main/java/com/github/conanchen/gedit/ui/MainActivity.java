@@ -112,7 +112,7 @@ public class MainActivity extends BaseFragmentActivity implements CustomPopWindo
             public void onChanged(@Nullable WorkshipResponse workshipResponse) {
                 if (Status.Code.OK == workshipResponse.getStatus().getCode()) {
                     //这里是获取我工作商铺的详情（storeUuid），获取到了之后只是做了保存，所以这几行代码没卵用可以删掉
-                    Log.i("-=-=-=-", "获取我工作商铺的信息  uuid保存了");
+                    Log.i("-=-=-=-", "getMyCurrentWorkinStore成功并保存");
                 }
             }
         });

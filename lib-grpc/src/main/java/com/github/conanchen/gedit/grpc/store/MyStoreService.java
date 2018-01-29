@@ -42,6 +42,7 @@ public class MyStoreService {
 
     public void loadMyStores(StoreCreateInfo storeCreateInfo, OwnershipCallBack callBack) {
 
+        Log.i("loadMyStores", "是否走到了这里");
         ManagedChannel channel = getManagedChannel();
         CallCredentials callCredentials = JcaUtils
                 .getCallCredentials(storeCreateInfo.voAccessToken.accessToken
@@ -70,6 +71,7 @@ public class MyStoreService {
                     @Override
                     public void onCompleted() {
                         callBack.onGrpcApiCompleted();
+                        Log.i("-=-=-", "onCompleted");
                     }
                 });
     }
