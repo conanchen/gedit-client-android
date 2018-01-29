@@ -100,10 +100,10 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
     implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
 
-    compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
+    implementation "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
 
-    compile "com.alibaba:arouter-api:$AROUTER_API_LIBS_VERSION"
+    implementation "com.alibaba:arouter-api:$AROUTER_API_LIBS_VERSION"
     annotationProcessor "com.alibaba:arouter-compiler:$AROUTER_COMPILER_LIBS_VERSION"
 
 
@@ -112,7 +112,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-js-rhino:1.5.0'
 
     implementation "org.apache.commons:commons-lang3:$commons_lang3_version"
-//    compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.1'
+//    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.1'
     implementation "com.github.LuckSiege.PictureSelector:picture_library:v2.1.1"
     //  add picture loading frame
 //    implementation "com.github.bumptech.glide:glide:4.5.0"
@@ -126,26 +126,26 @@ dependencies {
     implementation 'com.github.conanchen:AmapLiveLocation:1.0.3'
     implementation 'com.blankj:utilcode:1.8.1'
 
-    compile files('libs/alipaySdk-20170922.jar')
+    implementation files('libs/alipaySdk-20170922.jar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.4.0'
 
     //Refresh list
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
 
     // AndroidJUnitRunner and JUnit Rules
-    androidTestCompile 'com.android.support.test:runner:1.0.1'
-    androidTestCompile 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
 
     // Espresso dependencies
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-accessibility:3.0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-web:3.0.1'
-    androidTestCompile 'com.android.support.test.espresso.idling:idling-concurrent:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-accessibility:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-web:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso.idling:idling-concurrent:3.0.1'
 
-    // The following Espresso dependency can be either "compile"
-    // or "androidTestCompile", depending on your app's implementation
-    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
+    // The following Espresso dependency can be either "implementation"
+    // or "androidTestImplementation", depending on your app's implementation
+    androidTestImplementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
 
 }
