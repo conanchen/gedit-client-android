@@ -142,14 +142,14 @@ public class PaymentRepository {
         return new LiveData<PreparePayerInappPaymentResponse>() {
             @Override
             protected void onActive() {
-                Observable.just(true)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe((mBoolean) -> {
-                            grpcFascade.paymentService.getPayment(paymentInfo, response -> {
+                grpcFascade.paymentService.getPayment(paymentInfo, response -> {
+                    Observable.just(true)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe((mBoolean) -> {
                                 setValue(response);
                             });
-                        });
+                });
             }
         };
     }

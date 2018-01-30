@@ -101,6 +101,9 @@ public class StoreCreateActivity extends BaseActivity {
                             if (aMapLocation.getLatitude() > 0 && aMapLocation.getLongitude() > 0) {
                                 lat = aMapLocation.getLatitude();
                                 lon = aMapLocation.getLongitude();
+                                String city = aMapLocation.getCity();
+                                String address = aMapLocation.getAddress();
+                                mEtDetailAddress.setText(city + address);
                             }
                         });
                     }
@@ -173,7 +176,6 @@ public class StoreCreateActivity extends BaseActivity {
                 finish();
             }
         });
-
 
         currentSigninViewModel.getCurrentSigninResponse().observe(this, signinResponse -> {
             if (Status.Code.OK.getNumber() == signinResponse.getStatus().getCode().getNumber()) {

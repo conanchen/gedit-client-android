@@ -4,12 +4,14 @@ import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
-import com.github.conanchen.gedit.store.owner.grpc.ListMyStoreRequest;
-import com.github.conanchen.gedit.user.fans.grpc.Fanship;
+import com.github.conanchen.gedit.user.fans.grpc.AddFanshipRequest;
 import com.github.conanchen.gedit.user.fans.grpc.FanshipResponse;
 import com.github.conanchen.gedit.user.fans.grpc.ListMyFanRequest;
 import com.github.conanchen.gedit.user.fans.grpc.UserFansApiGrpc;
+import com.github.conanchen.gedit.utils.JcaUtils;
+import com.github.conanchen.utils.vo.MyFansBean;
 
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -23,6 +25,10 @@ public class MyFansService {
 
     public interface FanshipCallBack {
         void onFanshipResponse(FanshipResponse response);
+    }
+
+    public interface AddFansCallBack {
+        void onAddFansCallBack(FanshipResponse response);
 
     }
 
@@ -36,38 +42,75 @@ public class MyFansService {
     }
 
 
-
-    public void loadMyFans(ListMyFanRequest request, FanshipCallBack callBack) {
+    public void loadMyFans(MyFansBean myFansBean, FanshipCallBack callBack) {
         ManagedChannel channel = getManagedChannel();
+        CallCredentials callCredentials = JcaUtils.getCallCredentials(myFansBean.voAccessToken.accessToken,
+                Long.valueOf(myFansBean.voAccessToken.expiresIn));
         UserFansApiGrpc.UserFansApiStub userFansApiStub = UserFansApiGrpc.newStub(channel);
-        userFansApiStub.listMyFan(request, new StreamObserver<FanshipResponse>() {
-            @Override
-            public void onNext(FanshipResponse value) {
-                Log.i("-=-=-", "onNext");
-                callBack.onFanshipResponse(value);
-            }
+        userFansApiStub
+                .withCallCredentials(callCredentials)
+                .listMyFan(ListMyFanRequest.newBuilder().build(), new StreamObserver<FanshipResponse>() {
+                    @Override
+                    public void onNext(FanshipResponse value) {
+                        Log.i("-=-=-", "onNext");
+                        callBack.onFanshipResponse(value);
+                    }
 
-            @Override
-            public void onError(Throwable t) {
-                Log.i("-=-=-", "onError");
-                callBack.onFanshipResponse(FanshipResponse.newBuilder()
-                        .setStatus(Status.newBuilder()
-                                .setCode(Status.Code.UNKNOWN)
-                                .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
-                                .build())
-                        .setFanship( com.github.conanchen.gedit.user.fans.grpc.Fanship.newBuilder()
-                                .setFanUuid("fanUuid"+System.currentTimeMillis())
-                                .setFanName("fanname "+System.currentTimeMillis())
-                                .setCreated(System.currentTimeMillis())
-                                .build())
-                        .build());
-            }
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.i("-=-=-", "onError");
+                        callBack.onFanshipResponse(FanshipResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode(Status.Code.UNKNOWN)
+                                        .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
+                                        .build())
+                                .build());
+                    }
 
-            @Override
-            public void onCompleted() {
-                Log.i("-=-=-", "onCompleted");
-            }
-        });
+                    @Override
+                    public void onCompleted() {
+                        Log.i("-=-=-", "onCompleted");
+                    }
+                });
+    }
+
+    /**
+     * 添加粉丝
+     *
+     * @param myFansBean
+     * @param callBack
+     */
+    public void add(MyFansBean myFansBean, AddFansCallBack callBack) {
+        ManagedChannel channel = getManagedChannel();
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(myFansBean.voAccessToken.accessToken,
+                        Long.valueOf(myFansBean.voAccessToken.expiresIn));
+        UserFansApiGrpc.UserFansApiStub userFansApiStub = UserFansApiGrpc.newStub(channel);
+        userFansApiStub.withCallCredentials(callCredentials)
+                .add(AddFanshipRequest.newBuilder()
+                        .setFanUuid(myFansBean.fanUuid)
+                        .build(), new StreamObserver<FanshipResponse>() {
+                    @Override
+                    public void onNext(FanshipResponse value) {
+                        callBack.onAddFansCallBack(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        callBack.onAddFansCallBack(FanshipResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode(Status.Code.UNKNOWN)
+                                        .setDetails("网络不佳，请稍后重试")
+                                        .build())
+                                .build());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
+
     }
 
 

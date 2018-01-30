@@ -109,7 +109,8 @@ public class PointsPayActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!Strings.isNullOrEmpty(s.toString())) {
+                payeeCode = "123123123123";
+                if (!Strings.isNullOrEmpty(s.toString()) && !Strings.isNullOrEmpty(payeeCode)) {
 
                     PaymentInfo paymentInfo = PaymentInfo.builder()
                             .setPayeeCode(payeeCode)
@@ -159,6 +160,7 @@ public class PointsPayActivity extends BaseActivity {
                     // TODO: 2018/1/22  处理界面显示
                     String payeeStoreName = getReceiptCodeResponse.getPayeeCode().getPayeeStoreNamee();
                     payeeCode = getReceiptCodeResponse.getPayeeCode().getPayeeCode();//获取出来用来调用处理返还积分的接口
+                    Log.i("获取payeecode", "payeeCode" + payeeCode);
                     mTvStoreName.setText(Strings.isNullOrEmpty(payeeStoreName) ? "商铺" : payeeStoreName);
                 }
             }
@@ -318,8 +320,6 @@ public class PointsPayActivity extends BaseActivity {
                             .build();
                 }
                 isPay = true;
-
-                Log.i("-=-=-=-", (isPointsPay ? "使用积分" : "不适用积分") + "----微信还是支付宝:" + paymentChannelSelected);
                 pointsPayViewModel.createPayment(paymentInfo);
 
                 break;

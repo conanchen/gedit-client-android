@@ -5,18 +5,22 @@ import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
+import com.github.conanchen.gedit.grpc.fan.MyFansService;
 import com.github.conanchen.gedit.room.RoomFascade;
 import com.github.conanchen.gedit.room.my.fan.Fanship;
+import com.github.conanchen.gedit.user.fans.grpc.FanshipResponse;
 import com.github.conanchen.gedit.user.fans.grpc.ListMyFanRequest;
+import com.github.conanchen.utils.vo.MyFansBean;
 import com.google.gson.Gson;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -43,24 +47,60 @@ public class MyFansRepository {
             .setPageSize(20).build();
 
 
-    public LiveData<PagedList<Fanship>> loadMyFanships(Long times) {
-        return (new LivePagedListBuilder(roomFascade.daoFanship.listLivePagedFanship(), pagedListConfig))
-                .setBoundaryCallback(new PagedList.BoundaryCallback() {
-                    @Override
-                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
-                        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-                            grpcFascade.myFansService.loadMyFans(
-                                    ListMyFanRequest.newBuilder().build(), response -> {
-                                        Fanship myFanship = Fanship.builder()
-                                                .setFanUuid(response.getFanship().getFanUuid())
-                                                .setFanName(response.getFanship().getFanName())
-                                                .setCreated(response.getFanship().getCreated())
-                                                .build();
-                                        roomFascade.daoFanship.save(myFanship);
-                                    });
-                        });
+    public LiveData<PagedList<Fanship>> loadMyFanships(MyFansBean myFansBean) {
+        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe((mBoolean) -> {
+            grpcFascade.myFansService.loadMyFans(myFansBean, new MyFansService.FanshipCallBack() {
+                @Override
+                public void onFanshipResponse(FanshipResponse response) {
+                    if (Status.Code.OK == response.getStatus().getCode()) {
+                        Fanship fanship = Fanship.builder()
+                                .setFanName(response.getFanship().getFanName())
+                                .setFanUuid(response.getFanship().getFanUuid())
+                                .setCreated(response.getFanship().getCreated())
+                                .build();
+                        roomFascade.daoFanship.save(fanship);
                     }
-                })
-                .build();
+                }
+            });
+        });
+
+        return new LivePagedListBuilder(roomFascade.daoFanship.listLivePagedFanship(), pagedListConfig).build();
+    }
+
+
+    public LiveData<FanshipResponse> addFans(MyFansBean myFansBean) {
+        return new LiveData<FanshipResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.myFansService.add(myFansBean, new MyFansService.AddFansCallBack() {
+                    @Override
+                    public void onAddFansCallBack(FanshipResponse response) {
+                        Observable.fromCallable(() -> {
+                            if (Status.Code.OK == response.getStatus().getCode()) {
+                                Fanship fanship = Fanship.builder()
+                                        .setFanName(response.getFanship().getFanName())
+                                        .setFanUuid(response.getFanship().getFanUuid())
+                                        .setCreated(response.getFanship().getCreated())
+                                        .build();
+
+                                return roomFascade.daoFanship.save(fanship);
+                            } else {
+                                return new Long(-1);
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<Long>() {
+                                    @Override
+                                    public void accept(@NonNull Long rowId) throws Exception {
+                                        setValue(FanshipResponse.newBuilder()
+                                                .setFanship(response.getFanship())
+                                                .setStatus(response.getStatus())
+                                                .build());
+                                    }
+                                });
+                    }
+                });
+            }
+        };
     }
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:fitsSystemWindows="true"
-                                                 tools:context="com.github.conanchen.gedit.ui.store.StoreCreateActivity">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.github.conanchen.gedit.ui.store.StoreCreateActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -28,6 +29,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:background="@color/tool_bar_bg"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -39,7 +41,10 @@
                         android:id="@+id/back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_arrow_back_black_24dp"
+                        android:background="@null"
+                        android:backgroundTint="@color/blue"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_arrow_back_white_24dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@+id/title"
@@ -49,12 +54,12 @@
                         android:id="@+id/title"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/text_margin"
+                        android:gravity="center_horizontal"
                         android:text="新建积分铺子"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/back"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/right"
                         app:layout_constraintTop_toTopOf="parent"/>
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.Toolbar>
@@ -67,67 +72,76 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/name"
-            android:layout_width="match_parent"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/name_desc"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="店铺名称"
-            android:padding="10dp"
+            android:text="店铺名称:"
+            app:layout_constraintBottom_toBottomOf="@id/name"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintRight_toLeftOf="@id/name"
+            app:layout_constraintTop_toTopOf="@id/name"/>
 
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/districtUuid"
-            android:layout_width="match_parent"
+            android:id="@+id/name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="推荐人电话号码"
+            android:hint="如意餐馆"
             android:padding="10dp"
+            app:layout_constraintLeft_toRightOf="@id/name_desc"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/detailAddress_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="详细地址:"
+            app:layout_constraintBottom_toBottomOf="@id/detailAddress"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name"/>
+            app:layout_constraintRight_toLeftOf="@id/detailAddress"
+            app:layout_constraintTop_toTopOf="@id/detailAddress"/>
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/detailAddress"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="详细地址"
             android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/districtUuid"/>
+            app:layout_constraintLeft_toRightOf="@id/detailAddress_desc"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name"/>
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="手机当前定位获取的街道地址如玉林东路"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailAddress"/>
-
-        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/districtUuid_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/arrow_down"
-            app:layout_constraintRight_toRightOf="@id/location"
-            app:layout_constraintTop_toTopOf="@id/location"/>
+            android:text="推荐人电话号码:"
+            app:layout_constraintBottom_toBottomOf="@id/districtUuid"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/districtUuid"
+            app:layout_constraintTop_toTopOf="@id/districtUuid"/>
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/districtUuid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="13113113111"
+            android:padding="10dp"
+            app:layout_constraintLeft_toRightOf="@id/districtUuid_desc"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailAddress"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:background="@drawable/bottom_selector"
             android:padding="10dp"
             android:text="创建店铺"
             android:textColor="@color/text_color"
-            app:layout_constraintTop_toBottomOf="@+id/location"/>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/show"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="显示"
-            android:textColor="@color/text_color"
-            app:layout_constraintTop_toBottomOf="@+id/create"/>
-
+            app:layout_constraintTop_toBottomOf="@+id/districtUuid"/>
 
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>
