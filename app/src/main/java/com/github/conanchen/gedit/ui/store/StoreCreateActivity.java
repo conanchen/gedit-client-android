@@ -60,8 +60,8 @@ public class StoreCreateActivity extends BaseActivity {
     @BindView(R.id.detailAddress)
     AppCompatEditText mEtDetailAddress;
 
-    private double lon;
-    private double lat;
+    private double lon = 0;
+    private double lat = 0;
 
     public static String TAG = StoreCreateActivity.class.getSimpleName();
     private static final Gson gson = new Gson();
@@ -125,10 +125,6 @@ public class StoreCreateActivity extends BaseActivity {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                     Toast.makeText(StoreCreateActivity.this, "创建中....", Toast.LENGTH_SHORT).show();
-                    if (lon < 0 || lat < 0) {
-                        Toast.makeText(StoreCreateActivity.this, "定位失败,请手动输入详细位置", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
 
                     if (isLogin) {
                         //创建商铺

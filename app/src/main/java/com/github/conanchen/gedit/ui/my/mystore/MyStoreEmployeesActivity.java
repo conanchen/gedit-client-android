@@ -3,12 +3,14 @@ package com.github.conanchen.gedit.ui.my.mystore;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +29,7 @@ import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.ui.payment.GaptureActivity;
 import com.github.conanchen.utils.vo.PaymentInfo;
 import com.github.conanchen.utils.vo.VoAccessToken;
+import com.github.conanchen.utils.vo.VoLoadGrpcStatus;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
@@ -148,6 +151,15 @@ public class MyStoreEmployeesActivity extends BaseActivity {
 
             } else {
                 isLogin = false;
+            }
+        });
+
+        currentSigninViewModel.getGrpcApiStatus().observe(this, new Observer<VoLoadGrpcStatus>() {
+            @Override
+            public void onChanged(@Nullable VoLoadGrpcStatus voLoadGrpcStatus) {
+                if (voLoadGrpcStatus != null && !Strings.isNullOrEmpty(voLoadGrpcStatus.status)) {
+                    Toast.makeText(MyStoreEmployeesActivity.this, voLoadGrpcStatus.message, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

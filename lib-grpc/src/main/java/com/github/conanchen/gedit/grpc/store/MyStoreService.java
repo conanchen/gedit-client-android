@@ -42,7 +42,6 @@ public class MyStoreService {
 
     public void loadMyStores(StoreCreateInfo storeCreateInfo, OwnershipCallBack callBack) {
 
-        Log.i("loadMyStores", "是否走到了这里");
         ManagedChannel channel = getManagedChannel();
         CallCredentials callCredentials = JcaUtils
                 .getCallCredentials(storeCreateInfo.voAccessToken.accessToken
@@ -55,13 +54,13 @@ public class MyStoreService {
                         .build(), new StreamObserver<OwnershipResponse>() {
                     @Override
                     public void onNext(OwnershipResponse value) {
-                        Log.i("-=-=-", "onNext" + gson.toJson(value));
+                        Log.i("-=-=-==========", "onNext" + gson.toJson(value));
                         callBack.onOwnershipResponse(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        Log.i("-=-=-", "onError" + gson.toJson(t));
+                        Log.i("-=-=-==========", "onError" + gson.toJson(t));
                         callBack.onGrpcApiError(Status.newBuilder()
                                 .setCode(Status.Code.UNKNOWN)
                                 .setDetails("网络不佳，请稍后重试")
@@ -71,7 +70,7 @@ public class MyStoreService {
                     @Override
                     public void onCompleted() {
                         callBack.onGrpcApiCompleted();
-                        Log.i("-=-=-", "onCompleted");
+                        Log.i("-=-=-==========", "onCompleted");
                     }
                 });
     }

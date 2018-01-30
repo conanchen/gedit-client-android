@@ -3,7 +3,6 @@ package com.github.conanchen.gedit.repository;
 import android.arch.lifecycle.LiveData;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
-import android.support.annotation.NonNull;
 
 import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.GrpcFascade;
@@ -24,7 +23,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -61,62 +59,54 @@ public class MyStoreRepository {
      * @return
      */
     public LiveData<PagedList<MyStore>> loadMyStores(StoreCreateInfo storeCreateInfo) {
-
-        return (new LivePagedListBuilder(roomFascade.daoMyStore.listLivePagedMyStore(), pagedListConfig))
-                .setBoundaryCallback(new PagedList.BoundaryCallback() {
-                    @Override
-                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
-                        grpcFascade.myStoreService.loadMyStores(storeCreateInfo, new MyStoreService.OwnershipCallBack() {
-                            @Override
-                            public void onOwnershipResponse(OwnershipResponse response) {
-                                if (Status.Code.OK == response.getStatus().getCode()) {
-                                    Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-                                        MyStore myStore = MyStore.builder()
-                                                .setStoreUuid(response.getOwnership().getStoreUuid())
-                                                .setLat(response.getOwnership().getLocation().getLat())
-                                                .setLon(response.getOwnership().getLocation().getLon())
-                                                .setStoreLogo(response.getOwnership().getStoreLogo())
-                                                .setStoreName(response.getOwnership().getStoreName())
-                                                .setLastUpdated(System.currentTimeMillis())
-                                                .build();
-                                        roomFascade.daoMyStore.save(myStore);
-                                    });
-                                }
-                            }
-
-                            @Override
-                            public void onGrpcApiError(Status status) {
-                                saveGrpcStatus(VoLoadGrpcStatus.builder()
-                                        .setStatus(status.getCode().toString())
-                                        .setMessage("网络不佳，请稍后重试")
-                                        .build());
-                            }
-
-                            @Override
-                            public void onGrpcApiCompleted() {
-                                saveGrpcStatus(VoLoadGrpcStatus.builder()
-                                        .setStatus("COMPLETED")
-                                        .setMessage("暂无更多数据")
-                                        .build());
-
-                            }
-                        });
+        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+            grpcFascade.myStoreService.loadMyStores(storeCreateInfo, new MyStoreService.OwnershipCallBack() {
+                @Override
+                public void onOwnershipResponse(OwnershipResponse response) {
+                    if (Status.Code.OK == response.getStatus().getCode()) {
+                        MyStore myStore = MyStore.builder()
+                                .setStoreUuid(response.getOwnership().getStoreUuid())
+                                .setLat(response.getOwnership().getLocation().getLat())
+                                .setLon(response.getOwnership().getLocation().getLon())
+                                .setStoreLogo(response.getOwnership().getStoreLogo())
+                                .setStoreName(response.getOwnership().getStoreName())
+                                .setLastUpdated(System.currentTimeMillis())
+                                .build();
+                        roomFascade.daoMyStore.save(myStore);
                     }
-                })
-                .build();
+                }
+
+                @Override
+                public void onGrpcApiError(Status status) {
+                    saveGrpcStatus(VoLoadGrpcStatus.builder()
+                            .setStatus(status.getCode().toString())
+                            .setMessage("网络不佳，请稍后重试")
+                            .build());
+                }
+
+                @Override
+                public void onGrpcApiCompleted() {
+                    saveGrpcStatus(VoLoadGrpcStatus.builder()
+                            .setStatus("COMPLETED")
+                            .setMessage("暂无更多数据")
+                            .build());
+
+                }
+            });
+        });
+
+        return (new LivePagedListBuilder(roomFascade.daoMyStore.listLivePagedMyStore(), pagedListConfig)).build();
     }
 
 
     private void saveGrpcStatus(VoLoadGrpcStatus voLoadGrpcStatus) {
-        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            KeyValue keyValue = KeyValue.builder()
-                    .setKey(KeyValue.KEY.LOAD_GRPC_API_STATUS)
-                    .setValue(Value.builder()
-                            .setVoLoadGrpcStatus(voLoadGrpcStatus)
-                            .build())
-                    .build();
-            roomFascade.daoKeyValue.save(keyValue);
-        });
+        KeyValue keyValue = KeyValue.builder()
+                .setKey(KeyValue.KEY.LOAD_GRPC_API_STATUS)
+                .setValue(Value.builder()
+                        .setVoLoadGrpcStatus(voLoadGrpcStatus)
+                        .build())
+                .build();
+//        roomFascade.daoKeyValue.save(keyValue);
     }
 
 }

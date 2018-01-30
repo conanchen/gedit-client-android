@@ -68,11 +68,13 @@ public class StoreWorkerService {
                         .build(), new StreamObserver<WorkshipResponse>() {
                     @Override
                     public void onNext(WorkshipResponse value) {
+                        Log.i("---------", "onNext");
                         callBack.onListByWorkerCallBack(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
+                        Log.i("---------", "onError");
                         callBack.onGrpcApiError(Status.newBuilder()
                                 .setCode(Status.Code.UNKNOWN)
                                 .setDetails(String.format("API访问错误，可能网络不通！error:%s", t.getMessage()))
@@ -81,6 +83,7 @@ public class StoreWorkerService {
 
                     @Override
                     public void onCompleted() {
+                        Log.i("---------", "onCompleted");
                         callBack.onGrpcApiCompleted();
                     }
                 });

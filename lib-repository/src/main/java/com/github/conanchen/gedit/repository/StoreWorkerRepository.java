@@ -50,58 +50,50 @@ public class StoreWorkerRepository {
 
 
     public LiveData<PagedList<StoreWorker>> loadAllEmployees(PaymentInfo paymentInfo) {
-        return (new LivePagedListBuilder(roomFascade.daoStoreWorker.listLivePagedStore(), pagedListConfig))
-                .setBoundaryCallback(new PagedList.BoundaryCallback() {
-                    @Override
-                    public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
-                        grpcFascade.storeWorkerService.loadAllEmployees(paymentInfo, new StoreWorkerService.ListByWorkerCallBack() {
-                            @Override
-                            public void onListByWorkerCallBack(WorkshipResponse response) {
-                                Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-                                    if (Status.Code.OK == response.getStatus().getCode()) {
-                                        StoreWorker storeWorker = StoreWorker.builder()
-                                                .setStoreUuid(response.getOwnership().getStoreUuid())
-                                                .setStoreLogo(response.getOwnership().getStoreLogo())
-                                                .setStoreName(response.getOwnership().getStoreName())
-                                                .build();
-                                        roomFascade.daoStoreWorker.save(storeWorker);
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onGrpcApiError(Status status) {
-                                saveGrpcStatus(VoLoadGrpcStatus.builder()
-                                        .setStatus(status.getCode().toString())
-                                        .setMessage("网络不佳，请稍后重试")
-                                        .build());
-                            }
-
-                            @Override
-                            public void onGrpcApiCompleted() {
-                                saveGrpcStatus(VoLoadGrpcStatus.builder()
-                                        .setStatus("COMPLETED")
-                                        .setMessage("暂无更多数据")
-                                        .build());
-                            }
-
-                        });
+        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
+            grpcFascade.storeWorkerService.loadAllEmployees(paymentInfo, new StoreWorkerService.ListByWorkerCallBack() {
+                @Override
+                public void onListByWorkerCallBack(WorkshipResponse response) {
+                    if (Status.Code.OK == response.getStatus().getCode()) {
+                        StoreWorker storeWorker = StoreWorker.builder()
+                                .setStoreUuid(response.getOwnership().getStoreUuid())
+                                .setStoreLogo(response.getOwnership().getStoreLogo())
+                                .setStoreName(response.getOwnership().getStoreName())
+                                .build();
+                        roomFascade.daoStoreWorker.save(storeWorker);
                     }
-                })
+                }
+
+                @Override
+                public void onGrpcApiError(Status status) {
+                    saveGrpcStatus(VoLoadGrpcStatus.builder()
+                            .setStatus(status.getCode().toString())
+                            .setMessage("网络不佳，请稍后重试")
+                            .build());
+                }
+
+                @Override
+                public void onGrpcApiCompleted() {
+                    saveGrpcStatus(VoLoadGrpcStatus.builder()
+                            .setStatus("COMPLETED")
+                            .setMessage("暂无更多数据")
+                            .build());
+                }
+            });
+        });
+
+        return (new LivePagedListBuilder(roomFascade.daoStoreWorker.listLivePagedStore(), pagedListConfig))
                 .build();
     }
 
     private void saveGrpcStatus(VoLoadGrpcStatus voLoadGrpcStatus) {
-        Observable.just(true).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(aBoolean -> {
-            KeyValue keyValue = KeyValue.builder()
-                    .setKey(KeyValue.KEY.LOAD_GRPC_API_STATUS)
-                    .setValue(Value.builder()
-                            .setVoLoadGrpcStatus(voLoadGrpcStatus)
-                            .build())
-                    .build();
-            roomFascade.daoKeyValue.save(keyValue);
-        });
-
+        KeyValue keyValue = KeyValue.builder()
+                .setKey(KeyValue.KEY.LOAD_GRPC_API_STATUS)
+                .setValue(Value.builder()
+                        .setVoLoadGrpcStatus(voLoadGrpcStatus)
+                        .build())
+                .build();
+//        roomFascade.daoKeyValue.save(keyValue);
     }
 
     /**
@@ -117,39 +109,37 @@ public class StoreWorkerRepository {
                     @Override
                     public void onAddWorkerCallBack(WorkshipResponse response) {
                         Observable.fromCallable(() -> {
-                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
-                                return response;
-                            } else {
-                                WorkshipResponse workshipResponse = WorkshipResponse.newBuilder()
-                                        .setStatus(Status.newBuilder()
-                                                .setCode(response.getStatus().getCode())
-                                                .setDetails(response.getStatus().getDetails())
-                                                .build())
+                            if (Status.Code.OK == response.getStatus().getCode()) {
+                                StoreWorker storeWorker = StoreWorker.builder()
+                                        .setUuid(response.getOwnership().getUuid())
+                                        .setStoreUuid(response.getOwnership().getStoreUuid())
+                                        .setCreated(response.getOwnership().getCreated())
+                                        .setStoreLogo(response.getOwnership().getStoreLogo())
+                                        .setUserLogo(response.getOwnership().getUserLogo())
+                                        .setUserName(response.getOwnership().getUserName())
+                                        .setStoreName(response.getOwnership().getStoreName())
+                                        .setLat(response.getOwnership().getLocation().getLat())
+                                        .setLon(response.getOwnership().getLocation().getLon())
+                                        .setUserUuid(response.getOwnership().getUserUuid())
+                                        .setLastUpdated(response.getOwnership().getLastUpdated())
                                         .build();
-                                return workshipResponse;
+
+                                return roomFascade.daoStoreWorker.save(storeWorker);
+                            } else {
+                                return new Long(-1);
                             }
                         }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<WorkshipResponse>() {
+                                .subscribe(new Consumer<Long>() {
                                     @Override
-                                    public void accept(@NonNull WorkshipResponse workshipResponse) throws Exception {
-                                        if (Status.Code.OK.getNumber() == workshipResponse.getStatus().getCode().getNumber()) {
-                                            setValue(WorkshipResponse.newBuilder()
-                                                    .setOwnership(workshipResponse.getOwnership())
-                                                    .setStatus(Status.newBuilder()
-                                                            .setCode(Status.Code.UNKNOWN)
-                                                            .setDetails("add worker successfully")
-                                                            .build())
-                                                    .build());
-                                        } else {
-                                            setValue(WorkshipResponse.newBuilder()
-                                                    .setOwnership(workshipResponse.getOwnership())
-                                                    .setStatus(Status.newBuilder()
-                                                            .setCode(workshipResponse.getStatus().getCode())
-                                                            .setDetails(workshipResponse.getStatus().getDetails())
-                                                            .build())
-                                                    .build());
-                                        }
+                                    public void accept(@NonNull Long rowId) throws Exception {
+                                        setValue(WorkshipResponse.newBuilder()
+                                                .setOwnership(response.getOwnership())
+                                                .setStatus(Status.newBuilder()
+                                                        .setCode(response.getStatus().getCode())
+                                                        .setDetails(response.getStatus().getDetails())
+                                                        .build())
+                                                .build());
                                     }
                                 });
                         ;

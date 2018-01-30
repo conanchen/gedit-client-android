@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.github.conanchen.gedit.common.grpc.PaymentChannel;
 import com.github.conanchen.gedit.common.grpc.Status;
+import com.github.conanchen.gedit.grpc.GrpcApiCallback;
 import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
 import com.github.conanchen.gedit.payer.activeinapp.grpc.CreatePayerInappPaymentRequest;
@@ -34,7 +35,7 @@ public class PaymentService {
     private final static String TAG = MyIntroducedStoreService.class.getSimpleName();
     private Gson gson = new Gson();
 
-    public interface GetQRCodeUrlCallback {
+    public interface GetQRCodeUrlCallback extends GrpcApiCallback {
         void onGetQRCodeUrlCallback(GetMyPayeeCodeResponse response);
     }
 
@@ -88,16 +89,15 @@ public class PaymentService {
                     @Override
                     public void onError(Throwable t) {
                         Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
-                        callback.onGetQRCodeUrlCallback(GetMyPayeeCodeResponse.newBuilder()
-                                .setStatus(Status.newBuilder()
-                                        .setCode(Status.Code.UNKNOWN)
-                                        .setDetails("enter onError() method"))
+                        callback.onGrpcApiError(Status.newBuilder()
+                                .setCode(Status.Code.UNKNOWN)
+                                .setDetails("网络不佳，请稍后重试")
                                 .build());
                     }
 
                     @Override
                     public void onCompleted() {
-
+                        callback.onGrpcApiCompleted();
                     }
                 });
     }

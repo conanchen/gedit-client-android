@@ -181,7 +181,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="d949e7f182650c0c218f82f8510dfc7e">
+            android:value="d949e7f182650c0c218f82f8510dfc7">
             //高德开放平台申请的key
         </meta-data>
 

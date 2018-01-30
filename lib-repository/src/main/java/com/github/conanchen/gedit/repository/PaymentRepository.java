@@ -51,47 +51,21 @@ public class PaymentRepository {
                 grpcFascade.paymentService.getQRCode(paymentInfo, new PaymentService.GetQRCodeUrlCallback() {
                     @Override
                     public void onGetQRCodeUrlCallback(GetMyPayeeCodeResponse response) {
-                        Observable.fromCallable(() -> {
-
-                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
-                                return response;
-                            } else {
-                                GetMyPayeeCodeResponse getMyReceiptCodeResponse = GetMyPayeeCodeResponse.newBuilder()
-                                        .setStatus(Status.newBuilder()
-                                                .setCode(response.getStatus().getCode())
-                                                .setDetails(response.getStatus().getDetails())
-                                                .build())
-                                        .setPayeeCode(PayeeCode.newBuilder()
-                                                .setPayeeCode("fail")
-                                                .build())
-                                        .build();
-                                return getMyReceiptCodeResponse;
-                            }
-                        }).subscribeOn(Schedulers.io())
+                        Observable.just(true).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<GetMyPayeeCodeResponse>() {
-                                    @Override
-                                    public void accept(@NonNull GetMyPayeeCodeResponse getMyPayeeCodeResponse) throws Exception {
-                                        if (Status.Code.OK.getNumber() == getMyPayeeCodeResponse.getStatus().getCode().getNumber()) {
-                                            setValue(GetMyPayeeCodeResponse.newBuilder()
-                                                    .setPayeeCode(getMyPayeeCodeResponse.getPayeeCode())
-                                                    .setStatus(Status.newBuilder()
-                                                            .setCode(Status.Code.OK)
-                                                            .setDetails("get QR code successfully")
-                                                            .build())
-                                                    .build());
-                                        } else {
-                                            setValue(GetMyPayeeCodeResponse.newBuilder()
-                                                    .setPayeeCode(getMyPayeeCodeResponse.getPayeeCode())
-                                                    .setStatus(Status.newBuilder()
-                                                            .setCode(getMyPayeeCodeResponse.getStatus().getCode())
-                                                            .setDetails(getMyPayeeCodeResponse.getStatus().getDetails())
-                                                            .build())
-                                                    .build());
-                                        }
-                                    }
+                                .subscribe((mBoolean) -> {
+                                    setValue(response);
                                 });
-                        ;
+                    }
+
+                    @Override
+                    public void onGrpcApiError(Status status) {
+
+                    }
+
+                    @Override
+                    public void onGrpcApiCompleted() {
+
                     }
                 });
             }

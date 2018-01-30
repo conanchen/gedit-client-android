@@ -21,6 +21,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.github.conanchen.gedit.R;
 import com.github.conanchen.gedit.common.grpc.PaymentChannel;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payer.activeinapp.grpc.GetPayeeCodeResponse;
 import com.github.conanchen.gedit.payer.activeinapp.grpc.PreparePayerInappPaymentResponse;
@@ -117,10 +118,7 @@ public class PointsPayActivity extends BaseActivity {
                             .setPointsPay(mCbUsePoints.isChecked())
                             .build();
                     pointsPayViewModel.getPayment(paymentInfo);
-                } else {
-
                 }
-
             }
 
             @Override
@@ -157,7 +155,7 @@ public class PointsPayActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable GetPayeeCodeResponse getReceiptCodeResponse) {
                 Log.i("-=-=-=-=-=GetPayeeCode", gson.toJson(getReceiptCodeResponse));
-                if (getReceiptCodeResponse != null) {
+                if (Status.Code.OK == getReceiptCodeResponse.getStatus().getCode()) {
                     // TODO: 2018/1/22  处理界面显示
                     String payeeStoreName = getReceiptCodeResponse.getPayeeCode().getPayeeStoreNamee();
                     payeeCode = getReceiptCodeResponse.getPayeeCode().getPayeeCode();//获取出来用来调用处理返还积分的接口

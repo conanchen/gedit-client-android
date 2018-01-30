@@ -126,6 +126,8 @@ public class StoreProfileRepository {
                                 MyStore s = MyStore.builder()
                                         .setStoreUuid(createResponse.getUuid())
                                         .setStoreName(storeCreateInfo.name)
+                                        .setLat(storeCreateInfo.lat)
+                                        .setLon(storeCreateInfo.lon)
                                         .setLastUpdated(System.currentTimeMillis())
                                         .build();
                                 return roomFascade.daoMyStore.save(s);

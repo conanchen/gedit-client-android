@@ -8,11 +8,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.github.conanchen.gedit.R;
+import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeResponse;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
@@ -84,15 +85,15 @@ public class PayeeQRCodeActivity extends BaseActivity {
         payeeQRCodeViewModel.getStoreQRCodeLiveData().observe(this, new Observer<GetMyPayeeCodeResponse>() {
             @Override
             public void onChanged(@Nullable GetMyPayeeCodeResponse getMyReceiptCodeResponse) {
-                Log.i("-=-=-=-=--", gson.toJson(getMyReceiptCodeResponse));
-                if (getMyReceiptCodeResponse != null) {
-
+                if (Status.Code.OK == getMyReceiptCodeResponse.getStatus().getCode()) {
                     String code = getMyReceiptCodeResponse.getPayeeCode().getPayeeCode();
                     String logo = getMyReceiptCodeResponse.getPayeeCode().getPayeeLogo();
                     Bitmap mBitmap = CodeUtils
-                            .createImage(Strings.isNullOrEmpty(code) ? "wei huo qu dao sheng cheng de payCode" : code, 400, 400,
+                            .createImage(Strings.isNullOrEmpty(code) ? "未获取到工作店铺uuid" : code, 400, 400,
                                     Strings.isNullOrEmpty(logo) ? null : BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
                     mIvQRCode.setImageBitmap(mBitmap);
+                } else {
+                    Toast.makeText(PayeeQRCodeActivity.this, "生成二维码失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
