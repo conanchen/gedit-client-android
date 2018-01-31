@@ -89,7 +89,7 @@ public class PointsPayActivity extends BaseActivity {
     private VoAccessToken voAccessToken;
 
     private int actualPay = 0;//应支付金额
-    private int pointsPay = 0;//获得的积分
+    private int pointsPay = 0;//抵扣的积分
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
