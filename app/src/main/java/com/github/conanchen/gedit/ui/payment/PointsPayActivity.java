@@ -88,6 +88,9 @@ public class PointsPayActivity extends BaseActivity {
     private String payeeCode;
     private VoAccessToken voAccessToken;
 
+    private int actualPay = 0;//应支付金额
+    private int pointsPay = 0;//获得的积分
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +112,6 @@ public class PointsPayActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                payeeCode = "123123123123";
                 if (!Strings.isNullOrEmpty(s.toString()) && !Strings.isNullOrEmpty(payeeCode)) {
 
                     PaymentInfo paymentInfo = PaymentInfo.builder()
@@ -171,9 +173,9 @@ public class PointsPayActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable PreparePayerInappPaymentResponse prepareMyPaymentResponse) {
                 Log.i("-=-=-=-=-=Prepare", gson.toJson(prepareMyPaymentResponse));
-                if (prepareMyPaymentResponse != null) {
-                    // TODO: 2018/1/23 处理返还积分的
-
+                if (Status.Code.OK == prepareMyPaymentResponse.getStatus().getCode()) {
+                    pointsPay = prepareMyPaymentResponse.getPointsPay();
+                    actualPay = prepareMyPaymentResponse.getActualPay();
                 }
             }
         });
@@ -293,34 +295,33 @@ public class PointsPayActivity extends BaseActivity {
                 } else if (mCbNoUsePoints.isChecked()) {
                     isPointsPay = false;
                 }
-
-
-                PaymentInfo paymentInfo = null;
-                if (paymentChannelSelected == PaymentChannel.ALIPAY) {
-                    paymentInfo = PaymentInfo.builder()
-                            .setVoAccessToken(voAccessToken)
-                            .setActualPay(1)
-                            .setPayerIp(NetworkUtils.getIPAddress(true))
-                            .setPayeeCode("qazwsxedc")
-                            .setShouldPay(1)
-                            .setPointsPay(0)
-                            .setPointsPay(isPointsPay)
-                            .setPaymentChannelName("1")//支付宝
-                            .build();
-                } else if (paymentChannelSelected == PaymentChannel.WECHAT) {
-                    paymentInfo = PaymentInfo.builder()
-                            .setVoAccessToken(voAccessToken)
-                            .setActualPay(1)
-                            .setPayerIp(NetworkUtils.getIPAddress(true))
-                            .setPayeeCode("qazwsxedc")
-                            .setShouldPay(1)
-                            .setPointsPay(isPointsPay)
-                            .setPointsPay(0)
-                            .setPaymentChannelName("2")//微信
-                            .build();
+                int shouldPay = 0;
+                try {
+                    shouldPay = Integer.parseInt(mEtNeedPay.getText().toString());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
-                isPay = true;
-                pointsPayViewModel.createPayment(paymentInfo);
+
+                if (voAccessToken != null) {
+                    PaymentInfo.Builder builder = PaymentInfo.builder();
+                    builder.setVoAccessToken(voAccessToken)
+                            .setPayeeCode(code)
+                            .setPayerIp(NetworkUtils.getIPAddress(true))
+                            .setPointsPay(isPointsPay)
+                            .setShouldPay(shouldPay)
+                            .setPointsPay(pointsPay)
+                            .setActualPay(actualPay);
+                    if (paymentChannelSelected == PaymentChannel.ALIPAY) {
+                        builder.setPaymentChannelName("1");//支付宝
+                    } else if (paymentChannelSelected == PaymentChannel.WECHAT) {
+                        builder.setPaymentChannelName("2");//微信
+                    }
+
+                    PaymentInfo paymentInfo = builder.build();
+                    isPay = true;
+                    pointsPayViewModel.createPayment(paymentInfo);
+                }
+
 
                 break;
         }

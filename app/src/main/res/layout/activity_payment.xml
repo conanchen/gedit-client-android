@@ -90,6 +90,7 @@
         android:id="@+id/need_pay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxLength="8"
         android:inputType="numberDecimal"
         app:layout_constraintLeft_toRightOf="@+id/need_pay_desc"
         app:layout_constraintRight_toRightOf="@+id/unit"

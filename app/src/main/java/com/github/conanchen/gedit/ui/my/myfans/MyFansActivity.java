@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -15,6 +16,7 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.di.common.BaseActivity;
 import com.github.conanchen.gedit.ui.auth.CurrentSigninViewModel;
 import com.github.conanchen.gedit.user.auth.grpc.SigninResponse;
+import com.github.conanchen.gedit.user.fans.grpc.FanshipResponse;
 import com.github.conanchen.utils.vo.MyFansBean;
 import com.github.conanchen.utils.vo.VoAccessToken;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -98,6 +100,15 @@ public class MyFansActivity extends BaseActivity {
                             .setVoAccessToken(voAccessToken)
                             .build();
                     myFansViewModel.refresh(myFansBean);
+                }
+            }
+        });
+
+        myFansViewModel.addPagedListLiveData().observe(this, new Observer<FanshipResponse>() {
+            @Override
+            public void onChanged(@Nullable FanshipResponse fanshipResponse) {
+                if (Status.Code.OK == fanshipResponse.getStatus().getCode()) {
+                    Log.i("-=-=", "add fans  success");
                 }
             }
         });
