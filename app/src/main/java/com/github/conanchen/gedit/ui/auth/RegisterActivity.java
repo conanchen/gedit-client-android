@@ -184,7 +184,7 @@ public class RegisterActivity extends BaseActivity {
                     } else if ("ForgetPass".equals(TYPE)) {
                         Toast.makeText(RegisterActivity.this, "修改密码成功", Toast.LENGTH_LONG).show();
                     }
-//                    registerViewModel.saveRegisterOKAccessToken(registerResponse);
+                    registerViewModel.saveRegisterOKAccessToken(registerResponse);
                     finish();
                 } else {
                     if ("Register".equals(TYPE)) {

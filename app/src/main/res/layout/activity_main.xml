@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
+        android:background="@color/tool_bar_bg"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:expanded="false">
 
@@ -21,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            android:background="@color/tool_bar_bg"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
@@ -29,6 +31,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:background="@color/tool_bar_bg"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -99,6 +102,7 @@
             style="@style/BottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/bottom_navigation_menu"/>
     </android.support.constraint.ConstraintLayout>
