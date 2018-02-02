@@ -184,15 +184,25 @@ public class PointsPayActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable PaymentResponse paymentResponse) {
                 Log.i("-=-=-=-=-=Create", gson.toJson(paymentResponse));
-                if (paymentResponse != null && isPay) {
+                if (Status.Code.OK == paymentResponse.getStatus().getCode() && isPay) {
                     isPay = false;
                     PaymentChannel paymentChannel = paymentResponse.getPayment().getPaymentChannel();
                     String returnStr = paymentResponse.getPayment().getPaymentChannelSignature();
+                    String paymentUuid = paymentResponse.getPayment().getUuid();
                     if (PaymentChannel.ALIPAY.name().equalsIgnoreCase(paymentChannel.name())) {
-                        aliPay(returnStr);
+                        aliPay(returnStr, paymentUuid);
                     } else if (PaymentChannel.WECHAT.name().equalsIgnoreCase(paymentChannel.name())) {
-                        wechatPay(returnStr);
+                        wechatPay(returnStr, paymentUuid);
                     }
+                }
+            }
+        });
+
+        pointsPayViewModel.getCancelPaymentLiveData().observe(this, new Observer<PaymentResponse>() {
+            @Override
+            public void onChanged(@Nullable PaymentResponse paymentResponse) {
+                if (Status.Code.OK == paymentResponse.getStatus().getCode()) {
+                    Log.i("-=-=-=-=", "支付取消后调用cancel成功");
                 }
             }
         });
@@ -204,7 +214,7 @@ public class PointsPayActivity extends BaseActivity {
      *
      * @param
      */
-    private void aliPay(String returnStr) {
+    private void aliPay(String returnStr, String paymentUuid) {
 
         //调起支付
         AliPayUtil payUtil = new AliPayUtil(PointsPayActivity.this, new PayResultCallBack() {
@@ -224,6 +234,14 @@ public class PointsPayActivity extends BaseActivity {
             public void OnFail(int code, String error_message) {
                 //失败
                 Log.i("-=-=-=", "OnFail");
+                if (voAccessToken != null && code == AliPayUtil.CANCEL_PAY_ERROR) {
+                    //取消支付
+                    PaymentInfo paymentInfo = PaymentInfo.builder()
+                            .setVoAccessToken(voAccessToken)
+                            .setPaymentUuid(paymentUuid)
+                            .build();
+                    pointsPayViewModel.cancel(paymentInfo);
+                }
             }
         });
 
@@ -236,7 +254,7 @@ public class PointsPayActivity extends BaseActivity {
      *
      * @param signStr
      */
-    private void wechatPay(String signStr) {
+    private void wechatPay(String signStr, String paymentUuid) {
         WxPay.init(PointsPayActivity.this);
         WxPay.getInstance().doPay(signStr, new WxPay.WXPayResultCallBack() {
             @Override
@@ -255,6 +273,14 @@ public class PointsPayActivity extends BaseActivity {
             public void onCancel() {
                 //取消
                 Log.i("-=-=-=", "onCancel");
+                //取消支付
+                if (voAccessToken != null) {
+                    PaymentInfo paymentInfo = PaymentInfo.builder()
+                            .setVoAccessToken(voAccessToken)
+                            .setPaymentUuid(paymentUuid)
+                            .build();
+                    pointsPayViewModel.cancel(paymentInfo);
+                }
             }
         });
     }
@@ -301,7 +327,7 @@ public class PointsPayActivity extends BaseActivity {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-
+                actualPay = 1;
                 if (voAccessToken != null) {
                     PaymentInfo.Builder builder = PaymentInfo.builder();
                     builder.setVoAccessToken(voAccessToken)

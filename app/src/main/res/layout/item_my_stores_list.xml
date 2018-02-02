@@ -24,7 +24,7 @@
         android:text="wang xiao jie"
         app:layout_constraintBottom_toTopOf="@id/money"
         app:layout_constraintLeft_toRightOf="@id/image"
-        app:layout_constraintRight_toLeftOf="@id/distance"
+        app:layout_constraintRight_toLeftOf="@id/points"
         app:layout_constraintTop_toTopOf="@id/image"/>
 
     <android.support.v7.widget.AppCompatTextView
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@id/name"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/distance"
+        android:id="@+id/points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"

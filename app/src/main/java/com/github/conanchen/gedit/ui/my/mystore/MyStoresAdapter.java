@@ -42,21 +42,22 @@ public class MyStoresAdapter extends PagedListAdapter<MyStore, MyStoresAdapter.V
         AppCompatImageView image;
         AppCompatTextView name;
         AppCompatTextView money;
-        AppCompatTextView distance;
+        AppCompatTextView points;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             name = itemView.findViewById(R.id.name);
-            distance = itemView.findViewById(R.id.distance);
+            points = itemView.findViewById(R.id.points);
             money = itemView.findViewById(R.id.money);
             layout = itemView.findViewById(R.id.layout);
         }
 
         public void bindTo(MyStore myStore) {
-            name.setText(myStore.storeUuid);
-            distance.setText(myStore.storeName);
+            name.setText(myStore.storeName);
+            points.setText("0积分");
+            money.setText("营业额：500元");
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

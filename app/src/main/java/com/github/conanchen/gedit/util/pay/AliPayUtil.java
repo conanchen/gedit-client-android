@@ -31,7 +31,7 @@ public class AliPayUtil {
 
     private final static int ALI_PAY_ERROR = 3;//支付宝支付异常
 
-    private final static int CANCEL_PAY_ERROR = 4;//取消支付
+    public final static int CANCEL_PAY_ERROR = 4;//取消支付
 
     private final static int DUPLICATE_SUBMIT_ORDER_ERROR = 5;//订单重复提交
 

@@ -7,6 +7,7 @@ import com.github.conanchen.gedit.common.grpc.Status;
 import com.github.conanchen.gedit.grpc.GrpcApiCallback;
 import com.github.conanchen.gedit.grpc.store.MyIntroducedStoreService;
 import com.github.conanchen.gedit.hello.grpc.BuildConfig;
+import com.github.conanchen.gedit.payer.activeinapp.grpc.CancelPayerInappPaymentRequest;
 import com.github.conanchen.gedit.payer.activeinapp.grpc.CreatePayerInappPaymentRequest;
 import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeRequest;
 import com.github.conanchen.gedit.payer.activeinapp.grpc.GetMyPayeeCodeResponse;
@@ -47,9 +48,12 @@ public class PaymentService {
         void onGetPaymentCallback(PreparePayerInappPaymentResponse response);
     }
 
-
     public interface CreatePaymentCallback {
         void onCreatePaymentCallback(PaymentResponse response);
+    }
+
+    public interface CancelPaymentCallback {
+        void onCancelPaymentCallback(PaymentResponse response);
     }
 
     private ManagedChannel getManagedChannel() {
@@ -125,13 +129,13 @@ public class PaymentService {
                         .build(), new StreamObserver<GetPayeeCodeResponse>() {
                     @Override
                     public void onNext(GetPayeeCodeResponse value) {
-                        Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
+                        Log.i("-=-=-=-=--getPayeeCode", "进了onNext()方法" + gson.toJson(value));
                         callback.onGetPayeeStoreDetailsCallback(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
+                        Log.i("-=-=-=-=--getPayeeCode", "onError()方法" + t.getMessage());
                         callback.onGetPayeeStoreDetailsCallback(GetPayeeCodeResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode(Status.Code.UNKNOWN)
@@ -169,13 +173,13 @@ public class PaymentService {
                         .build(), new StreamObserver<PreparePayerInappPaymentResponse>() {
                     @Override
                     public void onNext(PreparePayerInappPaymentResponse value) {
-                        Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
+                        Log.i("-=-=-=-=--prepare", "进了onNext()方法" + gson.toJson(value));
                         callback.onGetPaymentCallback(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        Log.i("-=-=-=-=--", "onError()方法" + t.getMessage());
+                        Log.i("-=-=-=-=--prepare", "onError()方法" + t.getMessage());
                         callback.onGetPaymentCallback(PreparePayerInappPaymentResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode(Status.Code.UNKNOWN)
@@ -230,13 +234,13 @@ public class PaymentService {
                 .create(createPaymentRequest, new StreamObserver<PaymentResponse>() {
                     @Override
                     public void onNext(PaymentResponse value) {
-                        Log.i("-=-=-=-=--", "进了onNext()方法" + gson.toJson(value));
+                        Log.i("-=-=-=-=--create", "进了onNext()方法" + gson.toJson(value));
                         callback.onCreatePaymentCallback(value);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        Log.i("-=-=-=-=--", "onError()方法" + gson.toJson(t));
+                        Log.i("-=-=-=-=--create", "onError()方法" + gson.toJson(t));
                         callback.onCreatePaymentCallback(PaymentResponse.newBuilder()
                                 .setStatus(Status.newBuilder()
                                         .setCode(Status.Code.UNKNOWN)
@@ -249,6 +253,43 @@ public class PaymentService {
 
                     }
                 });
+    }
+
+
+    public void cancel(PaymentInfo paymentInfo, CancelPaymentCallback callback) {
+        ManagedChannel channel = getManagedChannel();
+        CallCredentials callCredentials = JcaUtils
+                .getCallCredentials(paymentInfo.voAccessToken.accessToken,
+                        Long.valueOf(paymentInfo.voAccessToken.expiresIn));
+        PayerActiveInappApiGrpc.PayerActiveInappApiStub payerActiveInappApiStub = PayerActiveInappApiGrpc.newStub(channel);
+        payerActiveInappApiStub
+                .withDeadlineAfter(60, TimeUnit.SECONDS)
+                .withCallCredentials(callCredentials)
+                .cancel(CancelPayerInappPaymentRequest.newBuilder()
+                        .setPaymentUuid(paymentInfo.paymentUuid)
+                        .build(), new StreamObserver<PaymentResponse>() {
+                    @Override
+                    public void onNext(PaymentResponse value) {
+                        Log.i("-=-=-=-=--cancel", "进了onNext()方法" + gson.toJson(value));
+                        callback.onCancelPaymentCallback(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.i("-=-=-=-=--cancel", "onError()方法" + gson.toJson(t));
+                        callback.onCancelPaymentCallback(PaymentResponse.newBuilder()
+                                .setStatus(Status.newBuilder()
+                                        .setCode(Status.Code.UNKNOWN)
+                                        .setDetails("enter onError() method"))
+                                .build());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
+
     }
 
 }

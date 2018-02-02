@@ -15,9 +15,11 @@ public class PaymentInfo {
     public String payerIp; //付款人客户端的实际ip地址
     public String paymentChannelName;//支付类型
     public boolean isPointsPay;//是否使用积分抵扣金额
+    public String paymentUuid;//生成订单号的主键
 
     private PaymentInfo(VoAccessToken voAccessToken, String payeeStoreUuid, String payeeWorkerUuid, String payeeCode,
-                        int shouldPay, int actualPay, int pointsPay, String payerIp, String paymentChannelName, boolean isPointsPay) {
+                        int shouldPay, int actualPay, int pointsPay, String payerIp, String paymentChannelName, boolean isPointsPay,
+                                String paymentUuid) {
         this.voAccessToken = voAccessToken;
         this.payeeStoreUuid = payeeStoreUuid;
         this.payeeWorkerUuid = payeeWorkerUuid;
@@ -28,6 +30,7 @@ public class PaymentInfo {
         this.payerIp = payerIp;
         this.paymentChannelName = paymentChannelName;
         this.isPointsPay = isPointsPay;
+        this.paymentUuid = paymentUuid;
     }
 
 
@@ -46,13 +49,14 @@ public class PaymentInfo {
         private String payerIp; //付款人客户端的实际ip地址
         private String paymentChannelName;//支付类型
         private boolean isPointsPay;//是否使用积分抵扣金额
+        private String paymentUuid;//是否使用积分抵扣金额
 
         Builder() {
         }
 
         public PaymentInfo build() {
             return new PaymentInfo(voAccessToken, payeeStoreUuid, payeeWorkerUuid, payeeCode,
-                    shouldPay, actualPay, pointsPay, payerIp, paymentChannelName, isPointsPay);
+                    shouldPay, actualPay, pointsPay, payerIp, paymentChannelName, isPointsPay,paymentUuid);
         }
 
         public Builder setVoAccessToken(VoAccessToken voAccessToken) {
@@ -102,6 +106,11 @@ public class PaymentInfo {
 
         public Builder setPointsPay(boolean pointsPay) {
             isPointsPay = pointsPay;
+            return this;
+        }
+
+        public Builder setPaymentUuid(String paymentUuid) {
+            this.paymentUuid = paymentUuid;
             return this;
         }
     }

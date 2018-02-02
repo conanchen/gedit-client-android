@@ -32,6 +32,10 @@ public class PointsPayViewModel extends ViewModel {
     final MutableLiveData<PaymentInfo> createPaymentMutableLiveData = new MutableLiveData<>();
     private final LiveData<PaymentResponse> createPaymentLiveData;
 
+    @VisibleForTesting
+    final MutableLiveData<PaymentInfo> cancelPaymentMutableLiveData = new MutableLiveData<>();
+    private final LiveData<PaymentResponse> cancelPaymentLiveData;
+
     @SuppressWarnings("unchecked")
     @Inject
     public PointsPayViewModel(PaymentRepository paymentRepository) {
@@ -61,6 +65,14 @@ public class PointsPayViewModel extends ViewModel {
         });
 
 
+        cancelPaymentLiveData = Transformations.switchMap(cancelPaymentMutableLiveData, paymentInfo -> {
+            if (paymentInfo == null) {
+                return AbsentLiveData.create();
+            } else {
+                return paymentRepository.cancel(paymentInfo);
+            }
+        });
+
     }
 
     @VisibleForTesting
@@ -89,5 +101,15 @@ public class PointsPayViewModel extends ViewModel {
 
     public void createPayment(PaymentInfo paymentInfo) {
         createPaymentMutableLiveData.setValue(paymentInfo);
+    }
+
+
+    @VisibleForTesting
+    public LiveData<PaymentResponse> getCancelPaymentLiveData() {
+        return cancelPaymentLiveData;
+    }
+
+    public void cancel(PaymentInfo paymentInfo) {
+        cancelPaymentMutableLiveData.setValue(paymentInfo);
     }
 }

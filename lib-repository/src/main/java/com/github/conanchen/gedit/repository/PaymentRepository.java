@@ -87,7 +87,7 @@ public class PaymentRepository {
                     public void onGetPayeeStoreDetailsCallback(GetPayeeCodeResponse response) {
                         Observable.fromCallable(() -> {
 
-                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
+                            if (Status.Code.OK == response.getStatus().getCode()) {
                                 return response;
                             } else {
                                 GetPayeeCodeResponse getPayeeCodeResponse = GetPayeeCodeResponse.newBuilder()
@@ -106,7 +106,7 @@ public class PaymentRepository {
                                 .subscribe(new Consumer<GetPayeeCodeResponse>() {
                                     @Override
                                     public void accept(@NonNull GetPayeeCodeResponse getReceiptCodeResponse) throws Exception {
-                                        if (Status.Code.OK.getNumber() == getReceiptCodeResponse.getStatus().getCode().getNumber()) {
+                                        if (Status.Code.OK == getReceiptCodeResponse.getStatus().getCode()) {
                                             setValue(GetPayeeCodeResponse.newBuilder()
                                                     .setPayeeCode(getReceiptCodeResponse.getPayeeCode())
                                                     .setStatus(Status.newBuilder()
@@ -170,7 +170,7 @@ public class PaymentRepository {
                     public void onCreatePaymentCallback(PaymentResponse response) {
 
                         Observable.fromCallable(() -> {
-                            if (Status.Code.OK.getNumber() == response.getStatus().getCode().getNumber()) {
+                            if (Status.Code.OK == response.getStatus().getCode()) {
                                 return response;
                             } else {
                                 PaymentResponse paymentResponse = PaymentResponse.newBuilder()
@@ -184,7 +184,7 @@ public class PaymentRepository {
                                 .subscribe(new Consumer<PaymentResponse>() {
                                     @Override
                                     public void accept(@NonNull PaymentResponse paymentResponse) throws Exception {
-                                        if (Status.Code.OK.getNumber() == paymentResponse.getStatus().getCode().getNumber()) {
+                                        if (Status.Code.OK == paymentResponse.getStatus().getCode()) {
                                             setValue(PaymentResponse.newBuilder()
                                                     .setStatus(Status.newBuilder()
                                                             .setCode(paymentResponse.getStatus().getCode())
@@ -207,6 +207,56 @@ public class PaymentRepository {
             }
         };
 
+    }
+
+    /**
+     * 取消支付的时候调用
+     * @param paymentInfo
+     * @return
+     */
+    public LiveData<PaymentResponse> cancel(PaymentInfo paymentInfo) {
+        return new LiveData<PaymentResponse>() {
+            @Override
+            protected void onActive() {
+                grpcFascade.paymentService.cancel(paymentInfo, new PaymentService.CancelPaymentCallback() {
+                    @Override
+                    public void onCancelPaymentCallback(PaymentResponse response) {
+                        Observable.fromCallable(() -> {
+                            if (Status.Code.OK == response.getStatus().getCode()) {
+                                return response;
+                            } else {
+                                PaymentResponse paymentResponse = PaymentResponse.newBuilder()
+                                        .setStatus(response.getStatus())
+                                        .setPayment(Payment.newBuilder().build())
+                                        .build();
+                                return paymentResponse;
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<PaymentResponse>() {
+                                    @Override
+                                    public void accept(@NonNull PaymentResponse paymentResponse) throws Exception {
+                                        if (Status.Code.OK == paymentResponse.getStatus().getCode()) {
+                                            setValue(PaymentResponse.newBuilder()
+                                                    .setStatus(Status.newBuilder()
+                                                            .setCode(paymentResponse.getStatus().getCode())
+                                                            .setDetails("pay success")
+                                                            .build())
+                                                    .setPayment(paymentResponse.getPayment())
+                                                    .build());
+                                        } else {
+                                            setValue(PaymentResponse.newBuilder()
+                                                    .setStatus(paymentResponse.getStatus())
+                                                    .setPayment(paymentResponse.getPayment())
+                                                    .build());
+                                        }
+                                    }
+                                });
+                        ;
+                    }
+                });
+            }
+        };
     }
 
 }
